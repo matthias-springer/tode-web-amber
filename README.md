@@ -1,7 +1,7 @@
 tODE-web-amber
 ==============
 
-This is a fork of amber-smalltalk/amber that adds additional classes for tODE.
+This is a fork of amber-smalltalk/amber that adds additional classes for tODE. It is kept in a separate repository to allow merges from the original repository in the future.
 
 Amber 
 =====
