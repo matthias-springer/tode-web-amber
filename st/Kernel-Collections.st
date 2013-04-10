@@ -91,6 +91,13 @@ remove: anObject
 
 remove: anObject ifAbsent: aBlock
 	self subclassResponsibility
+!
+
+removeAll
+	|copy|
+	"TODO: provide a more efficient implementation."
+	copy := self copy.
+	copy do: [:each | self remove: each].
 ! !
 
 !Collection methodsFor: 'converting'!
@@ -135,6 +142,15 @@ copyWithoutAll: aCollection
 ! !
 
 !Collection methodsFor: 'enumerating'!
+
+allSatisfy: aBlock
+	"Evaluate aBlock with the elements of the receiver.
+	If aBlock returns false for any element return false.
+	Otherwise return true."
+
+	self do: [:each | (aBlock value: each) ifFalse: [^ false]].
+	^ true
+!
 
 collect: aBlock
 	| stream |
@@ -435,6 +451,10 @@ addAll: aHashedCollection
 
 remove: aKey ifAbsent: aBlock
 	^self removeKey: aKey ifAbsent: aBlock
+!
+
+removeAll
+	self keys do: [:each | self removeKey: each].
 !
 
 removeKey: aKey
@@ -901,6 +921,11 @@ at: anIndex put: anObject
 	<return self[anIndex - 1] = anObject>
 !
 
+atAllPut: aValue
+	(1 to: self size) do: [:index | 
+		self at: index put: aValue].
+!
+
 size
 	<return self.length>
 ! !
@@ -921,6 +946,10 @@ remove: anObject ifAbsent: aBlock
 		};
 		aBlock._value();
 	>
+!
+
+removeAll
+	self shouldNotImplement
 !
 
 removeFrom: aNumber to: anotherNumber
@@ -979,6 +1008,13 @@ printOn: aStream
 
 new: anInteger
 	<return new Array(anInteger)>
+!
+
+new: size withAll: value 
+	"Answer an instance of me, with number of elements equal to size, each 
+	of which refers to the argument, value."
+
+	^(self new: size) atAllPut: value
 !
 
 with: anObject
@@ -1109,6 +1145,11 @@ charCodeAt: anInteger
 	< return self.charCodeAt(anInteger - 1) >
 !
 
+codePoint
+	self size ~~ 1 ifTrue: [Error signal: 'not a character'].
+	^ self asciiValue
+!
+
 escaped
 	<return escape(self)>
 !
@@ -1200,12 +1241,28 @@ crlfSanitized
 	^self lines join: String lf
 !
 
+digitValue
+	|digitValue|
+	self size ~~ 1 ifTrue: [Error signal: 'not a character'].
+	(digitValue := ('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ' indexOf: self) - 1) >= 0
+		ifTrue: [^ digitValue ]
+		ifFalse: [Error signal: 'not implemented yet'].
+!
+
+readStream
+	^ self class streamClass on: self
+!
+
 reversed
 	<return self.split("").reverse().join("")>
 !
 
 tokenize: aString
 	<return self.split(aString)>
+!
+
+writeStream
+	^ self class streamClass on: self
 ! !
 
 !String methodsFor: 'copying'!
@@ -1296,6 +1353,31 @@ trimRight: separators
 
 !String methodsFor: 'split join'!
 
+findDelimiters: delimiters startingAt: start 
+	"Answer the index of the character within the receiver, starting at start, that matches one of the delimiters. If the receiver does not contain any of the delimiters, answer size + 1."
+
+	start to: self size do: [:i |
+		delimiters do: [:delim | delim = (self at: i) ifTrue: [^ i]]].
+	^ self size + 1
+!
+
+findTokens: delimiters
+	"Answer the collection of tokens that result from parsing self.  Return strings between the delimiters.  Any character in the Collection delimiters marks a border.  Several delimiters in a row are considered as just one separation.  Also, allow delimiters to be a single character."
+	| tokens keyStart keyStop separators |
+
+	tokens := OrderedCollection new.
+	separators := delimiters isCharacter 
+		ifTrue: [Array with: delimiters]
+		ifFalse: [delimiters].
+	keyStop := 1.
+	[keyStop <= self size] whileTrue:
+		[keyStart := self skipDelimiters: separators startingAt: keyStop.
+		keyStop := self findDelimiters: separators startingAt: keyStart.
+		keyStart < keyStop
+			ifTrue: [tokens add: (self copyFrom: keyStart to: (keyStop - 1))]].
+	^ tokens
+!
+
 join: aCollection
 	^ String
 		streamContents: [:stream | aCollection
@@ -1363,6 +1445,15 @@ linesDo: aBlock
 
 	self lineIndicesDo: [:start :endWithoutDelimiters :end |
 		aBlock value: (self copyFrom: start to: endWithoutDelimiters)]
+!
+
+skipDelimiters: delimiters startingAt: start 
+	"Answer the index of the character within the receiver, starting at start, that does NOT match one of the delimiters. If the receiver does not contain any of the delimiters, answer size + 1.  Assumes the delimiters to be a non-empty string."
+
+	start to: self size do: [:i |
+		delimiters detect: [:delim | delim = (self at: i)]
+				ifNone: [^ i]].
+	^ self size + 1
 ! !
 
 !String methodsFor: 'testing'!
@@ -1371,8 +1462,24 @@ includesSubString: subString
 	< return self.indexOf(subString) !!= -1 >
 !
 
+isCharacter
+	^ self size = 1
+!
+
 isImmutable
 	^ true
+!
+
+isSeparator
+	"Answer whether the receiver is one of the separator characters--space, 
+	cr, tab, line feed, or form feed."
+	self size ~~ 1 ifTrue: [Error signal: 'not a character'].
+	self asciiValue = 32 ifTrue: [^true].	"space"
+	self asciiValue = 13 ifTrue: [^true].	"cr"
+	self asciiValue = 9 ifTrue: [^true].	"tab"
+	self asciiValue = 10 ifTrue: [^true].	"line feed"
+	self asciiValue = 12 ifTrue: [^true].	"form feed"
+	^false
 !
 
 isString

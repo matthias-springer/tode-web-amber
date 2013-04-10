@@ -17,7 +17,7 @@ decrease
 !
 
 increase
-	count := count + 1.
+	count := count + 2.
 	header contents: [:html | html with: count asString]
 ! !
 

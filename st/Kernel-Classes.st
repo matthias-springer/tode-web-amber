@@ -13,6 +13,10 @@ Behavior also provides methods for compiling methods, examining the method dicti
 
 !Behavior methodsFor: 'accessing'!
 
+allInstVarNames
+	^ self allInstanceVariableNames
+!
+
 allInstanceVariableNames
 	| result |
 	result := self instanceVariableNames copy.
@@ -382,6 +386,10 @@ printOn: aStream
 
 isClass
 	^true
+!
+
+isVariable
+	^ false
 ! !
 
 Behavior subclass: #Metaclass

@@ -172,6 +172,12 @@ shallowCopy
 
 !Object methodsFor: 'error handling'!
 
+assert: aBlock
+	"Throw an assertion error if aBlock does not evaluates to true."
+	
+	aBlock value ifFalse: [Error signal: 'Assertion failed']
+!
+
 deprecatedAPI
 	"Just a simple way to deprecate methods.
 	#deprecatedAPI is in the 'error handling' protocol even if it doesn't throw an error,
@@ -283,6 +289,10 @@ isBehavior
 !
 
 isBoolean
+	^ false
+!
+
+isCharacter
 	^ false
 !
 
@@ -472,6 +482,20 @@ isBoolean
 
 isImmutable
 	^ true
+! !
+
+Object subclass: #Character
+	instanceVariableNames: ''
+	package: 'Kernel-Objects'!
+
+!Character class methodsFor: 'characters'!
+
+codePoint: aNumber
+	< return String.fromCharCode(aNumber) >
+!
+
+space
+	^ ' '
 ! !
 
 Object subclass: #Date
@@ -1000,12 +1024,34 @@ identityHash
 	<return self / aNumber>
 !
 
+<< aNumber
+	aNumber < 0 
+		ifTrue: [Error signal: 'negative arg']
+		ifFalse: [^ self jsBitShiftLeft: aNumber]
+!
+
+>> aNumber
+	aNumber < 0 
+		ifTrue: [Error signal: 'negative arg']
+		ifFalse: [^ self jsBitShiftRight: aNumber]
+!
+
 \\ aNumber
 	<return self % aNumber>
 !
 
 abs
 	<return Math.abs(self);>
+!
+
+jsBitShiftLeft: aNumber
+	"Inlined in the Compiler"
+	<return self << aNumber>
+!
+
+jsBitShiftRight: aNumber
+	"Inlined in the Compiler"
+	<return self >> aNumber>
 !
 
 max: aNumber
@@ -1067,6 +1113,10 @@ squared
 
 @ aNumber
 	^Point x: self y: aNumber
+!
+
+asCharacter
+	^ Character codePoint: self
 !
 
 asJSON
@@ -1632,6 +1682,22 @@ at: aString
 	<return self[aString]>
 !
 
+at: key ifAbsent: aBlock
+	"Answer the value associated with the key or, if key isn't found, answer the result of evaluating aBlock."
+
+	| v |
+	(v := self at: key) ifNil: [^ aBlock value].
+	^ v
+!
+
+at: key ifPresent: aBlock
+	"Lookup the given key in the receiver. If it is present, answer the value of evaluating the given block with the value associated with the key. Otherwise, answer nil."
+
+	| v |
+	v := self at: key ifAbsent: [^ nil].
+	^ aBlock value: v
+!
+
 parse: aString
 	| result |
 	self try: [result := self basicParse: aString] catch: [:ex | (self parseError: ex parsing: aString) signal].
@@ -1663,6 +1729,14 @@ deleteClass: aClass
 	"Deletes a class by deleting its binding only. Use #removeClass instead"
 	
 	<self.removeClass(aClass)>
+!
+
+globals
+	|classes|
+	classes := Dictionary new.
+	Smalltalk current classes do: [:clazz | 
+		classes at: clazz name put: clazz].
+	^ classes
 !
 
 removeClass: aClass

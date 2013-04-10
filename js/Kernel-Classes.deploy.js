@@ -40,6 +40,19 @@ smalltalk.Behavior);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "allInstVarNames",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._allInstanceVariableNames();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"allInstVarNames",{},smalltalk.Behavior)})},
+messageSends: ["allInstanceVariableNames"]}),
+smalltalk.Behavior);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "allInstanceVariableNames",
 fn: function (){
 var self=this;
@@ -747,6 +760,17 @@ var self=this;
 return smalltalk.withContext(function($ctx1) { 
 return true;
 }, function($ctx1) {$ctx1.fill(self,"isClass",{},smalltalk.Class)})},
+messageSends: []}),
+smalltalk.Class);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "isVariable",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return false;
+}, function($ctx1) {$ctx1.fill(self,"isVariable",{},smalltalk.Class)})},
 messageSends: []}),
 smalltalk.Class);
 

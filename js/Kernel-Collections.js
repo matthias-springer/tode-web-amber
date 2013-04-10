@@ -198,6 +198,34 @@ smalltalk.Collection);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "allSatisfy:",
+category: 'enumerating',
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+var $early={};
+try {
+_st(self)._do_((function(each){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(aBlock)._value_(each);
+if(! smalltalk.assert($1)){
+throw $early=[false];
+};
+}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1)})}));
+return true;
+}
+catch(e) {if(e===$early)return e[0]; throw e}
+}, function($ctx1) {$ctx1.fill(self,"allSatisfy:",{aBlock:aBlock},smalltalk.Collection)})},
+args: ["aBlock"],
+source: "allSatisfy: aBlock\x0a\x09\x22Evaluate aBlock with the elements of the receiver.\x0a\x09If aBlock returns false for any element return false.\x0a\x09Otherwise return true.\x22\x0a\x0a\x09self do: [:each | (aBlock value: each) ifFalse: [^ false]].\x0a\x09^ true",
+messageSends: ["do:", "ifFalse:", "value:"],
+referencedClasses: []
+}),
+smalltalk.Collection);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "asArray",
 category: 'converting',
 fn: function (){
@@ -717,6 +745,27 @@ return self}, function($ctx1) {$ctx1.fill(self,"remove:ifAbsent:",{anObject:anOb
 args: ["anObject", "aBlock"],
 source: "remove: anObject ifAbsent: aBlock\x0a\x09self subclassResponsibility",
 messageSends: ["subclassResponsibility"],
+referencedClasses: []
+}),
+smalltalk.Collection);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "removeAll",
+category: 'adding/removing',
+fn: function (){
+var self=this;
+var copy;
+return smalltalk.withContext(function($ctx1) { 
+copy=_st(self)._copy();
+_st(copy)._do_((function(each){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._remove_(each);
+}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"removeAll",{copy:copy},smalltalk.Collection)})},
+args: [],
+source: "removeAll\x0a\x09|copy|\x0a\x09\x22TODO: provide a more efficient implementation.\x22\x0a\x09copy := self copy.\x0a\x09copy do: [:each | self remove: each].",
+messageSends: ["copy", "do:", "remove:"],
 referencedClasses: []
 }),
 smalltalk.Collection);
@@ -1522,6 +1571,25 @@ return $1;
 args: ["aKey", "aBlock"],
 source: "remove: aKey ifAbsent: aBlock\x0a\x09^self removeKey: aKey ifAbsent: aBlock",
 messageSends: ["removeKey:ifAbsent:"],
+referencedClasses: []
+}),
+smalltalk.HashedCollection);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "removeAll",
+category: 'adding/removing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._keys())._do_((function(each){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._removeKey_(each);
+}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"removeAll",{},smalltalk.HashedCollection)})},
+args: [],
+source: "removeAll\x0a\x09self keys do: [:each | self removeKey: each].",
+messageSends: ["do:", "removeKey:", "keys"],
 referencedClasses: []
 }),
 smalltalk.HashedCollection);
@@ -2690,6 +2758,25 @@ smalltalk.Array);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "atAllPut:",
+category: 'accessing',
+fn: function (aValue){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st((1))._to_(_st(self)._size()))._do_((function(index){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._at_put_(index,aValue);
+}, function($ctx2) {$ctx2.fillBlock({index:index},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"atAllPut:",{aValue:aValue},smalltalk.Array)})},
+args: ["aValue"],
+source: "atAllPut: aValue\x0a\x09(1 to: self size) do: [:index | \x0a\x09\x09self at: index put: aValue].",
+messageSends: ["do:", "at:put:", "to:", "size"],
+referencedClasses: []
+}),
+smalltalk.Array);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "join:",
 category: 'enumerating',
 fn: function (aString){
@@ -2749,6 +2836,22 @@ return self}, function($ctx1) {$ctx1.fill(self,"remove:ifAbsent:",{anObject:anOb
 args: ["anObject", "aBlock"],
 source: "remove: anObject ifAbsent: aBlock\x0a\x09<\x0a\x09\x09for(var i=0;i<self.length;i++) {\x0a\x09\x09\x09if(self[i] == anObject) {\x0a\x09\x09\x09\x09self.splice(i,1);\x0a\x09\x09\x09\x09return self;\x0a\x09\x09\x09}\x0a\x09\x09};\x0a\x09\x09aBlock._value();\x0a\x09>",
 messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Array);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "removeAll",
+category: 'adding/removing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._shouldNotImplement();
+return self}, function($ctx1) {$ctx1.fill(self,"removeAll",{},smalltalk.Array)})},
+args: [],
+source: "removeAll\x0a\x09self shouldNotImplement",
+messageSends: ["shouldNotImplement"],
 referencedClasses: []
 }),
 smalltalk.Array);
@@ -2888,6 +2991,24 @@ return self}, function($ctx1) {$ctx1.fill(self,"new:",{anInteger:anInteger},smal
 args: ["anInteger"],
 source: "new: anInteger\x0a\x09<return new Array(anInteger)>",
 messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Array.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "new:withAll:",
+category: 'instance creation',
+fn: function (size,value){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._new_(size))._atAllPut_(value);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"new:withAll:",{size:size,value:value},smalltalk.Array.klass)})},
+args: ["size", "value"],
+source: "new: size withAll: value \x0a\x09\x22Answer an instance of me, with number of elements equal to size, each \x0a\x09of which refers to the argument, value.\x22\x0a\x0a\x09^(self new: size) atAllPut: value",
+messageSends: ["atAllPut:", "new:"],
 referencedClasses: []
 }),
 smalltalk.Array.klass);
@@ -3540,6 +3661,29 @@ smalltalk.String);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "codePoint",
+category: 'accessing',
+fn: function (){
+var self=this;
+function $Error(){return smalltalk.Error||(typeof Error=="undefined"?nil:Error)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(_st(self)._size()).__tild_tild((1));
+if(smalltalk.assert($1)){
+_st($Error())._signal_("not a character");
+};
+$2=_st(self)._asciiValue();
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"codePoint",{},smalltalk.String)})},
+args: [],
+source: "codePoint\x0a\x09self size ~~ 1 ifTrue: [Error signal: 'not a character'].\x0a\x09^ self asciiValue",
+messageSends: ["ifTrue:", "signal:", "~~", "size", "asciiValue"],
+referencedClasses: ["Error"]
+}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "copyFrom:to:",
 category: 'copying',
 fn: function (anIndex,anotherIndex){
@@ -3593,6 +3737,36 @@ smalltalk.String);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "digitValue",
+category: 'converting',
+fn: function (){
+var self=this;
+var digitValue;
+function $Error(){return smalltalk.Error||(typeof Error=="undefined"?nil:Error)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+$1=_st(_st(self)._size()).__tild_tild((1));
+if(smalltalk.assert($1)){
+_st($Error())._signal_("not a character");
+};
+digitValue=_st(_st("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")._indexOf_(self)).__minus((1));
+$2=_st(digitValue).__gt_eq((0));
+if(smalltalk.assert($2)){
+$3=digitValue;
+return $3;
+} else {
+_st($Error())._signal_("not implemented yet");
+};
+return self}, function($ctx1) {$ctx1.fill(self,"digitValue",{digitValue:digitValue},smalltalk.String)})},
+args: [],
+source: "digitValue\x0a\x09|digitValue|\x0a\x09self size ~~ 1 ifTrue: [Error signal: 'not a character'].\x0a\x09(digitValue := ('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ' indexOf: self) - 1) >= 0\x0a\x09\x09ifTrue: [^ digitValue ]\x0a\x09\x09ifFalse: [Error signal: 'not implemented yet'].",
+messageSends: ["ifTrue:", "signal:", "~~", "size", "ifTrue:ifFalse:", ">=", "-", "indexOf:"],
+referencedClasses: ["Error"]
+}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "do:",
 category: 'enumerating',
 fn: function (aBlock){
@@ -3625,6 +3799,82 @@ smalltalk.String);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "findDelimiters:startingAt:",
+category: 'split join',
+fn: function (delimiters,start){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+var $early={};
+try {
+_st(start)._to_do_(_st(self)._size(),(function(i){
+return smalltalk.withContext(function($ctx2) {
+return _st(delimiters)._do_((function(delim){
+return smalltalk.withContext(function($ctx3) {
+$1=_st(delim).__eq(_st(self)._at_(i));
+if(smalltalk.assert($1)){
+$2=i;
+throw $early=[$2];
+};
+}, function($ctx3) {$ctx3.fillBlock({delim:delim},$ctx1)})}));
+}, function($ctx2) {$ctx2.fillBlock({i:i},$ctx1)})}));
+$3=_st(_st(self)._size()).__plus((1));
+return $3;
+}
+catch(e) {if(e===$early)return e[0]; throw e}
+}, function($ctx1) {$ctx1.fill(self,"findDelimiters:startingAt:",{delimiters:delimiters,start:start},smalltalk.String)})},
+args: ["delimiters", "start"],
+source: "findDelimiters: delimiters startingAt: start \x0a\x09\x22Answer the index of the character within the receiver, starting at start, that matches one of the delimiters. If the receiver does not contain any of the delimiters, answer size + 1.\x22\x0a\x0a\x09start to: self size do: [:i |\x0a\x09\x09delimiters do: [:delim | delim = (self at: i) ifTrue: [^ i]]].\x0a\x09^ self size + 1",
+messageSends: ["to:do:", "size", "do:", "ifTrue:", "=", "at:", "+"],
+referencedClasses: []
+}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "findTokens:",
+category: 'split join',
+fn: function (delimiters){
+var self=this;
+var tokens,keyStart,keyStop,separators;
+function $OrderedCollection(){return smalltalk.OrderedCollection||(typeof OrderedCollection=="undefined"?nil:OrderedCollection)}
+function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+tokens=_st($OrderedCollection())._new();
+$1=_st(delimiters)._isCharacter();
+if(smalltalk.assert($1)){
+separators=_st($Array())._with_(delimiters);
+} else {
+separators=delimiters;
+};
+keyStop=(1);
+_st((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(keyStop).__lt_eq(_st(self)._size());
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}))._whileTrue_((function(){
+return smalltalk.withContext(function($ctx2) {
+keyStart=_st(self)._skipDelimiters_startingAt_(separators,keyStop);
+keyStart;
+keyStop=_st(self)._findDelimiters_startingAt_(separators,keyStart);
+keyStop;
+$2=_st(keyStart).__lt(keyStop);
+if(smalltalk.assert($2)){
+return _st(tokens)._add_(_st(self)._copyFrom_to_(keyStart,_st(keyStop).__minus((1))));
+};
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+$3=tokens;
+return $3;
+}, function($ctx1) {$ctx1.fill(self,"findTokens:",{delimiters:delimiters,tokens:tokens,keyStart:keyStart,keyStop:keyStop,separators:separators},smalltalk.String)})},
+args: ["delimiters"],
+source: "findTokens: delimiters\x0a\x09\x22Answer the collection of tokens that result from parsing self.  Return strings between the delimiters.  Any character in the Collection delimiters marks a border.  Several delimiters in a row are considered as just one separation.  Also, allow delimiters to be a single character.\x22\x0a\x09| tokens keyStart keyStop separators |\x0a\x0a\x09tokens := OrderedCollection new.\x0a\x09separators := delimiters isCharacter \x0a\x09\x09ifTrue: [Array with: delimiters]\x0a\x09\x09ifFalse: [delimiters].\x0a\x09keyStop := 1.\x0a\x09[keyStop <= self size] whileTrue:\x0a\x09\x09[keyStart := self skipDelimiters: separators startingAt: keyStop.\x0a\x09\x09keyStop := self findDelimiters: separators startingAt: keyStart.\x0a\x09\x09keyStart < keyStop\x0a\x09\x09\x09ifTrue: [tokens add: (self copyFrom: keyStart to: (keyStop - 1))]].\x0a\x09^ tokens",
+messageSends: ["new", "ifTrue:ifFalse:", "with:", "isCharacter", "whileTrue:", "skipDelimiters:startingAt:", "findDelimiters:startingAt:", "ifTrue:", "add:", "copyFrom:to:", "-", "<", "<=", "size"],
+referencedClasses: ["OrderedCollection", "Array"]
+}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "includesSubString:",
 category: 'testing',
 fn: function (subString){
@@ -3635,6 +3885,24 @@ return self}, function($ctx1) {$ctx1.fill(self,"includesSubString:",{subString:s
 args: ["subString"],
 source: "includesSubString: subString\x0a\x09< return self.indexOf(subString) != -1 >",
 messageSends: [],
+referencedClasses: []
+}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "isCharacter",
+category: 'testing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._size()).__eq((1));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"isCharacter",{},smalltalk.String)})},
+args: [],
+source: "isCharacter\x0a\x09^ self size = 1",
+messageSends: ["=", "size"],
 referencedClasses: []
 }),
 smalltalk.String);
@@ -3652,6 +3920,48 @@ args: [],
 source: "isImmutable\x0a\x09^ true",
 messageSends: [],
 referencedClasses: []
+}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "isSeparator",
+category: 'testing',
+fn: function (){
+var self=this;
+function $Error(){return smalltalk.Error||(typeof Error=="undefined"?nil:Error)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5,$6;
+$1=_st(_st(self)._size()).__tild_tild((1));
+if(smalltalk.assert($1)){
+_st($Error())._signal_("not a character");
+};
+$2=_st(_st(self)._asciiValue()).__eq((32));
+if(smalltalk.assert($2)){
+return true;
+};
+$3=_st(_st(self)._asciiValue()).__eq((13));
+if(smalltalk.assert($3)){
+return true;
+};
+$4=_st(_st(self)._asciiValue()).__eq((9));
+if(smalltalk.assert($4)){
+return true;
+};
+$5=_st(_st(self)._asciiValue()).__eq((10));
+if(smalltalk.assert($5)){
+return true;
+};
+$6=_st(_st(self)._asciiValue()).__eq((12));
+if(smalltalk.assert($6)){
+return true;
+};
+return false;
+}, function($ctx1) {$ctx1.fill(self,"isSeparator",{},smalltalk.String)})},
+args: [],
+source: "isSeparator\x0a\x09\x22Answer whether the receiver is one of the separator characters--space, \x0a\x09cr, tab, line feed, or form feed.\x22\x0a\x09self size ~~ 1 ifTrue: [Error signal: 'not a character'].\x0a\x09self asciiValue = 32 ifTrue: [^true].\x09\x22space\x22\x0a\x09self asciiValue = 13 ifTrue: [^true].\x09\x22cr\x22\x0a\x09self asciiValue = 9 ifTrue: [^true].\x09\x22tab\x22\x0a\x09self asciiValue = 10 ifTrue: [^true].\x09\x22line feed\x22\x0a\x09self asciiValue = 12 ifTrue: [^true].\x09\x22form feed\x22\x0a\x09^false",
+messageSends: ["ifTrue:", "signal:", "~~", "size", "=", "asciiValue"],
+referencedClasses: ["Error"]
 }),
 smalltalk.String);
 
@@ -3940,6 +4250,24 @@ smalltalk.String);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "readStream",
+category: 'converting',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(self)._class())._streamClass())._on_(self);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"readStream",{},smalltalk.String)})},
+args: [],
+source: "readStream\x0a\x09^ self class streamClass on: self",
+messageSends: ["on:", "streamClass", "class"],
+referencedClasses: []
+}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "replace:with:",
 category: 'regular expressions',
 fn: function (aString,anotherString){
@@ -4019,6 +4347,39 @@ return self}, function($ctx1) {$ctx1.fill(self,"size",{},smalltalk.String)})},
 args: [],
 source: "size\x0a\x09<return self.length>",
 messageSends: [],
+referencedClasses: []
+}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "skipDelimiters:startingAt:",
+category: 'split join',
+fn: function (delimiters,start){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+var $early={};
+try {
+_st(start)._to_do_(_st(self)._size(),(function(i){
+return smalltalk.withContext(function($ctx2) {
+return _st(delimiters)._detect_ifNone_((function(delim){
+return smalltalk.withContext(function($ctx3) {
+return _st(delim).__eq(_st(self)._at_(i));
+}, function($ctx3) {$ctx3.fillBlock({delim:delim},$ctx1)})}),(function(){
+return smalltalk.withContext(function($ctx3) {
+$1=i;
+throw $early=[$1];
+}, function($ctx3) {$ctx3.fillBlock({},$ctx1)})}));
+}, function($ctx2) {$ctx2.fillBlock({i:i},$ctx1)})}));
+$2=_st(_st(self)._size()).__plus((1));
+return $2;
+}
+catch(e) {if(e===$early)return e[0]; throw e}
+}, function($ctx1) {$ctx1.fill(self,"skipDelimiters:startingAt:",{delimiters:delimiters,start:start},smalltalk.String)})},
+args: ["delimiters", "start"],
+source: "skipDelimiters: delimiters startingAt: start \x0a\x09\x22Answer the index of the character within the receiver, starting at start, that does NOT match one of the delimiters. If the receiver does not contain any of the delimiters, answer size + 1.  Assumes the delimiters to be a non-empty string.\x22\x0a\x0a\x09start to: self size do: [:i |\x0a\x09\x09delimiters detect: [:delim | delim = (self at: i)]\x0a\x09\x09\x09\x09ifNone: [^ i]].\x0a\x09^ self size + 1",
+messageSends: ["to:do:", "size", "detect:ifNone:", "=", "at:", "+"],
 referencedClasses: []
 }),
 smalltalk.String);
@@ -4177,6 +4538,24 @@ return self}, function($ctx1) {$ctx1.fill(self,"withIndexDo:",{aBlock:aBlock},sm
 args: ["aBlock"],
 source: "withIndexDo: aBlock\x0a\x09<for(var i=0;i<self.length;i++){aBlock(self.charAt(i), i+1);}>",
 messageSends: [],
+referencedClasses: []
+}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "writeStream",
+category: 'converting',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(self)._class())._streamClass())._on_(self);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"writeStream",{},smalltalk.String)})},
+args: [],
+source: "writeStream\x0a\x09^ self class streamClass on: self",
+messageSends: ["on:", "streamClass", "class"],
 referencedClasses: []
 }),
 smalltalk.String);

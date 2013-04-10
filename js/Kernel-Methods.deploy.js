@@ -35,6 +35,60 @@ smalltalk.BlockClosure);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "cull:",
+fn: function (anArg){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$1;
+$2=_st(_st(self)._numArgs()).__eq((0));
+if(smalltalk.assert($2)){
+$1=_st(self)._value();
+} else {
+$1=_st(self)._value_(anArg);
+};
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"cull:",{anArg:anArg},smalltalk.BlockClosure)})},
+messageSends: ["ifTrue:ifFalse:", "value", "value:", "=", "numArgs"]}),
+smalltalk.BlockClosure);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "cull:cull:",
+fn: function (firstArg,secondArg){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$1;
+$2=_st(_st(self)._numArgs()).__lt((2));
+if(smalltalk.assert($2)){
+$1=_st(self)._cull_(firstArg);
+} else {
+$1=_st(self)._value_value_(firstArg,secondArg);
+};
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"cull:cull:",{firstArg:firstArg,secondArg:secondArg},smalltalk.BlockClosure)})},
+messageSends: ["ifTrue:ifFalse:", "cull:", "value:value:", "<", "numArgs"]}),
+smalltalk.BlockClosure);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "cull:cull:cull:",
+fn: function (firstArg,secondArg,thirdArg){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$1;
+$2=_st(_st(self)._numArgs()).__lt((3));
+if(smalltalk.assert($2)){
+$1=_st(self)._cull_cull_(firstArg,secondArg);
+} else {
+$1=_st(self)._value_value_value_(firstArg,secondArg,thirdArg);
+};
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"cull:cull:cull:",{firstArg:firstArg,secondArg:secondArg,thirdArg:thirdArg},smalltalk.BlockClosure)})},
+messageSends: ["ifTrue:ifFalse:", "cull:cull:", "value:value:value:", "<", "numArgs"]}),
+smalltalk.BlockClosure);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "currySelf",
 fn: function (){
 var self=this;

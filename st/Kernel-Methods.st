@@ -80,6 +80,24 @@ applyTo: anObject arguments: aCollection
 	<return self.apply(anObject, aCollection)>
 !
 
+cull: anArg
+	^ self numArgs = 0 
+		ifTrue: [self value]
+		ifFalse: [self value: anArg]
+!
+
+cull: firstArg cull: secondArg
+	^ self numArgs < 2 
+		ifTrue: [self cull: firstArg]
+		ifFalse: [self value: firstArg value: secondArg]
+!
+
+cull: firstArg cull: secondArg cull: thirdArg
+	^self numArgs < 3 
+		ifTrue: [self cull: firstArg cull: secondArg]
+		ifFalse: [self value: firstArg value: secondArg value: thirdArg]
+!
+
 ensure: aBlock
 	<try{return self()}finally{aBlock._value()}>
 !

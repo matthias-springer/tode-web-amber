@@ -94,7 +94,10 @@ amber = (function() {
 				'Examples',
 				'Benchfib',
 				'Kernel-Tests',
-				'SUnit-Tests'
+				'SUnit-Tests',
+        'STON-Core',
+        'Topez-Client-GemStone',
+        'Topez-Web-Common-Console'
 			]);
 		}
 

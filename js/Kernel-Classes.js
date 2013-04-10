@@ -46,6 +46,24 @@ smalltalk.Behavior);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "allInstVarNames",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._allInstanceVariableNames();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"allInstVarNames",{},smalltalk.Behavior)})},
+args: [],
+source: "allInstVarNames\x0a\x09^ self allInstanceVariableNames",
+messageSends: ["allInstanceVariableNames"],
+referencedClasses: []
+}),
+smalltalk.Behavior);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "allInstanceVariableNames",
 category: 'accessing',
 fn: function (){
@@ -977,6 +995,22 @@ return true;
 }, function($ctx1) {$ctx1.fill(self,"isClass",{},smalltalk.Class)})},
 args: [],
 source: "isClass\x0a\x09^true",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Class);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "isVariable",
+category: 'testing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return false;
+}, function($ctx1) {$ctx1.fill(self,"isVariable",{},smalltalk.Class)})},
+args: [],
+source: "isVariable\x0a\x09^ false",
 messageSends: [],
 referencedClasses: []
 }),
