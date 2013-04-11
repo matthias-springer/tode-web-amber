@@ -223,6 +223,13 @@ errorNotFound
 	self error: 'Object is not in the collection'
 ! !
 
+!Collection methodsFor: 'ston-core'!
+
+stonOn: stonWriter
+	stonWriter writeObject: self do: [
+		stonWriter encodeList: self ]
+! !
+
 !Collection methodsFor: 'streaming'!
 
 putOn: aStream
@@ -288,6 +295,16 @@ withAll: aCollection
 		^self new
 		addAll: aCollection;
 		yourself
+! !
+
+!Collection class methodsFor: 'ston-core'!
+
+fromSton: stonReader
+	| collection |
+	collection := self new.
+	stonReader parseListDo: [ :each |
+		collection add: each ].
+	^ collection
 ! !
 
 Collection subclass: #IndexableCollection
@@ -699,10 +716,38 @@ positionOfKey: anObject
 	>
 ! !
 
+!Dictionary methodsFor: 'ston-core'!
+
+stonOn: stonWriter
+	"Instances of STON mapClass will be encoded directly, without a class tag.
+	Other (sub)classes will be encoded with a class tag and will use a map representation. "
+	
+	self class == STON mapClass
+		ifTrue: [ 
+			stonWriter writeMap: self ]
+		ifFalse: [ 
+			stonWriter 
+				writeObject: self 
+				do: [ stonWriter encodeMap: self ] ]
+! !
+
 !Dictionary methodsFor: 'testing'!
 
 includesKey: aKey
 	< return self._positionOfKey_(aKey) >>= 0; >
+! !
+
+!Dictionary class methodsFor: 'ston-core'!
+
+fromSton: stonReader
+	"Instances of STON mapClass will be read directly and won't arrive here.
+	Other (sub)classes will use this method."
+	
+	| dictionary |
+	dictionary := self new.
+	stonReader parseMapDo: [ :key :value |
+		dictionary at: key put: value ].
+	^ dictionary
 ! !
 
 IndexableCollection subclass: #SequenceableCollection
@@ -854,6 +899,14 @@ withIndexDo: aBlock
 	<for(var i=0;i<self.length;i++){aBlock(self[i], i+1);}>
 ! !
 
+!SequenceableCollection methodsFor: 'ston-core'!
+
+stonOn: stonWriter
+	self class == STON listClass
+		ifTrue: [ stonWriter writeList: self ]
+		ifFalse: [ super stonOn: stonWriter ]
+! !
+
 !SequenceableCollection methodsFor: 'streaming'!
 
 newStream
@@ -890,6 +943,14 @@ includes: anObject
 
 streamClass
 		^Stream
+! !
+
+!SequenceableCollection class methodsFor: 'ston-core'!
+
+fromSton: stonReader
+	^ self streamContents: [ :stream |
+		stonReader parseListDo: [ :each |
+			stream nextPut: each ] ]
 ! !
 
 !SequenceableCollection class methodsFor: 'streaming'!
@@ -1456,6 +1517,15 @@ skipDelimiters: delimiters startingAt: start
 	^ self size + 1
 ! !
 
+!String methodsFor: 'ston-core'!
+
+stonOn: stonWriter
+	stonWriter writeString: self
+!
+
+stonProcessSubObjects: block
+! !
+
 !String methodsFor: 'testing'!
 
 includesSubString: subString
@@ -1464,6 +1534,11 @@ includesSubString: subString
 
 isCharacter
 	^ self size = 1
+!
+
+isDigit
+	self isCharacter ifFalse: [Error signal: 'not a character'].
+	^ self asciiValue >= 48 and: [self asciiValue <= 57]
 !
 
 isImmutable
@@ -1823,6 +1898,11 @@ next: anInteger
 peek
 	^self atEnd ifFalse: [
 		self collection at: self position + 1]
+!
+
+print: anObject
+	"Have anObject print itself on the receiver."
+	anObject printOn: self
 ! !
 
 !Stream methodsFor: 'testing'!

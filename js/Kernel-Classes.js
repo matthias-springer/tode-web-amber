@@ -46,24 +46,6 @@ smalltalk.Behavior);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "allInstVarNames",
-category: 'accessing',
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st(self)._allInstanceVariableNames();
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"allInstVarNames",{},smalltalk.Behavior)})},
-args: [],
-source: "allInstVarNames\x0a\x09^ self allInstanceVariableNames",
-messageSends: ["allInstanceVariableNames"],
-referencedClasses: []
-}),
-smalltalk.Behavior);
-
-smalltalk.addMethod(
-smalltalk.method({
 selector: "allInstanceVariableNames",
 category: 'accessing',
 fn: function (){
@@ -1092,6 +1074,24 @@ args: ["aString"],
 source: "rename: aString\x0a\x09ClassBuilder new renameClass: self to: aString",
 messageSends: ["renameClass:to:", "new"],
 referencedClasses: ["ClassBuilder"]
+}),
+smalltalk.Class);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonName",
+category: 'ston-core',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._name();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"stonName",{},smalltalk.Class)})},
+args: [],
+source: "stonName\x0a\x09\x22Override to encode my instances using a different class name.\x22\x0a\x09\x0a\x09^ self name",
+messageSends: ["name"],
+referencedClasses: []
 }),
 smalltalk.Class);
 

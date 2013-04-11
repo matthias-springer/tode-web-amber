@@ -256,6 +256,46 @@ printString
 	^ String streamContents: [ :stream | self printOn: stream ]
 ! !
 
+!Object methodsFor: 'ston-core'!
+
+fromSton: stonReader
+	"Decode non-variable classes from a map of their instance variables and values.
+	Override to customize and add a mathcing #toSton: (see implementors)."
+	
+	self class isVariable 
+		ifTrue: [
+			self subclassResponsibility ]
+		ifFalse: [
+			stonReader parseMapDo: [ :instVarName :value |
+				self instVarAt: instVarName put: value ] ]
+!
+
+isStonReference
+	^ false
+!
+
+stonOn: stonWriter
+	"Encode non-variable classes with a map of their instance variable and values.
+	Override to customize and add a matching #fromSton: (see implementors)."
+
+	self class isVariable 
+		ifTrue: [
+			self subclassResponsibility ]
+		ifFalse: [
+			stonWriter writeObject: self streamMap: [ :dictionary |
+				self class allInstanceVariableNames do: [ :each |
+					dictionary at: each asSymbol put: (self instVarAt: each) ] ] ]
+!
+
+stonProcessSubObjects: block
+	1 to: self class instSize do: [ :each |
+		self instVarAt: each put: (block value: (self instVarAt: each)) ].
+	(self class isVariable and: [ self class isBytes not ])
+		ifTrue: [
+			1 to: self basicSize do: [ :each |
+				self basicAt: each put: (block value: (self basicAt: each)) ] ]
+! !
+
 !Object methodsFor: 'streaming'!
 
 putOn: aStream
@@ -358,6 +398,17 @@ respondsTo: aSelector
 
 initialize
 	"no op"
+! !
+
+!Object class methodsFor: 'ston-core'!
+
+fromSton: stonReader
+	"Create a new instance and delegate decoding to instance side.
+	Override only when new instance should be created directly (see implementors). "
+	
+	^ self new
+		fromSton: stonReader;
+		yourself
 ! !
 
 Object subclass: #Boolean
@@ -474,6 +525,15 @@ printOn: aStream
 	aStream nextPutAll: self asString
 ! !
 
+!Boolean methodsFor: 'ston-core'!
+
+stonOn: stonWriter
+	stonWriter writeBoolean: self
+!
+
+stonProcessSubObjects: block
+! !
+
 !Boolean methodsFor: 'testing'!
 
 isBoolean
@@ -488,14 +548,46 @@ Object subclass: #Character
 	instanceVariableNames: ''
 	package: 'Kernel-Objects'!
 
+!Character methodsFor: 'ston-core'!
+
+stonOn: stonWriter
+	stonWriter writeObject: self listSingleton: self asString
+! !
+
 !Character class methodsFor: 'characters'!
+
+backspace
+	^ self codePoint: 8
+!
 
 codePoint: aNumber
 	< return String.fromCharCode(aNumber) >
 !
 
+cr
+	^ self codePoint: 13
+!
+
+lf
+	^ self codePoint: 10
+!
+
+newPage
+	^ self codePoint: 12
+!
+
 space
 	^ ' '
+!
+
+tab
+	^ self codePoint: 9
+! !
+
+!Character class methodsFor: 'ston-core'!
+
+fromSton: stonReader
+	^ stonReader parseListSingleton first
 ! !
 
 Object subclass: #Date
@@ -649,6 +741,17 @@ printOn: aStream
 	aStream nextPutAll: self asString
 ! !
 
+!Date methodsFor: 'ston-core'!
+
+stonOn: stonWriter
+	"Use an ISO style YYYYMMDD representation"
+	"TODO: implement yyyymmdd"
+	stonWriter writeObject: self listSingleton: self yyyymmdd
+!
+
+stonProcessSubObjects: block
+! !
+
 !Date class methodsFor: 'instance creation'!
 
 fromMilliseconds: aNumber
@@ -681,6 +784,12 @@ now
 
 today
 	^self new
+! !
+
+!Date class methodsFor: 'ston-core'!
+
+fromSton: stonReader
+	^ self readFrom: stonReader parseListSingleton readStream
 ! !
 
 Object subclass: #Environment
@@ -1241,6 +1350,15 @@ printShowingDecimalPlaces: placesDesired
 	<return self.toFixed(placesDesired)>
 ! !
 
+!Number methodsFor: 'ston-core'!
+
+stonOn: stonWriter
+	stonWriter writeFloat: self
+!
+
+stonProcessSubObjects: block
+! !
+
 !Number methodsFor: 'testing'!
 
 IsImmutable
@@ -1590,6 +1708,19 @@ printOn: aStream
 	y printOn: aStream
 ! !
 
+!Point methodsFor: 'ston-core'!
+
+fromSton: stonReader
+	stonReader parseListDo: [ :each :index |
+		index = 1 ifTrue: [ x := each ].
+		index = 2 ifTrue: [ y := each ] ]
+!
+
+stonOn: stonWriter
+	stonWriter writeObject: self streamShortList: [ :array |
+		array add: x; add: y ]
+! !
+
 !Point methodsFor: 'transforming'!
 
 translateBy: delta
@@ -1930,6 +2061,15 @@ shallowCopy
 
 printOn: aStream
 	aStream nextPutAll: 'nil'
+! !
+
+!UndefinedObject methodsFor: 'ston-core'!
+
+stonOn: stonWriter
+	stonWriter writeNull
+!
+
+stonProcessSubObjects: block
 ! !
 
 !UndefinedObject methodsFor: 'testing'!

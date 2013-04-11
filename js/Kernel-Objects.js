@@ -353,6 +353,31 @@ smalltalk.Object);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "fromSton:",
+category: 'ston-core',
+fn: function (stonReader){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._class())._isVariable();
+if(smalltalk.assert($1)){
+_st(self)._subclassResponsibility();
+} else {
+_st(stonReader)._parseMapDo_((function(instVarName,value){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._instVarAt_put_(instVarName,value);
+}, function($ctx2) {$ctx2.fillBlock({instVarName:instVarName,value:value},$ctx1)})}));
+};
+return self}, function($ctx1) {$ctx1.fill(self,"fromSton:",{stonReader:stonReader},smalltalk.Object)})},
+args: ["stonReader"],
+source: "fromSton: stonReader\x0a\x09\x22Decode non-variable classes from a map of their instance variables and values.\x0a\x09Override to customize and add a mathcing #toSton: (see implementors).\x22\x0a\x09\x0a\x09self class isVariable \x0a\x09\x09ifTrue: [\x0a\x09\x09\x09self subclassResponsibility ]\x0a\x09\x09ifFalse: [\x0a\x09\x09\x09stonReader parseMapDo: [ :instVarName :value |\x0a\x09\x09\x09\x09self instVarAt: instVarName put: value ] ]",
+messageSends: ["ifTrue:ifFalse:", "subclassResponsibility", "parseMapDo:", "instVarAt:put:", "isVariable", "class"],
+referencedClasses: []
+}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "halt",
 category: 'error handling',
 fn: function (){
@@ -727,6 +752,22 @@ smalltalk.Object);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "isStonReference",
+category: 'ston-core',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return false;
+}, function($ctx1) {$ctx1.fill(self,"isStonReference",{},smalltalk.Object)})},
+args: [],
+source: "isStonReference\x0a\x09^ false",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "isString",
 category: 'testing',
 fn: function (){
@@ -963,6 +1004,64 @@ smalltalk.Object);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "stonOn:",
+category: 'ston-core',
+fn: function (stonWriter){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._class())._isVariable();
+if(smalltalk.assert($1)){
+_st(self)._subclassResponsibility();
+} else {
+_st(stonWriter)._writeObject_streamMap_(self,(function(dictionary){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(_st(self)._class())._allInstanceVariableNames())._do_((function(each){
+return smalltalk.withContext(function($ctx3) {
+return _st(dictionary)._at_put_(_st(each)._asSymbol(),_st(self)._instVarAt_(each));
+}, function($ctx3) {$ctx3.fillBlock({each:each},$ctx1)})}));
+}, function($ctx2) {$ctx2.fillBlock({dictionary:dictionary},$ctx1)})}));
+};
+return self}, function($ctx1) {$ctx1.fill(self,"stonOn:",{stonWriter:stonWriter},smalltalk.Object)})},
+args: ["stonWriter"],
+source: "stonOn: stonWriter\x0a\x09\x22Encode non-variable classes with a map of their instance variable and values.\x0a\x09Override to customize and add a matching #fromSton: (see implementors).\x22\x0a\x0a\x09self class isVariable \x0a\x09\x09ifTrue: [\x0a\x09\x09\x09self subclassResponsibility ]\x0a\x09\x09ifFalse: [\x0a\x09\x09\x09stonWriter writeObject: self streamMap: [ :dictionary |\x0a\x09\x09\x09\x09self class allInstanceVariableNames do: [ :each |\x0a\x09\x09\x09\x09\x09dictionary at: each asSymbol put: (self instVarAt: each) ] ] ]",
+messageSends: ["ifTrue:ifFalse:", "subclassResponsibility", "writeObject:streamMap:", "do:", "at:put:", "asSymbol", "instVarAt:", "allInstanceVariableNames", "class", "isVariable"],
+referencedClasses: []
+}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonProcessSubObjects:",
+category: 'ston-core',
+fn: function (block){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+_st((1))._to_do_(_st(_st(self)._class())._instSize(),(function(each){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._instVarAt_put_(each,_st(block)._value_(_st(self)._instVarAt_(each)));
+}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1)})}));
+$1=_st(_st(_st(self)._class())._isVariable())._and_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(_st(self)._class())._isBytes())._not();
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+if(smalltalk.assert($1)){
+_st((1))._to_do_(_st(self)._basicSize(),(function(each){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._basicAt_put_(each,_st(block)._value_(_st(self)._basicAt_(each)));
+}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1)})}));
+};
+return self}, function($ctx1) {$ctx1.fill(self,"stonProcessSubObjects:",{block:block},smalltalk.Object)})},
+args: ["block"],
+source: "stonProcessSubObjects: block\x0a\x091 to: self class instSize do: [ :each |\x0a\x09\x09self instVarAt: each put: (block value: (self instVarAt: each)) ].\x0a\x09(self class isVariable and: [ self class isBytes not ])\x0a\x09\x09ifTrue: [\x0a\x09\x09\x091 to: self basicSize do: [ :each |\x0a\x09\x09\x09\x09self basicAt: each put: (block value: (self basicAt: each)) ] ]",
+messageSends: ["to:do:", "instSize", "class", "instVarAt:put:", "value:", "instVarAt:", "ifTrue:", "basicSize", "basicAt:put:", "basicAt:", "and:", "not", "isBytes", "isVariable"],
+referencedClasses: []
+}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "subclassResponsibility",
 category: 'error handling',
 fn: function (){
@@ -1097,6 +1196,27 @@ referencedClasses: []
 }),
 smalltalk.Object);
 
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "fromSton:",
+category: 'ston-core',
+fn: function (stonReader){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=_st(self)._new();
+_st($2)._fromSton_(stonReader);
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"fromSton:",{stonReader:stonReader},smalltalk.Object.klass)})},
+args: ["stonReader"],
+source: "fromSton: stonReader\x0a\x09\x22Create a new instance and delegate decoding to instance side.\x0a\x09Override only when new instance should be created directly (see implementors). \x22\x0a\x09\x0a\x09^ self new\x0a\x09\x09fromSton: stonReader;\x0a\x09\x09yourself",
+messageSends: ["fromSton:", "new", "yourself"],
+referencedClasses: []
+}),
+smalltalk.Object.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
@@ -1442,6 +1562,37 @@ smalltalk.Boolean);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "stonOn:",
+category: 'ston-core',
+fn: function (stonWriter){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(stonWriter)._writeBoolean_(self);
+return self}, function($ctx1) {$ctx1.fill(self,"stonOn:",{stonWriter:stonWriter},smalltalk.Boolean)})},
+args: ["stonWriter"],
+source: "stonOn: stonWriter\x0a\x09stonWriter writeBoolean: self",
+messageSends: ["writeBoolean:"],
+referencedClasses: []
+}),
+smalltalk.Boolean);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonProcessSubObjects:",
+category: 'ston-core',
+fn: function (block){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"stonProcessSubObjects:",{block:block},smalltalk.Boolean)})},
+args: ["block"],
+source: "stonProcessSubObjects: block",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Boolean);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "|",
 category: 'controlling',
 fn: function (aBoolean){
@@ -1465,6 +1616,40 @@ smalltalk.Boolean);
 
 
 smalltalk.addClass('Character', smalltalk.Object, [], 'Kernel-Objects');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonOn:",
+category: 'ston-core',
+fn: function (stonWriter){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(stonWriter)._writeObject_listSingleton_(self,_st(self)._asString());
+return self}, function($ctx1) {$ctx1.fill(self,"stonOn:",{stonWriter:stonWriter},smalltalk.Character)})},
+args: ["stonWriter"],
+source: "stonOn: stonWriter\x0a\x09stonWriter writeObject: self listSingleton: self asString",
+messageSends: ["writeObject:listSingleton:", "asString"],
+referencedClasses: []
+}),
+smalltalk.Character);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "backspace",
+category: 'characters',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._codePoint_((8));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"backspace",{},smalltalk.Character.klass)})},
+args: [],
+source: "backspace\x0a\x09^ self codePoint: 8",
+messageSends: ["codePoint:"],
+referencedClasses: []
+}),
+smalltalk.Character.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
@@ -1484,6 +1669,78 @@ smalltalk.Character.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "cr",
+category: 'characters',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._codePoint_((13));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"cr",{},smalltalk.Character.klass)})},
+args: [],
+source: "cr\x0a\x09^ self codePoint: 13",
+messageSends: ["codePoint:"],
+referencedClasses: []
+}),
+smalltalk.Character.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "fromSton:",
+category: 'ston-core',
+fn: function (stonReader){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(stonReader)._parseListSingleton())._first();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"fromSton:",{stonReader:stonReader},smalltalk.Character.klass)})},
+args: ["stonReader"],
+source: "fromSton: stonReader\x0a\x09^ stonReader parseListSingleton first",
+messageSends: ["first", "parseListSingleton"],
+referencedClasses: []
+}),
+smalltalk.Character.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "lf",
+category: 'characters',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._codePoint_((10));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"lf",{},smalltalk.Character.klass)})},
+args: [],
+source: "lf\x0a\x09^ self codePoint: 10",
+messageSends: ["codePoint:"],
+referencedClasses: []
+}),
+smalltalk.Character.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "newPage",
+category: 'characters',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._codePoint_((12));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"newPage",{},smalltalk.Character.klass)})},
+args: [],
+source: "newPage\x0a\x09^ self codePoint: 12",
+messageSends: ["codePoint:"],
+referencedClasses: []
+}),
+smalltalk.Character.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "space",
 category: 'characters',
 fn: function (){
@@ -1494,6 +1751,24 @@ return " ";
 args: [],
 source: "space\x0a\x09^ ' '",
 messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Character.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "tab",
+category: 'characters',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._codePoint_((9));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"tab",{},smalltalk.Character.klass)})},
+args: [],
+source: "tab\x0a\x09^ self codePoint: 9",
+messageSends: ["codePoint:"],
 referencedClasses: []
 }),
 smalltalk.Character.klass);
@@ -1973,6 +2248,37 @@ smalltalk.Date);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "stonOn:",
+category: 'ston-core',
+fn: function (stonWriter){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(stonWriter)._writeObject_listSingleton_(self,_st(self)._yyyymmdd());
+return self}, function($ctx1) {$ctx1.fill(self,"stonOn:",{stonWriter:stonWriter},smalltalk.Date)})},
+args: ["stonWriter"],
+source: "stonOn: stonWriter\x0a\x09\x22Use an ISO style YYYYMMDD representation\x22\x0a\x09\x22TODO: implement yyyymmdd\x22\x0a\x09stonWriter writeObject: self listSingleton: self yyyymmdd",
+messageSends: ["writeObject:listSingleton:", "yyyymmdd"],
+referencedClasses: []
+}),
+smalltalk.Date);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonProcessSubObjects:",
+category: 'ston-core',
+fn: function (block){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"stonProcessSubObjects:",{block:block},smalltalk.Date)})},
+args: ["block"],
+source: "stonProcessSubObjects: block",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Date);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "time",
 category: 'accessing',
 fn: function (){
@@ -2068,6 +2374,24 @@ return $1;
 args: ["aNumber"],
 source: "fromSeconds: aNumber\x0a\x09^self fromMilliseconds: aNumber * 1000",
 messageSends: ["fromMilliseconds:", "*"],
+referencedClasses: []
+}),
+smalltalk.Date.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "fromSton:",
+category: 'ston-core',
+fn: function (stonReader){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._readFrom_(_st(_st(stonReader)._parseListSingleton())._readStream());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"fromSton:",{stonReader:stonReader},smalltalk.Date.klass)})},
+args: ["stonReader"],
+source: "fromSton: stonReader\x0a\x09^ self readFrom: stonReader parseListSingleton readStream",
+messageSends: ["readFrom:", "readStream", "parseListSingleton"],
 referencedClasses: []
 }),
 smalltalk.Date.klass);
@@ -3709,6 +4033,37 @@ smalltalk.Number);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "stonOn:",
+category: 'ston-core',
+fn: function (stonWriter){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(stonWriter)._writeFloat_(self);
+return self}, function($ctx1) {$ctx1.fill(self,"stonOn:",{stonWriter:stonWriter},smalltalk.Number)})},
+args: ["stonWriter"],
+source: "stonOn: stonWriter\x0a\x09stonWriter writeFloat: self",
+messageSends: ["writeFloat:"],
+referencedClasses: []
+}),
+smalltalk.Number);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonProcessSubObjects:",
+category: 'ston-core',
+fn: function (block){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"stonProcessSubObjects:",{block:block},smalltalk.Number)})},
+args: ["block"],
+source: "stonProcessSubObjects: block",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Number);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "timesRepeat:",
 category: 'enumerating',
 fn: function (aBlock){
@@ -4672,6 +5027,35 @@ smalltalk.Point);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "fromSton:",
+category: 'ston-core',
+fn: function (stonReader){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+_st(stonReader)._parseListDo_((function(each,index){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(index).__eq((1));
+if(smalltalk.assert($1)){
+self["@x"]=each;
+self["@x"];
+};
+$2=_st(index).__eq((2));
+if(smalltalk.assert($2)){
+self["@y"]=each;
+return self["@y"];
+};
+}, function($ctx2) {$ctx2.fillBlock({each:each,index:index},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"fromSton:",{stonReader:stonReader},smalltalk.Point)})},
+args: ["stonReader"],
+source: "fromSton: stonReader\x0a\x09stonReader parseListDo: [ :each :index |\x0a\x09\x09index = 1 ifTrue: [ x := each ].\x0a\x09\x09index = 2 ifTrue: [ y := each ] ]",
+messageSends: ["parseListDo:", "ifTrue:", "="],
+referencedClasses: []
+}),
+smalltalk.Point);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "printOn:",
 category: 'printing',
 fn: function (aStream){
@@ -4692,6 +5076,29 @@ return self}, function($ctx1) {$ctx1.fill(self,"printOn:",{aStream:aStream},smal
 args: ["aStream"],
 source: "printOn: aStream\x0a\x09\x22Print receiver in classic x@y notation.\x22\x0a\x0a\x09x printOn: aStream.\x0a\x09\x0a\x09aStream nextPutAll: '@'.\x0a\x09(y notNil and: [y negative]) ifTrue: [\x0a\x09\x09\x09\x22Avoid ambiguous @- construct\x22\x0a\x09\x09\x09aStream space ].\x0a\x09\x0a\x09y printOn: aStream",
 messageSends: ["printOn:", "nextPutAll:", "ifTrue:", "space", "and:", "negative", "notNil"],
+referencedClasses: []
+}),
+smalltalk.Point);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonOn:",
+category: 'ston-core',
+fn: function (stonWriter){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+_st(stonWriter)._writeObject_streamShortList_(self,(function(array){
+return smalltalk.withContext(function($ctx2) {
+$1=array;
+_st($1)._add_(self["@x"]);
+$2=_st($1)._add_(self["@y"]);
+return $2;
+}, function($ctx2) {$ctx2.fillBlock({array:array},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"stonOn:",{stonWriter:stonWriter},smalltalk.Point)})},
+args: ["stonWriter"],
+source: "stonOn: stonWriter\x0a\x09stonWriter writeObject: self streamShortList: [ :array |\x0a\x09\x09array add: x; add: y ]",
+messageSends: ["writeObject:streamShortList:", "add:"],
 referencedClasses: []
 }),
 smalltalk.Point);
@@ -5625,6 +6032,37 @@ return $1;
 }, function($ctx1) {$ctx1.fill(self,"shallowCopy",{},smalltalk.UndefinedObject)})},
 args: [],
 source: "shallowCopy\x0a\x09^self",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.UndefinedObject);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonOn:",
+category: 'ston-core',
+fn: function (stonWriter){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(stonWriter)._writeNull();
+return self}, function($ctx1) {$ctx1.fill(self,"stonOn:",{stonWriter:stonWriter},smalltalk.UndefinedObject)})},
+args: ["stonWriter"],
+source: "stonOn: stonWriter\x0a\x09stonWriter writeNull",
+messageSends: ["writeNull"],
+referencedClasses: []
+}),
+smalltalk.UndefinedObject);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonProcessSubObjects:",
+category: 'ston-core',
+fn: function (block){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"stonProcessSubObjects:",{block:block},smalltalk.UndefinedObject)})},
+args: ["block"],
+source: "stonProcessSubObjects: block",
 messageSends: [],
 referencedClasses: []
 }),

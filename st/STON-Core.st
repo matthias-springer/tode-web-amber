@@ -199,6 +199,27 @@ parseValue
 
 !STONReader methodsFor: 'parsing-internal'!
 
+parseCharacter
+	| char |
+	(char := readStream next) = '\' 
+		ifFalse: [ ^ char ].
+	(#( '''' '"' '/' '\') includes: (char := readStream next))
+		ifTrue: [ ^ char ].
+	char = 'b'
+		ifTrue: [ ^ Character backspace ].
+	char = 'f'
+		ifTrue: [ ^ Character newPage ].
+	char = 'n'
+		ifTrue: [ ^ Character lf ].
+	char = 'r'
+		ifTrue: [ ^ Character cr ].
+	char = 't'
+		ifTrue: [ ^ Character tab ].
+	char = 'u'
+		ifTrue: [ ^ self parseCharacterHex ].
+	self error: 'invalid escape character \' , (String with: char)
+!
+
 parseCharacterHex
 	| value |
 	value := self parseCharacterHexDigit.
@@ -615,7 +636,7 @@ reset
 
 encodeCharacter: char
 	| code encoding |
-	((code := char codePoint) < 127 and: [ (encoding := STONCharacters at: code + 1) notNil ])
+	((code := char codePoint) < 127 and: [ (encoding := self class stonCharacters at: code + 1) notNil ])
 		ifTrue: [ 
 			encoding = #pass
 				ifTrue: [ writeStream nextPut: char ]
@@ -710,6 +731,40 @@ nextPut: anObject
 ! !
 
 !STONWriter methodsFor: 'writing'!
+
+encodeList: elements
+	writeStream nextPut: '['.
+	elements isEmpty
+		ifTrue: [
+			self prettyPrintSpace ]
+		ifFalse: [
+			self indentedDo: [
+				self newlineIndent.
+				elements 
+					do: [ :each | self nextPut: each ]
+					separatedBy: [ self listElementSeparator ] ].
+			self newlineIndent ].
+	writeStream nextPut: ']'
+!
+
+encodeMap: pairs
+	| first |
+	first := true.
+	writeStream nextPut: '{'.
+	pairs isEmpty
+		ifTrue: [
+			self prettyPrintSpace ]
+		ifFalse: [
+			self indentedDo: [
+				self newlineIndent.
+				pairs keysAndValuesDo: [ :key :value |
+					first 
+						ifTrue: [ first := false ] 
+						ifFalse: [ self mapElementSeparator ].
+					self encodeKey: key value: value ] ].
+			self newlineIndent ].
+	writeStream nextPut: '}'
+!
 
 writeBoolean: boolean
 	writeStream print: boolean
@@ -815,6 +870,16 @@ writeSymbol: symbol
 ! !
 
 STONWriter class instanceVariableNames: 'sTONCharacters sTONSimpleSymbolCharacters'!
+
+!STONWriter class methodsFor: 'accessing'!
+
+stonCharacters
+	^ sTONCharacters
+!
+
+stonSimpleSymbolCharacters
+	^ sTONSimpleSymbolCharacters
+! !
 
 !STONWriter class methodsFor: 'class initialization'!
 

@@ -257,6 +257,26 @@ smalltalk.Object);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "fromSton:",
+fn: function (stonReader){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._class())._isVariable();
+if(smalltalk.assert($1)){
+_st(self)._subclassResponsibility();
+} else {
+_st(stonReader)._parseMapDo_((function(instVarName,value){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._instVarAt_put_(instVarName,value);
+}, function($ctx2) {$ctx2.fillBlock({instVarName:instVarName,value:value},$ctx1)})}));
+};
+return self}, function($ctx1) {$ctx1.fill(self,"fromSton:",{stonReader:stonReader},smalltalk.Object)})},
+messageSends: ["ifTrue:ifFalse:", "subclassResponsibility", "parseMapDo:", "instVarAt:put:", "isVariable", "class"]}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "halt",
 fn: function (){
 var self=this;
@@ -521,6 +541,17 @@ smalltalk.Object);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "isStonReference",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return false;
+}, function($ctx1) {$ctx1.fill(self,"isStonReference",{},smalltalk.Object)})},
+messageSends: []}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "isString",
 fn: function (){
 var self=this;
@@ -692,6 +723,54 @@ smalltalk.Object);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "stonOn:",
+fn: function (stonWriter){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._class())._isVariable();
+if(smalltalk.assert($1)){
+_st(self)._subclassResponsibility();
+} else {
+_st(stonWriter)._writeObject_streamMap_(self,(function(dictionary){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(_st(self)._class())._allInstanceVariableNames())._do_((function(each){
+return smalltalk.withContext(function($ctx3) {
+return _st(dictionary)._at_put_(_st(each)._asSymbol(),_st(self)._instVarAt_(each));
+}, function($ctx3) {$ctx3.fillBlock({each:each},$ctx1)})}));
+}, function($ctx2) {$ctx2.fillBlock({dictionary:dictionary},$ctx1)})}));
+};
+return self}, function($ctx1) {$ctx1.fill(self,"stonOn:",{stonWriter:stonWriter},smalltalk.Object)})},
+messageSends: ["ifTrue:ifFalse:", "subclassResponsibility", "writeObject:streamMap:", "do:", "at:put:", "asSymbol", "instVarAt:", "allInstanceVariableNames", "class", "isVariable"]}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonProcessSubObjects:",
+fn: function (block){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+_st((1))._to_do_(_st(_st(self)._class())._instSize(),(function(each){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._instVarAt_put_(each,_st(block)._value_(_st(self)._instVarAt_(each)));
+}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1)})}));
+$1=_st(_st(_st(self)._class())._isVariable())._and_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(_st(self)._class())._isBytes())._not();
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+if(smalltalk.assert($1)){
+_st((1))._to_do_(_st(self)._basicSize(),(function(each){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._basicAt_put_(each,_st(block)._value_(_st(self)._basicAt_(each)));
+}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1)})}));
+};
+return self}, function($ctx1) {$ctx1.fill(self,"stonProcessSubObjects:",{block:block},smalltalk.Object)})},
+messageSends: ["to:do:", "instSize", "class", "instVarAt:put:", "value:", "instVarAt:", "ifTrue:", "basicSize", "basicAt:put:", "basicAt:", "and:", "not", "isBytes", "isVariable"]}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "subclassResponsibility",
 fn: function (){
 var self=this;
@@ -786,6 +865,22 @@ return $1;
 messageSends: ["=", "=="]}),
 smalltalk.Object);
 
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "fromSton:",
+fn: function (stonReader){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=_st(self)._new();
+_st($2)._fromSton_(stonReader);
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"fromSton:",{stonReader:stonReader},smalltalk.Object.klass)})},
+messageSends: ["fromSton:", "new", "yourself"]}),
+smalltalk.Object.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
@@ -1040,6 +1135,27 @@ smalltalk.Boolean);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "stonOn:",
+fn: function (stonWriter){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(stonWriter)._writeBoolean_(self);
+return self}, function($ctx1) {$ctx1.fill(self,"stonOn:",{stonWriter:stonWriter},smalltalk.Boolean)})},
+messageSends: ["writeBoolean:"]}),
+smalltalk.Boolean);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonProcessSubObjects:",
+fn: function (block){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"stonProcessSubObjects:",{block:block},smalltalk.Boolean)})},
+messageSends: []}),
+smalltalk.Boolean);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "|",
 fn: function (aBoolean){
 var self=this;
@@ -1058,6 +1174,30 @@ smalltalk.Boolean);
 
 
 smalltalk.addClass('Character', smalltalk.Object, [], 'Kernel-Objects');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonOn:",
+fn: function (stonWriter){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(stonWriter)._writeObject_listSingleton_(self,_st(self)._asString());
+return self}, function($ctx1) {$ctx1.fill(self,"stonOn:",{stonWriter:stonWriter},smalltalk.Character)})},
+messageSends: ["writeObject:listSingleton:", "asString"]}),
+smalltalk.Character);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "backspace",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._codePoint_((8));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"backspace",{},smalltalk.Character.klass)})},
+messageSends: ["codePoint:"]}),
+smalltalk.Character.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
@@ -1072,6 +1212,58 @@ smalltalk.Character.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "cr",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._codePoint_((13));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"cr",{},smalltalk.Character.klass)})},
+messageSends: ["codePoint:"]}),
+smalltalk.Character.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "fromSton:",
+fn: function (stonReader){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(stonReader)._parseListSingleton())._first();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"fromSton:",{stonReader:stonReader},smalltalk.Character.klass)})},
+messageSends: ["first", "parseListSingleton"]}),
+smalltalk.Character.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "lf",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._codePoint_((10));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"lf",{},smalltalk.Character.klass)})},
+messageSends: ["codePoint:"]}),
+smalltalk.Character.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "newPage",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._codePoint_((12));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"newPage",{},smalltalk.Character.klass)})},
+messageSends: ["codePoint:"]}),
+smalltalk.Character.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "space",
 fn: function (){
 var self=this;
@@ -1079,6 +1271,19 @@ return smalltalk.withContext(function($ctx1) {
 return " ";
 }, function($ctx1) {$ctx1.fill(self,"space",{},smalltalk.Character.klass)})},
 messageSends: []}),
+smalltalk.Character.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "tab",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._codePoint_((9));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"tab",{},smalltalk.Character.klass)})},
+messageSends: ["codePoint:"]}),
 smalltalk.Character.klass);
 
 
@@ -1410,6 +1615,27 @@ smalltalk.Date);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "stonOn:",
+fn: function (stonWriter){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(stonWriter)._writeObject_listSingleton_(self,_st(self)._yyyymmdd());
+return self}, function($ctx1) {$ctx1.fill(self,"stonOn:",{stonWriter:stonWriter},smalltalk.Date)})},
+messageSends: ["writeObject:listSingleton:", "yyyymmdd"]}),
+smalltalk.Date);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonProcessSubObjects:",
+fn: function (block){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"stonProcessSubObjects:",{block:block},smalltalk.Date)})},
+messageSends: []}),
+smalltalk.Date);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "time",
 fn: function (){
 var self=this;
@@ -1477,6 +1703,19 @@ $1=_st(self)._fromMilliseconds_(_st(aNumber).__star((1000)));
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"fromSeconds:",{aNumber:aNumber},smalltalk.Date.klass)})},
 messageSends: ["fromMilliseconds:", "*"]}),
+smalltalk.Date.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "fromSton:",
+fn: function (stonReader){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._readFrom_(_st(_st(stonReader)._parseListSingleton())._readStream());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"fromSton:",{stonReader:stonReader},smalltalk.Date.klass)})},
+messageSends: ["readFrom:", "readStream", "parseListSingleton"]}),
 smalltalk.Date.klass);
 
 smalltalk.addMethod(
@@ -2683,6 +2922,27 @@ smalltalk.Number);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "stonOn:",
+fn: function (stonWriter){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(stonWriter)._writeFloat_(self);
+return self}, function($ctx1) {$ctx1.fill(self,"stonOn:",{stonWriter:stonWriter},smalltalk.Number)})},
+messageSends: ["writeFloat:"]}),
+smalltalk.Number);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonProcessSubObjects:",
+fn: function (block){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"stonProcessSubObjects:",{block:block},smalltalk.Number)})},
+messageSends: []}),
+smalltalk.Number);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "timesRepeat:",
 fn: function (aBlock){
 var self=this;
@@ -3424,6 +3684,30 @@ smalltalk.Point);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "fromSton:",
+fn: function (stonReader){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+_st(stonReader)._parseListDo_((function(each,index){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(index).__eq((1));
+if(smalltalk.assert($1)){
+self["@x"]=each;
+self["@x"];
+};
+$2=_st(index).__eq((2));
+if(smalltalk.assert($2)){
+self["@y"]=each;
+return self["@y"];
+};
+}, function($ctx2) {$ctx2.fillBlock({each:each,index:index},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"fromSton:",{stonReader:stonReader},smalltalk.Point)})},
+messageSends: ["parseListDo:", "ifTrue:", "="]}),
+smalltalk.Point);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "printOn:",
 fn: function (aStream){
 var self=this;
@@ -3441,6 +3725,24 @@ _st(aStream)._space();
 _st(self["@y"])._printOn_(aStream);
 return self}, function($ctx1) {$ctx1.fill(self,"printOn:",{aStream:aStream},smalltalk.Point)})},
 messageSends: ["printOn:", "nextPutAll:", "ifTrue:", "space", "and:", "negative", "notNil"]}),
+smalltalk.Point);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonOn:",
+fn: function (stonWriter){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+_st(stonWriter)._writeObject_streamShortList_(self,(function(array){
+return smalltalk.withContext(function($ctx2) {
+$1=array;
+_st($1)._add_(self["@x"]);
+$2=_st($1)._add_(self["@y"]);
+return $2;
+}, function($ctx2) {$ctx2.fillBlock({array:array},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"stonOn:",{stonWriter:stonWriter},smalltalk.Point)})},
+messageSends: ["writeObject:streamShortList:", "add:"]}),
 smalltalk.Point);
 
 smalltalk.addMethod(
@@ -4130,6 +4432,27 @@ var $1;
 $1=self;
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"shallowCopy",{},smalltalk.UndefinedObject)})},
+messageSends: []}),
+smalltalk.UndefinedObject);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonOn:",
+fn: function (stonWriter){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(stonWriter)._writeNull();
+return self}, function($ctx1) {$ctx1.fill(self,"stonOn:",{stonWriter:stonWriter},smalltalk.UndefinedObject)})},
+messageSends: ["writeNull"]}),
+smalltalk.UndefinedObject);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonProcessSubObjects:",
+fn: function (block){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"stonProcessSubObjects:",{block:block},smalltalk.UndefinedObject)})},
 messageSends: []}),
 smalltalk.UndefinedObject);
 

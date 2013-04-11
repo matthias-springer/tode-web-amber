@@ -616,6 +616,39 @@ return self}, function($ctx1) {$ctx1.fill(self,"size",{},smalltalk.Collection)})
 messageSends: ["subclassResponsibility"]}),
 smalltalk.Collection);
 
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonOn:",
+fn: function (stonWriter){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(stonWriter)._writeObject_do_(self,(function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(stonWriter)._encodeList_(self);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"stonOn:",{stonWriter:stonWriter},smalltalk.Collection)})},
+messageSends: ["writeObject:do:", "encodeList:"]}),
+smalltalk.Collection);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "fromSton:",
+fn: function (stonReader){
+var self=this;
+var collection;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+collection=_st(self)._new();
+_st(stonReader)._parseListDo_((function(each){
+return smalltalk.withContext(function($ctx2) {
+return _st(collection)._add_(each);
+}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1)})}));
+$1=collection;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"fromSton:",{stonReader:stonReader,collection:collection},smalltalk.Collection.klass)})},
+messageSends: ["new", "parseListDo:", "add:"]}),
+smalltalk.Collection.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
@@ -1541,6 +1574,27 @@ smalltalk.Dictionary);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "stonOn:",
+fn: function (stonWriter){
+var self=this;
+function $STON(){return smalltalk.STON||(typeof STON=="undefined"?nil:STON)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._class()).__eq_eq(_st($STON())._mapClass());
+if(smalltalk.assert($1)){
+_st(stonWriter)._writeMap_(self);
+} else {
+_st(stonWriter)._writeObject_do_(self,(function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(stonWriter)._encodeMap_(self);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+};
+return self}, function($ctx1) {$ctx1.fill(self,"stonOn:",{stonWriter:stonWriter},smalltalk.Dictionary)})},
+messageSends: ["ifTrue:ifFalse:", "writeMap:", "writeObject:do:", "encodeMap:", "==", "mapClass", "class"]}),
+smalltalk.Dictionary);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "values",
 fn: function (){
 var self=this;
@@ -1565,6 +1619,25 @@ return $1;
 messageSends: ["do:"]}),
 smalltalk.Dictionary);
 
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "fromSton:",
+fn: function (stonReader){
+var self=this;
+var dictionary;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+dictionary=_st(self)._new();
+_st(stonReader)._parseMapDo_((function(key,value){
+return smalltalk.withContext(function($ctx2) {
+return _st(dictionary)._at_put_(key,value);
+}, function($ctx2) {$ctx2.fillBlock({key:key,value:value},$ctx1)})}));
+$1=dictionary;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"fromSton:",{stonReader:stonReader,dictionary:dictionary},smalltalk.Dictionary.klass)})},
+messageSends: ["new", "parseMapDo:", "at:put:"]}),
+smalltalk.Dictionary.klass);
 
 
 smalltalk.addClass('SequenceableCollection', smalltalk.IndexableCollection, [], 'Kernel-Collections');
@@ -1912,6 +1985,24 @@ smalltalk.SequenceableCollection);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "stonOn:",
+fn: function (stonWriter){
+var self=this;
+function $STON(){return smalltalk.STON||(typeof STON=="undefined"?nil:STON)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._class()).__eq_eq(_st($STON())._listClass());
+if(smalltalk.assert($1)){
+_st(stonWriter)._writeList_(self);
+} else {
+smalltalk.IndexableCollection.fn.prototype._stonOn_.apply(_st(self), [stonWriter]);
+};
+return self}, function($ctx1) {$ctx1.fill(self,"stonOn:",{stonWriter:stonWriter},smalltalk.SequenceableCollection)})},
+messageSends: ["ifTrue:ifFalse:", "writeList:", "stonOn:", "==", "listClass", "class"]}),
+smalltalk.SequenceableCollection);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "stream",
 fn: function (){
 var self=this;
@@ -1984,6 +2075,25 @@ return $1;
 messageSends: ["stream"]}),
 smalltalk.SequenceableCollection);
 
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "fromSton:",
+fn: function (stonReader){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._streamContents_((function(stream){
+return smalltalk.withContext(function($ctx2) {
+return _st(stonReader)._parseListDo_((function(each){
+return smalltalk.withContext(function($ctx3) {
+return _st(stream)._nextPut_(each);
+}, function($ctx3) {$ctx3.fillBlock({each:each},$ctx1)})}));
+}, function($ctx2) {$ctx2.fillBlock({stream:stream},$ctx1)})}));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"fromSton:",{stonReader:stonReader},smalltalk.SequenceableCollection.klass)})},
+messageSends: ["streamContents:", "parseListDo:", "nextPut:"]}),
+smalltalk.SequenceableCollection.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
@@ -2915,6 +3025,27 @@ smalltalk.String);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "isDigit",
+fn: function (){
+var self=this;
+function $Error(){return smalltalk.Error||(typeof Error=="undefined"?nil:Error)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(self)._isCharacter();
+if(! smalltalk.assert($1)){
+_st($Error())._signal_("not a character");
+};
+$2=_st(_st(_st(self)._asciiValue()).__gt_eq((48)))._and_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(self)._asciiValue()).__lt_eq((57));
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"isDigit",{},smalltalk.String)})},
+messageSends: ["ifFalse:", "signal:", "isCharacter", "and:", "<=", "asciiValue", ">="]}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "isImmutable",
 fn: function (){
 var self=this;
@@ -3288,6 +3419,27 @@ return $2;
 catch(e) {if(e===$early)return e[0]; throw e}
 }, function($ctx1) {$ctx1.fill(self,"skipDelimiters:startingAt:",{delimiters:delimiters,start:start},smalltalk.String)})},
 messageSends: ["to:do:", "size", "detect:ifNone:", "=", "at:", "+"]}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonOn:",
+fn: function (stonWriter){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(stonWriter)._writeString_(self);
+return self}, function($ctx1) {$ctx1.fill(self,"stonOn:",{stonWriter:stonWriter},smalltalk.String)})},
+messageSends: ["writeString:"]}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonProcessSubObjects:",
+fn: function (block){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"stonProcessSubObjects:",{block:block},smalltalk.String)})},
+messageSends: []}),
 smalltalk.String);
 
 smalltalk.addMethod(
@@ -4131,6 +4283,17 @@ return smalltalk.withContext(function($ctx1) {
 self["@position"]=anInteger;
 return self}, function($ctx1) {$ctx1.fill(self,"position:",{anInteger:anInteger},smalltalk.Stream)})},
 messageSends: []}),
+smalltalk.Stream);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "print:",
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(anObject)._printOn_(self);
+return self}, function($ctx1) {$ctx1.fill(self,"print:",{anObject:anObject},smalltalk.Stream)})},
+messageSends: ["printOn:"]}),
 smalltalk.Stream);
 
 smalltalk.addMethod(

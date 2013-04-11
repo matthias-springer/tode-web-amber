@@ -13,10 +13,6 @@ Behavior also provides methods for compiling methods, examining the method dicti
 
 !Behavior methodsFor: 'accessing'!
 
-allInstVarNames
-	^ self allInstanceVariableNames
-!
-
 allInstanceVariableNames
 	| result |
 	result := self instanceVariableNames copy.
@@ -380,6 +376,14 @@ asJavascript
 
 printOn: aStream
 	aStream nextPutAll: self name
+! !
+
+!Class methodsFor: 'ston-core'!
+
+stonName
+	"Override to encode my instances using a different class name."
+	
+	^ self name
 ! !
 
 !Class methodsFor: 'testing'!

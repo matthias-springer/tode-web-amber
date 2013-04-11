@@ -477,6 +477,63 @@ smalltalk.STONReader);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "parseCharacter",
+fn: function (){
+var self=this;
+var char;
+function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
+function $String(){return smalltalk.String||(typeof String=="undefined"?nil:String)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16;
+char=_st(self["@readStream"])._next();
+$1=_st(char).__eq("\x5c");
+if(! smalltalk.assert($1)){
+$2=char;
+return $2;
+};
+char=_st(self["@readStream"])._next();
+$3=_st(["'", "\x22", "/", "\x5c"])._includes_(char);
+if(smalltalk.assert($3)){
+$4=char;
+return $4;
+};
+$5=_st(char).__eq("b");
+if(smalltalk.assert($5)){
+$6=_st($Character())._backspace();
+return $6;
+};
+$7=_st(char).__eq("f");
+if(smalltalk.assert($7)){
+$8=_st($Character())._newPage();
+return $8;
+};
+$9=_st(char).__eq("n");
+if(smalltalk.assert($9)){
+$10=_st($Character())._lf();
+return $10;
+};
+$11=_st(char).__eq("r");
+if(smalltalk.assert($11)){
+$12=_st($Character())._cr();
+return $12;
+};
+$13=_st(char).__eq("t");
+if(smalltalk.assert($13)){
+$14=_st($Character())._tab();
+return $14;
+};
+$15=_st(char).__eq("u");
+if(smalltalk.assert($15)){
+$16=_st(self)._parseCharacterHex();
+return $16;
+};
+_st(self)._error_(_st("invalid escape character \x5c").__comma(_st($String())._with_(char)));
+return self}, function($ctx1) {$ctx1.fill(self,"parseCharacter",{char:char},smalltalk.STONReader)})},
+messageSends: ["ifFalse:", "=", "next", "ifTrue:", "includes:", "backspace", "newPage", "lf", "cr", "tab", "parseCharacterHex", "error:", ",", "with:"]}),
+smalltalk.STONReader);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "parseCharacterHex",
 fn: function (){
 var self=this;
@@ -1422,13 +1479,12 @@ selector: "encodeCharacter:",
 fn: function (char){
 var self=this;
 var code,encoding;
-function $STONCharacters(){return smalltalk.STONCharacters||(typeof STONCharacters=="undefined"?nil:STONCharacters)}
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2;
 code=_st(char)._codePoint();
 $1=_st(_st(code).__lt((127)))._and_((function(){
 return smalltalk.withContext(function($ctx2) {
-encoding=_st($STONCharacters())._at_(_st(code).__plus((1)));
+encoding=_st(_st(_st(self)._class())._stonCharacters())._at_(_st(code).__plus((1)));
 return _st(encoding)._notNil();
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 if(smalltalk.assert($1)){
@@ -1443,7 +1499,7 @@ _st(self["@writeStream"])._nextPutAll_("\x5cu");
 _st(code)._printOn_base_nDigits_(self["@writeStream"],(16),(4));
 };
 return self}, function($ctx1) {$ctx1.fill(self,"encodeCharacter:",{char:char,code:code,encoding:encoding},smalltalk.STONWriter)})},
-messageSends: ["ifTrue:ifFalse:", "nextPut:", "nextPutAll:", "=", "printOn:base:nDigits:", "and:", "notNil", "at:", "+", "<", "codePoint"]}),
+messageSends: ["ifTrue:ifFalse:", "nextPut:", "nextPutAll:", "=", "printOn:base:nDigits:", "and:", "notNil", "at:", "+", "stonCharacters", "class", "<", "codePoint"]}),
 smalltalk.STONWriter);
 
 smalltalk.addMethod(
@@ -1459,6 +1515,72 @@ _st(self)._prettyPrintSpace();
 _st(self)._nextPut_(value);
 return self}, function($ctx1) {$ctx1.fill(self,"encodeKey:value:",{key:key,value:value},smalltalk.STONWriter)})},
 messageSends: ["nextPut:", "prettyPrintSpace"]}),
+smalltalk.STONWriter);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "encodeList:",
+fn: function (elements){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+_st(self["@writeStream"])._nextPut_("[");
+$1=_st(elements)._isEmpty();
+if(smalltalk.assert($1)){
+_st(self)._prettyPrintSpace();
+} else {
+_st(self)._indentedDo_((function(){
+return smalltalk.withContext(function($ctx2) {
+_st(self)._newlineIndent();
+return _st(elements)._do_separatedBy_((function(each){
+return smalltalk.withContext(function($ctx3) {
+return _st(self)._nextPut_(each);
+}, function($ctx3) {$ctx3.fillBlock({each:each},$ctx1)})}),(function(){
+return smalltalk.withContext(function($ctx3) {
+return _st(self)._listElementSeparator();
+}, function($ctx3) {$ctx3.fillBlock({},$ctx1)})}));
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+_st(self)._newlineIndent();
+};
+_st(self["@writeStream"])._nextPut_("]");
+return self}, function($ctx1) {$ctx1.fill(self,"encodeList:",{elements:elements},smalltalk.STONWriter)})},
+messageSends: ["nextPut:", "ifTrue:ifFalse:", "prettyPrintSpace", "indentedDo:", "newlineIndent", "do:separatedBy:", "listElementSeparator", "isEmpty"]}),
+smalltalk.STONWriter);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "encodeMap:",
+fn: function (pairs){
+var self=this;
+var first;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+first=true;
+_st(self["@writeStream"])._nextPut_("{");
+$1=_st(pairs)._isEmpty();
+if(smalltalk.assert($1)){
+_st(self)._prettyPrintSpace();
+} else {
+_st(self)._indentedDo_((function(){
+return smalltalk.withContext(function($ctx2) {
+_st(self)._newlineIndent();
+return _st(pairs)._keysAndValuesDo_((function(key,value){
+return smalltalk.withContext(function($ctx3) {
+$2=first;
+if(smalltalk.assert($2)){
+first=false;
+first;
+} else {
+_st(self)._mapElementSeparator();
+};
+return _st(self)._encodeKey_value_(key,value);
+}, function($ctx3) {$ctx3.fillBlock({key:key,value:value},$ctx1)})}));
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+_st(self)._newlineIndent();
+};
+_st(self["@writeStream"])._nextPut_("}");
+return self}, function($ctx1) {$ctx1.fill(self,"encodeMap:",{pairs:pairs,first:first},smalltalk.STONWriter)})},
+messageSends: ["nextPut:", "ifTrue:ifFalse:", "prettyPrintSpace", "indentedDo:", "newlineIndent", "keysAndValuesDo:", "mapElementSeparator", "encodeKey:value:", "isEmpty"]}),
 smalltalk.STONWriter);
 
 smalltalk.addMethod(
@@ -2049,6 +2171,32 @@ $1=$3;
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"on:",{writeStream:writeStream},smalltalk.STONWriter.klass)})},
 messageSends: ["on:", "new", "yourself"]}),
+smalltalk.STONWriter.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonCharacters",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@sTONCharacters"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"stonCharacters",{},smalltalk.STONWriter.klass)})},
+messageSends: []}),
+smalltalk.STONWriter.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonSimpleSymbolCharacters",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@sTONSimpleSymbolCharacters"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"stonSimpleSymbolCharacters",{},smalltalk.STONWriter.klass)})},
+messageSends: []}),
 smalltalk.STONWriter.klass);
 
 

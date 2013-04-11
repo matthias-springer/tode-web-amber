@@ -40,19 +40,6 @@ smalltalk.Behavior);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "allInstVarNames",
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st(self)._allInstanceVariableNames();
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"allInstVarNames",{},smalltalk.Behavior)})},
-messageSends: ["allInstanceVariableNames"]}),
-smalltalk.Behavior);
-
-smalltalk.addMethod(
-smalltalk.method({
 selector: "allInstanceVariableNames",
 fn: function (){
 var self=this;
@@ -831,6 +818,19 @@ return smalltalk.withContext(function($ctx1) {
 _st(_st($ClassBuilder())._new())._renameClass_to_(self,aString);
 return self}, function($ctx1) {$ctx1.fill(self,"rename:",{aString:aString},smalltalk.Class)})},
 messageSends: ["renameClass:to:", "new"]}),
+smalltalk.Class);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonName",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._name();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"stonName",{},smalltalk.Class)})},
+messageSends: ["name"]}),
 smalltalk.Class);
 
 smalltalk.addMethod(

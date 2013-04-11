@@ -813,6 +813,49 @@ referencedClasses: []
 }),
 smalltalk.Collection);
 
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonOn:",
+category: 'ston-core',
+fn: function (stonWriter){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(stonWriter)._writeObject_do_(self,(function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(stonWriter)._encodeList_(self);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"stonOn:",{stonWriter:stonWriter},smalltalk.Collection)})},
+args: ["stonWriter"],
+source: "stonOn: stonWriter\x0a\x09stonWriter writeObject: self do: [\x0a\x09\x09stonWriter encodeList: self ]",
+messageSends: ["writeObject:do:", "encodeList:"],
+referencedClasses: []
+}),
+smalltalk.Collection);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "fromSton:",
+category: 'ston-core',
+fn: function (stonReader){
+var self=this;
+var collection;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+collection=_st(self)._new();
+_st(stonReader)._parseListDo_((function(each){
+return smalltalk.withContext(function($ctx2) {
+return _st(collection)._add_(each);
+}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1)})}));
+$1=collection;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"fromSton:",{stonReader:stonReader,collection:collection},smalltalk.Collection.klass)})},
+args: ["stonReader"],
+source: "fromSton: stonReader\x0a\x09| collection |\x0a\x09collection := self new.\x0a\x09stonReader parseListDo: [ :each |\x0a\x09\x09collection add: each ].\x0a\x09^ collection",
+messageSends: ["new", "parseListDo:", "add:"],
+referencedClasses: []
+}),
+smalltalk.Collection.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
@@ -2041,6 +2084,32 @@ smalltalk.Dictionary);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "stonOn:",
+category: 'ston-core',
+fn: function (stonWriter){
+var self=this;
+function $STON(){return smalltalk.STON||(typeof STON=="undefined"?nil:STON)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._class()).__eq_eq(_st($STON())._mapClass());
+if(smalltalk.assert($1)){
+_st(stonWriter)._writeMap_(self);
+} else {
+_st(stonWriter)._writeObject_do_(self,(function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(stonWriter)._encodeMap_(self);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+};
+return self}, function($ctx1) {$ctx1.fill(self,"stonOn:",{stonWriter:stonWriter},smalltalk.Dictionary)})},
+args: ["stonWriter"],
+source: "stonOn: stonWriter\x0a\x09\x22Instances of STON mapClass will be encoded directly, without a class tag.\x0a\x09Other (sub)classes will be encoded with a class tag and will use a map representation. \x22\x0a\x09\x0a\x09self class == STON mapClass\x0a\x09\x09ifTrue: [ \x0a\x09\x09\x09stonWriter writeMap: self ]\x0a\x09\x09ifFalse: [ \x0a\x09\x09\x09stonWriter \x0a\x09\x09\x09\x09writeObject: self \x0a\x09\x09\x09\x09do: [ stonWriter encodeMap: self ] ]",
+messageSends: ["ifTrue:ifFalse:", "writeMap:", "writeObject:do:", "encodeMap:", "==", "mapClass", "class"],
+referencedClasses: ["STON"]
+}),
+smalltalk.Dictionary);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "values",
 category: 'accessing',
 fn: function (){
@@ -2075,6 +2144,30 @@ referencedClasses: []
 }),
 smalltalk.Dictionary);
 
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "fromSton:",
+category: 'ston-core',
+fn: function (stonReader){
+var self=this;
+var dictionary;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+dictionary=_st(self)._new();
+_st(stonReader)._parseMapDo_((function(key,value){
+return smalltalk.withContext(function($ctx2) {
+return _st(dictionary)._at_put_(key,value);
+}, function($ctx2) {$ctx2.fillBlock({key:key,value:value},$ctx1)})}));
+$1=dictionary;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"fromSton:",{stonReader:stonReader,dictionary:dictionary},smalltalk.Dictionary.klass)})},
+args: ["stonReader"],
+source: "fromSton: stonReader\x0a\x09\x22Instances of STON mapClass will be read directly and won't arrive here.\x0a\x09Other (sub)classes will use this method.\x22\x0a\x09\x0a\x09| dictionary |\x0a\x09dictionary := self new.\x0a\x09stonReader parseMapDo: [ :key :value |\x0a\x09\x09dictionary at: key put: value ].\x0a\x09^ dictionary",
+messageSends: ["new", "parseMapDo:", "at:put:"],
+referencedClasses: []
+}),
+smalltalk.Dictionary.klass);
 
 
 smalltalk.addClass('SequenceableCollection', smalltalk.IndexableCollection, [], 'Kernel-Collections');
@@ -2538,6 +2631,29 @@ smalltalk.SequenceableCollection);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "stonOn:",
+category: 'ston-core',
+fn: function (stonWriter){
+var self=this;
+function $STON(){return smalltalk.STON||(typeof STON=="undefined"?nil:STON)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._class()).__eq_eq(_st($STON())._listClass());
+if(smalltalk.assert($1)){
+_st(stonWriter)._writeList_(self);
+} else {
+smalltalk.IndexableCollection.fn.prototype._stonOn_.apply(_st(self), [stonWriter]);
+};
+return self}, function($ctx1) {$ctx1.fill(self,"stonOn:",{stonWriter:stonWriter},smalltalk.SequenceableCollection)})},
+args: ["stonWriter"],
+source: "stonOn: stonWriter\x0a\x09self class == STON listClass\x0a\x09\x09ifTrue: [ stonWriter writeList: self ]\x0a\x09\x09ifFalse: [ super stonOn: stonWriter ]",
+messageSends: ["ifTrue:ifFalse:", "writeList:", "stonOn:", "==", "listClass", "class"],
+referencedClasses: ["STON"]
+}),
+smalltalk.SequenceableCollection);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "stream",
 category: 'streaming',
 fn: function (){
@@ -2640,6 +2756,30 @@ referencedClasses: []
 }),
 smalltalk.SequenceableCollection);
 
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "fromSton:",
+category: 'ston-core',
+fn: function (stonReader){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._streamContents_((function(stream){
+return smalltalk.withContext(function($ctx2) {
+return _st(stonReader)._parseListDo_((function(each){
+return smalltalk.withContext(function($ctx3) {
+return _st(stream)._nextPut_(each);
+}, function($ctx3) {$ctx3.fillBlock({each:each},$ctx1)})}));
+}, function($ctx2) {$ctx2.fillBlock({stream:stream},$ctx1)})}));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"fromSton:",{stonReader:stonReader},smalltalk.SequenceableCollection.klass)})},
+args: ["stonReader"],
+source: "fromSton: stonReader\x0a\x09^ self streamContents: [ :stream |\x0a\x09\x09stonReader parseListDo: [ :each |\x0a\x09\x09\x09stream nextPut: each ] ]",
+messageSends: ["streamContents:", "parseListDo:", "nextPut:"],
+referencedClasses: []
+}),
+smalltalk.SequenceableCollection.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
@@ -3909,6 +4049,32 @@ smalltalk.String);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "isDigit",
+category: 'testing',
+fn: function (){
+var self=this;
+function $Error(){return smalltalk.Error||(typeof Error=="undefined"?nil:Error)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(self)._isCharacter();
+if(! smalltalk.assert($1)){
+_st($Error())._signal_("not a character");
+};
+$2=_st(_st(_st(self)._asciiValue()).__gt_eq((48)))._and_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(self)._asciiValue()).__lt_eq((57));
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"isDigit",{},smalltalk.String)})},
+args: [],
+source: "isDigit\x0a\x09self isCharacter ifFalse: [Error signal: 'not a character'].\x0a\x09^ self asciiValue >= 48 and: [self asciiValue <= 57]",
+messageSends: ["ifFalse:", "signal:", "isCharacter", "and:", "<=", "asciiValue", ">="],
+referencedClasses: ["Error"]
+}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "isImmutable",
 category: 'testing',
 fn: function (){
@@ -4380,6 +4546,37 @@ catch(e) {if(e===$early)return e[0]; throw e}
 args: ["delimiters", "start"],
 source: "skipDelimiters: delimiters startingAt: start \x0a\x09\x22Answer the index of the character within the receiver, starting at start, that does NOT match one of the delimiters. If the receiver does not contain any of the delimiters, answer size + 1.  Assumes the delimiters to be a non-empty string.\x22\x0a\x0a\x09start to: self size do: [:i |\x0a\x09\x09delimiters detect: [:delim | delim = (self at: i)]\x0a\x09\x09\x09\x09ifNone: [^ i]].\x0a\x09^ self size + 1",
 messageSends: ["to:do:", "size", "detect:ifNone:", "=", "at:", "+"],
+referencedClasses: []
+}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonOn:",
+category: 'ston-core',
+fn: function (stonWriter){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(stonWriter)._writeString_(self);
+return self}, function($ctx1) {$ctx1.fill(self,"stonOn:",{stonWriter:stonWriter},smalltalk.String)})},
+args: ["stonWriter"],
+source: "stonOn: stonWriter\x0a\x09stonWriter writeString: self",
+messageSends: ["writeString:"],
+referencedClasses: []
+}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonProcessSubObjects:",
+category: 'ston-core',
+fn: function (block){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"stonProcessSubObjects:",{block:block},smalltalk.String)})},
+args: ["block"],
+source: "stonProcessSubObjects: block",
+messageSends: [],
 referencedClasses: []
 }),
 smalltalk.String);
@@ -5522,6 +5719,22 @@ return self}, function($ctx1) {$ctx1.fill(self,"position:",{anInteger:anInteger}
 args: ["anInteger"],
 source: "position: anInteger\x0a\x09position := anInteger",
 messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Stream);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "print:",
+category: 'reading',
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(anObject)._printOn_(self);
+return self}, function($ctx1) {$ctx1.fill(self,"print:",{anObject:anObject},smalltalk.Stream)})},
+args: ["anObject"],
+source: "print: anObject\x0a\x09\x22Have anObject print itself on the receiver.\x22\x0a\x09anObject printOn: self",
+messageSends: ["printOn:"],
 referencedClasses: []
 }),
 smalltalk.Stream);
