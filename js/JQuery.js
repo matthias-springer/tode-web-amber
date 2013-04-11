@@ -17,4 +17,36 @@ referencedClasses: []
 }),
 smalltalk.Ajax.klass);
 
+smalltalk.addMethod(
+smalltalk.method({
+selector: "ajaxSync:",
+category: 'not yet classified',
+fn: function (aURL){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+ return $.ajax({url: aURL, async: false}); ;
+return self}, function($ctx1) {$ctx1.fill(self,"ajaxSync:",{aURL:aURL},smalltalk.Ajax.klass)})},
+args: ["aURL"],
+source: "ajaxSync: aURL\x0a\x09< return $.ajax({url: aURL, async: false}); >",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Ajax.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "ajaxSync:data:",
+category: 'not yet classified',
+fn: function (aURL,dataString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+ return $.ajax({url: aURL, data: dataString, async: false}); ;
+return self}, function($ctx1) {$ctx1.fill(self,"ajaxSync:data:",{aURL:aURL,dataString:dataString},smalltalk.Ajax.klass)})},
+args: ["aURL", "dataString"],
+source: "ajaxSync: aURL data: dataString\x0a\x09< return $.ajax({url: aURL, data: dataString, async: false}); >",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Ajax.klass);
+
 

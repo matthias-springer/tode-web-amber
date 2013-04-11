@@ -12,4 +12,26 @@ return self}, function($ctx1) {$ctx1.fill(self,"ajaxAsyncOnComplete:data:receive
 messageSends: []}),
 smalltalk.Ajax.klass);
 
+smalltalk.addMethod(
+smalltalk.method({
+selector: "ajaxSync:",
+fn: function (aURL){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+ return $.ajax({url: aURL, async: false}); ;
+return self}, function($ctx1) {$ctx1.fill(self,"ajaxSync:",{aURL:aURL},smalltalk.Ajax.klass)})},
+messageSends: []}),
+smalltalk.Ajax.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "ajaxSync:data:",
+fn: function (aURL,dataString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+ return $.ajax({url: aURL, data: dataString, async: false}); ;
+return self}, function($ctx1) {$ctx1.fill(self,"ajaxSync:data:",{aURL:aURL,dataString:dataString},smalltalk.Ajax.klass)})},
+messageSends: []}),
+smalltalk.Ajax.klass);
+
 

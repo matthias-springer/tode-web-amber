@@ -245,6 +245,25 @@ smalltalk.Collection);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "asDictionary",
+category: 'converting',
+fn: function (){
+var self=this;
+function $Dictionary(){return smalltalk.Dictionary||(typeof Dictionary=="undefined"?nil:Dictionary)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._as_($Dictionary());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"asDictionary",{},smalltalk.Collection)})},
+args: [],
+source: "asDictionary\x0a\x0a\x09^ self as: Dictionary",
+messageSends: ["as:"],
+referencedClasses: ["Dictionary"]
+}),
+smalltalk.Collection);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "asJSON",
 category: 'converting',
 fn: function (){
@@ -298,6 +317,22 @@ args: [],
 source: "asSet\x0a\x09^Set withAll: self",
 messageSends: ["withAll:"],
 referencedClasses: ["Set"]
+}),
+smalltalk.Collection);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "associationsDo:",
+category: 'enumerating',
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._do_(aBlock);
+return self}, function($ctx1) {$ctx1.fill(self,"associationsDo:",{aBlock:aBlock},smalltalk.Collection)})},
+args: ["aBlock"],
+source: "associationsDo: aBlock\x0a\x09\x22Evaluate aBlock for each of the receiver's elements (key/value \x0a\x09associations).  If any non-association is within, the error is not caught now,\x0a\x09but later, when a key or value message is sent to it.\x22\x0a\x0a\x09self do: aBlock",
+messageSends: ["do:"],
+referencedClasses: []
 }),
 smalltalk.Collection);
 
@@ -2165,6 +2200,35 @@ return $1;
 args: ["stonReader"],
 source: "fromSton: stonReader\x0a\x09\x22Instances of STON mapClass will be read directly and won't arrive here.\x0a\x09Other (sub)classes will use this method.\x22\x0a\x09\x0a\x09| dictionary |\x0a\x09dictionary := self new.\x0a\x09stonReader parseMapDo: [ :key :value |\x0a\x09\x09dictionary at: key put: value ].\x0a\x09^ dictionary",
 messageSends: ["new", "parseMapDo:", "at:put:"],
+referencedClasses: []
+}),
+smalltalk.Dictionary.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "newFrom:",
+category: 'instance creation',
+fn: function (aDict){
+var self=this;
+var newDictionary;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+newDictionary=_st(self)._new_(_st(aDict)._size());
+_st(aDict)._associationsDo_((function(x){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(newDictionary)._includesKey_(_st(x)._key());
+if(smalltalk.assert($1)){
+return _st(self)._error_(_st("Duplicate key: ").__comma(_st(_st(x)._key())._printString()));
+} else {
+return _st(newDictionary)._add_(x);
+};
+}, function($ctx2) {$ctx2.fillBlock({x:x},$ctx1)})}));
+$2=newDictionary;
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"newFrom:",{aDict:aDict,newDictionary:newDictionary},smalltalk.Dictionary.klass)})},
+args: ["aDict"],
+source: "newFrom: aDict \x0a\x09\x22Answer an instance of me containing the same associations as aDict.\x0a\x09 Error if any key appears twice.\x22\x0a\x09| newDictionary |\x0a\x09newDictionary := self new: aDict size.\x0a\x09aDict associationsDo:\x0a\x09\x09[:x |\x0a\x09\x09(newDictionary includesKey: x key)\x0a\x09\x09\x09ifTrue: [self error: 'Duplicate key: ', x key printString]\x0a\x09\x09\x09ifFalse: [newDictionary add: x]].\x0a\x09^ newDictionary",
+messageSends: ["new:", "size", "associationsDo:", "ifTrue:ifFalse:", "error:", ",", "printString", "key", "add:", "includesKey:"],
 referencedClasses: []
 }),
 smalltalk.Dictionary.klass);

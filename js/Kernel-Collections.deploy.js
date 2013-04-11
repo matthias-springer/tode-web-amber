@@ -183,6 +183,20 @@ smalltalk.Collection);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "asDictionary",
+fn: function (){
+var self=this;
+function $Dictionary(){return smalltalk.Dictionary||(typeof Dictionary=="undefined"?nil:Dictionary)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._as_($Dictionary());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"asDictionary",{},smalltalk.Collection)})},
+messageSends: ["as:"]}),
+smalltalk.Collection);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "asJSON",
 fn: function (){
 var self=this;
@@ -222,6 +236,17 @@ $1=_st($Set())._withAll_(self);
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"asSet",{},smalltalk.Collection)})},
 messageSends: ["withAll:"]}),
+smalltalk.Collection);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "associationsDo:",
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._do_(aBlock);
+return self}, function($ctx1) {$ctx1.fill(self,"associationsDo:",{aBlock:aBlock},smalltalk.Collection)})},
+messageSends: ["do:"]}),
 smalltalk.Collection);
 
 smalltalk.addMethod(
@@ -1637,6 +1662,30 @@ $1=dictionary;
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"fromSton:",{stonReader:stonReader,dictionary:dictionary},smalltalk.Dictionary.klass)})},
 messageSends: ["new", "parseMapDo:", "at:put:"]}),
+smalltalk.Dictionary.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "newFrom:",
+fn: function (aDict){
+var self=this;
+var newDictionary;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+newDictionary=_st(self)._new_(_st(aDict)._size());
+_st(aDict)._associationsDo_((function(x){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(newDictionary)._includesKey_(_st(x)._key());
+if(smalltalk.assert($1)){
+return _st(self)._error_(_st("Duplicate key: ").__comma(_st(_st(x)._key())._printString()));
+} else {
+return _st(newDictionary)._add_(x);
+};
+}, function($ctx2) {$ctx2.fillBlock({x:x},$ctx1)})}));
+$2=newDictionary;
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"newFrom:",{aDict:aDict,newDictionary:newDictionary},smalltalk.Dictionary.klass)})},
+messageSends: ["new:", "size", "associationsDo:", "ifTrue:ifFalse:", "error:", ",", "printString", "key", "add:", "includesKey:"]}),
 smalltalk.Dictionary.klass);
 
 

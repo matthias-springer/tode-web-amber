@@ -116,7 +116,9 @@ amber = (function() {
 				'SUnit-Tests',
         'JQuery',
         'STON-Core',
+        'Topez-Client-GCI',
         'Topez-Client-GemStone',
+        'Topez-Client-Session',
         'Topez-Web-Common-Console'
 			]);
 		}

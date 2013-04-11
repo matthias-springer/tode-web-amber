@@ -106,6 +106,11 @@ asArray
 	^Array withAll: self
 !
 
+asDictionary
+
+	^ self as: Dictionary
+!
+
 asJSON
 	^self asArray collect: [:each | each asJSON]
 !
@@ -150,6 +155,14 @@ allSatisfy: aBlock
 
 	self do: [:each | (aBlock value: each) ifFalse: [^ false]].
 	^ true
+!
+
+associationsDo: aBlock
+	"Evaluate aBlock for each of the receiver's elements (key/value 
+	associations).  If any non-association is within, the error is not caught now,
+	but later, when a key or value message is sent to it."
+
+	self do: aBlock
 !
 
 collect: aBlock
@@ -735,6 +748,21 @@ stonOn: stonWriter
 
 includesKey: aKey
 	< return self._positionOfKey_(aKey) >>= 0; >
+! !
+
+!Dictionary class methodsFor: 'instance creation'!
+
+newFrom: aDict 
+	"Answer an instance of me containing the same associations as aDict.
+	 Error if any key appears twice."
+	| newDictionary |
+	newDictionary := self new: aDict size.
+	aDict associationsDo:
+		[:x |
+		(newDictionary includesKey: x key)
+			ifTrue: [self error: 'Duplicate key: ', x key printString]
+			ifFalse: [newDictionary add: x]].
+	^ newDictionary
 ! !
 
 !Dictionary class methodsFor: 'ston-core'!

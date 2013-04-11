@@ -58,6 +58,24 @@ smalltalk.Object);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "as:",
+category: 'converting',
+fn: function (aSimilarClass){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(aSimilarClass)._newFrom_(self);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"as:",{aSimilarClass:aSimilarClass},smalltalk.Object)})},
+args: ["aSimilarClass"],
+source: "as: aSimilarClass\x0a\x09\x22Create an object of class aSimilarClass that has similar contents to the receiver.\x22\x0a\x0a\x09^ aSimilarClass newFrom: self",
+messageSends: ["newFrom:"],
+referencedClasses: []
+}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "asJSON",
 category: 'converting',
 fn: function (){
