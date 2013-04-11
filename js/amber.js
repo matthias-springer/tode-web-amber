@@ -27,6 +27,25 @@ amber = (function() {
         return a.href;
     }
 
+  that.perform = function() {
+    obj = arguments[0];
+    selector = arguments[1];
+    parameters = [];
+
+    for (var i = 2; i < arguments.length; i++) {
+      parameters.push(arguments[i]);
+    }
+  
+    func = obj['_' + selector.replace(/:/gi, '_')];
+
+    if (func === undefined) {
+      // TODO: throw MessageNotUnderstood
+      smalltalk["Error"]["_signal_"]("does not understand: " + selector);
+    } else {
+      return func.apply(obj, parameters);
+    }
+  }
+
 	that.load = function(obj) {
 		spec = obj || {};
 
@@ -95,6 +114,7 @@ amber = (function() {
 				'Benchfib',
 				'Kernel-Tests',
 				'SUnit-Tests',
+        'JQuery',
         'STON-Core',
         'Topez-Client-GemStone',
         'Topez-Web-Common-Console'
