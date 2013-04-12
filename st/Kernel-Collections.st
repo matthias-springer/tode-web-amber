@@ -98,6 +98,14 @@ removeAll
 	"TODO: provide a more efficient implementation."
 	copy := self copy.
 	copy do: [:each | self remove: each].
+!
+
+removeAllSuchThat: aBlock 
+	"Evaluate aBlock for each element and remove all that elements from
+	the receiver for that aBlock evaluates to true.  Use a copy to enumerate 
+	collections whose order changes when an element is removed (i.e. Sets)."
+
+	self copy do: [:each | (aBlock value: each) ifTrue: [self remove: each]]
 ! !
 
 !Collection methodsFor: 'converting'!
@@ -1338,12 +1346,23 @@ digitValue
 		ifFalse: [Error signal: 'not implemented yet'].
 !
 
+parseJSON
+	< return $.parseJSON(self) >
+!
+
 readStream
 	^ self class streamClass on: self
 !
 
 reversed
 	<return self.split("").reverse().join("")>
+!
+
+subStrings: separator
+	|tokens|
+	tokens := self tokenize: separator.
+	tokens removeAllSuchThat: [:x | x = ''].
+	^ tokens
 !
 
 tokenize: aString

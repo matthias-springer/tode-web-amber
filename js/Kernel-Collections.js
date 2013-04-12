@@ -807,6 +807,29 @@ smalltalk.Collection);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "removeAllSuchThat:",
+category: 'adding/removing',
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+_st(_st(self)._copy())._do_((function(each){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(aBlock)._value_(each);
+if(smalltalk.assert($1)){
+return _st(self)._remove_(each);
+};
+}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"removeAllSuchThat:",{aBlock:aBlock},smalltalk.Collection)})},
+args: ["aBlock"],
+source: "removeAllSuchThat: aBlock \x0a\x09\x22Evaluate aBlock for each element and remove all that elements from\x0a\x09the receiver for that aBlock evaluates to true.  Use a copy to enumerate \x0a\x09collections whose order changes when an element is removed (i.e. Sets).\x22\x0a\x0a\x09self copy do: [:each | (aBlock value: each) ifTrue: [self remove: each]]",
+messageSends: ["do:", "ifTrue:", "remove:", "value:", "copy"],
+referencedClasses: []
+}),
+smalltalk.Collection);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "select:",
 category: 'enumerating',
 fn: function (aBlock){
@@ -4444,6 +4467,22 @@ smalltalk.String);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "parseJSON",
+category: 'converting',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+ return $.parseJSON(self) ;
+return self}, function($ctx1) {$ctx1.fill(self,"parseJSON",{},smalltalk.String)})},
+args: [],
+source: "parseJSON\x0a\x09< return $.parseJSON(self) >",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "printNl",
 category: 'printing',
 fn: function (){
@@ -4641,6 +4680,30 @@ return self}, function($ctx1) {$ctx1.fill(self,"stonProcessSubObjects:",{block:b
 args: ["block"],
 source: "stonProcessSubObjects: block",
 messageSends: [],
+referencedClasses: []
+}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "subStrings:",
+category: 'converting',
+fn: function (separator){
+var self=this;
+var tokens;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+tokens=_st(self)._tokenize_(separator);
+_st(tokens)._removeAllSuchThat_((function(x){
+return smalltalk.withContext(function($ctx2) {
+return _st(x).__eq("");
+}, function($ctx2) {$ctx2.fillBlock({x:x},$ctx1)})}));
+$1=tokens;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"subStrings:",{separator:separator,tokens:tokens},smalltalk.String)})},
+args: ["separator"],
+source: "subStrings: separator\x0a\x09|tokens|\x0a\x09tokens := self tokenize: separator.\x0a\x09tokens removeAllSuchThat: [:x | x = ''].\x0a\x09^ tokens",
+messageSends: ["tokenize:", "removeAllSuchThat:", "="],
 referencedClasses: []
 }),
 smalltalk.String);

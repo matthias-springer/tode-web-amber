@@ -610,6 +610,24 @@ smalltalk.Collection);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "removeAllSuchThat:",
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+_st(_st(self)._copy())._do_((function(each){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(aBlock)._value_(each);
+if(smalltalk.assert($1)){
+return _st(self)._remove_(each);
+};
+}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"removeAllSuchThat:",{aBlock:aBlock},smalltalk.Collection)})},
+messageSends: ["do:", "ifTrue:", "remove:", "value:", "copy"]}),
+smalltalk.Collection);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "select:",
 fn: function (aBlock){
 var self=this;
@@ -3345,6 +3363,17 @@ smalltalk.String);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "parseJSON",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+ return $.parseJSON(self) ;
+return self}, function($ctx1) {$ctx1.fill(self,"parseJSON",{},smalltalk.String)})},
+messageSends: []}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "printNl",
 fn: function (){
 var self=this;
@@ -3489,6 +3518,25 @@ var self=this;
 return smalltalk.withContext(function($ctx1) { 
 return self}, function($ctx1) {$ctx1.fill(self,"stonProcessSubObjects:",{block:block},smalltalk.String)})},
 messageSends: []}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "subStrings:",
+fn: function (separator){
+var self=this;
+var tokens;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+tokens=_st(self)._tokenize_(separator);
+_st(tokens)._removeAllSuchThat_((function(x){
+return smalltalk.withContext(function($ctx2) {
+return _st(x).__eq("");
+}, function($ctx2) {$ctx2.fillBlock({x:x},$ctx1)})}));
+$1=tokens;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"subStrings:",{separator:separator,tokens:tokens},smalltalk.String)})},
+messageSends: ["tokenize:", "removeAllSuchThat:", "="]}),
 smalltalk.String);
 
 smalltalk.addMethod(
