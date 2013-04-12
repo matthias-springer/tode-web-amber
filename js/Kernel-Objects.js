@@ -1808,6 +1808,152 @@ referencedClasses: []
 smalltalk.Character.klass);
 
 
+smalltalk.addClass('Color', smalltalk.Object, ['r', 'g', 'b'], 'Kernel-Objects');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "blue",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@b"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"blue",{},smalltalk.Color)})},
+args: [],
+source: "blue\x0a\x09^ b",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Color);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "green",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@g"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"green",{},smalltalk.Color)})},
+args: [],
+source: "green\x0a\x09^ g",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Color);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "red",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@r"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"red",{},smalltalk.Color)})},
+args: [],
+source: "red\x0a\x09^ r",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Color);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "setBlue:",
+category: 'accessing',
+fn: function (blue){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@b"]=blue;
+return self}, function($ctx1) {$ctx1.fill(self,"setBlue:",{blue:blue},smalltalk.Color)})},
+args: ["blue"],
+source: "setBlue: blue\x0a\x09b := blue",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Color);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "setGreen:",
+category: 'accessing',
+fn: function (green){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@g"]=green;
+return self}, function($ctx1) {$ctx1.fill(self,"setGreen:",{green:green},smalltalk.Color)})},
+args: ["green"],
+source: "setGreen: green\x0a\x09g := green",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Color);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "setRed:",
+category: 'accessing',
+fn: function (red){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@r"]=red;
+return self}, function($ctx1) {$ctx1.fill(self,"setRed:",{red:red},smalltalk.Color)})},
+args: ["red"],
+source: "setRed: red\x0a\x09r := red",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Color);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "lightGreen",
+category: 'named colors',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._r_g_b_((0.8),(1),(0.6));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"lightGreen",{},smalltalk.Color.klass)})},
+args: [],
+source: "lightGreen\x0a\x09^ self r: 0.8 g: 1.0 b: 0.6",
+messageSends: ["r:g:b:"],
+referencedClasses: []
+}),
+smalltalk.Color.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "r:g:b:",
+category: 'instance creation',
+fn: function (r,g,b){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=_st(self)._basicNew();
+_st($2)._setRed_(r);
+_st($2)._setGreen_(g);
+_st($2)._setBlue_(b);
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"r:g:b:",{r:r,g:g,b:b},smalltalk.Color.klass)})},
+args: ["r", "g", "b"],
+source: "r: r g: g b: b\x0a\x09^ self basicNew\x0a\x09\x09setRed: r;\x0a\x09\x09setGreen: g;\x0a\x09\x09setBlue: b;\x0a\x09\x09yourself",
+messageSends: ["setRed:", "basicNew", "setGreen:", "setBlue:", "yourself"],
+referencedClasses: []
+}),
+smalltalk.Color.klass);
+
+
 smalltalk.addClass('Date', smalltalk.Object, [], 'Kernel-Objects');
 smalltalk.Date.comment="The Date class is used to work with dates and times. Therefore `Date today` and `Date now` are both valid in\x0aAmber and answer the same date object.\x0a\x0aDate wraps the `Date()` JavaScript constructor, and Smalltalk date objects are JavaScript date objects."
 smalltalk.addMethod(
@@ -3434,6 +3580,24 @@ smalltalk.Number);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "//",
+category: 'arithmetic',
+fn: function (aNumber){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self).__slash(aNumber))._floor();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"//",{aNumber:aNumber},smalltalk.Number)})},
+args: ["aNumber"],
+source: "// aNumber\x0a\x09^ (self / aNumber) floor",
+messageSends: ["floor", "/"],
+referencedClasses: []
+}),
+smalltalk.Number);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "<",
 category: 'comparing',
 fn: function (aNumber){
@@ -3653,6 +3817,24 @@ smalltalk.Number);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "asInteger",
+category: 'converting',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._truncated();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"asInteger",{},smalltalk.Number)})},
+args: [],
+source: "asInteger\x0a\x09^ self truncated",
+messageSends: ["truncated"],
+referencedClasses: []
+}),
+smalltalk.Number);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "asJSON",
 category: 'converting',
 fn: function (){
@@ -3791,6 +3973,24 @@ return $1;
 args: [],
 source: "even\x0a\x09^ 0 = (self \x5c\x5c 2)",
 messageSends: ["=", "\x5c\x5c"],
+referencedClasses: []
+}),
+smalltalk.Number);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "floor",
+category: 'converting',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._truncated();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"floor",{},smalltalk.Number)})},
+args: [],
+source: "floor\x0a\x09^ self truncated",
+messageSends: ["truncated"],
 referencedClasses: []
 }),
 smalltalk.Number);
@@ -5054,6 +5254,21 @@ return $1;
 }, function($ctx1) {$ctx1.fill(self,"asPoint",{},smalltalk.Point)})},
 args: [],
 source: "asPoint\x0a\x09^self",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Point);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "extent:",
+category: 'converting',
+fn: function (aPoint){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"extent:",{aPoint:aPoint},smalltalk.Point)})},
+args: ["aPoint"],
+source: "extent: aPoint\x0a\x09\x22TODO: convert to rectangle\x22",
 messageSends: [],
 referencedClasses: []
 }),

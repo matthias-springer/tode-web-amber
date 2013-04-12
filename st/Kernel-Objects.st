@@ -600,6 +600,52 @@ fromSton: stonReader
 	^ stonReader parseListSingleton first
 ! !
 
+Object subclass: #Color
+	instanceVariableNames: 'r g b'
+	package: 'Kernel-Objects'!
+
+!Color methodsFor: 'accessing'!
+
+blue
+	^ b
+!
+
+green
+	^ g
+!
+
+red
+	^ r
+!
+
+setBlue: blue
+	b := blue
+!
+
+setGreen: green
+	g := green
+!
+
+setRed: red
+	r := red
+! !
+
+!Color class methodsFor: 'instance creation'!
+
+r: r g: g b: b
+	^ self basicNew
+		setRed: r;
+		setGreen: g;
+		setBlue: b;
+		yourself
+! !
+
+!Color class methodsFor: 'named colors'!
+
+lightGreen
+	^ self r: 0.8 g: 1.0 b: 0.6
+! !
+
 Object subclass: #Date
 	instanceVariableNames: ''
 	package: 'Kernel-Objects'!
@@ -1143,6 +1189,10 @@ identityHash
 	<return self / aNumber>
 !
 
+// aNumber
+	^ (self / aNumber) floor
+!
+
 << aNumber
 	aNumber < 0 
 		ifTrue: [Error signal: 'negative arg']
@@ -1238,6 +1288,10 @@ asCharacter
 	^ Character codePoint: self
 !
 
+asInteger
+	^ self truncated
+!
+
 asJSON
 	^self
 !
@@ -1256,6 +1310,10 @@ asString
 
 atRandom
 	^(Random new next * self) truncated + 1
+!
+
+floor
+	^ self truncated
 !
 
 rounded
@@ -1701,6 +1759,10 @@ y: aNumber
 
 asPoint
 	^self
+!
+
+extent: aPoint
+	"TODO: convert to rectangle"
 ! !
 
 !Point methodsFor: 'printing'!

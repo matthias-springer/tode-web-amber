@@ -1311,6 +1311,112 @@ messageSends: ["codePoint:"]}),
 smalltalk.Character.klass);
 
 
+smalltalk.addClass('Color', smalltalk.Object, ['r', 'g', 'b'], 'Kernel-Objects');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "blue",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@b"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"blue",{},smalltalk.Color)})},
+messageSends: []}),
+smalltalk.Color);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "green",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@g"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"green",{},smalltalk.Color)})},
+messageSends: []}),
+smalltalk.Color);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "red",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@r"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"red",{},smalltalk.Color)})},
+messageSends: []}),
+smalltalk.Color);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "setBlue:",
+fn: function (blue){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@b"]=blue;
+return self}, function($ctx1) {$ctx1.fill(self,"setBlue:",{blue:blue},smalltalk.Color)})},
+messageSends: []}),
+smalltalk.Color);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "setGreen:",
+fn: function (green){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@g"]=green;
+return self}, function($ctx1) {$ctx1.fill(self,"setGreen:",{green:green},smalltalk.Color)})},
+messageSends: []}),
+smalltalk.Color);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "setRed:",
+fn: function (red){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@r"]=red;
+return self}, function($ctx1) {$ctx1.fill(self,"setRed:",{red:red},smalltalk.Color)})},
+messageSends: []}),
+smalltalk.Color);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "lightGreen",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._r_g_b_((0.8),(1),(0.6));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"lightGreen",{},smalltalk.Color.klass)})},
+messageSends: ["r:g:b:"]}),
+smalltalk.Color.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "r:g:b:",
+fn: function (r,g,b){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=_st(self)._basicNew();
+_st($2)._setRed_(r);
+_st($2)._setGreen_(g);
+_st($2)._setBlue_(b);
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"r:g:b:",{r:r,g:g,b:b},smalltalk.Color.klass)})},
+messageSends: ["setRed:", "basicNew", "setGreen:", "setBlue:", "yourself"]}),
+smalltalk.Color.klass);
+
+
 smalltalk.addClass('Date', smalltalk.Object, [], 'Kernel-Objects');
 smalltalk.addMethod(
 smalltalk.method({
@@ -2493,6 +2599,19 @@ smalltalk.Number);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "//",
+fn: function (aNumber){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self).__slash(aNumber))._floor();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"//",{aNumber:aNumber},smalltalk.Number)})},
+messageSends: ["floor", "/"]}),
+smalltalk.Number);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "<",
 fn: function (aNumber){
 var self=this;
@@ -2652,6 +2771,19 @@ smalltalk.Number);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "asInteger",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._truncated();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"asInteger",{},smalltalk.Number)})},
+messageSends: ["truncated"]}),
+smalltalk.Number);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "asJSON",
 fn: function (){
 var self=this;
@@ -2752,6 +2884,19 @@ $1=_st((0)).__eq(_st(self).__backslash_backslash((2)));
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"even",{},smalltalk.Number)})},
 messageSends: ["=", "\x5c\x5c"]}),
+smalltalk.Number);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "floor",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._truncated();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"floor",{},smalltalk.Number)})},
+messageSends: ["truncated"]}),
 smalltalk.Number);
 
 smalltalk.addMethod(
@@ -3703,6 +3848,16 @@ var $1;
 $1=self;
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"asPoint",{},smalltalk.Point)})},
+messageSends: []}),
+smalltalk.Point);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "extent:",
+fn: function (aPoint){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"extent:",{aPoint:aPoint},smalltalk.Point)})},
 messageSends: []}),
 smalltalk.Point);
 
