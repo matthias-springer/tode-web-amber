@@ -66,16 +66,14 @@ selector: "executeStringExpectingString:envId:",
 category: 'public gci calls',
 fn: function (aString,envId){
 var self=this;
-var result;
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-result=_st(_st(self)._library())._apiGciExecuteStr_a_a_(aString,_st(_st(self)._library())._oopNil(),envId);
-$1=_st(_st(self)._library())._fetchChars_(result);
+$1=_st(_st(self)._library())._apiGciExecuteStrExpectingStr_a_a_(aString,_st(_st(self)._library())._oopNil(),envId);
 return $1;
-}, function($ctx1) {$ctx1.fill(self,"executeStringExpectingString:envId:",{aString:aString,envId:envId,result:result},smalltalk.GciSession)})},
+}, function($ctx1) {$ctx1.fill(self,"executeStringExpectingString:envId:",{aString:aString,envId:envId},smalltalk.GciSession)})},
 args: ["aString", "envId"],
-source: "executeStringExpectingString: aString envId: envId\x0a\x09|result|\x0a\x09result := self library apiGciExecuteStr: aString a: self library oopNil a: envId.\x0a\x09^ self library fetchChars: result",
-messageSends: ["apiGciExecuteStr:a:a:", "oopNil", "library", "fetchChars:"],
+source: "executeStringExpectingString: aString envId: envId\x0a\x09\x22TODO: make non-blocking to support abort from JavaScript\x22\x0a\x09^ self library apiGciExecuteStrExpectingStr: aString a: self library oopNil a: envId",
+messageSends: ["apiGciExecuteStrExpectingStr:a:a:", "oopNil", "library"],
 referencedClasses: []
 }),
 smalltalk.GciSession);
@@ -471,5 +469,1447 @@ referencedClasses: []
 }),
 smalltalk.GciSession);
 
+
+smalltalk.GciSession.klass.iVarNames = ['fullCompressionEnabled'];
+smalltalk.addMethod(
+smalltalk.method({
+selector: "disableFullCompression",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@fullCompressionEnabled"]=false;
+return self}, function($ctx1) {$ctx1.fill(self,"disableFullCompression",{},smalltalk.GciSession.klass)})},
+args: [],
+source: "disableFullCompression\x0a\x09\x22self disableFullCompression\x22\x0a\x09\x22takes effect at next login\x22\x0a\x0a\x09fullCompressionEnabled := false.",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.GciSession.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "enableFullCompression",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@fullCompressionEnabled"]=true;
+return self}, function($ctx1) {$ctx1.fill(self,"enableFullCompression",{},smalltalk.GciSession.klass)})},
+args: [],
+source: "enableFullCompression\x0a\x09\x22self enableFullCompression\x22\x0a\x09\x22takes effect at next login\x22\x0a\x0a\x09fullCompressionEnabled := true.",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.GciSession.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "fullCompressionEnabled",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(self["@fullCompressionEnabled"]).__eq_eq(nil);
+if(smalltalk.assert($1)){
+self["@fullCompressionEnabled"]=false;
+self["@fullCompressionEnabled"];
+};
+$2=self["@fullCompressionEnabled"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"fullCompressionEnabled",{},smalltalk.GciSession.klass)})},
+args: [],
+source: "fullCompressionEnabled\x0a\x0a\x09fullCompressionEnabled == nil ifTrue: [ fullCompressionEnabled := false ].\x0a\x09^ fullCompressionEnabled",
+messageSends: ["ifTrue:", "=="],
+referencedClasses: []
+}),
+smalltalk.GciSession.klass);
+
+
+smalltalk.addClass('GsError', smalltalk.Error, ['session'], 'Topez-Client-Session');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "session",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@session"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"session",{},smalltalk.GsError)})},
+args: [],
+source: "session\x0a\x09^ session",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.GsError);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "session:",
+category: 'accessing',
+fn: function (aGciSession){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@session"]=aGciSession;
+return self}, function($ctx1) {$ctx1.fill(self,"session:",{aGciSession:aGciSession},smalltalk.GsError)})},
+args: ["aGciSession"],
+source: "session: aGciSession\x0a\x09session := aGciSession.",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.GsError);
+
+
+
+smalltalk.addClass('GsRuntimeError', smalltalk.GsError, [], 'Topez-Client-Session');
+
+
+smalltalk.addClass('OGCustomSessionDescription', smalltalk.Object, ['name', 'stoneHost', 'stoneName', 'gemHost', 'netLDI', 'gemTask', 'userId', 'password', 'osUserId', 'osPassword', 'dataDirectory', 'backupDirectory', 'gemstoneVersion', 'gciLibraryName', 'adornmentColor'], 'Topez-Client-Session');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "addOptionalTemplateEntriesOn:",
+category: 'template',
+fn: function (aStream){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5,$6,$7,$8;
+$1=_st(_st(self)._backupDirectory())._isEmpty();
+if(! smalltalk.assert($1)){
+$2=aStream;
+_st($2)._cr();
+$3=_st($2)._tab();
+$3;
+$4=aStream;
+_st($4)._nextPutAll_(_st("backupDirectory: ").__comma(_st(_st(self)._backupDirectory())._printString()));
+$5=_st($4)._nextPut_(";");
+$5;
+};
+$6=_st(_st(self)._dataDirectory())._isEmpty();
+if(! smalltalk.assert($6)){
+$7=aStream;
+_st($7)._cr();
+_st($7)._tab();
+_st($7)._nextPutAll_(_st("dataDirectory: ").__comma(_st(_st(self)._dataDirectory())._printString()));
+$8=_st($7)._nextPut_(";");
+$8;
+};
+return self}, function($ctx1) {$ctx1.fill(self,"addOptionalTemplateEntriesOn:",{aStream:aStream},smalltalk.OGCustomSessionDescription)})},
+args: ["aStream"],
+source: "addOptionalTemplateEntriesOn: aStream\x0a\x0a\x09self backupDirectory isEmpty\x0a\x09\x09ifFalse: [ \x0a\x09\x09\x09aStream cr; tab.\x0a\x09\x09\x09aStream nextPutAll: 'backupDirectory: ', self backupDirectory printString; nextPut: ';' ].\x0a\x09self dataDirectory isEmpty\x0a\x09\x09ifFalse: [\x0a\x09\x09\x09aStream\x0a \x09\x09\x09\x09cr; tab;\x0a\x09\x09\x09\x09nextPutAll: 'dataDirectory: ', self dataDirectory printString; nextPut: ';' ].",
+messageSends: ["ifFalse:", "cr", "tab", "nextPutAll:", ",", "printString", "backupDirectory", "nextPut:", "isEmpty", "dataDirectory"],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "adornmentColor",
+category: 'accessing',
+fn: function (){
+var self=this;
+function $Color(){return smalltalk.Color||(typeof Color=="undefined"?nil:Color)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=self["@adornmentColor"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@adornmentColor"]=_st($Color())._lightGreen();
+self["@adornmentColor"];
+} else {
+$1;
+};
+$2=self["@adornmentColor"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"adornmentColor",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "adornmentColor\x0a\x09adornmentColor ifNil: [ adornmentColor := Color lightGreen ].\x0a\x09^ adornmentColor",
+messageSends: ["ifNil:", "lightGreen"],
+referencedClasses: ["Color"]
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "adornmentColor:",
+category: 'accessing',
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@adornmentColor"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"adornmentColor:",{anObject:anObject},smalltalk.OGCustomSessionDescription)})},
+args: ["anObject"],
+source: "adornmentColor: anObject\x0a\x09adornmentColor := anObject",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "backupDirectory",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(self["@backupDirectory"]).__eq_eq(nil);
+if(smalltalk.assert($1)){
+self["@backupDirectory"]="";
+self["@backupDirectory"];
+};
+$2=self["@backupDirectory"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"backupDirectory",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "backupDirectory\x0a\x0a\x09backupDirectory == nil ifTrue: [ backupDirectory := '' ].\x0a\x09^backupDirectory",
+messageSends: ["ifTrue:", "=="],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "backupDirectory:",
+category: 'accessing',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(aString)._isEmpty())._or_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(aString)._last()).__eq("/");
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+if(smalltalk.assert($1)){
+self["@backupDirectory"]=aString;
+self["@backupDirectory"];
+} else {
+self["@backupDirectory"]=_st(aString).__comma("/");
+self["@backupDirectory"];
+};
+return self}, function($ctx1) {$ctx1.fill(self,"backupDirectory:",{aString:aString},smalltalk.OGCustomSessionDescription)})},
+args: ["aString"],
+source: "backupDirectory: aString\x0a\x0a\x09(aString isEmpty or: [ aString last = '/' ])\x0a\x09\x09ifTrue: [ backupDirectory := aString ]\x0a\x09\x09ifFalse: [ backupDirectory := aString, '/' ]",
+messageSends: ["ifTrue:ifFalse:", ",", "or:", "=", "last", "isEmpty"],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "dataDirectory",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(self["@dataDirectory"]).__eq_eq(nil);
+if(smalltalk.assert($1)){
+self["@dataDirectory"]="";
+self["@dataDirectory"];
+};
+$2=self["@dataDirectory"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"dataDirectory",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "dataDirectory\x0a\x0a\x09dataDirectory == nil ifTrue: [ dataDirectory := '' ].\x0a\x09^dataDirectory",
+messageSends: ["ifTrue:", "=="],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "dataDirectory:",
+category: 'accessing',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(aString)._isEmpty())._or_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(aString)._last()).__eq("/");
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+if(smalltalk.assert($1)){
+self["@dataDirectory"]=aString;
+self["@dataDirectory"];
+} else {
+self["@dataDirectory"]=_st(aString).__comma("/");
+self["@dataDirectory"];
+};
+return self}, function($ctx1) {$ctx1.fill(self,"dataDirectory:",{aString:aString},smalltalk.OGCustomSessionDescription)})},
+args: ["aString"],
+source: "dataDirectory: aString\x0a\x0a\x09(aString isEmpty or: [ aString last = '/' ])\x0a\x09\x09ifTrue: [ dataDirectory := aString ]\x0a\x09\x09ifFalse: [ dataDirectory := aString, '/' ]",
+messageSends: ["ifTrue:ifFalse:", ",", "or:", "=", "last", "isEmpty"],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "defaultGemHost",
+category: 'defaults',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return "glass";
+}, function($ctx1) {$ctx1.fill(self,"defaultGemHost",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "defaultGemHost\x0a\x0a\x09^'glass'",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "defaultGemTask",
+category: 'defaults',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return "gemnetobject";
+}, function($ctx1) {$ctx1.fill(self,"defaultGemTask",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "defaultGemTask\x0a\x0a\x09^'gemnetobject'",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "defaultNetLDI",
+category: 'defaults',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return "50377";
+}, function($ctx1) {$ctx1.fill(self,"defaultNetLDI",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "defaultNetLDI\x0a\x0a\x09^'50377'",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "defaultPassword",
+category: 'defaults',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return "swordfish";
+}, function($ctx1) {$ctx1.fill(self,"defaultPassword",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "defaultPassword\x0a\x0a\x09^'swordfish'",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "defaultStoneHost",
+category: 'defaults',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return "glass";
+}, function($ctx1) {$ctx1.fill(self,"defaultStoneHost",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "defaultStoneHost\x0a\x0a\x09^'glass'",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "defaultStoneName",
+category: 'defaults',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return "seaside";
+}, function($ctx1) {$ctx1.fill(self,"defaultStoneName",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "defaultStoneName\x0a\x0a\x09^'seaside'",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "defaultUserId",
+category: 'defaults',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return "DataCurator";
+}, function($ctx1) {$ctx1.fill(self,"defaultUserId",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "defaultUserId\x0a\x0a\x09^'DataCurator'",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "editTemplate",
+category: 'template',
+fn: function (){
+var self=this;
+var stream;
+function $String(){return smalltalk.String||(typeof String=="undefined"?nil:String)}
+function $WriteStream(){return smalltalk.WriteStream||(typeof WriteStream=="undefined"?nil:WriteStream)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+stream=_st($WriteStream())._on_(_st($String())._new());
+$1=stream;
+_st($1)._nextPutAll_(_st(_st(_st(self)._class())._name())._asString());
+_st($1)._nextPutAll_(" new");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("name: ").__comma(_st(_st(self)._name())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("stoneHost: ").__comma(_st(_st(self)._stoneHost())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("stoneName: ").__comma(_st(_st(self)._stoneName())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("gemHost: ").__comma(_st(_st(self)._gemHost())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("netLDI: ").__comma(_st(_st(self)._netLDI())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("gemTask: ").__comma(_st(_st(self)._gemTask())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("userId: ").__comma(_st(_st(self)._userId())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("password: ").__comma(_st(_st(self)._password())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("osUserId: ").__comma(_st(_st(self)._osUserId())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("osPassword: ").__comma(_st(_st(self)._osPassword())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("backupDirectory: ").__comma(_st(_st(self)._backupDirectory())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("dataDirectory: ").__comma(_st(_st(self)._dataDirectory())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+$2=_st($1)._nextPutAll_("yourself.");
+$3=_st(stream)._contents();
+return $3;
+}, function($ctx1) {$ctx1.fill(self,"editTemplate",{stream:stream},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "editTemplate\x0a\x0a\x09| stream |\x0a\x09stream := WriteStream on: String new.\x0a\x09stream \x0a\x09\x09nextPutAll: self class name asString; nextPutAll: ' new';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'name: ', self name printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'stoneHost: ', self stoneHost printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'stoneName: ', self stoneName printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'gemHost: ', self gemHost printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'netLDI: ', self netLDI printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'gemTask: ', self gemTask printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'userId: ', self userId printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'password: ', self password printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'osUserId: ', self osUserId printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'osPassword: ', self osPassword printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'backupDirectory: ', self backupDirectory printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'dataDirectory: ', self dataDirectory printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'yourself.'.\x0a\x09^stream contents",
+messageSends: ["on:", "new", "nextPutAll:", "asString", "name", "class", "cr", "tab", ",", "printString", "nextPut:", "stoneHost", "stoneName", "gemHost", "netLDI", "gemTask", "userId", "password", "osUserId", "osPassword", "backupDirectory", "dataDirectory", "contents"],
+referencedClasses: ["String", "WriteStream"]
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "gciLibrary",
+category: 'accessing',
+fn: function (){
+var self=this;
+function $GciLibrary(){return smalltalk.GciLibrary||(typeof GciLibrary=="undefined"?nil:GciLibrary)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st($GciLibrary())._new();
+_st($1)._apiGciInit();
+$2=_st($1)._yourself();
+return self}, function($ctx1) {$ctx1.fill(self,"gciLibrary",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "gciLibrary\x0a\x09\x22TODO: think about support for more libraries\x22\x0a\x09GciLibrary new\x0a\x09\x09apiGciInit;\x0a\x09\x09yourself.",
+messageSends: ["apiGciInit", "new", "yourself"],
+referencedClasses: ["GciLibrary"]
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "gciLibraryName",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@gciLibraryName"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"gciLibraryName",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "gciLibraryName\x0a\x09^ gciLibraryName",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "gciLibraryName:",
+category: 'accessing',
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@gciLibraryName"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"gciLibraryName:",{anObject:anObject},smalltalk.OGCustomSessionDescription)})},
+args: ["anObject"],
+source: "gciLibraryName: anObject\x0a\x09gciLibraryName := anObject",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "gemHost",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(self["@gemHost"]).__eq_eq(nil);
+if(smalltalk.assert($1)){
+self["@gemHost"]=_st(self)._defaultGemHost();
+self["@gemHost"];
+};
+$2=self["@gemHost"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"gemHost",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "gemHost\x0a\x0a\x09gemHost == nil ifTrue: [ gemHost := self defaultGemHost ].\x0a\x09^gemHost",
+messageSends: ["ifTrue:", "defaultGemHost", "=="],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "gemHost:",
+category: 'accessing',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@gemHost"]=aString;
+return self}, function($ctx1) {$ctx1.fill(self,"gemHost:",{aString:aString},smalltalk.OGCustomSessionDescription)})},
+args: ["aString"],
+source: "gemHost: aString\x0a\x0a\x09gemHost := aString",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "gemNRS",
+category: 'nrs',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(_st(_st("!tcp@").__comma(_st(self)._gemHost())).__comma("#netldi:")).__comma(_st(self)._netLDI())).__comma("#task!")).__comma(_st(self)._gemTask());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"gemNRS",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "gemNRS\x0a\x0a\x09^'!tcp@' , self gemHost, \x0a\x09\x09'#netldi:' , self netLDI, \x0a\x09\x09'#task!' , self gemTask.",
+messageSends: [",", "gemTask", "netLDI", "gemHost"],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "gemTask",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(self["@gemTask"]).__eq_eq(nil);
+if(smalltalk.assert($1)){
+self["@gemTask"]=_st(self)._defaultGemTask();
+self["@gemTask"];
+};
+$2=self["@gemTask"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"gemTask",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "gemTask\x0a\x0a\x09gemTask == nil ifTrue: [ gemTask := self defaultGemTask ].\x0a\x09^gemTask",
+messageSends: ["ifTrue:", "defaultGemTask", "=="],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "gemTask:",
+category: 'accessing',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@gemTask"]=aString;
+return self}, function($ctx1) {$ctx1.fill(self,"gemTask:",{aString:aString},smalltalk.OGCustomSessionDescription)})},
+args: ["aString"],
+source: "gemTask: aString\x0a\x0a\x09gemTask := aString",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "gemstoneVersion",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@gemstoneVersion"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"gemstoneVersion",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "gemstoneVersion\x0a\x09^ gemstoneVersion",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "gemstoneVersion:",
+category: 'accessing',
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@gemstoneVersion"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"gemstoneVersion:",{anObject:anObject},smalltalk.OGCustomSessionDescription)})},
+args: ["anObject"],
+source: "gemstoneVersion: anObject\x0a\x09gemstoneVersion := anObject",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "isGuest",
+category: 'testing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._osUserId())._isEmpty();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"isGuest",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "isGuest\x0a\x0a\x09^self osUserId isEmpty",
+messageSends: ["isEmpty", "osUserId"],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "name",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$1;
+$2=_st(self["@name"]).__eq_eq(nil);
+if(smalltalk.assert($2)){
+$1=_st(_st(self)._class())._label();
+} else {
+$1=self["@name"];
+};
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"name",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "name\x0a\x0a\x09^name == nil\x0a\x09\x09ifTrue: [ self class label ]\x0a\x09\x09ifFalse: [ name ]",
+messageSends: ["ifTrue:ifFalse:", "label", "class", "=="],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "name:",
+category: 'accessing',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@name"]=aString;
+return self}, function($ctx1) {$ctx1.fill(self,"name:",{aString:aString},smalltalk.OGCustomSessionDescription)})},
+args: ["aString"],
+source: "name: aString\x0a\x0a\x09name := aString",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "netLDI",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(self["@netLDI"]).__eq_eq(nil);
+if(smalltalk.assert($1)){
+self["@netLDI"]=_st(self)._defaultNetLDI();
+self["@netLDI"];
+};
+$2=self["@netLDI"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"netLDI",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "netLDI\x0a\x0a\x09netLDI == nil ifTrue: [ netLDI := self defaultNetLDI ].\x0a\x09^netLDI",
+messageSends: ["ifTrue:", "defaultNetLDI", "=="],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "netLDI:",
+category: 'accessing',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@netLDI"]=aString;
+return self}, function($ctx1) {$ctx1.fill(self,"netLDI:",{aString:aString},smalltalk.OGCustomSessionDescription)})},
+args: ["aString"],
+source: "netLDI: aString\x0a\x0a\x09netLDI := aString",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "obConfigure",
+category: 'template',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._class())._obConfigureWith_(self);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"obConfigure",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "obConfigure\x0a\x0a\x09^self class obConfigureWith: self",
+messageSends: ["obConfigureWith:", "class"],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "osPassword",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(self["@osPassword"]).__eq_eq(nil);
+if(smalltalk.assert($1)){
+self["@osPassword"]="";
+self["@osPassword"];
+};
+$2=self["@osPassword"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"osPassword",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "osPassword\x0a\x0a\x09osPassword == nil ifTrue: [ osPassword := '' ].\x0a\x09^osPassword",
+messageSends: ["ifTrue:", "=="],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "osPassword:",
+category: 'accessing',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@osPassword"]=aString;
+return self}, function($ctx1) {$ctx1.fill(self,"osPassword:",{aString:aString},smalltalk.OGCustomSessionDescription)})},
+args: ["aString"],
+source: "osPassword: aString\x0a\x0a\x09osPassword := aString",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "osUserId",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(self["@osUserId"]).__eq_eq(nil);
+if(smalltalk.assert($1)){
+self["@osUserId"]="";
+self["@osUserId"];
+};
+$2=self["@osUserId"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"osUserId",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "osUserId\x0a\x0a\x09osUserId == nil ifTrue: [ osUserId := '' ].\x0a\x09^osUserId",
+messageSends: ["ifTrue:", "=="],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "osUserId:",
+category: 'accessing',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@osUserId"]=aString;
+return self}, function($ctx1) {$ctx1.fill(self,"osUserId:",{aString:aString},smalltalk.OGCustomSessionDescription)})},
+args: ["aString"],
+source: "osUserId: aString\x0a\x0a\x09osUserId := aString",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "password",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(self["@password"]).__eq_eq(nil);
+if(smalltalk.assert($1)){
+self["@password"]=_st(self)._defaultPassword();
+self["@password"];
+};
+$2=self["@password"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"password",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "password\x0a\x0a\x09password == nil ifTrue: [ password := self defaultPassword ].\x0a\x09^password",
+messageSends: ["ifTrue:", "defaultPassword", "=="],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "password:",
+category: 'accessing',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@password"]=aString;
+return self}, function($ctx1) {$ctx1.fill(self,"password:",{aString:aString},smalltalk.OGCustomSessionDescription)})},
+args: ["aString"],
+source: "password: aString\x0a\x0a\x09password := aString",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "postCopy",
+category: 'copying',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+smalltalk.Object.fn.prototype._postCopy.apply(_st(self), []);
+_st(self)._name_(_st(_st(self)._name()).__comma(" copy"));
+return self}, function($ctx1) {$ctx1.fill(self,"postCopy",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "postCopy\x0a\x0a\x09super postCopy.\x0a\x09self name: self name, ' copy'",
+messageSends: ["postCopy", "name:", ",", "name"],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stoneHost",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(self["@stoneHost"]).__eq_eq(nil);
+if(smalltalk.assert($1)){
+self["@stoneHost"]=_st(self)._defaultStoneHost();
+self["@stoneHost"];
+};
+$2=self["@stoneHost"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"stoneHost",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "stoneHost\x0a\x0a\x09stoneHost == nil ifTrue: [ stoneHost := self defaultStoneHost ].\x0a\x09^stoneHost",
+messageSends: ["ifTrue:", "defaultStoneHost", "=="],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stoneHost:",
+category: 'accessing',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@stoneHost"]=aString;
+return self}, function($ctx1) {$ctx1.fill(self,"stoneHost:",{aString:aString},smalltalk.OGCustomSessionDescription)})},
+args: ["aString"],
+source: "stoneHost: aString\x0a\x0a\x09stoneHost := aString",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stoneNRS",
+category: 'nrs',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st("!tcp@").__comma(_st(self)._stoneHost())).__comma("#server!")).__comma(_st(self)._stoneName());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"stoneNRS",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "stoneNRS\x0a\x0a\x09^'!tcp@' , self stoneHost , \x0a\x09\x09'#server!' , self stoneName.\x0a\x09",
+messageSends: [",", "stoneName", "stoneHost"],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stoneName",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(self["@stoneName"]).__eq_eq(nil);
+if(smalltalk.assert($1)){
+self["@stoneName"]=_st(self)._defaultStoneName();
+self["@stoneName"];
+};
+$2=self["@stoneName"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"stoneName",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "stoneName\x0a\x0a\x09stoneName == nil ifTrue: [ stoneName := self defaultStoneName ].\x0a\x09^stoneName",
+messageSends: ["ifTrue:", "defaultStoneName", "=="],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stoneName:",
+category: 'accessing',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@stoneName"]=aString;
+return self}, function($ctx1) {$ctx1.fill(self,"stoneName:",{aString:aString},smalltalk.OGCustomSessionDescription)})},
+args: ["aString"],
+source: "stoneName: aString\x0a\x0a\x09stoneName := aString",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "userId",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(self["@userId"]).__eq_eq(nil);
+if(smalltalk.assert($1)){
+self["@userId"]=_st(self)._defaultUserId();
+self["@userId"];
+};
+$2=self["@userId"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"userId",{},smalltalk.OGCustomSessionDescription)})},
+args: [],
+source: "userId\x0a\x0a\x09userId == nil ifTrue: [ userId := self defaultUserId ].\x0a\x09^userId",
+messageSends: ["ifTrue:", "defaultUserId", "=="],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "userId:",
+category: 'accessing',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@userId"]=aString;
+return self}, function($ctx1) {$ctx1.fill(self,"userId:",{aString:aString},smalltalk.OGCustomSessionDescription)})},
+args: ["aString"],
+source: "userId: aString\x0a\x0a\x09userId := aString",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "isValid",
+category: 'testing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return true;
+}, function($ctx1) {$ctx1.fill(self,"isValid",{},smalltalk.OGCustomSessionDescription.klass)})},
+args: [],
+source: "isValid\x0a\x09^ true",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "label",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return "Custom";
+}, function($ctx1) {$ctx1.fill(self,"label",{},smalltalk.OGCustomSessionDescription.klass)})},
+args: [],
+source: "label\x0a\x09^ 'Custom'",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "obConfigure",
+category: 'instance creation',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._obConfigureWith_(_st(self)._new());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"obConfigure",{},smalltalk.OGCustomSessionDescription.klass)})},
+args: [],
+source: "obConfigure\x0a\x09^ self obConfigureWith: self new",
+messageSends: ["obConfigureWith:", "new"],
+referencedClasses: []
+}),
+smalltalk.OGCustomSessionDescription.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "obConfigureWith:",
+category: 'instance creation',
+fn: function (aDescription){
+var self=this;
+var creationString,description;
+function $OBMultiLineTextRequest(){return smalltalk.OBMultiLineTextRequest||(typeof OBMultiLineTextRequest=="undefined"?nil:OBMultiLineTextRequest)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+creationString=_st($OBMultiLineTextRequest())._prompt_template_("Edit template and save",_st(aDescription)._editTemplate());
+$1=_st(_st(creationString)._isNil())._or_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(creationString)._isEmpty();
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+if(smalltalk.assert($1)){
+return nil;
+};
+description=_st(self)._readFrom_(_st(creationString)._readStream());
+$2=description;
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"obConfigureWith:",{aDescription:aDescription,creationString:creationString,description:description},smalltalk.OGCustomSessionDescription.klass)})},
+args: ["aDescription"],
+source: "obConfigureWith: aDescription\x0a\x0a\x09| creationString description |\x0a\x09\x22TODO: provide editor\x22\x0a\x09creationString := OBMultiLineTextRequest prompt: 'Edit template and save' template: aDescription editTemplate.\x0a\x09(creationString isNil or: [creationString isEmpty]) ifTrue: [ ^nil ].\x0a\x09description := self readFrom: creationString readStream.\x0a\x09^description",
+messageSends: ["prompt:template:", "editTemplate", "ifTrue:", "or:", "isEmpty", "isNil", "readFrom:", "readStream"],
+referencedClasses: ["OBMultiLineTextRequest"]
+}),
+smalltalk.OGCustomSessionDescription.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "readFrom:",
+category: 'instance creation',
+fn: function (textStringOrStream){
+var self=this;
+var object;
+function $Compiler(){return smalltalk.Compiler||(typeof Compiler=="undefined"?nil:Compiler)}
+function $OGCustomSessionDescription(){return smalltalk.OGCustomSessionDescription||(typeof OGCustomSessionDescription=="undefined"?nil:OGCustomSessionDescription)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4;
+$1=_st($Compiler())._couldEvaluate_(textStringOrStream);
+if(! smalltalk.assert($1)){
+$2=_st(self)._error_("expected String, Stream, or Text");
+return $2;
+};
+object=_st($Compiler())._evaluate_(textStringOrStream);
+$3=_st(object)._isKindOf_($OGCustomSessionDescription());
+if(! smalltalk.assert($3)){
+_st(self)._error_(_st(_st(self)._name()).__comma(" expected"));
+};
+$4=object;
+return $4;
+}, function($ctx1) {$ctx1.fill(self,"readFrom:",{textStringOrStream:textStringOrStream,object:object},smalltalk.OGCustomSessionDescription.klass)})},
+args: ["textStringOrStream"],
+source: "readFrom: textStringOrStream\x0a\x09\x22Create an object based on the contents of textStringOrStream.\x22\x0a\x0a\x09| object |\x0a\x09(Compiler couldEvaluate: textStringOrStream)\x0a\x09\x09ifFalse: [^ self error: 'expected String, Stream, or Text'].\x0a\x09object := Compiler evaluate: textStringOrStream.\x0a\x09(object isKindOf: OGCustomSessionDescription) ifFalse: [self error: self name, ' expected'].\x0a\x09^ object",
+messageSends: ["ifFalse:", "error:", "couldEvaluate:", "evaluate:", ",", "name", "isKindOf:"],
+referencedClasses: ["Compiler", "OGCustomSessionDescription"]
+}),
+smalltalk.OGCustomSessionDescription.klass);
+
+
+smalltalk.addClass('OGApplianceSessionDescription', smalltalk.OGCustomSessionDescription, [], 'Topez-Client-Session');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "defaultGemHost",
+category: 'defaults',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._stoneHost();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"defaultGemHost",{},smalltalk.OGApplianceSessionDescription)})},
+args: [],
+source: "defaultGemHost\x0a\x0a\x09^self stoneHost",
+messageSends: ["stoneHost"],
+referencedClasses: []
+}),
+smalltalk.OGApplianceSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "editTemplate",
+category: 'template',
+fn: function (){
+var self=this;
+var stream;
+function $String(){return smalltalk.String||(typeof String=="undefined"?nil:String)}
+function $WriteStream(){return smalltalk.WriteStream||(typeof WriteStream=="undefined"?nil:WriteStream)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5;
+stream=_st($WriteStream())._on_(_st($String())._new());
+$1=stream;
+_st($1)._nextPutAll_(_st(_st(_st(self)._class())._name())._asString());
+_st($1)._nextPutAll_(" new");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("name: ").__comma(_st(_st(self)._name())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("stoneHost: ").__comma(_st(_st(self)._stoneHost())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("stoneName: ").__comma(_st(_st(self)._stoneName())._printString()));
+$2=_st($1)._nextPut_(";");
+_st(self)._addOptionalTemplateEntriesOn_(stream);
+$3=stream;
+_st($3)._cr();
+_st($3)._tab();
+$4=_st($3)._nextPutAll_("yourself.");
+$5=_st(stream)._contents();
+return $5;
+}, function($ctx1) {$ctx1.fill(self,"editTemplate",{stream:stream},smalltalk.OGApplianceSessionDescription)})},
+args: [],
+source: "editTemplate\x0a\x0a\x09| stream |\x0a\x09stream := WriteStream on: String new.\x0a\x09stream \x0a\x09\x09nextPutAll: self class name asString; nextPutAll: ' new';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'name: ', self name printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'stoneHost: ', self stoneHost printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'stoneName: ', self stoneName printString; nextPut: ';'.\x0a\x09self addOptionalTemplateEntriesOn: stream.\x0a\x09stream \x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'yourself.'.\x0a\x09^stream contents",
+messageSends: ["on:", "new", "nextPutAll:", "asString", "name", "class", "cr", "tab", ",", "printString", "nextPut:", "stoneHost", "stoneName", "addOptionalTemplateEntriesOn:", "contents"],
+referencedClasses: ["String", "WriteStream"]
+}),
+smalltalk.OGApplianceSessionDescription);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "label",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return "Appliance";
+}, function($ctx1) {$ctx1.fill(self,"label",{},smalltalk.OGApplianceSessionDescription.klass)})},
+args: [],
+source: "label\x0a\x09^ 'Appliance'",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGApplianceSessionDescription.klass);
+
+
+smalltalk.addClass('OGFullSessionDescription', smalltalk.OGCustomSessionDescription, [], 'Topez-Client-Session');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "editTemplate",
+category: 'template',
+fn: function (){
+var self=this;
+var stream;
+function $String(){return smalltalk.String||(typeof String=="undefined"?nil:String)}
+function $WriteStream(){return smalltalk.WriteStream||(typeof WriteStream=="undefined"?nil:WriteStream)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5;
+stream=_st($WriteStream())._on_(_st($String())._new());
+$1=stream;
+_st($1)._nextPutAll_(_st(_st(_st(self)._class())._name())._asString());
+_st($1)._nextPutAll_(" new");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("name: ").__comma(_st(_st(self)._name())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("stoneHost: ").__comma(_st(_st(self)._stoneHost())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("stoneName: ").__comma(_st(_st(self)._stoneName())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("gemHost: ").__comma(_st(_st(self)._gemHost())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("netLDI: ").__comma(_st(_st(self)._netLDI())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("gemTask: ").__comma(_st(_st(self)._gemTask())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("userId: ").__comma(_st(_st(self)._userId())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("password: ").__comma(_st(_st(self)._password())._printString()));
+$2=_st($1)._nextPut_(";");
+_st(self)._addOptionalTemplateEntriesOn_(stream);
+$3=stream;
+_st($3)._cr();
+_st($3)._tab();
+$4=_st($3)._nextPutAll_("yourself.");
+$5=_st(stream)._contents();
+return $5;
+}, function($ctx1) {$ctx1.fill(self,"editTemplate",{stream:stream},smalltalk.OGFullSessionDescription)})},
+args: [],
+source: "editTemplate\x0a\x0a\x09| stream |\x0a\x09stream := WriteStream on: String new.\x0a\x09stream \x0a\x09\x09nextPutAll: self class name asString; nextPutAll: ' new';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'name: ', self name printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'stoneHost: ', self stoneHost printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'stoneName: ', self stoneName printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'gemHost: ', self gemHost printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'netLDI: ', self netLDI printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'gemTask: ', self gemTask printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'userId: ', self userId printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'password: ', self password printString; nextPut: ';'.\x0a\x09self addOptionalTemplateEntriesOn: stream.\x0a\x09stream \x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'yourself.'.\x0a\x09^stream contents",
+messageSends: ["on:", "new", "nextPutAll:", "asString", "name", "class", "cr", "tab", ",", "printString", "nextPut:", "stoneHost", "stoneName", "gemHost", "netLDI", "gemTask", "userId", "password", "addOptionalTemplateEntriesOn:", "contents"],
+referencedClasses: ["String", "WriteStream"]
+}),
+smalltalk.OGFullSessionDescription);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "isValid",
+category: 'testing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return false;
+}, function($ctx1) {$ctx1.fill(self,"isValid",{},smalltalk.OGFullSessionDescription.klass)})},
+args: [],
+source: "isValid\x0a\x09\x22Will ultimately get rid of OGFullSessionDescription - won't show up in the choices anymore, to start'\x22\x0a\x09^ false",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGFullSessionDescription.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "label",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return "Full";
+}, function($ctx1) {$ctx1.fill(self,"label",{},smalltalk.OGFullSessionDescription.klass)})},
+args: [],
+source: "label\x0a\x09^ 'Full'",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGFullSessionDescription.klass);
+
+
+smalltalk.addClass('OGStandardSessionDescription', smalltalk.OGCustomSessionDescription, [], 'Topez-Client-Session');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "addOptionalTemplateEntriesOn:",
+category: 'template',
+fn: function (aStream){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+$1=_st(_st(self)._dataDirectory())._isEmpty();
+if(! smalltalk.assert($1)){
+$2=aStream;
+_st($2)._cr();
+_st($2)._tab();
+_st($2)._nextPutAll_(_st("dataDirectory: ").__comma(_st(_st(self)._dataDirectory())._printString()));
+$3=_st($2)._nextPut_(";");
+$3;
+};
+return self}, function($ctx1) {$ctx1.fill(self,"addOptionalTemplateEntriesOn:",{aStream:aStream},smalltalk.OGStandardSessionDescription)})},
+args: ["aStream"],
+source: "addOptionalTemplateEntriesOn: aStream\x0a\x0a\x09self dataDirectory isEmpty\x0a\x09\x09ifFalse: [\x0a\x09\x09\x09aStream\x0a \x09\x09\x09\x09cr; tab;\x0a\x09\x09\x09\x09nextPutAll: 'dataDirectory: ', self dataDirectory printString; nextPut: ';' ].",
+messageSends: ["ifFalse:", "cr", "tab", "nextPutAll:", ",", "printString", "dataDirectory", "nextPut:", "isEmpty"],
+referencedClasses: []
+}),
+smalltalk.OGStandardSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "defaultGemHost",
+category: 'defaults',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._stoneHost();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"defaultGemHost",{},smalltalk.OGStandardSessionDescription)})},
+args: [],
+source: "defaultGemHost\x0a\x09^ self stoneHost",
+messageSends: ["stoneHost"],
+referencedClasses: []
+}),
+smalltalk.OGStandardSessionDescription);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "editTemplate",
+category: 'template',
+fn: function (){
+var self=this;
+var stream;
+function $String(){return smalltalk.String||(typeof String=="undefined"?nil:String)}
+function $WriteStream(){return smalltalk.WriteStream||(typeof WriteStream=="undefined"?nil:WriteStream)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5;
+stream=_st($WriteStream())._on_(_st($String())._new());
+$1=stream;
+_st($1)._nextPutAll_(_st(_st(_st(self)._class())._name())._asString());
+_st($1)._nextPutAll_(" new");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("name: ").__comma(_st(_st(self)._name())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("stoneHost: ").__comma(_st(_st(self)._stoneHost())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("stoneName: ").__comma(_st(_st(self)._stoneName())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("gemHost: ").__comma(_st(_st(self)._gemHost())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("netLDI: ").__comma(_st(_st(self)._netLDI())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("userId: ").__comma(_st(_st(self)._userId())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("password: ").__comma(_st(_st(self)._password())._printString()));
+_st($1)._nextPut_(";");
+_st($1)._cr();
+_st($1)._tab();
+_st($1)._nextPutAll_(_st("backupDirectory: ").__comma(_st(_st(self)._backupDirectory())._printString()));
+$2=_st($1)._nextPut_(";");
+_st(self)._addOptionalTemplateEntriesOn_(stream);
+$3=stream;
+_st($3)._cr();
+_st($3)._tab();
+$4=_st($3)._nextPutAll_("yourself.");
+$5=_st(stream)._contents();
+return $5;
+}, function($ctx1) {$ctx1.fill(self,"editTemplate",{stream:stream},smalltalk.OGStandardSessionDescription)})},
+args: [],
+source: "editTemplate\x0a\x0a\x09| stream |\x0a\x09stream := WriteStream on: String new.\x0a\x09stream \x0a\x09\x09nextPutAll: self class name asString; nextPutAll: ' new';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'name: ', self name printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'stoneHost: ', self stoneHost printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'stoneName: ', self stoneName printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'gemHost: ', self gemHost printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'netLDI: ', self netLDI printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'userId: ', self userId printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'password: ', self password printString; nextPut: ';';\x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'backupDirectory: ', self backupDirectory printString; nextPut: ';'.\x0a\x09self addOptionalTemplateEntriesOn: stream.\x0a\x09stream \x0a\x09\x09cr; tab;\x0a\x09\x09nextPutAll: 'yourself.'.\x0a\x09^stream contents",
+messageSends: ["on:", "new", "nextPutAll:", "asString", "name", "class", "cr", "tab", ",", "printString", "nextPut:", "stoneHost", "stoneName", "gemHost", "netLDI", "userId", "password", "backupDirectory", "addOptionalTemplateEntriesOn:", "contents"],
+referencedClasses: ["String", "WriteStream"]
+}),
+smalltalk.OGStandardSessionDescription);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "label",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return "Standard";
+}, function($ctx1) {$ctx1.fill(self,"label",{},smalltalk.OGStandardSessionDescription.klass)})},
+args: [],
+source: "label\x0a\x09^ 'Standard'",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.OGStandardSessionDescription.klass);
 
 

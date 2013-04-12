@@ -208,6 +208,13 @@ recompileAll
 		[self recompile: each] valueWithTimeout: 100]
 ! !
 
+!Compiler class methodsFor: 'accessing'!
+
+couldEvaluate: anObject
+	"Answer true if anObject can be passed to my various #evaluate: methods."
+	^ anObject isString or: [ anObject isStream ]
+! !
+
 !Compiler class methodsFor: 'compiling'!
 
 recompile: aClass
@@ -217,6 +224,12 @@ recompile: aClass
 recompileAll
 	Smalltalk current classes do: [:each |
 		self recompile: each]
+! !
+
+!Compiler class methodsFor: 'evaluating'!
+
+evaluate: aString
+	^ self new evaluateExpression: aString
 ! !
 
 Object subclass: #DoIt

@@ -1964,6 +1964,10 @@ atStart
 
 isEmpty
 	^self size = 0
+!
+
+isStream
+	^ true
 ! !
 
 !Stream methodsFor: 'writing'!

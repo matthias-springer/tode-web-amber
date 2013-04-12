@@ -384,6 +384,10 @@ isParseFailure
 	^false
 !
 
+isStream
+	^ false
+!
+
 isString
 	^false
 !

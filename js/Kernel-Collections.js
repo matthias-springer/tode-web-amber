@@ -5687,6 +5687,22 @@ smalltalk.Stream);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "isStream",
+category: 'testing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return true;
+}, function($ctx1) {$ctx1.fill(self,"isStream",{},smalltalk.Stream)})},
+args: [],
+source: "isStream\x0a\x09^ true",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Stream);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "next",
 category: 'reading',
 fn: function (){

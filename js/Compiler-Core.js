@@ -677,6 +677,45 @@ smalltalk.Compiler);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "couldEvaluate:",
+category: 'accessing',
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(anObject)._isString())._or_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(anObject)._isStream();
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"couldEvaluate:",{anObject:anObject},smalltalk.Compiler.klass)})},
+args: ["anObject"],
+source: "couldEvaluate: anObject\x0a\x09\x22Answer true if anObject can be passed to my various #evaluate: methods.\x22\x0a\x09^ anObject isString or: [ anObject isStream ]",
+messageSends: ["or:", "isStream", "isString"],
+referencedClasses: []
+}),
+smalltalk.Compiler.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "evaluate:",
+category: 'evaluating',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._new())._evaluateExpression_(aString);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"evaluate:",{aString:aString},smalltalk.Compiler.klass)})},
+args: ["aString"],
+source: "evaluate: aString\x0a\x09^ self new evaluateExpression: aString",
+messageSends: ["evaluateExpression:", "new"],
+referencedClasses: []
+}),
+smalltalk.Compiler.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "recompile:",
 category: 'compiling',
 fn: function (aClass){

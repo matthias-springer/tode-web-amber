@@ -786,6 +786,22 @@ smalltalk.Object);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "isStream",
+category: 'testing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return false;
+}, function($ctx1) {$ctx1.fill(self,"isStream",{},smalltalk.Object)})},
+args: [],
+source: "isStream\x0a\x09^ false",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "isString",
 category: 'testing',
 fn: function (){

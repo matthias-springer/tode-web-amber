@@ -67,6 +67,60 @@ smalltalk.GciLibrary);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "apiGciExecuteStr:a:a:",
+category: 'API',
+fn: function (aString,anOop,envId){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._apiGci_data_("execute_str",_st([_st("string").__minus_gt(aString),_st("oop").__minus_gt(anOop),_st("envId").__minus_gt(envId)])._asDictionary());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"apiGciExecuteStr:a:a:",{aString:aString,anOop:anOop,envId:envId},smalltalk.GciLibrary)})},
+args: ["aString", "anOop", "envId"],
+source: "apiGciExecuteStr: aString a: anOop a: envId\x0a\x09^ self apiGci: 'execute_str' data: {'string'->aString. 'oop'->anOop. 'envId'->envId} asDictionary",
+messageSends: ["apiGci:data:", "asDictionary", "->"],
+referencedClasses: []
+}),
+smalltalk.GciLibrary);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "apiGciExecuteStrExpectingStr:a:",
+category: 'API convenience',
+fn: function (aString,anOop){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._apiGci_data_("execute_str_expecting_str",_st([_st("string").__minus_gt(aString),_st("oop").__minus_gt(anOop)])._asDictionary());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"apiGciExecuteStrExpectingStr:a:",{aString:aString,anOop:anOop},smalltalk.GciLibrary)})},
+args: ["aString", "anOop"],
+source: "apiGciExecuteStrExpectingStr: aString a: anOop\x0a\x09^ self apiGci: 'execute_str_expecting_str' data: {'string'->aString. 'oop'->anOop} asDictionary",
+messageSends: ["apiGci:data:", "asDictionary", "->"],
+referencedClasses: []
+}),
+smalltalk.GciLibrary);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "apiGciExecuteStrExpectingStr:a:a:",
+category: 'API convenience',
+fn: function (aString,anOop,envId){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._apiGci_data_("execute_str_expecting_str",_st([_st("string").__minus_gt(aString),_st("oop").__minus_gt(anOop),_st("envId").__minus_gt(envId)])._asDictionary());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"apiGciExecuteStrExpectingStr:a:a:",{aString:aString,anOop:anOop,envId:envId},smalltalk.GciLibrary)})},
+args: ["aString", "anOop", "envId"],
+source: "apiGciExecuteStrExpectingStr: aString a: anOop a: envId\x0a\x09^ self apiGci: 'execute_str_expecting_str' data: {'string'->aString. 'oop'->anOop. 'envId'->envId} asDictionary",
+messageSends: ["apiGci:data:", "asDictionary", "->"],
+referencedClasses: []
+}),
+smalltalk.GciLibrary);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "apiGciGetSessionId",
 category: 'API',
 fn: function (){

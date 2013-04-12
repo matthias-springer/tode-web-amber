@@ -9,6 +9,10 @@ apiGciExecuteStr: aString a: anOop
 	^ self apiGci: 'execute_str' data: {'string'->aString. 'oop'->anOop} asDictionary
 !
 
+apiGciExecuteStr: aString a: anOop a: envId
+	^ self apiGci: 'execute_str' data: {'string'->aString. 'oop'->anOop. 'envId'->envId} asDictionary
+!
+
 apiGciGetSessionId
 	sessionId := self apiNoSessionGci: 'get_session_id' data: Dictionary new.
 	^ sessionId
@@ -32,6 +36,16 @@ apiGciSetSessionId: aNumber
 
 apiGciVersion
 	^ self apiGci: 'version'
+! !
+
+!GciLibrary methodsFor: 'API convenience'!
+
+apiGciExecuteStrExpectingStr: aString a: anOop
+	^ self apiGci: 'execute_str_expecting_str' data: {'string'->aString. 'oop'->anOop} asDictionary
+!
+
+apiGciExecuteStrExpectingStr: aString a: anOop a: envId
+	^ self apiGci: 'execute_str_expecting_str' data: {'string'->aString. 'oop'->anOop. 'envId'->envId} asDictionary
 ! !
 
 !GciLibrary methodsFor: 'constants'!

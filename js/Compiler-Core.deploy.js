@@ -509,6 +509,35 @@ smalltalk.Compiler);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "couldEvaluate:",
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(anObject)._isString())._or_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(anObject)._isStream();
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"couldEvaluate:",{anObject:anObject},smalltalk.Compiler.klass)})},
+messageSends: ["or:", "isStream", "isString"]}),
+smalltalk.Compiler.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "evaluate:",
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._new())._evaluateExpression_(aString);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"evaluate:",{aString:aString},smalltalk.Compiler.klass)})},
+messageSends: ["evaluateExpression:", "new"]}),
+smalltalk.Compiler.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "recompile:",
 fn: function (aClass){
 var self=this;
