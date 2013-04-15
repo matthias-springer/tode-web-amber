@@ -1433,6 +1433,10 @@ digitValue
 		ifFalse: [Error signal: 'not implemented yet'].
 !
 
+parseFloat
+	< return parseFloat(self) >
+!
+
 parseJSON
 	< return $.parseJSON(self) >
 !

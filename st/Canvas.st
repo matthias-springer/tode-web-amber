@@ -735,7 +735,7 @@ alt: aString
 !
 
 appendClass: aString
-	<self['@element'].className = self['@element'].className + ' ' + aString>
+	self element asJQuery addClass: aString
 !
 
 at: aString put: aValue
@@ -1024,50 +1024,127 @@ renderOn: html
 ! !
 
 Widget subclass: #Morph
-	instanceVariableNames: 'html'
+	instanceVariableNames: 'morphElement'
 	package: 'Canvas'!
 
-!Morph methodsFor: 'not yet classified'!
+!Morph methodsFor: 'geometry'!
+
+height
+	^ (self morphElement asJQuery css: 'height') parseFloat
+!
+
+height: aNumber
+	self morphElement asJQuery css: 'height' a: aNumber asString, 'px'.
+!
+
+left
+	^ (self morphElement asJQuery css: 'left') parseFloat
+!
+
+left: aNumber
+	self morphElement asJQuery css: 'left' a: aNumber asString, 'px'.
+!
+
+top
+	^ (self morphElement asJQuery css: 'top') parseFloat
+!
+
+top: aNumber
+	self morphElement asJQuery css: 'top' a: aNumber asString, 'px'.
+!
+
+width
+	^ (self morphElement asJQuery css: 'width') parseFloat
+!
+
+width: aNumber
+	self morphElement asJQuery css: 'width' a: aNumber asString, 'px'.
+! !
+
+!Morph methodsFor: 'private'!
+
+morphElement
+	^ morphElement
+! !
+
+!Morph methodsFor: 'rendering'!
+
+render: container with: html
+!
+
+renderOn: html
+	morphElement := html div.
+	self render: morphElement with: html.
+! !
+
+!Morph methodsFor: 'submorphs'!
 
 addMorph: aMorph
-	self html div with: aMorph.
+	"TODO: cause rendering before addMorph: to allow changing properties before rendering."
+	aMorph appendToJQuery: self morphElement asJQuery.
+! !
+
+Morph subclass: #SimpleButtonMorph
+	instanceVariableNames: 'morphElement button'
+	package: 'Canvas'!
+
+!SimpleButtonMorph methodsFor: 'accessing'!
+
+appendClass: aString
+	button asJQuery addClass: aString.
 !
 
-html
-	^ html
+label
+	^ button asJQuery html
 !
 
-render
-!
+label: aString
+	button with: aString.
+! !
 
-renderOn: phtml
-	html := phtml.
-	self render.
+!SimpleButtonMorph methodsFor: 'events'!
+
+onClick: aBlock
+	button onClick: [aBlock value].
+! !
+
+!SimpleButtonMorph methodsFor: 'rendering'!
+
+render: container with: html
+	container  
+		with: [button := html a class: 'btn'].
 ! !
 
 Morph subclass: #SystemWindow
-	instanceVariableNames: ''
+	instanceVariableNames: 'morphElement'
 	package: 'Canvas'!
 
-!SystemWindow methodsFor: 'not yet classified'!
+!SystemWindow methodsFor: 'rendering'!
 
-render
-	self html div 
-		with: 'Window content';
+drawTitleBar
+	|closeBtn|
+	closeBtn := SimpleButtonMorph new.
+	self addMorph: closeBtn.
+	closeBtn label: 'close'.
+	closeBtn onClick: [Transcript show: 'abc'].
+!
+
+render: container with: html
+	container  
 		class: 'component window';
 		draggable.
+	self drawTitleBar.
 ! !
 
 Morph subclass: #WorkspaceMorph
-	instanceVariableNames: ''
+	instanceVariableNames: 'morphElement'
 	package: 'Canvas'!
 
-!WorkspaceMorph methodsFor: 'not yet classified'!
+!WorkspaceMorph methodsFor: 'rendering'!
 
-render
-	self html div
-		id: 'workspace';
-		with: SystemWindow new.
+render: container with: html
+	container
+		id: 'workspace'.
 ! !
 
 WorkspaceMorph class instanceVariableNames: 'workspace'!

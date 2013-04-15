@@ -3531,6 +3531,17 @@ smalltalk.String);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "parseFloat",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+ return parseFloat(self) ;
+return self}, function($ctx1) {$ctx1.fill(self,"parseFloat",{},smalltalk.String)})},
+messageSends: []}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "parseJSON",
 fn: function (){
 var self=this;
