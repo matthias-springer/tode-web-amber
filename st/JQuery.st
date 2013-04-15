@@ -17,3 +17,7 @@ ajaxSync: aURL data: dataString
 	< return $.ajax({url: aURL, data: dataString, async: false}); >
 ! !
 
+Object subclass: #JQuery
+	instanceVariableNames: ''
+	package: 'JQuery'!
+

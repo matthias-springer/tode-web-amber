@@ -245,6 +245,50 @@ smalltalk.Collection);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "asCommaString",
+category: 'printing',
+fn: function (){
+var self=this;
+function $String(){return smalltalk.String||(typeof String=="undefined"?nil:String)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($String())._streamContents_((function(s){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._asStringOn_delimiter_(s,", ");
+}, function($ctx2) {$ctx2.fillBlock({s:s},$ctx1)})}));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"asCommaString",{},smalltalk.Collection)})},
+args: [],
+source: "asCommaString\x0a\x09\x22Return collection printed as 'a, b, c' \x22\x0a\x0a\x09^String streamContents: [:s | self asStringOn: s delimiter: ', ']\x0a\x09\x09",
+messageSends: ["streamContents:", "asStringOn:delimiter:"],
+referencedClasses: ["String"]
+}),
+smalltalk.Collection);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "asCommaStringAnd",
+category: 'printing',
+fn: function (){
+var self=this;
+function $String(){return smalltalk.String||(typeof String=="undefined"?nil:String)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($String())._streamContents_((function(s){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._asStringOn_delimiter_last_(s,", "," and ");
+}, function($ctx2) {$ctx2.fillBlock({s:s},$ctx1)})}));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"asCommaStringAnd",{},smalltalk.Collection)})},
+args: [],
+source: "asCommaStringAnd\x0a\x09\x22Return collection printed as 'a, b and c' \x22\x0a\x0a\x09^String streamContents: [:s | self asStringOn: s delimiter: ', ' last: ' and ']\x0a\x09\x09",
+messageSends: ["streamContents:", "asStringOn:delimiter:last:"],
+referencedClasses: ["String"]
+}),
+smalltalk.Collection);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "asDictionary",
 category: 'converting',
 fn: function (){
@@ -317,6 +361,63 @@ args: [],
 source: "asSet\x0a\x09^Set withAll: self",
 messageSends: ["withAll:"],
 referencedClasses: ["Set"]
+}),
+smalltalk.Collection);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "asStringOn:delimiter:",
+category: 'printing',
+fn: function (aStream,delimString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._do_separatedBy_((function(elem){
+return smalltalk.withContext(function($ctx2) {
+return _st(aStream)._nextPutAll_(_st(elem)._asString());
+}, function($ctx2) {$ctx2.fillBlock({elem:elem},$ctx1)})}),(function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(aStream)._nextPutAll_(delimString);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"asStringOn:delimiter:",{aStream:aStream,delimString:delimString},smalltalk.Collection)})},
+args: ["aStream", "delimString"],
+source: "asStringOn: aStream delimiter: delimString\x0a\x09\x22Print elements on a stream separated\x0a\x09with a delimiter String like: 'a, b, c'\x0a\x09Uses #asString instead of #print:.\x22\x0a\x0a\x09self do: [:elem | aStream nextPutAll: elem asString]\x0a\x09\x09separatedBy: [aStream nextPutAll: delimString]",
+messageSends: ["do:separatedBy:", "nextPutAll:", "asString"],
+referencedClasses: []
+}),
+smalltalk.Collection);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "asStringOn:delimiter:last:",
+category: 'printing',
+fn: function (aStream,delimString,lastDelimString){
+var self=this;
+var n,sz;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$3,$2;
+n=(1);
+sz=_st(self)._size();
+_st(self)._do_separatedBy_((function(elem){
+return smalltalk.withContext(function($ctx2) {
+n=_st(n).__plus((1));
+n;
+return _st(aStream)._nextPutAll_(_st(elem)._asString());
+}, function($ctx2) {$ctx2.fillBlock({elem:elem},$ctx1)})}),(function(){
+return smalltalk.withContext(function($ctx2) {
+$1=aStream;
+$3=_st(n).__eq(sz);
+if(smalltalk.assert($3)){
+$2=lastDelimString;
+} else {
+$2=delimString;
+};
+return _st($1)._nextPutAll_($2);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"asStringOn:delimiter:last:",{aStream:aStream,delimString:delimString,lastDelimString:lastDelimString,n:n,sz:sz},smalltalk.Collection)})},
+args: ["aStream", "delimString", "lastDelimString"],
+source: "asStringOn: aStream delimiter: delimString last: lastDelimString\x0a\x09\x22Print elements on a stream separated\x0a\x09with a delimiter between all the elements and with\x0a\x09a special one before the last like: 'a, b and c'.\x0a\x09Uses #asString instead of #print:\x0a\x0a\x09Note: Feel free to improve the code to detect the last element.\x22\x0a\x0a\x09| n sz |\x0a\x09n := 1.\x0a\x09sz := self size.\x0a\x09self do: [:elem |\x0a\x09\x09n := n + 1.\x0a\x09\x09aStream nextPutAll: elem asString]\x0a\x09separatedBy: [\x0a\x09\x09aStream nextPutAll: (n = sz ifTrue: [lastDelimString] ifFalse: [delimString])]",
+messageSends: ["size", "do:separatedBy:", "+", "nextPutAll:", "asString", "ifTrue:ifFalse:", "="],
+referencedClasses: []
 }),
 smalltalk.Collection);
 
@@ -703,6 +804,118 @@ return $2;
 args: ["anObject"],
 source: "occurrencesOf: anObject\x0a\x09\x22Answer how many of the receiver's elements are equal to anObject.\x22\x0a\x0a\x09| tally |\x0a\x09tally := 0.\x0a\x09self do: [:each | anObject = each ifTrue: [tally := tally + 1]].\x0a\x09^tally",
 messageSends: ["do:", "ifTrue:", "+", "="],
+referencedClasses: []
+}),
+smalltalk.Collection);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "printElementsOn:",
+category: 'printing',
+fn: function (aStream){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(aStream)._nextPut_("(");
+_st(self)._do_separatedBy_((function(element){
+return smalltalk.withContext(function($ctx2) {
+return _st(aStream)._print_(element);
+}, function($ctx2) {$ctx2.fillBlock({element:element},$ctx1)})}),(function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(aStream)._space();
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+_st(aStream)._nextPut_(")");
+return self}, function($ctx1) {$ctx1.fill(self,"printElementsOn:",{aStream:aStream},smalltalk.Collection)})},
+args: ["aStream"],
+source: "printElementsOn: aStream\x0a\x09\x22The original code used #skip:, but some streams do not support that,\x0a\x09 and we don't really need it.\x22\x0a\x0a\x09aStream nextPut: '('.\x0a\x09self do: [:element | aStream print: element] separatedBy: [aStream space].\x0a\x09aStream nextPut: ')'",
+messageSends: ["nextPut:", "do:separatedBy:", "print:", "space"],
+referencedClasses: []
+}),
+smalltalk.Collection);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "printNameOn:",
+category: 'printing',
+fn: function (aStream){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+smalltalk.Object.fn.prototype._printOn_.apply(_st(self), [aStream]);
+return self}, function($ctx1) {$ctx1.fill(self,"printNameOn:",{aStream:aStream},smalltalk.Collection)})},
+args: ["aStream"],
+source: "printNameOn: aStream\x0a\x09super printOn: aStream",
+messageSends: ["printOn:"],
+referencedClasses: []
+}),
+smalltalk.Collection);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "printOn:",
+category: 'printing',
+fn: function (aStream){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._printNameOn_(aStream);
+_st(self)._printElementsOn_(aStream);
+return self}, function($ctx1) {$ctx1.fill(self,"printOn:",{aStream:aStream},smalltalk.Collection)})},
+args: ["aStream"],
+source: "printOn: aStream \x0a\x09\x22Append a sequence of characters that identify the receiver to aStream.\x22\x0a\x0a\x09self printNameOn: aStream.\x0a\x09self printElementsOn: aStream",
+messageSends: ["printNameOn:", "printElementsOn:"],
+referencedClasses: []
+}),
+smalltalk.Collection);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "printOn:delimiter:",
+category: 'printing',
+fn: function (aStream,delimString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._do_separatedBy_((function(elem){
+return smalltalk.withContext(function($ctx2) {
+return _st(aStream)._print_(elem);
+}, function($ctx2) {$ctx2.fillBlock({elem:elem},$ctx1)})}),(function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(aStream)._print_(delimString);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"printOn:delimiter:",{aStream:aStream,delimString:delimString},smalltalk.Collection)})},
+args: ["aStream", "delimString"],
+source: "printOn: aStream delimiter: delimString\x0a\x09\x22Print elements on a stream separated\x0a\x09with a delimiter String like: 'a, b, c' \x22\x0a\x0a\x09self do: [:elem | aStream print: elem] separatedBy: [aStream print: delimString]\x0a\x09\x09",
+messageSends: ["do:separatedBy:", "print:"],
+referencedClasses: []
+}),
+smalltalk.Collection);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "printOn:delimiter:last:",
+category: 'printing',
+fn: function (aStream,delimString,lastDelimString){
+var self=this;
+var n,sz;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+n=(1);
+sz=_st(self)._size();
+_st(self)._do_separatedBy_((function(elem){
+return smalltalk.withContext(function($ctx2) {
+n=_st(n).__plus((1));
+n;
+return _st(aStream)._print_(elem);
+}, function($ctx2) {$ctx2.fillBlock({elem:elem},$ctx1)})}),(function(){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(n).__eq(sz);
+if(smalltalk.assert($1)){
+return _st(aStream)._print_(lastDelimString);
+} else {
+return _st(aStream)._print_(delimString);
+};
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"printOn:delimiter:last:",{aStream:aStream,delimString:delimString,lastDelimString:lastDelimString,n:n,sz:sz},smalltalk.Collection)})},
+args: ["aStream", "delimString", "lastDelimString"],
+source: "printOn: aStream delimiter: delimString last: lastDelimString\x0a\x09\x22Print elements on a stream separated\x0a\x09with a delimiter between all the elements and with\x0a\x09a special one before the last like: 'a, b and c'\x0a\x0a\x09Note: Feel free to improve the code to detect the last element.\x22\x0a\x0a\x09| n sz |\x0a\x09n := 1.\x0a\x09sz := self size.\x0a\x09self do: [:elem |\x0a\x09\x09n := n + 1.\x0a\x09\x09aStream print: elem]\x0a\x09separatedBy: [\x0a\x09\x09n = sz\x0a\x09\x09\x09ifTrue: [aStream print: lastDelimString]\x0a\x09\x09\x09ifFalse: [aStream print: delimString]]",
+messageSends: ["size", "do:separatedBy:", "+", "print:", "ifTrue:ifFalse:", "="],
 referencedClasses: []
 }),
 smalltalk.Collection);
@@ -5074,6 +5287,2555 @@ referencedClasses: []
 smalltalk.String.klass);
 
 
+smalltalk.addClass('RunArray', smalltalk.SequenceableCollection, ['runs', 'values', 'lastIndex', 'lastRun', 'lastOffset'], 'Kernel-Collections');
+smalltalk.addMethod(
+smalltalk.method({
+selector: ",",
+category: 'copying',
+fn: function (aRunArray){
+var self=this;
+var new_,newRuns;
+function $RunArray(){return smalltalk.RunArray||(typeof RunArray=="undefined"?nil:RunArray)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5,$6,$7,$8,$9;
+$1=_st(aRunArray)._isMemberOf_($RunArray());
+if(! smalltalk.assert($1)){
+new_=_st(self)._copy();
+new_;
+_st(aRunArray)._do_((function(each){
+return smalltalk.withContext(function($ctx2) {
+return _st(new_)._addLast_(each);
+}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1)})}));
+$2=new_;
+return $2;
+};
+$3=_st(_st(self["@runs"])._size()).__eq((0));
+if(smalltalk.assert($3)){
+$4=_st(aRunArray)._copy();
+return $4;
+};
+$5=_st(_st(_st(aRunArray)._runs())._size()).__eq((0));
+if(smalltalk.assert($5)){
+$6=_st(self)._copy();
+return $6;
+};
+$7=_st(_st(self["@values"])._at_(_st(self["@values"])._size())).__tild_eq(_st(_st(aRunArray)._values())._at_((1)));
+if(smalltalk.assert($7)){
+$8=_st($RunArray())._runs_values_(_st(self["@runs"]).__comma(_st(aRunArray)._runs()),_st(self["@values"]).__comma(_st(aRunArray)._values()));
+return $8;
+};
+newRuns=_st(self["@runs"])._copyReplaceFrom_to_with_(_st(self["@runs"])._size(),_st(self["@runs"])._size(),_st(aRunArray)._runs());
+_st(newRuns)._at_put_(_st(self["@runs"])._size(),_st(_st(self["@runs"])._at_(_st(self["@runs"])._size())).__plus(_st(_st(aRunArray)._runs())._at_((1))));
+$9=_st($RunArray())._runs_values_(newRuns,_st(self["@values"])._copyReplaceFrom_to_with_(_st(self["@values"])._size(),_st(self["@values"])._size(),_st(aRunArray)._values()));
+return $9;
+}, function($ctx1) {$ctx1.fill(self,",",{aRunArray:aRunArray,new_:new_,newRuns:newRuns},smalltalk.RunArray)})},
+args: ["aRunArray"],
+source: ", aRunArray \x0a\x09\x22Answer a new RunArray that is a concatenation of the receiver and\x0a\x09aRunArray.\x22\x0a\x0a\x09| new newRuns |\x0a\x09(aRunArray isMemberOf: RunArray)\x0a\x09\x09ifFalse: \x0a\x09\x09\x09[new := self copy.\x0a\x09\x09\x09\x22attempt to be sociable\x22\x0a\x09\x09\x09aRunArray do: [:each | new addLast: each].\x0a\x09\x09\x09^new].\x0a\x09runs size = 0 ifTrue: [^aRunArray copy].\x0a\x09aRunArray runs size = 0 ifTrue: [^self copy].\x0a\x09(values at: values size) ~= (aRunArray values at: 1)\x0a\x09\x09ifTrue: [^RunArray\x0a\x09\x09\x09\x09\x09runs: runs , aRunArray runs\x0a\x09\x09\x09\x09\x09values: values , aRunArray values].\x0a\x09newRuns := runs\x0a\x09\x09\x09copyReplaceFrom: runs size\x0a\x09\x09\x09to: runs size\x0a\x09\x09\x09with: aRunArray runs.\x0a\x09newRuns at: runs size put: (runs at: runs size) + (aRunArray runs at: 1).\x0a\x09^RunArray\x0a\x09\x09runs: newRuns\x0a\x09\x09values: \x0a\x09\x09\x09(values\x0a\x09\x09\x09\x09copyReplaceFrom: values size\x0a\x09\x09\x09\x09to: values size\x0a\x09\x09\x09\x09with: aRunArray values)",
+messageSends: ["ifFalse:", "copy", "do:", "addLast:", "isMemberOf:", "ifTrue:", "=", "size", "runs", "runs:values:", ",", "values", "~=", "at:", "copyReplaceFrom:to:with:", "at:put:", "+"],
+referencedClasses: ["RunArray"]
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "=",
+category: 'comparing',
+fn: function (otherArray){
+var self=this;
+function $RunArray(){return smalltalk.RunArray||(typeof RunArray=="undefined"?nil:RunArray)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5;
+$1=_st(self).__eq_eq(otherArray);
+if(smalltalk.assert($1)){
+return true;
+};
+$2=_st(_st(self)._species()).__eq_eq(_st(otherArray)._species());
+if(! smalltalk.assert($2)){
+return false;
+};
+$3=_st(otherArray)._isMemberOf_($RunArray());
+if(! smalltalk.assert($3)){
+$4=_st(self)._hasEqualElements_(otherArray);
+return $4;
+};
+$5=_st(_st(self["@runs"])._hasEqualElements_(_st(otherArray)._runs()))._and_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(self["@values"])._hasEqualElements_(_st(otherArray)._values());
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $5;
+}, function($ctx1) {$ctx1.fill(self,"=",{otherArray:otherArray},smalltalk.RunArray)})},
+args: ["otherArray"],
+source: "= otherArray \x0a\x09\x22Test if all my elements are equal to those of otherArray\x22\x0a\x0a\x09self == otherArray ifTrue: [^true].\x0a\x09self species == otherArray species ifFalse: [^ false].\x0a\x09(otherArray isMemberOf: RunArray) ifFalse: [^ self hasEqualElements: otherArray].\x0a\x0a\x09\x22Faster test between two RunArrays\x22\x0a\x09^ (runs hasEqualElements: otherArray runs)\x0a\x09\x09and: [values hasEqualElements: otherArray values]",
+messageSends: ["ifTrue:", "==", "ifFalse:", "species", "hasEqualElements:", "isMemberOf:", "and:", "values", "runs"],
+referencedClasses: ["RunArray"]
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "add:withOccurrences:",
+category: 'adding',
+fn: function (newObject,anInteger){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+$1=_st(anInteger).__lt_eq((0));
+if(smalltalk.assert($1)){
+$2=self;
+return $2;
+};
+self["@lastIndex"]=nil;
+$3=_st(_st(_st(self["@runs"])._size()).__eq((0)))._or_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(self["@values"])._last()).__tild_eq(newObject);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+if(smalltalk.assert($3)){
+self["@runs"]=_st(self["@runs"])._copyWith_(anInteger);
+self["@runs"];
+self["@values"]=_st(self["@values"])._copyWith_(newObject);
+self["@values"];
+} else {
+_st(self["@runs"])._at_put_(_st(self["@runs"])._size(),_st(_st(self["@runs"])._last()).__plus(anInteger));
+};
+return self}, function($ctx1) {$ctx1.fill(self,"add:withOccurrences:",{newObject:newObject,anInteger:anInteger},smalltalk.RunArray)})},
+args: ["newObject", "anInteger"],
+source: "add: newObject withOccurrences: anInteger\x0a\x09\x22Add value as the last element of the receiver, the given number of times\x22\x0a\x09anInteger <= 0 ifTrue: [ ^self ].\x0a\x09lastIndex := nil. \x22flush access cache\x22\x0a\x09(runs size=0 or: [values last ~= newObject])\x0a\x09\x09ifTrue:\x0a\x09\x09\x09[runs := runs copyWith: anInteger.\x0a\x09\x09\x09values := values copyWith: newObject]\x0a\x09\x09ifFalse:\x0a\x09\x09\x09[runs at: runs size put: runs last + anInteger]",
+messageSends: ["ifTrue:", "<=", "ifTrue:ifFalse:", "copyWith:", "at:put:", "size", "+", "last", "or:", "~=", "="],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "addFirst:",
+category: 'adding',
+fn: function (value){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+self["@lastIndex"]=nil;
+$1=_st(_st(_st(self["@runs"])._size()).__eq((0)))._or_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(self["@values"])._first()).__tild_eq(value);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+if(smalltalk.assert($1)){
+self["@runs"]=_st([(1)]).__comma(self["@runs"]);
+self["@runs"];
+self["@values"]=_st([value]).__comma(self["@values"]);
+self["@values"];
+} else {
+_st(self["@runs"])._at_put_((1),_st(_st(self["@runs"])._first()).__plus((1)));
+};
+return self}, function($ctx1) {$ctx1.fill(self,"addFirst:",{value:value},smalltalk.RunArray)})},
+args: ["value"],
+source: "addFirst: value\x0a\x09\x22Add value as the first element of the receiver.\x22\x0a\x09lastIndex := nil. \x22flush access cache\x22\x0a\x09(runs size=0 or: [values first ~= value])\x0a\x09\x09ifTrue:\x0a\x09\x09\x09[runs := {1}, runs.\x0a\x09\x09\x09values := {value}, values]\x0a\x09\x09ifFalse:\x0a\x09\x09\x09[runs at: 1 put: runs first+1]",
+messageSends: ["ifTrue:ifFalse:", ",", "at:put:", "+", "first", "or:", "~=", "=", "size"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "addLast:",
+category: 'adding',
+fn: function (value){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+self["@lastIndex"]=nil;
+$1=_st(_st(_st(self["@runs"])._size()).__eq((0)))._or_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(self["@values"])._last()).__tild_eq(value);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+if(smalltalk.assert($1)){
+self["@runs"]=_st(self["@runs"])._copyWith_((1));
+self["@runs"];
+self["@values"]=_st(self["@values"])._copyWith_(value);
+self["@values"];
+} else {
+_st(self["@runs"])._at_put_(_st(self["@runs"])._size(),_st(_st(self["@runs"])._last()).__plus((1)));
+};
+$2=value;
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"addLast:",{value:value},smalltalk.RunArray)})},
+args: ["value"],
+source: "addLast: value\x0a\x09\x22Add value as the last element of the receiver.\x22\x0a\x09lastIndex := nil. \x22flush access cache\x22\x0a\x09(runs size=0 or: [values last ~= value])\x0a\x09\x09ifTrue:\x0a\x09\x09\x09[runs := runs copyWith: 1.\x0a\x09\x09\x09values := values copyWith: value]\x0a\x09\x09ifFalse:\x0a\x09\x09\x09[runs at: runs size put: runs last+1].\x0a\x09^value",
+messageSends: ["ifTrue:ifFalse:", "copyWith:", "at:put:", "size", "+", "last", "or:", "~=", "="],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "allSatisfy:",
+category: 'enumerating',
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@values"])._allSatisfy_(aBlock);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"allSatisfy:",{aBlock:aBlock},smalltalk.RunArray)})},
+args: ["aBlock"],
+source: "allSatisfy: aBlock \x0a\x09\x22Only evaluate once per run\x22\x0a\x0a\x09^values allSatisfy: aBlock",
+messageSends: ["allSatisfy:"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "anySatisfy:",
+category: 'enumerating',
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@values"])._anySatisfy_(aBlock);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"anySatisfy:",{aBlock:aBlock},smalltalk.RunArray)})},
+args: ["aBlock"],
+source: "anySatisfy: aBlock \x0a\x09\x22Only evaluate once per run\x22\x0a\x0a\x09^values anySatisfy: aBlock",
+messageSends: ["anySatisfy:"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "at:",
+category: 'accessing',
+fn: function (index){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+var $early={};
+try {
+_st(self)._at_setRunOffsetAndValue_(index,(function(run,offset,value){
+return smalltalk.withContext(function($ctx2) {
+$1=value;
+throw $early=[$1];
+}, function($ctx2) {$ctx2.fillBlock({run:run,offset:offset,value:value},$ctx1)})}));
+return self}
+catch(e) {if(e===$early)return e[0]; throw e}
+}, function($ctx1) {$ctx1.fill(self,"at:",{index:index},smalltalk.RunArray)})},
+args: ["index"],
+source: "at: index\x0a\x0a\x09self at: index setRunOffsetAndValue: [:run :offset :value | ^value]",
+messageSends: ["at:setRunOffsetAndValue:"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "at:put:",
+category: 'accessing',
+fn: function (index,aValue){
+var self=this;
+var runIndex,offsetInRun,lastValue,runLength,runReplacement,valueReplacement,iStart,iStop;
+function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5,$6,$7;
+$1=_st(index)._isInteger();
+if(! smalltalk.assert($1)){
+_st(self)._errorNonIntegerIndex();
+};
+$2=_st(_st(index).__gt_eq((1)))._and_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(index).__lt_eq(_st(self)._size());
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+if(! smalltalk.assert($2)){
+_st(self)._errorSubscriptBounds_(index);
+};
+_st(self)._at_setRunOffsetAndValue_(index,(function(run,offset,value){
+return smalltalk.withContext(function($ctx2) {
+runIndex=run;
+runIndex;
+offsetInRun=offset;
+offsetInRun;
+lastValue=value;
+return lastValue;
+}, function($ctx2) {$ctx2.fillBlock({run:run,offset:offset,value:value},$ctx1)})}));
+$3=_st(aValue).__eq(lastValue);
+if(smalltalk.assert($3)){
+$4=aValue;
+return $4;
+};
+runLength=_st(self["@runs"])._at_(runIndex);
+runReplacement=_st($Array())._with_with_with_(offsetInRun,(1),_st(_st(runLength).__minus(offsetInRun)).__minus((1)));
+valueReplacement=_st($Array())._with_with_with_(lastValue,aValue,lastValue);
+$5=_st(offsetInRun).__eq((0));
+if(smalltalk.assert($5)){
+iStart=(2);
+} else {
+iStart=(1);
+};
+$6=_st(offsetInRun).__eq(_st(runLength).__minus((1)));
+if(smalltalk.assert($6)){
+iStop=(2);
+} else {
+iStop=(3);
+};
+_st(self)._setRuns_setValues_(_st(self["@runs"])._copyReplaceFrom_to_with_(runIndex,runIndex,_st(runReplacement)._copyFrom_to_(iStart,iStop)),_st(self["@values"])._copyReplaceFrom_to_with_(runIndex,runIndex,_st(valueReplacement)._copyFrom_to_(iStart,iStop)));
+_st(self)._coalesce();
+$7=aValue;
+return $7;
+}, function($ctx1) {$ctx1.fill(self,"at:put:",{index:index,aValue:aValue,runIndex:runIndex,offsetInRun:offsetInRun,lastValue:lastValue,runLength:runLength,runReplacement:runReplacement,valueReplacement:valueReplacement,iStart:iStart,iStop:iStop},smalltalk.RunArray)})},
+args: ["index", "aValue"],
+source: "at: index put: aValue \x0a\x09\x22Set an element of the RunArray\x22\x0a\x09| runIndex offsetInRun lastValue runLength runReplacement valueReplacement iStart iStop |\x0a\x09index isInteger\x0a\x09\x09ifFalse: [self errorNonIntegerIndex].\x0a\x09(index >= 1 and: [index <= self size])\x0a\x09\x09ifFalse: [self errorSubscriptBounds: index].\x0a\x09self\x0a\x09\x09at: index\x0a\x09\x09setRunOffsetAndValue: [:run :offset :value | \x0a\x09\x09\x09runIndex := run.\x0a\x09\x09\x09offsetInRun := offset.\x0a\x09\x09\x09lastValue := value].\x0a\x09aValue = lastValue\x0a\x09\x09ifTrue: [^ aValue].\x0a\x09runLength := runs at: runIndex.\x0a\x09runReplacement := Array\x0a\x09\x09\x09\x09with: offsetInRun\x0a\x09\x09\x09\x09with: 1\x0a\x09\x09\x09\x09with: runLength - offsetInRun - 1.\x0a\x09valueReplacement := Array\x0a\x09\x09\x09\x09with: lastValue\x0a\x09\x09\x09\x09with: aValue\x0a\x09\x09\x09\x09with: lastValue.\x0a\x09iStart := offsetInRun = 0\x0a\x09\x09\x09\x09ifTrue: [2]\x0a\x09\x09\x09\x09ifFalse: [1].\x0a\x09iStop := offsetInRun = (runLength - 1)\x0a\x09\x09\x09\x09ifTrue: [2]\x0a\x09\x09\x09\x09ifFalse: [3].\x0a\x09self\x0a\x09\x09setRuns: (runs copyReplaceFrom: runIndex to: runIndex with: (runReplacement copyFrom: iStart to: iStop))\x0a\x09\x09setValues: (values copyReplaceFrom: runIndex to: runIndex with: (valueReplacement copyFrom: iStart to: iStop)).\x0a\x09self coalesce.\x0a\x09^ aValue",
+messageSends: ["ifFalse:", "errorNonIntegerIndex", "isInteger", "errorSubscriptBounds:", "and:", "<=", "size", ">=", "at:setRunOffsetAndValue:", "ifTrue:", "=", "at:", "with:with:with:", "-", "ifTrue:ifFalse:", "setRuns:setValues:", "copyReplaceFrom:to:with:", "copyFrom:to:", "coalesce"],
+referencedClasses: ["Array"]
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "at:setRunOffsetAndValue:",
+category: 'private',
+fn: function (index,aBlock){
+var self=this;
+var run,limit,offset;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+limit=_st(self["@runs"])._size();
+$1=_st(_st(self["@lastIndex"]).__eq_eq(nil))._or_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(index).__lt(self["@lastIndex"]);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+if(smalltalk.assert($1)){
+run=(1);
+run;
+offset=_st(index).__minus((1));
+offset;
+} else {
+run=self["@lastRun"];
+run;
+offset=_st(self["@lastOffset"]).__plus(_st(index).__minus(self["@lastIndex"]));
+offset;
+};
+_st((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(run).__lt_eq(limit))._and_((function(){
+return smalltalk.withContext(function($ctx3) {
+return _st(offset).__gt_eq(_st(self["@runs"])._at_(run));
+}, function($ctx3) {$ctx3.fillBlock({},$ctx1)})}));
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}))._whileTrue_((function(){
+return smalltalk.withContext(function($ctx2) {
+offset=_st(offset).__minus(_st(self["@runs"])._at_(run));
+offset;
+run=_st(run).__plus((1));
+return run;
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+self["@lastIndex"]=index;
+self["@lastRun"]=run;
+self["@lastOffset"]=offset;
+$2=_st(run).__gt(limit);
+if(smalltalk.assert($2)){
+run=_st(run).__minus((1));
+run;
+offset=_st(offset).__plus(_st(self["@runs"])._at_(run));
+offset;
+};
+$3=_st(aBlock)._value_value_value_(run,offset,_st(self["@values"])._at_(run));
+return $3;
+}, function($ctx1) {$ctx1.fill(self,"at:setRunOffsetAndValue:",{index:index,aBlock:aBlock,run:run,limit:limit,offset:offset},smalltalk.RunArray)})},
+args: ["index", "aBlock"],
+source: "at: index setRunOffsetAndValue: aBlock \x0a\x09\x22Supply all run information to aBlock.\x22\x0a\x09\x22Tolerates index=0 and index=size+1 for copyReplace: \x22\x0a\x09| run limit offset |\x0a\x09limit := runs size.\x0a\x09(lastIndex == nil or: [index < lastIndex])\x0a\x09\x09ifTrue: \x22cache not loaded, or beyond index - start over\x22\x0a\x09\x09\x09[run := 1.\x0a\x09\x09\x09offset := index-1]\x0a\x09\x09ifFalse: \x22cache loaded and before index - start at cache\x22\x0a\x09\x09\x09[run := lastRun.\x0a\x09\x09\x09offset := lastOffset + (index-lastIndex)].\x0a\x09[run <= limit and: [offset >= (runs at: run)]]\x0a\x09\x09whileTrue: \x0a\x09\x09\x09[offset := offset - (runs at: run).\x0a\x09\x09\x09run := run + 1].\x0a\x09lastIndex := index. \x22Load cache for next access\x22\x0a\x09lastRun := run.\x0a\x09lastOffset := offset.\x0a\x09run > limit\x0a\x09\x09ifTrue: \x0a\x09\x09\x09[\x22adjustment for size+1\x22\x0a\x09\x09\x09run := run - 1.\x0a\x09\x09\x09offset := offset + (runs at: run)].\x0a\x09^aBlock\x0a\x09\x09value: run \x22an index into runs and values\x22\x0a\x09\x09value: offset \x22zero-based offset from beginning of this run\x22\x0a\x09\x09value: (values at: run) \x22value for this run\x22",
+messageSends: ["size", "ifTrue:ifFalse:", "-", "+", "or:", "<", "==", "whileTrue:", "at:", "and:", ">=", "<=", "ifTrue:", ">", "value:value:value:"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "coalesce",
+category: 'adding',
+fn: function (){
+var self=this;
+var ind;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+ind=(2);
+_st((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(ind).__gt(_st(self["@values"])._size());
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}))._whileFalse_((function(){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(_st(self["@values"])._at_(_st(ind).__minus((1)))).__eq(_st(self["@values"])._at_(ind));
+if(smalltalk.assert($1)){
+self["@values"]=_st(self["@values"])._copyReplaceFrom_to_with_(ind,ind,[]);
+self["@values"];
+_st(self["@runs"])._at_put_(_st(ind).__minus((1)),_st(_st(self["@runs"])._at_(_st(ind).__minus((1)))).__plus(_st(self["@runs"])._at_(ind)));
+self["@runs"]=_st(self["@runs"])._copyReplaceFrom_to_with_(ind,ind,[]);
+return self["@runs"];
+} else {
+ind=_st(ind).__plus((1));
+return ind;
+};
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"coalesce",{ind:ind},smalltalk.RunArray)})},
+args: [],
+source: "coalesce\x0a\x09\x22Try to combine adjacent runs\x22\x0a\x09| ind |\x0a\x09ind := 2.\x0a\x09[ind > values size] whileFalse: [\x0a\x09\x09(values at: ind-1) = (values at: ind) \x0a\x09\x09\x09ifFalse: [ind := ind + 1]\x0a\x09\x09\x09ifTrue: [\x22two are the same, combine them\x22\x0a\x09\x09\x09\x09values := values copyReplaceFrom: ind to: ind with: #().\x0a\x09\x09\x09\x09runs at: ind-1 put: (runs at: ind-1) + (runs at: ind).\x0a\x09\x09\x09\x09runs := runs copyReplaceFrom: ind to: ind with: #().\x0a\x09\x09\x09\x09\x22self error: 'needed to combine runs' \x22]].\x0a\x09\x09\x09",
+messageSends: ["whileFalse:", "ifFalse:ifTrue:", "+", "copyReplaceFrom:to:with:", "at:put:", "-", "at:", "=", ">", "size"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "collect:",
+category: 'enumerating',
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(self)._class())._runs_values_(_st(_st(self["@runs"])._copy())._contents(),_st(self["@values"])._collect_(aBlock)))._coalesce();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"collect:",{aBlock:aBlock},smalltalk.RunArray)})},
+args: ["aBlock"],
+source: "collect: aBlock\x0a\x09\x22Beware, the block will be evaluated only once per group of values.\x22\x0a\x09^(self class runs: runs copy contents values: (values collect: aBlock)) coalesce",
+messageSends: ["coalesce", "runs:values:", "contents", "copy", "collect:", "class"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "copyFrom:to:",
+category: 'copying',
+fn: function (start,stop){
+var self=this;
+var newRuns,run1,run2,offset1,offset2;
+function $RunArray(){return smalltalk.RunArray||(typeof RunArray=="undefined"?nil:RunArray)}
+function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4;
+$1=_st(stop).__lt(start);
+if(smalltalk.assert($1)){
+$2=_st($RunArray())._new();
+return $2;
+};
+_st(self)._at_setRunOffsetAndValue_(start,(function(r,o,value1){
+return smalltalk.withContext(function($ctx2) {
+run1=r;
+run1;
+offset1=o;
+offset1;
+return value1;
+}, function($ctx2) {$ctx2.fillBlock({r:r,o:o,value1:value1},$ctx1)})}));
+_st(self)._at_setRunOffsetAndValue_(stop,(function(r,o,value2){
+return smalltalk.withContext(function($ctx2) {
+run2=r;
+run2;
+offset2=o;
+offset2;
+return value2;
+}, function($ctx2) {$ctx2.fillBlock({r:r,o:o,value2:value2},$ctx1)})}));
+$3=_st(run1).__eq(run2);
+if(smalltalk.assert($3)){
+newRuns=_st($Array())._with_(_st(_st(offset2).__minus(offset1)).__plus((1)));
+newRuns;
+} else {
+newRuns=_st(self["@runs"])._copyFrom_to_(run1,run2);
+newRuns;
+_st(newRuns)._at_put_((1),_st(_st(newRuns)._at_((1))).__minus(offset1));
+_st(newRuns)._at_put_(_st(newRuns)._size(),_st(offset2).__plus((1)));
+};
+$4=_st($RunArray())._runs_values_(newRuns,_st(self["@values"])._copyFrom_to_(run1,run2));
+return $4;
+}, function($ctx1) {$ctx1.fill(self,"copyFrom:to:",{start:start,stop:stop,newRuns:newRuns,run1:run1,run2:run2,offset1:offset1,offset2:offset2},smalltalk.RunArray)})},
+args: ["start", "stop"],
+source: "copyFrom: start to: stop\x0a\x09| newRuns run1 run2 offset1 offset2 | \x0a\x09stop < start ifTrue: [^RunArray new].\x0a\x09self at: start setRunOffsetAndValue: [:r :o :value1 | run1 := r. offset1 := o. value1].\x0a\x09self at: stop setRunOffsetAndValue: [:r :o :value2 | run2 := r. offset2 := o. value2].\x0a\x09run1 = run2\x0a\x09\x09ifTrue: \x0a\x09\x09\x09[newRuns := Array with: offset2 - offset1 + 1]\x0a\x09\x09ifFalse: \x0a\x09\x09\x09[newRuns := runs copyFrom: run1 to: run2.\x0a\x09\x09\x09newRuns at: 1 put: (newRuns at: 1) - offset1.\x0a\x09\x09\x09newRuns at: newRuns size put: offset2 + 1].\x0a\x09^RunArray runs: newRuns values: (values copyFrom: run1 to: run2)",
+messageSends: ["ifTrue:", "new", "<", "at:setRunOffsetAndValue:", "ifTrue:ifFalse:", "with:", "+", "-", "copyFrom:to:", "at:put:", "at:", "size", "=", "runs:values:"],
+referencedClasses: ["RunArray", "Array"]
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "copyReplaceFrom:to:with:",
+category: 'copying',
+fn: function (start,stop,replacement){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(self)._copyFrom_to_((1),_st(start).__minus((1)))).__comma(replacement)).__comma(_st(self)._copyFrom_to_(_st(stop).__plus((1)),_st(self)._size()));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"copyReplaceFrom:to:with:",{start:start,stop:stop,replacement:replacement},smalltalk.RunArray)})},
+args: ["start", "stop", "replacement"],
+source: "copyReplaceFrom: start to: stop with: replacement\x0a\x0a\x09^(self copyFrom: 1 to: start - 1)\x0a\x09\x09, replacement \x0a\x09\x09, (self copyFrom: stop + 1 to: self size)",
+messageSends: [",", "copyFrom:to:", "+", "size", "-"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "copyUpThrough:",
+category: 'copying',
+fn: function (anElement){
+var self=this;
+var newValues;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+newValues=_st(self["@values"])._copyUpThrough_(anElement);
+$1=_st(_st(self)._class())._runs_values_(_st(self["@runs"])._copyFrom_to_((1),_st(newValues)._size()),newValues);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"copyUpThrough:",{anElement:anElement,newValues:newValues},smalltalk.RunArray)})},
+args: ["anElement"],
+source: "copyUpThrough: anElement\x0a\x09\x22Optimized\x22\x0a\x0a\x09| newValues |\x0a\x09newValues := values copyUpThrough: anElement.\x0a\x09^ self class\x0a\x09\x09runs: (runs copyFrom: 1 to: newValues size)\x0a\x09\x09values: newValues",
+messageSends: ["copyUpThrough:", "runs:values:", "copyFrom:to:", "size", "class"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "copyUpTo:",
+category: 'copying',
+fn: function (anElement){
+var self=this;
+var newValues;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+newValues=_st(self["@values"])._copyUpTo_(anElement);
+$1=_st(_st(self)._class())._runs_values_(_st(self["@runs"])._copyFrom_to_((1),_st(newValues)._size()),newValues);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"copyUpTo:",{anElement:anElement,newValues:newValues},smalltalk.RunArray)})},
+args: ["anElement"],
+source: "copyUpTo: anElement \x0a\x09\x22Optimized\x22\x0a\x0a\x09| newValues |\x0a\x09newValues := values copyUpTo: anElement.\x0a\x09^ self class\x0a\x09\x09runs: (runs copyFrom: 1 to: newValues size)\x0a\x09\x09values: newValues",
+messageSends: ["copyUpTo:", "runs:values:", "copyFrom:to:", "size", "class"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "copyUpToLast:",
+category: 'copying',
+fn: function (anElement){
+var self=this;
+var newValues;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+newValues=_st(self["@values"])._copyUpToLast_(anElement);
+$1=_st(_st(self)._class())._runs_values_(_st(self["@runs"])._copyFrom_to_((1),_st(newValues)._size()),newValues);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"copyUpToLast:",{anElement:anElement,newValues:newValues},smalltalk.RunArray)})},
+args: ["anElement"],
+source: "copyUpToLast: anElement\x0a\x09\x22Optimized\x22\x0a\x0a\x09| newValues |\x0a\x09newValues := values copyUpToLast: anElement.\x0a\x09^ self class\x0a\x09\x09runs: (runs copyFrom: 1 to: newValues size)\x0a\x09\x09values: newValues",
+messageSends: ["copyUpToLast:", "runs:values:", "copyFrom:to:", "size", "class"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "count:",
+category: 'enumerating',
+fn: function (aBlock){
+var self=this;
+var count;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+count=(0);
+_st(self)._runsAndValuesDo_((function(run,value){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(aBlock)._value_(value);
+if(smalltalk.assert($1)){
+count=_st(count).__plus(run);
+return count;
+};
+}, function($ctx2) {$ctx2.fillBlock({run:run,value:value},$ctx1)})}));
+$2=count;
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"count:",{aBlock:aBlock,count:count},smalltalk.RunArray)})},
+args: ["aBlock"],
+source: "count: aBlock\x0a\x09\x22Beware, the block will be evaluated only once per group of values.\x22\x0a\x09| count |\x0a\x09count := 0.\x0a\x09self runsAndValuesDo: [:run :value |\x0a\x09\x09(aBlock value: value)\x0a\x09\x09\x09ifTrue:\x0a\x09\x09\x09\x09[count := count + run]].\x0a\x09^count",
+messageSends: ["runsAndValuesDo:", "ifTrue:", "+", "value:"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "detect:ifNone:",
+category: 'enumerating',
+fn: function (aBlock,exceptionBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@values"])._detect_ifNone_(aBlock,exceptionBlock);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"detect:ifNone:",{aBlock:aBlock,exceptionBlock:exceptionBlock},smalltalk.RunArray)})},
+args: ["aBlock", "exceptionBlock"],
+source: "detect: aBlock ifNone: exceptionBlock \x0a\x09\x22Only evaluate once per run\x22\x0a\x0a\x09^values detect: aBlock ifNone: exceptionBlock ",
+messageSends: ["detect:ifNone:"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "detectMax:",
+category: 'enumerating',
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@values"])._detectMax_(aBlock);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"detectMax:",{aBlock:aBlock},smalltalk.RunArray)})},
+args: ["aBlock"],
+source: "detectMax: aBlock\x0a\x09\x22Only evaluate once per run\x22\x0a\x0a\x09^values detectMax: aBlock",
+messageSends: ["detectMax:"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "detectMin:",
+category: 'enumerating',
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@values"])._detectMin_(aBlock);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"detectMin:",{aBlock:aBlock},smalltalk.RunArray)})},
+args: ["aBlock"],
+source: "detectMin: aBlock\x0a\x09\x22Only evaluate once per run\x22\x0a\x0a\x09^values detectMin: aBlock",
+messageSends: ["detectMin:"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "detectSum:",
+category: 'enumerating',
+fn: function (aBlock){
+var self=this;
+var sum;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+sum=(0);
+_st(self)._runsAndValuesDo_((function(run,value){
+return smalltalk.withContext(function($ctx2) {
+sum=_st(_st(_st(aBlock)._value_(value)).__star(run)).__plus(sum);
+return sum;
+}, function($ctx2) {$ctx2.fillBlock({run:run,value:value},$ctx1)})}));
+$1=sum;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"detectSum:",{aBlock:aBlock,sum:sum},smalltalk.RunArray)})},
+args: ["aBlock"],
+source: "detectSum: aBlock\x0a\x09\x22Only loop on runs\x22\x0a\x09| sum |\x0a\x09sum := 0.\x0a\x09self runsAndValuesDo: [:run :value | \x0a\x09\x09sum := (aBlock value: value) * run + sum].\x0a\x09^ sum",
+messageSends: ["runsAndValuesDo:", "+", "*", "value:"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "do:",
+category: 'enumerating',
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st((1))._to_do_(_st(self["@runs"])._size(),(function(i){
+var r,v;
+return smalltalk.withContext(function($ctx2) {
+v=_st(self["@values"])._at_(i);
+v;
+r=_st(self["@runs"])._at_(i);
+r;
+return _st((function(){
+return smalltalk.withContext(function($ctx3) {
+r=_st(r).__minus((1));
+return _st(r).__gt_eq((0));
+}, function($ctx3) {$ctx3.fillBlock({},$ctx1)})}))._whileTrue_((function(){
+return smalltalk.withContext(function($ctx3) {
+return _st(aBlock)._value_(v);
+}, function($ctx3) {$ctx3.fillBlock({},$ctx1)})}));
+}, function($ctx2) {$ctx2.fillBlock({i:i,r:r,v:v},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"do:",{aBlock:aBlock},smalltalk.RunArray)})},
+args: ["aBlock"],
+source: "do: aBlock\x0a\x09\x22This is refined for speed\x22\x0a\x09\x0a\x091 to: runs size do: [:i |\x0a\x09\x09| r v |\x0a\x09\x09v := values at: i.\x0a\x09\x09r := runs at: i.\x0a\x09\x09[( r := r - 1) >= 0]\x0a\x09\x09\x09whileTrue: [aBlock value: v]].",
+messageSends: ["to:do:", "size", "at:", "whileTrue:", "value:", ">=", "-"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "fillFrom:with:",
+category: 'private',
+fn: function (aCollection,aBlock){
+var self=this;
+var newRuns,newValues,lastLength,lastValue;
+function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
+function $Object(){return smalltalk.Object||(typeof Object=="undefined"?nil:Object)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+newRuns=_st(_st($Array())._new_(_st(aCollection)._size()))._writeStream();
+newValues=_st(_st($Array())._new_(_st(aCollection)._size()))._writeStream();
+lastLength=(0);
+lastValue=_st($Object())._new();
+_st(aCollection)._do_((function(each){
+var value;
+return smalltalk.withContext(function($ctx2) {
+value=_st(aBlock)._value_(each);
+value;
+$1=_st(lastValue).__eq(value);
+if(smalltalk.assert($1)){
+lastLength=_st(lastLength).__plus((1));
+return lastLength;
+} else {
+$2=_st(lastLength).__gt((0));
+if(smalltalk.assert($2)){
+_st(newRuns)._nextPut_(lastLength);
+_st(newValues)._nextPut_(lastValue);
+};
+lastLength=(1);
+lastLength;
+lastValue=value;
+return lastValue;
+};
+}, function($ctx2) {$ctx2.fillBlock({each:each,value:value},$ctx1)})}));
+$3=_st(lastLength).__gt((0));
+if(smalltalk.assert($3)){
+_st(newRuns)._nextPut_(lastLength);
+_st(newValues)._nextPut_(lastValue);
+};
+_st(self)._setRuns_setValues_(_st(newRuns)._contents(),_st(newValues)._contents());
+return self}, function($ctx1) {$ctx1.fill(self,"fillFrom:with:",{aCollection:aCollection,aBlock:aBlock,newRuns:newRuns,newValues:newValues,lastLength:lastLength,lastValue:lastValue},smalltalk.RunArray)})},
+args: ["aCollection", "aBlock"],
+source: "fillFrom: aCollection with: aBlock\x0a\x09\x22Evaluate aBlock with each of aCollection's elements as the argument.\x0a\x09Collect the resulting values into self. Answer self.\x22\x0a\x0a\x09| newRuns newValues lastLength lastValue |\x0a\x09newRuns := (Array new: aCollection size) writeStream.\x0a\x09newValues := (Array new: aCollection size) writeStream.\x0a\x09lastLength := 0.\x0a\x09lastValue := Object new.\x0a\x09aCollection do: [:each | \x0a\x09\x09| value |\x0a\x09\x09value := aBlock value: each.\x0a\x09\x09lastValue = value\x0a\x09\x09\x09ifTrue: [lastLength := lastLength + 1]\x0a\x09\x09\x09ifFalse:\x0a\x09\x09\x09\x09[lastLength > 0\x0a\x09\x09\x09\x09\x09ifTrue:\x0a\x09\x09\x09\x09\x09\x09[newRuns nextPut: lastLength.\x0a\x09\x09\x09\x09\x09\x09newValues nextPut: lastValue].\x0a\x09\x09\x09\x09lastLength := 1.\x0a\x09\x09\x09\x09lastValue := value]].\x0a\x09lastLength > 0\x0a\x09\x09ifTrue:\x0a\x09\x09\x09[newRuns nextPut: lastLength.\x0a\x09\x09\x09newValues nextPut: lastValue].\x0a\x09self setRuns: newRuns contents setValues: newValues contents",
+messageSends: ["writeStream", "new:", "size", "new", "do:", "value:", "ifTrue:ifFalse:", "+", "ifTrue:", "nextPut:", ">", "=", "setRuns:setValues:", "contents"],
+referencedClasses: ["Array", "Object"]
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "findFirst:",
+category: 'enumerating',
+fn: function (aBlock){
+var self=this;
+var index;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+var $early={};
+try {
+index=(1);
+_st(self)._runsAndValuesDo_((function(run,value){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(aBlock)._value_(value);
+if(smalltalk.assert($1)){
+$2=index;
+throw $early=[$2];
+};
+index=_st(index).__plus(run);
+return index;
+}, function($ctx2) {$ctx2.fillBlock({run:run,value:value},$ctx1)})}));
+$3=(0);
+return $3;
+}
+catch(e) {if(e===$early)return e[0]; throw e}
+}, function($ctx1) {$ctx1.fill(self,"findFirst:",{aBlock:aBlock,index:index},smalltalk.RunArray)})},
+args: ["aBlock"],
+source: "findFirst: aBlock\x0a\x09| index |\x0a\x09index := 1.\x0a\x09self runsAndValuesDo: [ :run :value |\x0a\x09\x09(aBlock value: value) ifTrue: [^index].\x0a\x09\x09index := index + run].\x0a\x09^0",
+messageSends: ["runsAndValuesDo:", "ifTrue:", "value:", "+"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "findLast:",
+category: 'enumerating',
+fn: function (aBlock){
+var self=this;
+var index;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+var $early={};
+try {
+index=_st(_st(self["@values"])._size()).__plus((1));
+_st((function(){
+return smalltalk.withContext(function($ctx2) {
+index=_st(index).__minus((1));
+return _st(index).__gt_eq((1));
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}))._whileTrue_((function(){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(aBlock)._value_(_st(self["@values"])._at_(index));
+if(smalltalk.assert($1)){
+$2=_st(_st((1))._to_(index))._detectSum_((function(i){
+return smalltalk.withContext(function($ctx3) {
+return _st(self["@runs"])._at_(i);
+}, function($ctx3) {$ctx3.fillBlock({i:i},$ctx1)})}));
+throw $early=[$2];
+};
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+$3=(0);
+return $3;
+}
+catch(e) {if(e===$early)return e[0]; throw e}
+}, function($ctx1) {$ctx1.fill(self,"findLast:",{aBlock:aBlock,index:index},smalltalk.RunArray)})},
+args: ["aBlock"],
+source: "findLast: aBlock\x0a\x09| index |\x0a\x09index := values size + 1.\x0a\x09[(index := index - 1) >= 1] whileTrue:\x0a\x09\x09[(aBlock value: (values at: index)) ifTrue: [^(1 to: index) detectSum: [:i | runs at: i]]].\x0a\x09^0",
+messageSends: ["+", "size", "whileTrue:", "ifTrue:", "detectSum:", "at:", "to:", "value:", ">=", "-"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "first",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@values"])._at_((1));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"first",{},smalltalk.RunArray)})},
+args: [],
+source: "first\x0a\x09^values at: 1",
+messageSends: ["at:"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "fromSton:",
+category: 'topez-common-core',
+fn: function (stonReader){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(stonReader)._parseMapDo_((function(instVarName,value){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._instVarNamed_put_(instVarName,value);
+}, function($ctx2) {$ctx2.fillBlock({instVarName:instVarName,value:value},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"fromSton:",{stonReader:stonReader},smalltalk.RunArray)})},
+args: ["stonReader"],
+source: "fromSton: stonReader\x0a    stonReader parseMapDo: [ :instVarName :value | self instVarNamed: instVarName put: value ]",
+messageSends: ["parseMapDo:", "instVarNamed:put:"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "includes:",
+category: 'testing',
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@values"])._includes_(anObject);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"includes:",{anObject:anObject},smalltalk.RunArray)})},
+args: ["anObject"],
+source: "includes: anObject\x0a\x09\x22Answer whether anObject is one of the receiver's elements.\x22\x0a\x0a\x09^values includes: anObject",
+messageSends: ["includes:"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "isSorted",
+category: 'testing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@values"])._isSorted();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"isSorted",{},smalltalk.RunArray)})},
+args: [],
+source: "isSorted\x0a\x09^values isSorted",
+messageSends: ["isSorted"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "isSortedBy:",
+category: 'testing',
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@values"])._isSortedBy_(aBlock);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"isSortedBy:",{aBlock:aBlock},smalltalk.RunArray)})},
+args: ["aBlock"],
+source: "isSortedBy: aBlock\x0a\x09^values isSortedBy: aBlock",
+messageSends: ["isSortedBy:"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "last",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@values"])._at_(_st(self["@values"])._size());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"last",{},smalltalk.RunArray)})},
+args: [],
+source: "last\x0a\x09^values at: values size",
+messageSends: ["at:", "size"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "mapValues:",
+category: 'private',
+fn: function (mapBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@values"]=_st(self["@values"])._collect_(mapBlock);
+return self}, function($ctx1) {$ctx1.fill(self,"mapValues:",{mapBlock:mapBlock},smalltalk.RunArray)})},
+args: ["mapBlock"],
+source: "mapValues: mapBlock\x0a\x09\x22NOTE: only meaningful to an entire set of runs\x22\x0a\x0a\x09values := values collect: mapBlock",
+messageSends: ["collect:"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "noneSatisfy:",
+category: 'enumerating',
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@values"])._noneSatisfy_(aBlock);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"noneSatisfy:",{aBlock:aBlock},smalltalk.RunArray)})},
+args: ["aBlock"],
+source: "noneSatisfy: aBlock \x0a\x09\x22Only evaluate once per run\x22\x0a\x0a\x09^values noneSatisfy: aBlock",
+messageSends: ["noneSatisfy:"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "postCopy",
+category: 'copying',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+smalltalk.SequenceableCollection.fn.prototype._postCopy.apply(_st(self), []);
+self["@runs"]=_st(self["@runs"])._copy();
+self["@values"]=_st(self["@values"])._copy();
+return self}, function($ctx1) {$ctx1.fill(self,"postCopy",{},smalltalk.RunArray)})},
+args: [],
+source: "postCopy\x0a\x09super postCopy.\x0a\x09runs := runs copy.\x0a\x09values := values copy",
+messageSends: ["postCopy", "copy"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "printOn:",
+category: 'printing',
+fn: function (aStream){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+_st(self)._printNameOn_(aStream);
+$1=aStream;
+_st($1)._nextPutAll_(" runs: ");
+_st($1)._print_(self["@runs"]);
+_st($1)._nextPutAll_(" values: ");
+$2=_st($1)._print_(self["@values"]);
+return self}, function($ctx1) {$ctx1.fill(self,"printOn:",{aStream:aStream},smalltalk.RunArray)})},
+args: ["aStream"],
+source: "printOn: aStream\x0a\x09self printNameOn: aStream.\x0a\x09aStream\x0a\x09\x09nextPutAll: ' runs: ';\x0a\x09\x09print: runs;\x0a\x09\x09nextPutAll: ' values: ';\x0a\x09\x09print: values",
+messageSends: ["printNameOn:", "nextPutAll:", "print:"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "rangeOf:startingAt:",
+category: 'adding',
+fn: function (attr,startPos){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$1;
+var $early={};
+try {
+_st(self)._at_setRunOffsetAndValue_(startPos,(function(run,offset,value){
+return smalltalk.withContext(function($ctx2) {
+$2=_st(value)._includes_(attr);
+if(smalltalk.assert($2)){
+var firstRelevantPosition,lastRelevantPosition,idxOfCandidateRun;
+lastRelevantPosition=_st(_st(_st(startPos).__minus(offset)).__plus(_st(self["@runs"])._at_(run))).__minus((1));
+lastRelevantPosition;
+firstRelevantPosition=_st(startPos).__minus(offset);
+firstRelevantPosition;
+idxOfCandidateRun=_st(run).__plus((1));
+idxOfCandidateRun;
+_st((function(){
+return smalltalk.withContext(function($ctx3) {
+return _st(_st(idxOfCandidateRun).__lt_eq(_st(self["@runs"])._size()))._and_((function(){
+return smalltalk.withContext(function($ctx4) {
+return _st(_st(self["@values"])._at_(idxOfCandidateRun))._includes_(attr);
+}, function($ctx4) {$ctx4.fillBlock({},$ctx1)})}));
+}, function($ctx3) {$ctx3.fillBlock({},$ctx1)})}))._whileTrue_((function(){
+return smalltalk.withContext(function($ctx3) {
+lastRelevantPosition=_st(lastRelevantPosition).__plus(_st(self["@runs"])._at_(idxOfCandidateRun));
+lastRelevantPosition;
+idxOfCandidateRun=_st(idxOfCandidateRun).__plus((1));
+return idxOfCandidateRun;
+}, function($ctx3) {$ctx3.fillBlock({},$ctx1)})}));
+idxOfCandidateRun=_st(run).__minus((1));
+idxOfCandidateRun;
+_st((function(){
+return smalltalk.withContext(function($ctx3) {
+return _st(_st(idxOfCandidateRun).__gt_eq((1)))._and_((function(){
+return smalltalk.withContext(function($ctx4) {
+return _st(_st(self["@values"])._at_(idxOfCandidateRun))._includes_(attr);
+}, function($ctx4) {$ctx4.fillBlock({},$ctx1)})}));
+}, function($ctx3) {$ctx3.fillBlock({},$ctx1)})}))._whileTrue_((function(){
+return smalltalk.withContext(function($ctx3) {
+firstRelevantPosition=_st(firstRelevantPosition).__minus(_st(self["@runs"])._at_(idxOfCandidateRun));
+firstRelevantPosition;
+idxOfCandidateRun=_st(idxOfCandidateRun).__minus((1));
+return idxOfCandidateRun;
+}, function($ctx3) {$ctx3.fillBlock({},$ctx1)})}));
+$1=_st(firstRelevantPosition)._to_(lastRelevantPosition);
+} else {
+$1=_st(startPos)._to_(_st(startPos).__minus((1)));
+};
+throw $early=[$1];
+}, function($ctx2) {$ctx2.fillBlock({run:run,offset:offset,value:value},$ctx1)})}));
+return self}
+catch(e) {if(e===$early)return e[0]; throw e}
+}, function($ctx1) {$ctx1.fill(self,"rangeOf:startingAt:",{attr:attr,startPos:startPos},smalltalk.RunArray)})},
+args: ["attr", "startPos"],
+source: "rangeOf: attr startingAt: startPos\x0a\x09\x22Answer an interval that gives the range of attr at index position startPos. An empty interval with start value startPos is returned when the attribute attr is not present at position startPos. self size > 0 is assumed, it is the responsibility of the caller to test for emptiness of self.\x0aNote that an attribute may span several adjancent runs. \x22\x0a\x0a\x09self at: startPos \x0a\x09\x09setRunOffsetAndValue: \x0a\x09\x09\x09[:run :offset :value | \x0a\x09\x09\x09^(value includes: attr)\x0a\x09\x09\x09\x09ifFalse: [startPos to: startPos - 1]\x0a\x09\x09\x09\x09ifTrue:\x0a\x09\x09\x09\x09\x09[ | firstRelevantPosition lastRelevantPosition idxOfCandidateRun |\x0a\x09\x09\x09\x09\x09lastRelevantPosition := startPos - offset + (runs at: run) - 1.\x0a\x09\x09\x09\x09\x09firstRelevantPosition := startPos - offset.\x0a\x09\x09\x09\x09\x09idxOfCandidateRun := run + 1.\x0a\x09\x09\x09\x09\x09[idxOfCandidateRun <= runs size \x0a\x09\x09\x09\x09\x09\x09\x09 and: [(values at: idxOfCandidateRun) includes: attr]]\x0a\x09\x09\x09\x09\x09\x09whileTrue:\x0a\x09\x09\x09\x09\x09\x09\x09[lastRelevantPosition := lastRelevantPosition + (runs at: idxOfCandidateRun).\x0a\x09\x09\x09\x09\x09\x09\x09idxOfCandidateRun := idxOfCandidateRun + 1]. \x0a\x09\x09\x09\x09\x09idxOfCandidateRun := run - 1.\x0a\x09\x09\x09\x09\x09[idxOfCandidateRun >= 1 \x0a\x09\x09\x09\x09\x09\x09\x09 and: [(values at: idxOfCandidateRun) includes: attr]]\x0a\x09\x09\x09\x09\x09\x09whileTrue:\x0a\x09\x09\x09\x09\x09\x09\x09[firstRelevantPosition := firstRelevantPosition - (runs at: idxOfCandidateRun).\x0a\x09\x09\x09\x09\x09\x09\x09idxOfCandidateRun := idxOfCandidateRun - 1]. \x0a \x0a\x09\x09\x09\x09\x09firstRelevantPosition to: lastRelevantPosition]]",
+messageSends: ["at:setRunOffsetAndValue:", "ifFalse:ifTrue:", "to:", "-", "+", "at:", "whileTrue:", "and:", "includes:", "<=", "size", ">="],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "remove:ifAbsent:",
+category: 'removing',
+fn: function (anObject,exceptionBlock){
+var self=this;
+var index,mustCoalesce,run;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4;
+var $early={};
+try {
+index=_st(self["@values"])._indexOf_ifAbsent_(anObject,(function(){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(exceptionBlock)._value();
+throw $early=[$1];
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+run=_st(self["@runs"])._at_(index);
+$2=_st(run).__gt((1));
+if(smalltalk.assert($2)){
+_st(self["@runs"])._at_put_(index,_st(run).__minus((1)));
+} else {
+mustCoalesce=_st(_st(index).__gt((1)))._and_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(index).__lt(_st(self["@values"])._size()))._and_((function(){
+return smalltalk.withContext(function($ctx3) {
+return _st(_st(self["@values"])._at_(_st(index).__minus((1)))).__eq(_st(self["@values"])._at_(_st(index).__plus((1))));
+}, function($ctx3) {$ctx3.fillBlock({},$ctx1)})}));
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+mustCoalesce;
+self["@runs"]=_st(self["@runs"])._copyWithoutIndex_(index);
+self["@runs"];
+self["@values"]=_st(self["@values"])._copyWithoutIndex_(index);
+self["@values"];
+$3=mustCoalesce;
+if(smalltalk.assert($3)){
+_st(self["@runs"])._at_put_(_st(index).__minus((1)),_st(_st(self["@runs"])._at_(_st(index).__minus((1)))).__plus(_st(self["@runs"])._at_(index)));
+self["@runs"]=_st(self["@runs"])._copyWithoutIndex_(index);
+self["@runs"];
+self["@values"]=_st(self["@values"])._copyWithoutIndex_(index);
+self["@values"];
+};
+};
+$4=anObject;
+return $4;
+}
+catch(e) {if(e===$early)return e[0]; throw e}
+}, function($ctx1) {$ctx1.fill(self,"remove:ifAbsent:",{anObject:anObject,exceptionBlock:exceptionBlock,index:index,mustCoalesce:mustCoalesce,run:run},smalltalk.RunArray)})},
+args: ["anObject", "exceptionBlock"],
+source: "remove: anObject ifAbsent: exceptionBlock\x0a\x09| index mustCoalesce run |\x0a\x09index := values indexOf: anObject ifAbsent: [^exceptionBlock value].\x0a\x09(run := runs at: index) > 1\x0a\x09\x09ifTrue: [runs at: index put: run - 1]\x0a\x09\x09ifFalse:\x0a\x09\x09\x09[mustCoalesce := index > 1 and: [index < values size and: [(values at: index - 1) = (values at: index + 1)]].\x0a\x09\x09\x09runs := runs copyWithoutIndex: index.\x0a\x09\x09\x09values := values copyWithoutIndex: index.\x0a\x09\x09\x09mustCoalesce\x0a\x09\x09\x09\x09ifTrue:\x0a\x09\x09\x09\x09\x09[runs at: index - 1 put: (runs at: index - 1) + (runs at: index).\x0a\x09\x09\x09\x09\x09runs := runs copyWithoutIndex: index.\x0a\x09\x09\x09\x09\x09values := values copyWithoutIndex: index]].\x0a\x09^anObject",
+messageSends: ["indexOf:ifAbsent:", "value", "ifTrue:ifFalse:", "at:put:", "-", "and:", "=", "at:", "+", "<", "size", ">", "copyWithoutIndex:", "ifTrue:"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "removeAll",
+category: 'removing',
+fn: function (){
+var self=this;
+function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
+return smalltalk.withContext(function($ctx1) { 
+self["@runs"]=_st($Array())._new();
+self["@values"]=_st($Array())._new();
+return self}, function($ctx1) {$ctx1.fill(self,"removeAll",{},smalltalk.RunArray)})},
+args: [],
+source: "removeAll\x0a\x09runs := Array new.\x0a\x09values := Array new",
+messageSends: ["new"],
+referencedClasses: ["Array"]
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "repeatLast:ifEmpty:",
+category: 'adding',
+fn: function (times,defaultBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+$1=_st(times).__eq((0));
+if(smalltalk.assert($1)){
+$2=self;
+return $2;
+};
+self["@lastIndex"]=nil;
+$3=_st(_st(self["@runs"])._size()).__eq((0));
+if(smalltalk.assert($3)){
+self["@runs"]=_st(self["@runs"])._copyWith_(times);
+self["@runs"];
+self["@values"]=_st(self["@values"])._copyWith_(_st(defaultBlock)._value());
+self["@values"];
+} else {
+_st(self["@runs"])._at_put_(_st(self["@runs"])._size(),_st(_st(self["@runs"])._last()).__plus(times));
+};
+return self}, function($ctx1) {$ctx1.fill(self,"repeatLast:ifEmpty:",{times:times,defaultBlock:defaultBlock},smalltalk.RunArray)})},
+args: ["times", "defaultBlock"],
+source: "repeatLast: times ifEmpty: defaultBlock\x0a\x09\x22add the last value back again, the given number of times. If we are empty, add (defaultBlock value)\x22\x0a\x09times = 0 ifTrue: [^self ].\x0a\x09lastIndex := nil. \x22flush access cache\x22\x0a\x09(runs size=0)\x0a\x09\x09ifTrue:\x0a\x09\x09\x09[runs := runs copyWith: times.\x0a\x09\x09\x09values := values copyWith: defaultBlock value]\x0a\x09\x09ifFalse:\x0a\x09\x09\x09[runs at: runs size put: runs last+times] ",
+messageSends: ["ifTrue:", "=", "ifTrue:ifFalse:", "copyWith:", "value", "at:put:", "size", "+", "last"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "repeatLastIfEmpty:",
+category: 'adding',
+fn: function (defaultBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+self["@lastIndex"]=nil;
+$1=_st(_st(self["@runs"])._size()).__eq((0));
+if(smalltalk.assert($1)){
+self["@runs"]=_st(self["@runs"])._copyWith_((1));
+self["@runs"];
+self["@values"]=_st(self["@values"])._copyWith_(_st(defaultBlock)._value());
+self["@values"];
+} else {
+_st(self["@runs"])._at_put_(_st(self["@runs"])._size(),_st(_st(self["@runs"])._last()).__plus((1)));
+};
+return self}, function($ctx1) {$ctx1.fill(self,"repeatLastIfEmpty:",{defaultBlock:defaultBlock},smalltalk.RunArray)})},
+args: ["defaultBlock"],
+source: "repeatLastIfEmpty: defaultBlock\x0a\x09\x22add the last value back again. If we are empty, add (defaultBlock value)\x22\x0a\x09lastIndex := nil. \x22flush access cache\x22\x0a\x09(runs size=0)\x0a\x09\x09ifTrue:[\x0a\x09\x09\x09runs := runs copyWith: 1.\x0a\x09\x09\x09values := values copyWith: defaultBlock value]\x0a\x09\x09ifFalse:\x0a\x09\x09\x09[runs at: runs size put: runs last+1]",
+messageSends: ["ifTrue:ifFalse:", "copyWith:", "value", "at:put:", "size", "+", "last", "="],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "replace:",
+category: 'enumerating',
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@values"]=_st(self["@values"])._replace_(aBlock);
+_st(self)._coalesce();
+return self}, function($ctx1) {$ctx1.fill(self,"replace:",{aBlock:aBlock},smalltalk.RunArray)})},
+args: ["aBlock"],
+source: "replace: aBlock\x0a\x09\x22Beware, the block will be evaluated only once per group of values.\x22\x0a\x09values := values replace: aBlock.\x0a\x09self coalesce",
+messageSends: ["replace:", "coalesce"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "reverseDo:",
+category: 'enumerating',
+fn: function (aBlock){
+var self=this;
+var i;
+return smalltalk.withContext(function($ctx1) { 
+i=_st(self["@runs"])._size();
+_st((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(i).__gt((0));
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}))._whileTrue_((function(){
+var r,v;
+return smalltalk.withContext(function($ctx2) {
+v=_st(self["@values"])._at_(i);
+v;
+r=_st(self["@runs"])._at_(i);
+r;
+i=_st(i).__minus((1));
+i;
+return _st((function(){
+return smalltalk.withContext(function($ctx3) {
+r=_st(r).__minus((1));
+return _st(r).__gt_eq((0));
+}, function($ctx3) {$ctx3.fillBlock({},$ctx1)})}))._whileTrue_((function(){
+return smalltalk.withContext(function($ctx3) {
+return _st(aBlock)._value_(v);
+}, function($ctx3) {$ctx3.fillBlock({},$ctx1)})}));
+}, function($ctx2) {$ctx2.fillBlock({r:r,v:v},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"reverseDo:",{aBlock:aBlock,i:i},smalltalk.RunArray)})},
+args: ["aBlock"],
+source: "reverseDo: aBlock\x0a\x09\x22This is refined for speed\x22\x0a\x09\x0a\x09| i |\x0a\x09i := runs size.\x0a\x09[i > 0]\x0a\x09\x09whileTrue: \x0a\x09\x09\x09[ | r v |\x0a\x09\x09\x09v := values at: i.\x0a\x09\x09\x09r := runs at: i.\x0a\x09\x09\x09i := i - 1.\x0a\x09\x09\x09[( r := r - 1) >= 0]\x0a\x09\x09\x09\x09whileTrue: [aBlock value: v]].",
+messageSends: ["size", "whileTrue:", "at:", "-", "value:", ">=", ">"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "runLengthAt:",
+category: 'accessing',
+fn: function (index){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+var $early={};
+try {
+_st(self)._at_setRunOffsetAndValue_(index,(function(run,offset,value){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(_st(self["@runs"])._at_(run)).__minus(offset);
+throw $early=[$1];
+}, function($ctx2) {$ctx2.fillBlock({run:run,offset:offset,value:value},$ctx1)})}));
+return self}
+catch(e) {if(e===$early)return e[0]; throw e}
+}, function($ctx1) {$ctx1.fill(self,"runLengthAt:",{index:index},smalltalk.RunArray)})},
+args: ["index"],
+source: "runLengthAt: index \x0a\x09\x22Answer the length remaining in run beginning at index.\x22\x0a\x0a\x09self at: index \x0a\x09\x09setRunOffsetAndValue: [:run :offset :value | ^(runs at: run) - offset]",
+messageSends: ["at:setRunOffsetAndValue:", "-", "at:"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "runs",
+category: 'private',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@runs"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"runs",{},smalltalk.RunArray)})},
+args: [],
+source: "runs\x0a\x0a\x09^runs",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "runsAndValuesDo:",
+category: 'enumerating',
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@runs"])._with_do_(self["@values"],aBlock);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"runsAndValuesDo:",{aBlock:aBlock},smalltalk.RunArray)})},
+args: ["aBlock"],
+source: "runsAndValuesDo: aBlock\x0a\x09\x22Evaluate aBlock with run lengths and values from the receiver\x22\x0a\x09^runs with: values do: aBlock.",
+messageSends: ["with:do:"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "runsFrom:to:do:",
+category: 'enumerating',
+fn: function (start,stop,aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(start).__gt(stop);
+if(smalltalk.assert($1)){
+$2=self;
+return $2;
+};
+_st(self)._at_setRunOffsetAndValue_(start,(function(firstRun,offset,firstValue){
+var run,value,index;
+return smalltalk.withContext(function($ctx2) {
+run=firstRun;
+run;
+value=firstValue;
+value;
+index=_st(_st(start).__plus(_st(self["@runs"])._at_(run))).__minus(offset);
+index;
+return _st((function(){
+return smalltalk.withContext(function($ctx3) {
+_st(aBlock)._value_(value);
+return _st(index).__lt_eq(stop);
+}, function($ctx3) {$ctx3.fillBlock({},$ctx1)})}))._whileTrue_((function(){
+return smalltalk.withContext(function($ctx3) {
+run=_st(run).__plus((1));
+run;
+value=_st(self["@values"])._at_(run);
+value;
+index=_st(index).__plus(_st(self["@runs"])._at_(run));
+return index;
+}, function($ctx3) {$ctx3.fillBlock({},$ctx1)})}));
+}, function($ctx2) {$ctx2.fillBlock({firstRun:firstRun,offset:offset,firstValue:firstValue,run:run,value:value,index:index},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"runsFrom:to:do:",{start:start,stop:stop,aBlock:aBlock},smalltalk.RunArray)})},
+args: ["start", "stop", "aBlock"],
+source: "runsFrom: start to: stop do: aBlock\x0a\x09\x22Evaluate aBlock with all existing runs in the range from start to stop\x22\x0a\x09start > stop ifTrue:[^self].\x0a\x09self at: start setRunOffsetAndValue:[:firstRun :offset :firstValue|\x0a\x09\x09| run value index |\x0a\x09\x09run := firstRun.\x0a\x09\x09value := firstValue.\x0a\x09\x09index := start + (runs at: run) - offset.\x0a\x09\x09[aBlock value: value.\x0a\x09\x09index <= stop] whileTrue:[\x0a\x09\x09\x09run := run + 1.\x0a\x09\x09\x09value := values at: run.\x0a\x09\x09\x09index := index + (runs at: run)]].",
+messageSends: ["ifTrue:", ">", "at:setRunOffsetAndValue:", "-", "+", "at:", "whileTrue:", "value:", "<="],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "select:",
+category: 'enumerating',
+fn: function (aBlock){
+var self=this;
+var newRuns,newValues;
+function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+newRuns=_st(_st($Array())._new_(_st(self["@runs"])._size()))._writeStream();
+newValues=_st(_st($Array())._new_(_st(self["@values"])._size()))._writeStream();
+_st(self)._runsAndValuesDo_((function(run,value){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(aBlock)._value_(value);
+if(smalltalk.assert($1)){
+_st(newRuns)._add_(run);
+return _st(newValues)._add_(value);
+};
+}, function($ctx2) {$ctx2.fillBlock({run:run,value:value},$ctx1)})}));
+$2=_st(_st(_st(self)._class())._runs_values_(_st(newRuns)._contents(),_st(newValues)._contents()))._coalesce();
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"select:",{aBlock:aBlock,newRuns:newRuns,newValues:newValues},smalltalk.RunArray)})},
+args: ["aBlock"],
+source: "select: aBlock\x0a\x09\x22Beware, the block will be evaluated only once per group of values.\x22\x0a\x09| newRuns newValues |\x0a\x09newRuns := (Array new: runs size) writeStream.\x0a\x09newValues := (Array new: values size) writeStream.\x0a\x09self runsAndValuesDo: [:run :value |\x0a\x09\x09(aBlock value: value)\x0a\x09\x09\x09ifTrue:\x0a\x09\x09\x09\x09[newRuns add: run.\x0a\x09\x09\x09\x09newValues add: value]].\x0a\x09^(self class runs: newRuns contents values: newValues contents) coalesce",
+messageSends: ["writeStream", "new:", "size", "runsAndValuesDo:", "ifTrue:", "add:", "value:", "coalesce", "runs:values:", "contents", "class"],
+referencedClasses: ["Array"]
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "setRuns:setValues:",
+category: 'private',
+fn: function (newRuns,newValues){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@lastIndex"]=nil;
+self["@runs"]=_st(newRuns)._asArray();
+self["@values"]=_st(newValues)._asArray();
+return self}, function($ctx1) {$ctx1.fill(self,"setRuns:setValues:",{newRuns:newRuns,newValues:newValues},smalltalk.RunArray)})},
+args: ["newRuns", "newValues"],
+source: "setRuns: newRuns setValues: newValues\x0a\x09lastIndex := nil. \x22flush access cache\x22\x0a\x09runs := newRuns asArray.\x0a\x09values := newValues asArray.",
+messageSends: ["asArray"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "size",
+category: 'accessing',
+fn: function (){
+var self=this;
+var size;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+size=(0);
+_st((1))._to_do_(_st(self["@runs"])._size(),(function(i){
+return smalltalk.withContext(function($ctx2) {
+size=_st(size).__plus(_st(self["@runs"])._at_(i));
+return size;
+}, function($ctx2) {$ctx2.fillBlock({i:i},$ctx1)})}));
+$1=size;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"size",{size:size},smalltalk.RunArray)})},
+args: [],
+source: "size\x0a\x09| size |\x0a\x09size := 0.\x0a\x091 to: runs size do: [:i | size := size + (runs at: i)].\x0a\x09^size",
+messageSends: ["to:do:", "size", "+", "at:"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonOn:",
+category: 'topez-common-core',
+fn: function (stonWriter){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(stonWriter)._writeObject_streamMap_(self,(function(dictionary){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(_st(self)._class())._allInstVarNames())._do_((function(each){
+return smalltalk.withContext(function($ctx3) {
+return _st(dictionary)._at_put_(_st(each)._asSymbol(),_st(self)._instVarNamed_(each));
+}, function($ctx3) {$ctx3.fillBlock({each:each},$ctx1)})}));
+}, function($ctx2) {$ctx2.fillBlock({dictionary:dictionary},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"stonOn:",{stonWriter:stonWriter},smalltalk.RunArray)})},
+args: ["stonWriter"],
+source: "stonOn: stonWriter\x0a    \x22workaround for https://github.com/svenvc/ston/issues/4\x22\x0a\x0a    stonWriter\x0a        writeObject: self\x0a        streamMap: [ :dictionary | self class allInstVarNames do: [ :each | dictionary at: each asSymbol put: (self instVarNamed: each) ] ]",
+messageSends: ["writeObject:streamMap:", "do:", "at:put:", "asSymbol", "instVarNamed:", "allInstVarNames", "class"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "storeOn:",
+category: 'printing',
+fn: function (aStream){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(aStream)._nextPut_("(");
+_st(aStream)._nextPutAll_(_st(_st(self)._class())._name());
+_st(aStream)._nextPutAll_(" runs: ");
+_st(self["@runs"])._storeOn_(aStream);
+_st(aStream)._nextPutAll_(" values: ");
+_st(self["@values"])._storeOn_(aStream);
+_st(aStream)._nextPut_(")");
+return self}, function($ctx1) {$ctx1.fill(self,"storeOn:",{aStream:aStream},smalltalk.RunArray)})},
+args: ["aStream"],
+source: "storeOn: aStream\x0a\x0a\x09aStream nextPut: '('.\x0a\x09aStream nextPutAll: self class name.\x0a\x09aStream nextPutAll: ' runs: '.\x0a\x09runs storeOn: aStream.\x0a\x09aStream nextPutAll: ' values: '.\x0a\x09values storeOn: aStream.\x0a\x09aStream nextPut: ')'",
+messageSends: ["nextPut:", "nextPutAll:", "name", "class", "storeOn:"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "values",
+category: 'private',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@values"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"values",{},smalltalk.RunArray)})},
+args: [],
+source: "values\x0a\x09\x22Answer the values in the receiver.\x22\x0a\x0a\x09^values",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "withStartStopAndValueDo:",
+category: 'accessing',
+fn: function (aBlock){
+var self=this;
+var start;
+return smalltalk.withContext(function($ctx1) { 
+start=(1);
+_st(self["@runs"])._with_do_(self["@values"],(function(len,val){
+var stop;
+return smalltalk.withContext(function($ctx2) {
+stop=_st(_st(start).__plus(len)).__minus((1));
+stop;
+_st(aBlock)._value_value_value_(start,stop,val);
+start=_st(stop).__plus((1));
+return start;
+}, function($ctx2) {$ctx2.fillBlock({len:len,val:val,stop:stop},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"withStartStopAndValueDo:",{aBlock:aBlock,start:start},smalltalk.RunArray)})},
+args: ["aBlock"],
+source: "withStartStopAndValueDo: aBlock\x0a\x09| start |\x0a\x09start := 1.\x0a\x09runs with: values do:\x0a\x09\x09[:len : val | | stop |\x0a\x09\x09stop := start + len - 1.\x0a\x09\x09aBlock value: start value: stop value: val.\x0a\x09\x09start := stop + 1]\x0a\x09\x09",
+messageSends: ["with:do:", "-", "+", "value:value:value:"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "writeOn:",
+category: 'printing',
+fn: function (aStream){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(aStream)._nextWordPut_(_st(self["@runs"])._size());
+_st((1))._to_do_(_st(self["@runs"])._size(),(function(x){
+return smalltalk.withContext(function($ctx2) {
+_st(aStream)._nextWordPut_(_st(self["@runs"])._at_(x));
+return _st(aStream)._nextWordPut_(_st(self["@values"])._at_(x));
+}, function($ctx2) {$ctx2.fillBlock({x:x},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"writeOn:",{aStream:aStream},smalltalk.RunArray)})},
+args: ["aStream"],
+source: "writeOn: aStream\x0a\x0a\x09aStream nextWordPut: runs size.\x0a\x091 to: runs size do:\x0a\x09\x09[:x |\x0a\x09\x09aStream nextWordPut: (runs at: x).\x0a\x09\x09aStream nextWordPut: (values at: x)]",
+messageSends: ["nextWordPut:", "size", "to:do:", "at:"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "writeScanOn:",
+category: 'printing',
+fn: function (strm){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+_st(strm)._nextPut_("(");
+_st(self["@runs"])._do_((function(rr){
+return smalltalk.withContext(function($ctx2) {
+_st(rr)._printOn_(strm);
+return _st(strm)._space();
+}, function($ctx2) {$ctx2.fillBlock({rr:rr},$ctx1)})}));
+$1=strm;
+_st($1)._skip_((-1));
+$2=_st($1)._nextPut_(")");
+_st(self["@values"])._do_((function(vv){
+return smalltalk.withContext(function($ctx2) {
+_st(vv)._do_((function(att){
+return smalltalk.withContext(function($ctx3) {
+return _st(att)._writeScanOn_(strm);
+}, function($ctx3) {$ctx3.fillBlock({att:att},$ctx1)})}));
+return _st(strm)._nextPut_(",");
+}, function($ctx2) {$ctx2.fillBlock({vv:vv},$ctx1)})}));
+_st(strm)._skip_((-1));
+return self}, function($ctx1) {$ctx1.fill(self,"writeScanOn:",{strm:strm},smalltalk.RunArray)})},
+args: ["strm"],
+source: "writeScanOn: strm\x0a\x09\x22Write out the format used for text runs in source files. (14 50 312)f1,f1b,f1LInteger +;i\x22\x0a\x0a\x09strm nextPut: '('.\x0a\x09runs do: [:rr | rr printOn: strm. strm space].\x0a\x09strm skip: -1; nextPut: ')'.\x0a\x09values do: [:vv |\x0a\x09\x09vv do: [:att | att writeScanOn: strm].\x0a\x09\x09strm nextPut: ','].\x0a\x09strm skip: -1. \x22trailing comma\x22",
+messageSends: ["nextPut:", "do:", "printOn:", "space", "skip:", "writeScanOn:"],
+referencedClasses: []
+}),
+smalltalk.RunArray);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "fromSton:",
+category: 'topez-common-core',
+fn: function (stonReader){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=_st(self)._new();
+_st($2)._fromSton_(stonReader);
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"fromSton:",{stonReader:stonReader},smalltalk.RunArray.klass)})},
+args: ["stonReader"],
+source: "fromSton: stonReader\x0a    \x22workaround for https://github.com/svenvc/ston/issues/4\x22\x0a\x0a    ^ self new\x0a        fromSton: stonReader;\x0a        yourself",
+messageSends: ["fromSton:", "new", "yourself"],
+referencedClasses: []
+}),
+smalltalk.RunArray.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "new",
+category: 'instance creation',
+fn: function (){
+var self=this;
+function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._runs_values_(_st($Array())._new(),_st($Array())._new());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"new",{},smalltalk.RunArray.klass)})},
+args: [],
+source: "new\x0a\x0a\x09^self runs: Array new values: Array new",
+messageSends: ["runs:values:", "new"],
+referencedClasses: ["Array"]
+}),
+smalltalk.RunArray.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "new:",
+category: 'instance creation',
+fn: function (aSize){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._new_withAll_(aSize,nil);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"new:",{aSize:aSize},smalltalk.RunArray.klass)})},
+args: ["aSize"],
+source: "new: aSize\x0a\x09^ self new: aSize withAll: nil",
+messageSends: ["new:withAll:"],
+referencedClasses: []
+}),
+smalltalk.RunArray.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "new:withAll:",
+category: 'instance creation',
+fn: function (size,value){
+var self=this;
+function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+$1=_st(size).__eq((0));
+if(smalltalk.assert($1)){
+$2=_st(self)._new();
+return $2;
+};
+$3=_st(self)._runs_values_(_st($Array())._with_(size),_st($Array())._with_(value));
+return $3;
+}, function($ctx1) {$ctx1.fill(self,"new:withAll:",{size:size,value:value},smalltalk.RunArray.klass)})},
+args: ["size", "value"],
+source: "new: size withAll: value \x0a\x09\x22Answer a new instance of me, whose every element is equal to the\x0a\x09argument, value.\x22\x0a\x0a\x09size = 0 ifTrue: [^self new].\x0a\x09^self runs: (Array with: size) values: (Array with: value)",
+messageSends: ["ifTrue:", "new", "=", "runs:values:", "with:"],
+referencedClasses: ["Array"]
+}),
+smalltalk.RunArray.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "newFrom:",
+category: 'instance creation',
+fn: function (aCollection){
+var self=this;
+var vruns,vvalues,vlastRun,lastValue;
+function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
+function $Object(){return smalltalk.Object||(typeof Object=="undefined"?nil:Object)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4;
+vruns=_st(_st($Array())._new_(_st(_st(aCollection)._size()).__slash_slash((2))))._writeStream();
+vvalues=_st(_st($Array())._new_(_st(_st(aCollection)._size()).__slash_slash((2))))._writeStream();
+vlastRun=(0);
+lastValue=_st($Object())._new();
+_st(aCollection)._do_((function(x){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(lastValue).__eq(x);
+if(smalltalk.assert($1)){
+vlastRun=_st(vlastRun).__plus((1));
+return vlastRun;
+} else {
+$2=_st(vlastRun).__gt((0));
+if(smalltalk.assert($2)){
+_st(vruns)._nextPut_(vlastRun);
+_st(vvalues)._nextPut_(lastValue);
+};
+vlastRun=(1);
+vlastRun;
+lastValue=x;
+return lastValue;
+};
+}, function($ctx2) {$ctx2.fillBlock({x:x},$ctx1)})}));
+$3=_st(vlastRun).__gt((0));
+if(smalltalk.assert($3)){
+_st(vruns)._nextPut_(vlastRun);
+_st(vvalues)._nextPut_(lastValue);
+};
+$4=_st(_st(self)._basicNew())._setRuns_setValues_(_st(vruns)._contents(),_st(vvalues)._contents());
+return $4;
+}, function($ctx1) {$ctx1.fill(self,"newFrom:",{aCollection:aCollection,vruns:vruns,vvalues:vvalues,vlastRun:vlastRun,lastValue:lastValue},smalltalk.RunArray.klass)})},
+args: ["aCollection"],
+source: "newFrom: aCollection \x0a\x09\x22Answer an instance of me containing the same elements as aCollection.\x22\x0a\x0a\x09| vruns vvalues vlastRun lastValue |\x0a\x09vruns := (Array new: aCollection size // 2) writeStream.\x0a\x09vvalues := (Array new: aCollection size // 2) writeStream.\x0a\x09vlastRun := 0.\x0a\x09lastValue := Object new.\x0a\x09aCollection do: [:x | \x0a\x09\x09lastValue = x\x0a\x09\x09\x09ifTrue: [vlastRun := vlastRun + 1]\x0a\x09\x09\x09ifFalse:\x0a\x09\x09\x09\x09[vlastRun > 0\x0a\x09\x09\x09\x09\x09ifTrue:\x0a\x09\x09\x09\x09\x09\x09[vruns nextPut: vlastRun.\x0a\x09\x09\x09\x09\x09\x09vvalues nextPut: lastValue].\x0a\x09\x09\x09\x09vlastRun := 1.\x0a\x09\x09\x09\x09lastValue := x]].\x0a\x09vlastRun > 0\x0a\x09\x09ifTrue:\x0a\x09\x09\x09[vruns nextPut: vlastRun.\x0a\x09\x09\x09vvalues nextPut: lastValue].\x0a\x09^self basicNew setRuns: vruns contents setValues: vvalues contents\x0a\x0a\x22\x09RunArray newFrom: {1. 2. 2. 3}\x0a\x09{1. $a. $a. 3} as: RunArray\x0a\x09({1. $a. $a. 3} as: RunArray) values\x0a\x22",
+messageSends: ["writeStream", "new:", "//", "size", "new", "do:", "ifTrue:ifFalse:", "+", "ifTrue:", "nextPut:", ">", "=", "setRuns:setValues:", "contents", "basicNew"],
+referencedClasses: ["Array", "Object"]
+}),
+smalltalk.RunArray.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "readFrom:",
+category: 'instance creation',
+fn: function (aStream){
+var self=this;
+var size,vruns,vvalues;
+function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+size=_st(aStream)._nextWord();
+vruns=_st($Array())._new_(size);
+vvalues=_st($Array())._new_(size);
+_st((1))._to_do_(size,(function(x){
+return smalltalk.withContext(function($ctx2) {
+_st(vruns)._at_put_(x,_st(aStream)._nextWord());
+return _st(vvalues)._at_put_(x,_st(aStream)._nextWord());
+}, function($ctx2) {$ctx2.fillBlock({x:x},$ctx1)})}));
+$1=_st(self)._runs_values_(vruns,vvalues);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"readFrom:",{aStream:aStream,size:size,vruns:vruns,vvalues:vvalues},smalltalk.RunArray.klass)})},
+args: ["aStream"],
+source: "readFrom: aStream\x0a\x09\x22Answer an instance of me as described on the stream, aStream.\x22\x0a\x0a\x09| size vruns vvalues |\x0a\x09size := aStream nextWord.\x0a\x09vruns := Array new: size.\x0a\x09vvalues := Array new: size.\x0a\x091 to: size do:\x0a\x09\x09[:x |\x0a\x09\x09vruns at: x put: aStream nextWord.\x0a\x09\x09vvalues at: x put: aStream nextWord].\x0a\x09^ self runs: vruns values: vvalues",
+messageSends: ["nextWord", "new:", "to:do:", "at:put:", "runs:values:"],
+referencedClasses: ["Array"]
+}),
+smalltalk.RunArray.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "runs:values:",
+category: 'instance creation',
+fn: function (newRuns,newValues){
+var self=this;
+var instance;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+instance=_st(self)._basicNew();
+_st(instance)._setRuns_setValues_(newRuns,newValues);
+$1=instance;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"runs:values:",{newRuns:newRuns,newValues:newValues,instance:instance},smalltalk.RunArray.klass)})},
+args: ["newRuns", "newValues"],
+source: "runs: newRuns values: newValues \x0a\x09\x22Answer an instance of me with runs and values specified by the \x0a\x09arguments.\x22\x0a\x0a\x09| instance |\x0a\x09instance := self basicNew.\x0a\x09instance setRuns: newRuns setValues: newValues.\x0a\x09^instance",
+messageSends: ["basicNew", "setRuns:setValues:"],
+referencedClasses: []
+}),
+smalltalk.RunArray.klass);
+
+
+smalltalk.addClass('Text', smalltalk.SequenceableCollection, ['string', 'runs'], 'Kernel-Collections');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "=",
+category: 'comparing',
+fn: function (other){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4;
+$1=_st(other)._isText();
+if(smalltalk.assert($1)){
+$2=_st(_st(self["@string"]).__eq_eq(_st(other)._string()))._or_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(self["@string"]).__eq(_st(other)._string());
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $2;
+};
+$3=_st(other)._isString();
+if(smalltalk.assert($3)){
+$4=_st(_st(self["@string"]).__eq_eq(other))._or_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(self["@string"]).__eq(other);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $4;
+};
+return false;
+}, function($ctx1) {$ctx1.fill(self,"=",{other:other},smalltalk.Text)})},
+args: ["other"],
+source: "= other\x0a\x09\x22Am I equal to the other Text or String?  \x0a\x09***** Warning ***** Two Texts are considered equal if they have the same characters in them.  They might have completely different emphasis, fonts, sizes, text actions, or embedded morphs.  If you need to find out if one is a true copy of the other, you must do (text1 = text2 and: [text1 runs = text2 runs]).\x22\x0a\x0a\x09other isText ifTrue:\x09[\x22This is designed to run fast even for megabytes\x22\x0a\x09\x09\x09\x09^ string == other string or: [string = other string]].\x0a\x09other isString ifTrue: [^ string == other or: [string = other]].\x0a\x09^ false",
+messageSends: ["ifTrue:", "or:", "=", "string", "==", "isText", "isString"],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "append:",
+category: 'accessing',
+fn: function (stringOrText){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._replaceFrom_to_with_(_st(_st(self["@string"])._size()).__plus((1)),_st(self["@string"])._size(),stringOrText);
+return self}, function($ctx1) {$ctx1.fill(self,"append:",{stringOrText:stringOrText},smalltalk.Text)})},
+args: ["stringOrText"],
+source: "append: stringOrText\x0a\x0a\x09self replaceFrom: string size + 1\x0a\x09\x09\x09\x09to: string size with: stringOrText",
+messageSends: ["replaceFrom:to:with:", "+", "size"],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "asNumber",
+category: 'converting',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@string"])._asNumber();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"asNumber",{},smalltalk.Text)})},
+args: [],
+source: "asNumber\x0a\x09\x22Answer the number created by interpreting the receiver as the textual \x0a\x09representation of a number.\x22\x0a\x0a\x09^string asNumber",
+messageSends: ["asNumber"],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "asString",
+category: 'converting',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@string"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"asString",{},smalltalk.Text)})},
+args: [],
+source: "asString\x0a\x09\x22Answer a String representation of the textual receiver.\x22\x0a\x0a\x09^string",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "asStringOrText",
+category: 'converting',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"asStringOrText",{},smalltalk.Text)})},
+args: [],
+source: "asStringOrText\x09\x0a\x09\x22Answer the receiver itself.\x22\x0a\x0a\x09^self",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "asText",
+category: 'converting',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"asText",{},smalltalk.Text)})},
+args: [],
+source: "asText\x09\x0a\x09\x22Answer the receiver itself.\x22\x0a\x0a\x09^self",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "at:",
+category: 'accessing',
+fn: function (index){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@string"])._at_(index);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"at:",{index:index},smalltalk.Text)})},
+args: ["index"],
+source: "at: index\x0a\x0a\x09^string at: index",
+messageSends: ["at:"],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "at:put:",
+category: 'accessing',
+fn: function (index,character){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@string"])._at_put_(index,character);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"at:put:",{index:index,character:character},smalltalk.Text)})},
+args: ["index", "character"],
+source: "at: index put: character\x0a\x0a\x09^string at: index put: character",
+messageSends: ["at:put:"],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "copyFrom:to:",
+category: 'copying',
+fn: function (start,stop){
+var self=this;
+var realStart,realStop;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+$1=_st(stop).__gt(_st(self)._size());
+if(smalltalk.assert($1)){
+realStop=_st(self)._size();
+realStop;
+} else {
+realStop=stop;
+realStop;
+};
+$2=_st(start).__lt((1));
+if(smalltalk.assert($2)){
+realStart=(1);
+realStart;
+} else {
+realStart=start;
+realStart;
+};
+$3=_st(_st(self)._class())._string_runs_(_st(self["@string"])._copyFrom_to_(realStart,realStop),_st(self["@runs"])._copyFrom_to_(realStart,realStop));
+return $3;
+}, function($ctx1) {$ctx1.fill(self,"copyFrom:to:",{start:start,stop:stop,realStart:realStart,realStop:realStop},smalltalk.Text)})},
+args: ["start", "stop"],
+source: "copyFrom: start to: stop \x0a\x09\x22Answer a copied subrange of the receiver.\x22\x0a\x0a\x09| realStart realStop |\x0a\x09stop > self size\x0a\x09\x09ifTrue: [realStop := self size]\x09\x09\x22handle selection at end of string\x22\x0a\x09\x09ifFalse: [realStop := stop].\x0a\x09start < 1\x0a\x09\x09ifTrue: [realStart := 1]\x09\x09\x09\x22handle selection before start of string\x22\x0a\x09\x09ifFalse: [realStart := start].\x0a\x09^self class \x0a\x09\x09string: (string copyFrom: realStart to: realStop)\x0a\x09\x09runs: (runs copyFrom: realStart to: realStop)",
+messageSends: ["ifTrue:ifFalse:", "size", ">", "<", "string:runs:", "copyFrom:to:", "class"],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "copyReplaceFrom:to:with:",
+category: 'copying',
+fn: function (start,stop,aTextOrString){
+var self=this;
+var txt;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+txt=_st(aTextOrString)._asText();
+$1=_st(_st(self)._class())._string_runs_(_st(self["@string"])._copyReplaceFrom_to_with_(start,stop,_st(txt)._string()),_st(self["@runs"])._copyReplaceFrom_to_with_(start,stop,_st(txt)._runs()));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"copyReplaceFrom:to:with:",{start:start,stop:stop,aTextOrString:aTextOrString,txt:txt},smalltalk.Text)})},
+args: ["start", "stop", "aTextOrString"],
+source: "copyReplaceFrom: start to: stop with: aTextOrString\x0a\x0a\x09| txt |\x0a\x09txt := aTextOrString asText.\x09\x22might be a string\x22\x0a\x09^self class \x0a             string: (string copyReplaceFrom: start to: stop with: txt string)\x0a             runs: (runs copyReplaceFrom: start to: stop with: txt runs)",
+messageSends: ["asText", "string:runs:", "copyReplaceFrom:to:with:", "string", "runs", "class"],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "copyReplaceTokens:with:",
+category: 'copying',
+fn: function (oldSubstring,newSubstring){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._copyReplaceAll_with_asTokens_(oldSubstring,newSubstring,true);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"copyReplaceTokens:with:",{oldSubstring:oldSubstring,newSubstring:newSubstring},smalltalk.Text)})},
+args: ["oldSubstring", "newSubstring"],
+source: "copyReplaceTokens: oldSubstring with: newSubstring \x0a\x09\x22Replace all occurrences of oldSubstring that are surrounded\x0a\x09by non-alphanumeric characters\x22\x0a\x09^ self copyReplaceAll: oldSubstring with: newSubstring asTokens: true\x0a\x09\x22'File asFile Files File''s File' copyReplaceTokens: 'File' with: 'Snick'\x22",
+messageSends: ["copyReplaceAll:with:asTokens:"],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "deepCopy",
+category: 'copying',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._copy();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"deepCopy",{},smalltalk.Text)})},
+args: [],
+source: "deepCopy\x0a\x0a\x09^ self copy \x22Both string and runs are assumed to be read-only\x22",
+messageSends: ["copy"],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "findString:startingAt:",
+category: 'accessing',
+fn: function (aString,start){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@string"])._findString_startingAt_(_st(aString)._asString(),start);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"findString:startingAt:",{aString:aString,start:start},smalltalk.Text)})},
+args: ["aString", "start"],
+source: "findString: aString startingAt: start \x0a\x09\x22Answer the index of subString within the receiver, starting at index \x0a\x09start. If the receiver does not contain subString, answer 0.\x22\x0a\x0a\x09^string findString: aString asString startingAt: start",
+messageSends: ["findString:startingAt:", "asString"],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "findString:startingAt:caseSensitive:",
+category: 'accessing',
+fn: function (aString,start,caseSensitive){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@string"])._findString_startingAt_caseSensitive_(_st(aString)._asString(),start,caseSensitive);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"findString:startingAt:caseSensitive:",{aString:aString,start:start,caseSensitive:caseSensitive},smalltalk.Text)})},
+args: ["aString", "start", "caseSensitive"],
+source: "findString: aString startingAt: start caseSensitive: caseSensitive\x0a\x09\x22Answer the index of subString within the receiver, starting at index \x0a\x09start. If the receiver does not contain subString, answer 0.\x22\x0a\x0a\x09^string findString: aString asString startingAt: start caseSensitive: caseSensitive",
+messageSends: ["findString:startingAt:caseSensitive:", "asString"],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "howManyMatch:",
+category: 'comparing',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._string())._howManyMatch_(aString);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"howManyMatch:",{aString:aString},smalltalk.Text)})},
+args: ["aString"],
+source: "howManyMatch: aString\x0a\x0a\x09^ self string howManyMatch: aString",
+messageSends: ["howManyMatch:", "string"],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "initialStyle",
+category: 'accessing',
+fn: function (){
+var self=this;
+function $TextStyle(){return smalltalk.TextStyle||(typeof TextStyle=="undefined"?nil:TextStyle)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($TextStyle())._default();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"initialStyle",{},smalltalk.Text)})},
+args: [],
+source: "initialStyle\x0a\x09^TextStyle default",
+messageSends: ["default"],
+referencedClasses: ["TextStyle"]
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "isText",
+category: 'comparing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return true;
+}, function($ctx1) {$ctx1.fill(self,"isText",{},smalltalk.Text)})},
+args: [],
+source: "isText\x0a\x09^ true",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "lineCount",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@string"])._lineCount();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"lineCount",{},smalltalk.Text)})},
+args: [],
+source: "lineCount\x0a\x0a\x09^ string lineCount",
+messageSends: ["lineCount"],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "postCopy",
+category: 'copying',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+smalltalk.SequenceableCollection.fn.prototype._postCopy.apply(_st(self), []);
+self["@string"]=_st(self["@string"])._copy();
+self["@runs"]=_st(self["@runs"])._copy();
+return self}, function($ctx1) {$ctx1.fill(self,"postCopy",{},smalltalk.Text)})},
+args: [],
+source: "postCopy\x0a\x09super postCopy.\x0a\x09string := string copy.\x0a\x09runs := runs copy",
+messageSends: ["postCopy", "copy"],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "prepend:",
+category: 'accessing',
+fn: function (stringOrText){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._replaceFrom_to_with_((1),(0),stringOrText);
+return self}, function($ctx1) {$ctx1.fill(self,"prepend:",{stringOrText:stringOrText},smalltalk.Text)})},
+args: ["stringOrText"],
+source: "prepend: stringOrText\x0a\x0a\x09self replaceFrom: 1 to: 0 with: stringOrText",
+messageSends: ["replaceFrom:to:with:"],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "printOn:",
+category: 'printing',
+fn: function (aStream){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+_st(self)._printNameOn_(aStream);
+$1=aStream;
+_st($1)._nextPutAll_(" for ");
+$2=_st($1)._print_(self["@string"]);
+return self}, function($ctx1) {$ctx1.fill(self,"printOn:",{aStream:aStream},smalltalk.Text)})},
+args: ["aStream"],
+source: "printOn: aStream\x0a\x09self printNameOn: aStream.\x0a\x09aStream nextPutAll: ' for '; print: string",
+messageSends: ["printNameOn:", "nextPutAll:", "print:"],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "rangeOf:startingAt:",
+category: 'accessing',
+fn: function (attribute,index){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$1;
+$2=_st(_st(self["@string"])._size()).__eq((0));
+if(smalltalk.assert($2)){
+$1=_st(index)._to_(_st(index).__minus((1)));
+} else {
+$1=_st(self["@runs"])._rangeOf_startingAt_(attribute,index);
+};
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"rangeOf:startingAt:",{attribute:attribute,index:index},smalltalk.Text)})},
+args: ["attribute", "index"],
+source: "rangeOf: attribute startingAt: index\x0a\x22Answer an interval that gives the range of attribute at index position  index. An empty interval with start value index is returned when the attribute is not present at position index.  \x22\x0a   ^string size = 0\x0a      ifTrue: [index to: index - 1]\x0a\x09 ifFalse: [runs rangeOf: attribute startingAt: index]",
+messageSends: ["ifTrue:ifFalse:", "to:", "-", "rangeOf:startingAt:", "=", "size"],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "replaceFrom:to:with:",
+category: 'accessing',
+fn: function (start,stop,aText){
+var self=this;
+var txt;
+return smalltalk.withContext(function($ctx1) { 
+txt=_st(aText)._asText();
+self["@string"]=_st(self["@string"])._copyReplaceFrom_to_with_(start,stop,_st(txt)._string());
+self["@runs"]=_st(self["@runs"])._copyReplaceFrom_to_with_(start,stop,_st(txt)._runs());
+return self}, function($ctx1) {$ctx1.fill(self,"replaceFrom:to:with:",{start:start,stop:stop,aText:aText,txt:txt},smalltalk.Text)})},
+args: ["start", "stop", "aText"],
+source: "replaceFrom: start to: stop with: aText\x0a\x0a\x09| txt |\x0a\x09txt := aText asText.\x09\x22might be a string\x22\x0a\x09string := string copyReplaceFrom: start to: stop with: txt string.\x0a\x09runs := runs copyReplaceFrom: start to: stop with: txt runs",
+messageSends: ["asText", "copyReplaceFrom:to:with:", "string", "runs"],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "replaceFrom:to:with:startingAt:",
+category: 'converting',
+fn: function (start,stop,replacement,repStart){
+var self=this;
+var rep,newRepRuns;
+return smalltalk.withContext(function($ctx1) { 
+rep=_st(replacement)._asText();
+_st(self["@string"])._replaceFrom_to_with_startingAt_(start,stop,_st(rep)._string(),repStart);
+newRepRuns=_st(_st(rep)._runs())._copyFrom_to_(repStart,_st(_st(repStart).__plus(stop)).__minus(start));
+self["@runs"]=_st(self["@runs"])._copyReplaceFrom_to_with_(start,stop,newRepRuns);
+return self}, function($ctx1) {$ctx1.fill(self,"replaceFrom:to:with:startingAt:",{start:start,stop:stop,replacement:replacement,repStart:repStart,rep:rep,newRepRuns:newRepRuns},smalltalk.Text)})},
+args: ["start", "stop", "replacement", "repStart"],
+source: "replaceFrom: start to: stop with: replacement startingAt: repStart \x0a \x09\x22This destructively replaces elements from start to stop in the receiver starting at index, repStart, in replacementCollection. Do it to both the string and the runs.\x22\x0a \x0a \x09| rep newRepRuns |\x0a \x09rep := replacement asText.\x09\x22might be a string\x22\x0a \x09string replaceFrom: start to: stop with: rep string startingAt: repStart.\x0a \x09newRepRuns := rep runs copyFrom: repStart to: repStart + stop - start.\x0a\x09runs := runs copyReplaceFrom: start to: stop with: newRepRuns",
+messageSends: ["asText", "replaceFrom:to:with:startingAt:", "string", "copyFrom:to:", "-", "+", "runs", "copyReplaceFrom:to:with:"],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "runs",
+category: 'private',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@runs"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"runs",{},smalltalk.Text)})},
+args: [],
+source: "runs\x0a\x0a\x09^runs",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "runs:",
+category: 'accessing',
+fn: function (anArray){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(_st(anArray)._size()).__eq(_st(self["@string"])._size());
+if(! smalltalk.assert($1)){
+$2=_st(self)._error_("Some code is setting text attributes length not matching the string size");
+return $2;
+};
+self["@runs"]=anArray;
+return self}, function($ctx1) {$ctx1.fill(self,"runs:",{anArray:anArray},smalltalk.Text)})},
+args: ["anArray"],
+source: "runs: anArray\x0a\x09anArray size = string size\x0a\x09\x09ifFalse:\x0a\x09\x09\x09[^self error: 'Some code is setting text attributes length not matching the string size'].\x0a\x09runs := anArray",
+messageSends: ["ifFalse:", "error:", "=", "size"],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "setString:setRuns:",
+category: 'private',
+fn: function (aString,anArray){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@string"]=aString;
+self["@runs"]=anArray;
+return self}, function($ctx1) {$ctx1.fill(self,"setString:setRuns:",{aString:aString,anArray:anArray},smalltalk.Text)})},
+args: ["aString", "anArray"],
+source: "setString: aString setRuns: anArray\x0a\x0a\x09string := aString.\x0a\x09runs := anArray",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "setString:setRunsChecking:",
+category: 'private',
+fn: function (aString,aRunArray){
+var self=this;
+function $RunArray(){return smalltalk.RunArray||(typeof RunArray=="undefined"?nil:RunArray)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5,$6,$7,$8;
+self["@string"]=aString;
+$1=aRunArray;
+if(($receiver = $1) == nil || $receiver == undefined){
+$2=_st(aString)._asText();
+return $2;
+} else {
+$1;
+};
+$3=_st(aRunArray)._isKindOf_($RunArray());
+if(! smalltalk.assert($3)){
+$4=_st(aString)._asText();
+return $4;
+};
+$5=_st(_st(_st(aRunArray)._runs())._size()).__eq(_st(_st(aRunArray)._values())._size());
+if(! smalltalk.assert($5)){
+$6=_st(aString)._asText();
+return $6;
+};
+$7=_st(_st(aRunArray)._size()).__eq(_st(aString)._size());
+if(! smalltalk.assert($7)){
+$8=_st(aString)._asText();
+return $8;
+};
+self["@runs"]=aRunArray;
+return self}, function($ctx1) {$ctx1.fill(self,"setString:setRunsChecking:",{aString:aString,aRunArray:aRunArray},smalltalk.Text)})},
+args: ["aString", "aRunArray"],
+source: "setString: aString setRunsChecking: aRunArray\x0a\x09\x22Check runs and do the best you can to make them fit...\x22\x0a\x0a\x09string := aString.\x0a\x09\x22check the runs\x22\x0a\x09aRunArray ifNil: [^ aString asText].\x0a\x09(aRunArray isKindOf: RunArray) ifFalse: [^ aString asText].\x0a\x09aRunArray runs size = aRunArray values size ifFalse: [^ aString asText].\x0a\x09aRunArray size = aString size ifFalse: [^ aString asText].\x0a\x09\x0a\x09runs := aRunArray.",
+messageSends: ["ifNil:", "asText", "ifFalse:", "isKindOf:", "=", "size", "values", "runs"],
+referencedClasses: ["RunArray"]
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "size",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@string"])._size();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"size",{},smalltalk.Text)})},
+args: [],
+source: "size\x0a\x0a\x09^string size",
+messageSends: ["size"],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "storeOn:",
+category: 'printing',
+fn: function (aStream){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=aStream;
+_st($1)._nextPutAll_("(Text string: ");
+_st($1)._store_(self["@string"]);
+_st($1)._nextPutAll_(" runs: ");
+_st($1)._store_(self["@runs"]);
+$2=_st($1)._nextPut_(")");
+return self}, function($ctx1) {$ctx1.fill(self,"storeOn:",{aStream:aStream},smalltalk.Text)})},
+args: ["aStream"],
+source: "storeOn: aStream\x0a\x0a\x09aStream nextPutAll: '(Text string: ';\x0a\x09\x09store: string;\x0a\x09\x09nextPutAll: ' runs: ';\x0a\x09\x09store: runs;\x0a\x09\x09nextPut: ')'",
+messageSends: ["nextPutAll:", "store:", "nextPut:"],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "string",
+category: 'comparing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@string"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"string",{},smalltalk.Text)})},
+args: [],
+source: "string\x0a\x09\x22Answer the string representation of the receiver.\x22\x0a\x0a\x09^string",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "fromSton:",
+category: 'topez-common-core',
+fn: function (stonReader){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=_st(self)._new();
+_st($2)._fromSton_(stonReader);
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"fromSton:",{stonReader:stonReader},smalltalk.Text.klass)})},
+args: ["stonReader"],
+source: "fromSton: stonReader\x0a    \x22workaround for https://github.com/svenvc/ston/issues/4\x22\x0a\x0a    ^ self new\x0a        fromSton: stonReader;\x0a        yourself",
+messageSends: ["fromSton:", "new", "yourself"],
+referencedClasses: []
+}),
+smalltalk.Text.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "fromString:",
+category: 'instance creation',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._string_attributes_(aString,[]);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"fromString:",{aString:aString},smalltalk.Text.klass)})},
+args: ["aString"],
+source: "fromString: aString \x0a  \x22Answer an instance of me whose characters are those of the argument, aString.\x22\x0a  \x22TODO: font style\x22\x0a  ^ self\x0a    string: aString\x0a    attributes:{}",
+messageSends: ["string:attributes:"],
+referencedClasses: []
+}),
+smalltalk.Text.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "new",
+category: 'instance creation',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._new_((0));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"new",{},smalltalk.Text.klass)})},
+args: [],
+source: "new\x0a\x09^ self new: 0",
+messageSends: ["new:"],
+referencedClasses: []
+}),
+smalltalk.Text.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "new:",
+category: 'instance creation',
+fn: function (stringSize){
+var self=this;
+function $String(){return smalltalk.String||(typeof String=="undefined"?nil:String)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._fromString_(_st($String())._new_(stringSize));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"new:",{stringSize:stringSize},smalltalk.Text.klass)})},
+args: ["stringSize"],
+source: "new: stringSize\x0a\x0a\x09^self fromString: (String new: stringSize)",
+messageSends: ["fromString:", "new:"],
+referencedClasses: ["String"]
+}),
+smalltalk.Text.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "streamContents:",
+category: 'instance creation',
+fn: function (blockWithArg){
+var self=this;
+var stream;
+function $TextStream(){return smalltalk.TextStream||(typeof TextStream=="undefined"?nil:TextStream)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+stream=_st($TextStream())._on_(_st(self)._new_((400)));
+_st(blockWithArg)._value_(stream);
+$1=_st(stream)._contents();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"streamContents:",{blockWithArg:blockWithArg,stream:stream},smalltalk.Text.klass)})},
+args: ["blockWithArg"],
+source: "streamContents: blockWithArg \x0a\x09| stream |\x0a\x09stream := TextStream on: (self new: 400).\x0a\x09blockWithArg value: stream.\x0a\x09^ stream contents",
+messageSends: ["on:", "new:", "value:", "contents"],
+referencedClasses: ["TextStream"]
+}),
+smalltalk.Text.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "string:attribute:",
+category: 'instance creation',
+fn: function (aString,att){
+var self=this;
+function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._string_attributes_(aString,_st($Array())._with_(att));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"string:attribute:",{aString:aString,att:att},smalltalk.Text.klass)})},
+args: ["aString", "att"],
+source: "string: aString attribute: att\x0a\x09\x22Answer an instance of me whose characters are aString.\x0a\x09att is a TextAttribute.\x22\x0a\x0a\x09^self string: aString attributes: (Array with: att)",
+messageSends: ["string:attributes:", "with:"],
+referencedClasses: ["Array"]
+}),
+smalltalk.Text.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "string:attributes:",
+category: 'instance creation',
+fn: function (aString,atts){
+var self=this;
+function $RunArray(){return smalltalk.RunArray||(typeof RunArray=="undefined"?nil:RunArray)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._string_runs_(aString,_st($RunArray())._new_withAll_(_st(aString)._size(),atts));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"string:attributes:",{aString:aString,atts:atts},smalltalk.Text.klass)})},
+args: ["aString", "atts"],
+source: "string: aString attributes: atts\x0a\x09\x22Answer an instance of me whose characters are those of aString.\x0a\x09atts is an array of TextAttributes.\x22\x0a\x0a\x09^self string: aString runs: (RunArray new: aString size withAll: atts)",
+messageSends: ["string:runs:", "new:withAll:", "size"],
+referencedClasses: ["RunArray"]
+}),
+smalltalk.Text.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "string:emphasis:",
+category: 'instance creation',
+fn: function (aString,emphasis){
+var self=this;
+function $Halt(){return smalltalk.Halt||(typeof Halt=="undefined"?nil:Halt)}
+function $TextFontChange(){return smalltalk.TextFontChange||(typeof TextFontChange=="undefined"?nil:TextFontChange)}
+function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
+function $RunArray(){return smalltalk.RunArray||(typeof RunArray=="undefined"?nil:RunArray)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+$1=_st(emphasis)._isNumber();
+if(smalltalk.assert($1)){
+_st($Halt())._halt_("Numeric emphasis is not supported");
+$2=_st(self)._string_runs_(aString,_st($RunArray())._new_withAll_(_st(aString)._size(),_st($Array())._with_(_st(_st($TextFontChange())._new())._fontNumber_(emphasis))));
+return $2;
+};
+$3=_st(self)._string_attributes_(aString,emphasis);
+return $3;
+}, function($ctx1) {$ctx1.fill(self,"string:emphasis:",{aString:aString,emphasis:emphasis},smalltalk.Text.klass)})},
+args: ["aString", "emphasis"],
+source: "string: aString emphasis: emphasis\x0a\x09\x22This is an old method that is mainly used by old applications\x22\x0a\x0a\x09emphasis isNumber ifTrue:\x0a\x09\x09[Halt halt: 'Numeric emphasis is not supported'.\x0a\x09\x09\x22But if you proceed, we will do our best to give you what you want...\x22\x0a\x09\x09^ self string: aString runs: (RunArray new: aString size withAll: \x0a\x09\x09\x09(Array with: (TextFontChange new fontNumber: emphasis)))].\x0a\x09^ self string: aString attributes: emphasis",
+messageSends: ["ifTrue:", "halt:", "string:runs:", "new:withAll:", "size", "with:", "fontNumber:", "new", "isNumber", "string:attributes:"],
+referencedClasses: ["Halt", "TextFontChange", "Array", "RunArray"]
+}),
+smalltalk.Text.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "string:runs:",
+category: 'instance creation',
+fn: function (aString,anArray){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._basicNew())._setString_setRuns_(aString,anArray);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"string:runs:",{aString:aString,anArray:anArray},smalltalk.Text.klass)})},
+args: ["aString", "anArray"],
+source: "string: aString runs: anArray\x0a \x0a\x09^self basicNew setString: aString setRuns: anArray",
+messageSends: ["setString:setRuns:", "basicNew"],
+referencedClasses: []
+}),
+smalltalk.Text.klass);
+
+
 smalltalk.addClass('Set', smalltalk.Collection, ['elements'], 'Kernel-Collections');
 smalltalk.Set.comment="I represent an unordered set of objects without duplicates."
 smalltalk.addMethod(
@@ -6238,5 +9000,30 @@ referencedClasses: ["String"]
 }),
 smalltalk.StringStream);
 
+
+
+smalltalk.addClass('TextStream', smalltalk.StringStream, [], 'Kernel-Collections');
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "on:",
+category: 'instance creation',
+fn: function (aCollection){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=_st(self)._basicNew();
+_st($2)._setCollection_(aCollection);
+_st($2)._setStreamSize_(_st(aCollection)._size());
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"on:",{aCollection:aCollection},smalltalk.TextStream.klass)})},
+args: ["aCollection"],
+source: "on: aCollection\x0a\x09\x09^self basicNew\x0a\x09\x09setCollection: aCollection;\x0a\x09\x09setStreamSize: aCollection size;\x0a\x09\x09yourself",
+messageSends: ["setCollection:", "basicNew", "setStreamSize:", "size", "yourself"],
+referencedClasses: []
+}),
+smalltalk.TextStream.klass);
 
 

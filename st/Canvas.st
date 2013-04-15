@@ -485,6 +485,14 @@ ul: anObject
 
 video
 	^self tag: 'video'
+!
+
+workspace
+	^ root addBrush: (WorkspaceMorph canvas: self)
+!
+
+workspace: aString
+	^ self workspace with: aString; yourself
 ! !
 
 !HTMLCanvas class methodsFor: 'instance creation'!
@@ -726,6 +734,10 @@ alt: aString
 	self at: 'alt' put: aString
 !
 
+appendClass: aString
+	<self['@element'].className = self['@element'].className + ' ' + aString>
+!
+
 at: aString put: aValue
 	<self['@element'].setAttribute(aString, aValue)>
 !
@@ -744,6 +756,11 @@ contenteditable: aString
 
 contextmenu: aString
 	self at: 'contextmenu' put: aString
+!
+
+draggable
+	self appendClass: 'draggable'.
+	self element asJQuery draggable.
 !
 
 draggable: aString
@@ -1004,6 +1021,85 @@ appendToJQuery: aJQuery
 
 renderOn: html
 	self
+! !
+
+Widget subclass: #Morph
+	instanceVariableNames: 'html'
+	package: 'Canvas'!
+
+!Morph methodsFor: 'not yet classified'!
+
+addMorph: aMorph
+	self html div with: aMorph.
+!
+
+html
+	^ html
+!
+
+render
+!
+
+renderOn: phtml
+	html := phtml.
+	self render.
+! !
+
+Morph subclass: #SystemWindow
+	instanceVariableNames: ''
+	package: 'Canvas'!
+
+!SystemWindow methodsFor: 'not yet classified'!
+
+render
+	self html div 
+		with: 'Window content';
+		class: 'component window';
+		draggable.
+! !
+
+Morph subclass: #WorkspaceMorph
+	instanceVariableNames: ''
+	package: 'Canvas'!
+
+!WorkspaceMorph methodsFor: 'not yet classified'!
+
+render
+	self html div
+		id: 'workspace';
+		with: SystemWindow new.
+! !
+
+WorkspaceMorph class instanceVariableNames: 'workspace'!
+
+!WorkspaceMorph class methodsFor: 'instance creation'!
+
+canvas: aCanvas
+	^ self basicNew
+	initialize;
+	initializeFromString: 'div' canvas: aCanvas;
+	yourself
+!
+
+containerRoot
+	^ 'body' asJQuery
+!
+
+new
+	Error signal: '#new not allowed for singleton'
+!
+
+privateNew
+	^ self basicNew
+			initialize;
+			appendToJQuery: self containerRoot
+! !
+
+!WorkspaceMorph class methodsFor: 'singleton'!
+
+current
+	workspace ifNil: [workspace := self privateNew].
+	^ workspace
 ! !
 
 !Object methodsFor: '*Canvas'!

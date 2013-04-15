@@ -50,3 +50,6 @@ referencedClasses: []
 smalltalk.Ajax.klass);
 
 
+smalltalk.addClass('JQuery', smalltalk.Object, [], 'JQuery');
+
+

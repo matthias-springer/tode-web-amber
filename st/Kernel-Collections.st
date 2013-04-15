@@ -244,6 +244,93 @@ errorNotFound
 	self error: 'Object is not in the collection'
 ! !
 
+!Collection methodsFor: 'printing'!
+
+asCommaString
+	"Return collection printed as 'a, b, c' "
+
+	^String streamContents: [:s | self asStringOn: s delimiter: ', ']
+!
+
+asCommaStringAnd
+	"Return collection printed as 'a, b and c' "
+
+	^String streamContents: [:s | self asStringOn: s delimiter: ', ' last: ' and ']
+!
+
+asStringOn: aStream delimiter: delimString
+	"Print elements on a stream separated
+	with a delimiter String like: 'a, b, c'
+	Uses #asString instead of #print:."
+
+	self do: [:elem | aStream nextPutAll: elem asString]
+		separatedBy: [aStream nextPutAll: delimString]
+!
+
+asStringOn: aStream delimiter: delimString last: lastDelimString
+	"Print elements on a stream separated
+	with a delimiter between all the elements and with
+	a special one before the last like: 'a, b and c'.
+	Uses #asString instead of #print:
+
+	Note: Feel free to improve the code to detect the last element."
+
+	| n sz |
+	n := 1.
+	sz := self size.
+	self do: [:elem |
+		n := n + 1.
+		aStream nextPutAll: elem asString]
+	separatedBy: [
+		aStream nextPutAll: (n = sz ifTrue: [lastDelimString] ifFalse: [delimString])]
+!
+
+printElementsOn: aStream
+	"The original code used #skip:, but some streams do not support that,
+	 and we don't really need it."
+
+	aStream nextPut: '('.
+	self do: [:element | aStream print: element] separatedBy: [aStream space].
+	aStream nextPut: ')'
+!
+
+printNameOn: aStream
+	super printOn: aStream
+!
+
+printOn: aStream 
+	"Append a sequence of characters that identify the receiver to aStream."
+
+	self printNameOn: aStream.
+	self printElementsOn: aStream
+!
+
+printOn: aStream delimiter: delimString
+	"Print elements on a stream separated
+	with a delimiter String like: 'a, b, c' "
+
+	self do: [:elem | aStream print: elem] separatedBy: [aStream print: delimString]
+!
+
+printOn: aStream delimiter: delimString last: lastDelimString
+	"Print elements on a stream separated
+	with a delimiter between all the elements and with
+	a special one before the last like: 'a, b and c'
+
+	Note: Feel free to improve the code to detect the last element."
+
+	| n sz |
+	n := 1.
+	sz := self size.
+	self do: [:elem |
+		n := n + 1.
+		aStream print: elem]
+	separatedBy: [
+		n = sz
+			ifTrue: [aStream print: lastDelimString]
+			ifFalse: [aStream print: delimString]]
+! !
+
 !Collection methodsFor: 'ston-core'!
 
 stonOn: stonWriter
@@ -1668,6 +1755,995 @@ randomNotIn: aString
     ^result
 ! !
 
+SequenceableCollection subclass: #RunArray
+	instanceVariableNames: 'runs values lastIndex lastRun lastOffset'
+	package: 'Kernel-Collections'!
+
+!RunArray methodsFor: 'accessing'!
+
+at: index
+
+	self at: index setRunOffsetAndValue: [:run :offset :value | ^value]
+!
+
+at: index put: aValue 
+	"Set an element of the RunArray"
+	| runIndex offsetInRun lastValue runLength runReplacement valueReplacement iStart iStop |
+	index isInteger
+		ifFalse: [self errorNonIntegerIndex].
+	(index >= 1 and: [index <= self size])
+		ifFalse: [self errorSubscriptBounds: index].
+	self
+		at: index
+		setRunOffsetAndValue: [:run :offset :value | 
+			runIndex := run.
+			offsetInRun := offset.
+			lastValue := value].
+	aValue = lastValue
+		ifTrue: [^ aValue].
+	runLength := runs at: runIndex.
+	runReplacement := Array
+				with: offsetInRun
+				with: 1
+				with: runLength - offsetInRun - 1.
+	valueReplacement := Array
+				with: lastValue
+				with: aValue
+				with: lastValue.
+	iStart := offsetInRun = 0
+				ifTrue: [2]
+				ifFalse: [1].
+	iStop := offsetInRun = (runLength - 1)
+				ifTrue: [2]
+				ifFalse: [3].
+	self
+		setRuns: (runs copyReplaceFrom: runIndex to: runIndex with: (runReplacement copyFrom: iStart to: iStop))
+		setValues: (values copyReplaceFrom: runIndex to: runIndex with: (valueReplacement copyFrom: iStart to: iStop)).
+	self coalesce.
+	^ aValue
+!
+
+first
+	^values at: 1
+!
+
+last
+	^values at: values size
+!
+
+runLengthAt: index 
+	"Answer the length remaining in run beginning at index."
+
+	self at: index 
+		setRunOffsetAndValue: [:run :offset :value | ^(runs at: run) - offset]
+!
+
+size
+	| size |
+	size := 0.
+	1 to: runs size do: [:i | size := size + (runs at: i)].
+	^size
+!
+
+withStartStopAndValueDo: aBlock
+	| start |
+	start := 1.
+	runs with: values do:
+		[:len : val | | stop |
+		stop := start + len - 1.
+		aBlock value: start value: stop value: val.
+		start := stop + 1]
+! !
+
+!RunArray methodsFor: 'adding'!
+
+add: newObject withOccurrences: anInteger
+	"Add value as the last element of the receiver, the given number of times"
+	anInteger <= 0 ifTrue: [ ^self ].
+	lastIndex := nil. "flush access cache"
+	(runs size=0 or: [values last ~= newObject])
+		ifTrue:
+			[runs := runs copyWith: anInteger.
+			values := values copyWith: newObject]
+		ifFalse:
+			[runs at: runs size put: runs last + anInteger]
+!
+
+addFirst: value
+	"Add value as the first element of the receiver."
+	lastIndex := nil. "flush access cache"
+	(runs size=0 or: [values first ~= value])
+		ifTrue:
+			[runs := {1}, runs.
+			values := {value}, values]
+		ifFalse:
+			[runs at: 1 put: runs first+1]
+!
+
+addLast: value
+	"Add value as the last element of the receiver."
+	lastIndex := nil. "flush access cache"
+	(runs size=0 or: [values last ~= value])
+		ifTrue:
+			[runs := runs copyWith: 1.
+			values := values copyWith: value]
+		ifFalse:
+			[runs at: runs size put: runs last+1].
+	^value
+!
+
+coalesce
+	"Try to combine adjacent runs"
+	| ind |
+	ind := 2.
+	[ind > values size] whileFalse: [
+		(values at: ind-1) = (values at: ind) 
+			ifFalse: [ind := ind + 1]
+			ifTrue: ["two are the same, combine them"
+				values := values copyReplaceFrom: ind to: ind with: #().
+				runs at: ind-1 put: (runs at: ind-1) + (runs at: ind).
+				runs := runs copyReplaceFrom: ind to: ind with: #().
+				"self error: 'needed to combine runs' "]].
+!
+
+rangeOf: attr startingAt: startPos
+	"Answer an interval that gives the range of attr at index position startPos. An empty interval with start value startPos is returned when the attribute attr is not present at position startPos. self size > 0 is assumed, it is the responsibility of the caller to test for emptiness of self.
+Note that an attribute may span several adjancent runs. "
+
+	self at: startPos 
+		setRunOffsetAndValue: 
+			[:run :offset :value | 
+			^(value includes: attr)
+				ifFalse: [startPos to: startPos - 1]
+				ifTrue:
+					[ | firstRelevantPosition lastRelevantPosition idxOfCandidateRun |
+					lastRelevantPosition := startPos - offset + (runs at: run) - 1.
+					firstRelevantPosition := startPos - offset.
+					idxOfCandidateRun := run + 1.
+					[idxOfCandidateRun <= runs size 
+							 and: [(values at: idxOfCandidateRun) includes: attr]]
+						whileTrue:
+							[lastRelevantPosition := lastRelevantPosition + (runs at: idxOfCandidateRun).
+							idxOfCandidateRun := idxOfCandidateRun + 1]. 
+					idxOfCandidateRun := run - 1.
+					[idxOfCandidateRun >= 1 
+							 and: [(values at: idxOfCandidateRun) includes: attr]]
+						whileTrue:
+							[firstRelevantPosition := firstRelevantPosition - (runs at: idxOfCandidateRun).
+							idxOfCandidateRun := idxOfCandidateRun - 1]. 
+ 
+					firstRelevantPosition to: lastRelevantPosition]]
+!
+
+repeatLast: times ifEmpty: defaultBlock
+	"add the last value back again, the given number of times. If we are empty, add (defaultBlock value)"
+	times = 0 ifTrue: [^self ].
+	lastIndex := nil. "flush access cache"
+	(runs size=0)
+		ifTrue:
+			[runs := runs copyWith: times.
+			values := values copyWith: defaultBlock value]
+		ifFalse:
+			[runs at: runs size put: runs last+times]
+!
+
+repeatLastIfEmpty: defaultBlock
+	"add the last value back again. If we are empty, add (defaultBlock value)"
+	lastIndex := nil. "flush access cache"
+	(runs size=0)
+		ifTrue:[
+			runs := runs copyWith: 1.
+			values := values copyWith: defaultBlock value]
+		ifFalse:
+			[runs at: runs size put: runs last+1]
+! !
+
+!RunArray methodsFor: 'comparing'!
+
+= otherArray 
+	"Test if all my elements are equal to those of otherArray"
+
+	self == otherArray ifTrue: [^true].
+	self species == otherArray species ifFalse: [^ false].
+	(otherArray isMemberOf: RunArray) ifFalse: [^ self hasEqualElements: otherArray].
+
+	"Faster test between two RunArrays"
+	^ (runs hasEqualElements: otherArray runs)
+		and: [values hasEqualElements: otherArray values]
+! !
+
+!RunArray methodsFor: 'copying'!
+
+, aRunArray 
+	"Answer a new RunArray that is a concatenation of the receiver and
+	aRunArray."
+
+	| new newRuns |
+	(aRunArray isMemberOf: RunArray)
+		ifFalse: 
+			[new := self copy.
+			"attempt to be sociable"
+			aRunArray do: [:each | new addLast: each].
+			^new].
+	runs size = 0 ifTrue: [^aRunArray copy].
+	aRunArray runs size = 0 ifTrue: [^self copy].
+	(values at: values size) ~= (aRunArray values at: 1)
+		ifTrue: [^RunArray
+					runs: runs , aRunArray runs
+					values: values , aRunArray values].
+	newRuns := runs
+			copyReplaceFrom: runs size
+			to: runs size
+			with: aRunArray runs.
+	newRuns at: runs size put: (runs at: runs size) + (aRunArray runs at: 1).
+	^RunArray
+		runs: newRuns
+		values: 
+			(values
+				copyReplaceFrom: values size
+				to: values size
+				with: aRunArray values)
+!
+
+copyFrom: start to: stop
+	| newRuns run1 run2 offset1 offset2 | 
+	stop < start ifTrue: [^RunArray new].
+	self at: start setRunOffsetAndValue: [:r :o :value1 | run1 := r. offset1 := o. value1].
+	self at: stop setRunOffsetAndValue: [:r :o :value2 | run2 := r. offset2 := o. value2].
+	run1 = run2
+		ifTrue: 
+			[newRuns := Array with: offset2 - offset1 + 1]
+		ifFalse: 
+			[newRuns := runs copyFrom: run1 to: run2.
+			newRuns at: 1 put: (newRuns at: 1) - offset1.
+			newRuns at: newRuns size put: offset2 + 1].
+	^RunArray runs: newRuns values: (values copyFrom: run1 to: run2)
+!
+
+copyReplaceFrom: start to: stop with: replacement
+
+	^(self copyFrom: 1 to: start - 1)
+		, replacement 
+		, (self copyFrom: stop + 1 to: self size)
+!
+
+copyUpThrough: anElement
+	"Optimized"
+
+	| newValues |
+	newValues := values copyUpThrough: anElement.
+	^ self class
+		runs: (runs copyFrom: 1 to: newValues size)
+		values: newValues
+!
+
+copyUpTo: anElement 
+	"Optimized"
+
+	| newValues |
+	newValues := values copyUpTo: anElement.
+	^ self class
+		runs: (runs copyFrom: 1 to: newValues size)
+		values: newValues
+!
+
+copyUpToLast: anElement
+	"Optimized"
+
+	| newValues |
+	newValues := values copyUpToLast: anElement.
+	^ self class
+		runs: (runs copyFrom: 1 to: newValues size)
+		values: newValues
+!
+
+postCopy
+	super postCopy.
+	runs := runs copy.
+	values := values copy
+! !
+
+!RunArray methodsFor: 'enumerating'!
+
+allSatisfy: aBlock 
+	"Only evaluate once per run"
+
+	^values allSatisfy: aBlock
+!
+
+anySatisfy: aBlock 
+	"Only evaluate once per run"
+
+	^values anySatisfy: aBlock
+!
+
+collect: aBlock
+	"Beware, the block will be evaluated only once per group of values."
+	^(self class runs: runs copy contents values: (values collect: aBlock)) coalesce
+!
+
+count: aBlock
+	"Beware, the block will be evaluated only once per group of values."
+	| count |
+	count := 0.
+	self runsAndValuesDo: [:run :value |
+		(aBlock value: value)
+			ifTrue:
+				[count := count + run]].
+	^count
+!
+
+detect: aBlock ifNone: exceptionBlock 
+	"Only evaluate once per run"
+
+	^values detect: aBlock ifNone: exceptionBlock
+!
+
+detectMax: aBlock
+	"Only evaluate once per run"
+
+	^values detectMax: aBlock
+!
+
+detectMin: aBlock
+	"Only evaluate once per run"
+
+	^values detectMin: aBlock
+!
+
+detectSum: aBlock
+	"Only loop on runs"
+	| sum |
+	sum := 0.
+	self runsAndValuesDo: [:run :value | 
+		sum := (aBlock value: value) * run + sum].
+	^ sum
+!
+
+do: aBlock
+	"This is refined for speed"
+	
+	1 to: runs size do: [:i |
+		| r v |
+		v := values at: i.
+		r := runs at: i.
+		[( r := r - 1) >= 0]
+			whileTrue: [aBlock value: v]].
+!
+
+findFirst: aBlock
+	| index |
+	index := 1.
+	self runsAndValuesDo: [ :run :value |
+		(aBlock value: value) ifTrue: [^index].
+		index := index + run].
+	^0
+!
+
+findLast: aBlock
+	| index |
+	index := values size + 1.
+	[(index := index - 1) >= 1] whileTrue:
+		[(aBlock value: (values at: index)) ifTrue: [^(1 to: index) detectSum: [:i | runs at: i]]].
+	^0
+!
+
+noneSatisfy: aBlock 
+	"Only evaluate once per run"
+
+	^values noneSatisfy: aBlock
+!
+
+replace: aBlock
+	"Beware, the block will be evaluated only once per group of values."
+	values := values replace: aBlock.
+	self coalesce
+!
+
+reverseDo: aBlock
+	"This is refined for speed"
+	
+	| i |
+	i := runs size.
+	[i > 0]
+		whileTrue: 
+			[ | r v |
+			v := values at: i.
+			r := runs at: i.
+			i := i - 1.
+			[( r := r - 1) >= 0]
+				whileTrue: [aBlock value: v]].
+!
+
+runsAndValuesDo: aBlock
+	"Evaluate aBlock with run lengths and values from the receiver"
+	^runs with: values do: aBlock.
+!
+
+runsFrom: start to: stop do: aBlock
+	"Evaluate aBlock with all existing runs in the range from start to stop"
+	start > stop ifTrue:[^self].
+	self at: start setRunOffsetAndValue:[:firstRun :offset :firstValue|
+		| run value index |
+		run := firstRun.
+		value := firstValue.
+		index := start + (runs at: run) - offset.
+		[aBlock value: value.
+		index <= stop] whileTrue:[
+			run := run + 1.
+			value := values at: run.
+			index := index + (runs at: run)]].
+!
+
+select: aBlock
+	"Beware, the block will be evaluated only once per group of values."
+	| newRuns newValues |
+	newRuns := (Array new: runs size) writeStream.
+	newValues := (Array new: values size) writeStream.
+	self runsAndValuesDo: [:run :value |
+		(aBlock value: value)
+			ifTrue:
+				[newRuns add: run.
+				newValues add: value]].
+	^(self class runs: newRuns contents values: newValues contents) coalesce
+! !
+
+!RunArray methodsFor: 'printing'!
+
+printOn: aStream
+	self printNameOn: aStream.
+	aStream
+		nextPutAll: ' runs: ';
+		print: runs;
+		nextPutAll: ' values: ';
+		print: values
+!
+
+storeOn: aStream
+
+	aStream nextPut: '('.
+	aStream nextPutAll: self class name.
+	aStream nextPutAll: ' runs: '.
+	runs storeOn: aStream.
+	aStream nextPutAll: ' values: '.
+	values storeOn: aStream.
+	aStream nextPut: ')'
+!
+
+writeOn: aStream
+
+	aStream nextWordPut: runs size.
+	1 to: runs size do:
+		[:x |
+		aStream nextWordPut: (runs at: x).
+		aStream nextWordPut: (values at: x)]
+!
+
+writeScanOn: strm
+	"Write out the format used for text runs in source files. (14 50 312)f1,f1b,f1LInteger +;i"
+
+	strm nextPut: '('.
+	runs do: [:rr | rr printOn: strm. strm space].
+	strm skip: -1; nextPut: ')'.
+	values do: [:vv |
+		vv do: [:att | att writeScanOn: strm].
+		strm nextPut: ','].
+	strm skip: -1. "trailing comma"
+! !
+
+!RunArray methodsFor: 'private'!
+
+at: index setRunOffsetAndValue: aBlock 
+	"Supply all run information to aBlock."
+	"Tolerates index=0 and index=size+1 for copyReplace: "
+	| run limit offset |
+	limit := runs size.
+	(lastIndex == nil or: [index < lastIndex])
+		ifTrue: "cache not loaded, or beyond index - start over"
+			[run := 1.
+			offset := index-1]
+		ifFalse: "cache loaded and before index - start at cache"
+			[run := lastRun.
+			offset := lastOffset + (index-lastIndex)].
+	[run <= limit and: [offset >= (runs at: run)]]
+		whileTrue: 
+			[offset := offset - (runs at: run).
+			run := run + 1].
+	lastIndex := index. "Load cache for next access"
+	lastRun := run.
+	lastOffset := offset.
+	run > limit
+		ifTrue: 
+			["adjustment for size+1"
+			run := run - 1.
+			offset := offset + (runs at: run)].
+	^aBlock
+		value: run "an index into runs and values"
+		value: offset "zero-based offset from beginning of this run"
+		value: (values at: run) "value for this run"
+!
+
+fillFrom: aCollection with: aBlock
+	"Evaluate aBlock with each of aCollection's elements as the argument.
+	Collect the resulting values into self. Answer self."
+
+	| newRuns newValues lastLength lastValue |
+	newRuns := (Array new: aCollection size) writeStream.
+	newValues := (Array new: aCollection size) writeStream.
+	lastLength := 0.
+	lastValue := Object new.
+	aCollection do: [:each | 
+		| value |
+		value := aBlock value: each.
+		lastValue = value
+			ifTrue: [lastLength := lastLength + 1]
+			ifFalse:
+				[lastLength > 0
+					ifTrue:
+						[newRuns nextPut: lastLength.
+						newValues nextPut: lastValue].
+				lastLength := 1.
+				lastValue := value]].
+	lastLength > 0
+		ifTrue:
+			[newRuns nextPut: lastLength.
+			newValues nextPut: lastValue].
+	self setRuns: newRuns contents setValues: newValues contents
+!
+
+mapValues: mapBlock
+	"NOTE: only meaningful to an entire set of runs"
+
+	values := values collect: mapBlock
+!
+
+runs
+
+	^runs
+!
+
+setRuns: newRuns setValues: newValues
+	lastIndex := nil. "flush access cache"
+	runs := newRuns asArray.
+	values := newValues asArray.
+!
+
+values
+	"Answer the values in the receiver."
+
+	^values
+! !
+
+!RunArray methodsFor: 'removing'!
+
+remove: anObject ifAbsent: exceptionBlock
+	| index mustCoalesce run |
+	index := values indexOf: anObject ifAbsent: [^exceptionBlock value].
+	(run := runs at: index) > 1
+		ifTrue: [runs at: index put: run - 1]
+		ifFalse:
+			[mustCoalesce := index > 1 and: [index < values size and: [(values at: index - 1) = (values at: index + 1)]].
+			runs := runs copyWithoutIndex: index.
+			values := values copyWithoutIndex: index.
+			mustCoalesce
+				ifTrue:
+					[runs at: index - 1 put: (runs at: index - 1) + (runs at: index).
+					runs := runs copyWithoutIndex: index.
+					values := values copyWithoutIndex: index]].
+	^anObject
+!
+
+removeAll
+	runs := Array new.
+	values := Array new
+! !
+
+!RunArray methodsFor: 'testing'!
+
+includes: anObject
+	"Answer whether anObject is one of the receiver's elements."
+
+	^values includes: anObject
+!
+
+isSorted
+	^values isSorted
+!
+
+isSortedBy: aBlock
+	^values isSortedBy: aBlock
+! !
+
+!RunArray methodsFor: 'topez-common-core'!
+
+fromSton: stonReader
+    stonReader parseMapDo: [ :instVarName :value | self instVarNamed: instVarName put: value ]
+!
+
+stonOn: stonWriter
+    "workaround for https://github.com/svenvc/ston/issues/4"
+
+    stonWriter
+        writeObject: self
+        streamMap: [ :dictionary | self class allInstVarNames do: [ :each | dictionary at: each asSymbol put: (self instVarNamed: each) ] ]
+! !
+
+!RunArray class methodsFor: 'instance creation'!
+
+new
+
+	^self runs: Array new values: Array new
+!
+
+new: aSize
+	^ self new: aSize withAll: nil
+!
+
+new: size withAll: value 
+	"Answer a new instance of me, whose every element is equal to the
+	argument, value."
+
+	size = 0 ifTrue: [^self new].
+	^self runs: (Array with: size) values: (Array with: value)
+!
+
+newFrom: aCollection 
+	"Answer an instance of me containing the same elements as aCollection."
+
+	| vruns vvalues vlastRun lastValue |
+	vruns := (Array new: aCollection size // 2) writeStream.
+	vvalues := (Array new: aCollection size // 2) writeStream.
+	vlastRun := 0.
+	lastValue := Object new.
+	aCollection do: [:x | 
+		lastValue = x
+			ifTrue: [vlastRun := vlastRun + 1]
+			ifFalse:
+				[vlastRun > 0
+					ifTrue:
+						[vruns nextPut: vlastRun.
+						vvalues nextPut: lastValue].
+				vlastRun := 1.
+				lastValue := x]].
+	vlastRun > 0
+		ifTrue:
+			[vruns nextPut: vlastRun.
+			vvalues nextPut: lastValue].
+	^self basicNew setRuns: vruns contents setValues: vvalues contents
+
+"	RunArray newFrom: {1. 2. 2. 3}
+	{1. $a. $a. 3} as: RunArray
+	({1. $a. $a. 3} as: RunArray) values
+"
+!
+
+readFrom: aStream
+	"Answer an instance of me as described on the stream, aStream."
+
+	| size vruns vvalues |
+	size := aStream nextWord.
+	vruns := Array new: size.
+	vvalues := Array new: size.
+	1 to: size do:
+		[:x |
+		vruns at: x put: aStream nextWord.
+		vvalues at: x put: aStream nextWord].
+	^ self runs: vruns values: vvalues
+!
+
+runs: newRuns values: newValues 
+	"Answer an instance of me with runs and values specified by the 
+	arguments."
+
+	| instance |
+	instance := self basicNew.
+	instance setRuns: newRuns setValues: newValues.
+	^instance
+! !
+
+!RunArray class methodsFor: 'topez-common-core'!
+
+fromSton: stonReader
+    "workaround for https://github.com/svenvc/ston/issues/4"
+
+    ^ self new
+        fromSton: stonReader;
+        yourself
+! !
+
+SequenceableCollection subclass: #Text
+	instanceVariableNames: 'string runs'
+	package: 'Kernel-Collections'!
+
+!Text methodsFor: 'accessing'!
+
+append: stringOrText
+
+	self replaceFrom: string size + 1
+				to: string size with: stringOrText
+!
+
+at: index
+
+	^string at: index
+!
+
+at: index put: character
+
+	^string at: index put: character
+!
+
+findString: aString startingAt: start 
+	"Answer the index of subString within the receiver, starting at index 
+	start. If the receiver does not contain subString, answer 0."
+
+	^string findString: aString asString startingAt: start
+!
+
+findString: aString startingAt: start caseSensitive: caseSensitive
+	"Answer the index of subString within the receiver, starting at index 
+	start. If the receiver does not contain subString, answer 0."
+
+	^string findString: aString asString startingAt: start caseSensitive: caseSensitive
+!
+
+initialStyle
+	^TextStyle default
+!
+
+lineCount
+
+	^ string lineCount
+!
+
+prepend: stringOrText
+
+	self replaceFrom: 1 to: 0 with: stringOrText
+!
+
+rangeOf: attribute startingAt: index
+"Answer an interval that gives the range of attribute at index position  index. An empty interval with start value index is returned when the attribute is not present at position index.  "
+   ^string size = 0
+      ifTrue: [index to: index - 1]
+	 ifFalse: [runs rangeOf: attribute startingAt: index]
+!
+
+replaceFrom: start to: stop with: aText
+
+	| txt |
+	txt := aText asText.	"might be a string"
+	string := string copyReplaceFrom: start to: stop with: txt string.
+	runs := runs copyReplaceFrom: start to: stop with: txt runs
+!
+
+runs: anArray
+	anArray size = string size
+		ifFalse:
+			[^self error: 'Some code is setting text attributes length not matching the string size'].
+	runs := anArray
+!
+
+size
+
+	^string size
+! !
+
+!Text methodsFor: 'comparing'!
+
+= other
+	"Am I equal to the other Text or String?  
+	***** Warning ***** Two Texts are considered equal if they have the same characters in them.  They might have completely different emphasis, fonts, sizes, text actions, or embedded morphs.  If you need to find out if one is a true copy of the other, you must do (text1 = text2 and: [text1 runs = text2 runs])."
+
+	other isText ifTrue:	["This is designed to run fast even for megabytes"
+				^ string == other string or: [string = other string]].
+	other isString ifTrue: [^ string == other or: [string = other]].
+	^ false
+!
+
+howManyMatch: aString
+
+	^ self string howManyMatch: aString
+!
+
+isText
+	^ true
+!
+
+string
+	"Answer the string representation of the receiver."
+
+	^string
+! !
+
+!Text methodsFor: 'converting'!
+
+asNumber
+	"Answer the number created by interpreting the receiver as the textual 
+	representation of a number."
+
+	^string asNumber
+!
+
+asString
+	"Answer a String representation of the textual receiver."
+
+	^string
+!
+
+asStringOrText	
+	"Answer the receiver itself."
+
+	^self
+!
+
+asText	
+	"Answer the receiver itself."
+
+	^self
+!
+
+replaceFrom: start to: stop with: replacement startingAt: repStart 
+ 	"This destructively replaces elements from start to stop in the receiver starting at index, repStart, in replacementCollection. Do it to both the string and the runs."
+ 
+ 	| rep newRepRuns |
+ 	rep := replacement asText.	"might be a string"
+ 	string replaceFrom: start to: stop with: rep string startingAt: repStart.
+ 	newRepRuns := rep runs copyFrom: repStart to: repStart + stop - start.
+	runs := runs copyReplaceFrom: start to: stop with: newRepRuns
+! !
+
+!Text methodsFor: 'copying'!
+
+copyFrom: start to: stop 
+	"Answer a copied subrange of the receiver."
+
+	| realStart realStop |
+	stop > self size
+		ifTrue: [realStop := self size]		"handle selection at end of string"
+		ifFalse: [realStop := stop].
+	start < 1
+		ifTrue: [realStart := 1]			"handle selection before start of string"
+		ifFalse: [realStart := start].
+	^self class 
+		string: (string copyFrom: realStart to: realStop)
+		runs: (runs copyFrom: realStart to: realStop)
+!
+
+copyReplaceFrom: start to: stop with: aTextOrString
+
+	| txt |
+	txt := aTextOrString asText.	"might be a string"
+	^self class 
+             string: (string copyReplaceFrom: start to: stop with: txt string)
+             runs: (runs copyReplaceFrom: start to: stop with: txt runs)
+!
+
+copyReplaceTokens: oldSubstring with: newSubstring 
+	"Replace all occurrences of oldSubstring that are surrounded
+	by non-alphanumeric characters"
+	^ self copyReplaceAll: oldSubstring with: newSubstring asTokens: true
+	"'File asFile Files File''s File' copyReplaceTokens: 'File' with: 'Snick'"
+!
+
+deepCopy
+
+	^ self copy "Both string and runs are assumed to be read-only"
+!
+
+postCopy
+	super postCopy.
+	string := string copy.
+	runs := runs copy
+! !
+
+!Text methodsFor: 'printing'!
+
+printOn: aStream
+	self printNameOn: aStream.
+	aStream nextPutAll: ' for '; print: string
+!
+
+storeOn: aStream
+
+	aStream nextPutAll: '(Text string: ';
+		store: string;
+		nextPutAll: ' runs: ';
+		store: runs;
+		nextPut: ')'
+! !
+
+!Text methodsFor: 'private'!
+
+runs
+
+	^runs
+!
+
+setString: aString setRuns: anArray
+
+	string := aString.
+	runs := anArray
+!
+
+setString: aString setRunsChecking: aRunArray
+	"Check runs and do the best you can to make them fit..."
+
+	string := aString.
+	"check the runs"
+	aRunArray ifNil: [^ aString asText].
+	(aRunArray isKindOf: RunArray) ifFalse: [^ aString asText].
+	aRunArray runs size = aRunArray values size ifFalse: [^ aString asText].
+	aRunArray size = aString size ifFalse: [^ aString asText].
+	
+	runs := aRunArray.
+! !
+
+!Text class methodsFor: 'instance creation'!
+
+fromString: aString 
+  "Answer an instance of me whose characters are those of the argument, aString."
+  "TODO: font style"
+  ^ self
+    string: aString
+    attributes:{}
+!
+
+new
+	^ self new: 0
+!
+
+new: stringSize
+
+	^self fromString: (String new: stringSize)
+!
+
+streamContents: blockWithArg 
+	| stream |
+	stream := TextStream on: (self new: 400).
+	blockWithArg value: stream.
+	^ stream contents
+!
+
+string: aString attribute: att
+	"Answer an instance of me whose characters are aString.
+	att is a TextAttribute."
+
+	^self string: aString attributes: (Array with: att)
+!
+
+string: aString attributes: atts
+	"Answer an instance of me whose characters are those of aString.
+	atts is an array of TextAttributes."
+
+	^self string: aString runs: (RunArray new: aString size withAll: atts)
+!
+
+string: aString emphasis: emphasis
+	"This is an old method that is mainly used by old applications"
+
+	emphasis isNumber ifTrue:
+		[Halt halt: 'Numeric emphasis is not supported'.
+		"But if you proceed, we will do our best to give you what you want..."
+		^ self string: aString runs: (RunArray new: aString size withAll: 
+			(Array with: (TextFontChange new fontNumber: emphasis)))].
+	^ self string: aString attributes: emphasis
+!
+
+string: aString runs: anArray
+ 
+	^self basicNew setString: aString setRuns: anArray
+! !
+
+!Text class methodsFor: 'topez-common-core'!
+
+fromSton: stonReader
+    "workaround for https://github.com/svenvc/ston/issues/4"
+
+    ^ self new
+        fromSton: stonReader;
+        yourself
+! !
+
 Collection subclass: #Set
 	instanceVariableNames: 'elements'
 	package: 'Kernel-Collections'!
@@ -2060,5 +3136,18 @@ space
 
 tab
 	^self nextPutAll: String tab
+! !
+
+StringStream subclass: #TextStream
+	instanceVariableNames: ''
+	package: 'Kernel-Collections'!
+
+!TextStream class methodsFor: 'instance creation'!
+
+on: aCollection
+		^self basicNew
+		setCollection: aCollection;
+		setStreamSize: aCollection size;
+		yourself
 ! !
 

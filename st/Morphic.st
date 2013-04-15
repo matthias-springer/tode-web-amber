@@ -1,0 +1,1 @@
+Smalltalk current createPackage: 'Morphic'!

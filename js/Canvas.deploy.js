@@ -1506,6 +1506,36 @@ return $1;
 messageSends: ["with:", "root"]}),
 smalltalk.HTMLCanvas);
 
+smalltalk.addMethod(
+smalltalk.method({
+selector: "workspace",
+fn: function (){
+var self=this;
+function $WorkspaceMorph(){return smalltalk.WorkspaceMorph||(typeof WorkspaceMorph=="undefined"?nil:WorkspaceMorph)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@root"])._addBrush_(_st($WorkspaceMorph())._canvas_(self));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"workspace",{},smalltalk.HTMLCanvas)})},
+messageSends: ["addBrush:", "canvas:"]}),
+smalltalk.HTMLCanvas);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "workspace:",
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=_st(self)._workspace();
+_st($2)._with_(aString);
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"workspace:",{aString:aString},smalltalk.HTMLCanvas)})},
+messageSends: ["with:", "workspace", "yourself"]}),
+smalltalk.HTMLCanvas);
+
 
 smalltalk.addMethod(
 smalltalk.method({
@@ -1881,6 +1911,17 @@ smalltalk.TagBrush);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "appendClass:",
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self['@element'].className = self['@element'].className + ' ' + aString;
+return self}, function($ctx1) {$ctx1.fill(self,"appendClass:",{aString:aString},smalltalk.TagBrush)})},
+messageSends: []}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "appendString:",
 fn: function (aString){
 var self=this;
@@ -2003,6 +2044,18 @@ return smalltalk.withContext(function($ctx1) {
 return document.createTextNode(String(aString));
 return self}, function($ctx1) {$ctx1.fill(self,"createTextNodeFor:",{aString:aString},smalltalk.TagBrush)})},
 messageSends: []}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "draggable",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._appendClass_("draggable");
+_st(_st(_st(self)._element())._asJQuery())._draggable();
+return self}, function($ctx1) {$ctx1.fill(self,"draggable",{},smalltalk.TagBrush)})},
+messageSends: ["appendClass:", "draggable", "asJQuery", "element"]}),
 smalltalk.TagBrush);
 
 smalltalk.addMethod(
@@ -2642,6 +2695,170 @@ return self}, function($ctx1) {$ctx1.fill(self,"renderOn:",{html:html},smalltalk
 messageSends: []}),
 smalltalk.Widget);
 
+
+
+smalltalk.addClass('Morph', smalltalk.Widget, ['html'], 'Canvas');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "addMorph:",
+fn: function (aMorph){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(_st(self)._html())._div())._with_(aMorph);
+return self}, function($ctx1) {$ctx1.fill(self,"addMorph:",{aMorph:aMorph},smalltalk.Morph)})},
+messageSends: ["with:", "div", "html"]}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "html",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@html"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"html",{},smalltalk.Morph)})},
+messageSends: []}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "render",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"render",{},smalltalk.Morph)})},
+messageSends: []}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "renderOn:",
+fn: function (phtml){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@html"]=phtml;
+_st(self)._render();
+return self}, function($ctx1) {$ctx1.fill(self,"renderOn:",{phtml:phtml},smalltalk.Morph)})},
+messageSends: ["render"]}),
+smalltalk.Morph);
+
+
+
+smalltalk.addClass('SystemWindow', smalltalk.Morph, [], 'Canvas');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "render",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(_st(self)._html())._div();
+_st($1)._with_("Window content");
+_st($1)._class_("component window");
+$2=_st($1)._draggable();
+return self}, function($ctx1) {$ctx1.fill(self,"render",{},smalltalk.SystemWindow)})},
+messageSends: ["with:", "div", "html", "class:", "draggable"]}),
+smalltalk.SystemWindow);
+
+
+
+smalltalk.addClass('WorkspaceMorph', smalltalk.Morph, [], 'Canvas');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "render",
+fn: function (){
+var self=this;
+function $SystemWindow(){return smalltalk.SystemWindow||(typeof SystemWindow=="undefined"?nil:SystemWindow)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(_st(self)._html())._div();
+_st($1)._id_("workspace");
+$2=_st($1)._with_(_st($SystemWindow())._new());
+return self}, function($ctx1) {$ctx1.fill(self,"render",{},smalltalk.WorkspaceMorph)})},
+messageSends: ["id:", "div", "html", "with:", "new"]}),
+smalltalk.WorkspaceMorph);
+
+
+smalltalk.WorkspaceMorph.klass.iVarNames = ['workspace'];
+smalltalk.addMethod(
+smalltalk.method({
+selector: "canvas:",
+fn: function (aCanvas){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=_st(self)._basicNew();
+_st($2)._initialize();
+_st($2)._initializeFromString_canvas_("div",aCanvas);
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"canvas:",{aCanvas:aCanvas},smalltalk.WorkspaceMorph.klass)})},
+messageSends: ["initialize", "basicNew", "initializeFromString:canvas:", "yourself"]}),
+smalltalk.WorkspaceMorph.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "containerRoot",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st("body")._asJQuery();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"containerRoot",{},smalltalk.WorkspaceMorph.klass)})},
+messageSends: ["asJQuery"]}),
+smalltalk.WorkspaceMorph.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "current",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=self["@workspace"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@workspace"]=_st(self)._privateNew();
+self["@workspace"];
+} else {
+$1;
+};
+$2=self["@workspace"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"current",{},smalltalk.WorkspaceMorph.klass)})},
+messageSends: ["ifNil:", "privateNew"]}),
+smalltalk.WorkspaceMorph.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "new",
+fn: function (){
+var self=this;
+function $Error(){return smalltalk.Error||(typeof Error=="undefined"?nil:Error)}
+return smalltalk.withContext(function($ctx1) { 
+_st($Error())._signal_("#new not allowed for singleton");
+return self}, function($ctx1) {$ctx1.fill(self,"new",{},smalltalk.WorkspaceMorph.klass)})},
+messageSends: ["signal:"]}),
+smalltalk.WorkspaceMorph.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "privateNew",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=_st(self)._basicNew();
+_st($2)._initialize();
+$3=_st($2)._appendToJQuery_(_st(self)._containerRoot());
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"privateNew",{},smalltalk.WorkspaceMorph.klass)})},
+messageSends: ["initialize", "basicNew", "appendToJQuery:", "containerRoot"]}),
+smalltalk.WorkspaceMorph.klass);
 
 
 smalltalk.addMethod(
