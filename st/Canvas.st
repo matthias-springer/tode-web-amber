@@ -1526,7 +1526,8 @@ textareaPadding
 
 render: container with: html
 	container  
-		with: [textarea := html textarea].
+		with: [textarea := html textarea
+			style: 'resize: none;'].
 ! !
 
 !PluggableTextMorph class methodsFor: 'instance creation'!
@@ -1617,7 +1618,7 @@ titleBarHeight
 contentExtent
 	^ Point
 		x: self width - self padding
-		y: self height - self fullTitleBarHeight - (self padding * 3) - 35.
+		y: self height - self fullTitleBarHeight - (self padding * 3) - 34.
 !
 
 contentOrigin

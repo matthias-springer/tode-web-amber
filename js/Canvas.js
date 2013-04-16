@@ -5267,13 +5267,13 @@ var self=this;
 return smalltalk.withContext(function($ctx1) { 
 _st(container)._with_((function(){
 return smalltalk.withContext(function($ctx2) {
-self["@textarea"]=_st(html)._textarea();
+self["@textarea"]=_st(_st(html)._textarea())._style_("resize: none;");
 return self["@textarea"];
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"render:with:",{container:container,html:html},smalltalk.PluggableTextMorph)})},
 args: ["container", "html"],
-source: "render: container with: html\x0a\x09container  \x0a\x09\x09with: [textarea := html textarea].",
-messageSends: ["with:", "textarea"],
+source: "render: container with: html\x0a\x09container  \x0a\x09\x09with: [textarea := html textarea\x0a\x09\x09\x09style: 'resize: none;'].",
+messageSends: ["with:", "style:", "textarea"],
 referencedClasses: []
 }),
 smalltalk.PluggableTextMorph);
@@ -5561,11 +5561,11 @@ var self=this;
 function $Point(){return smalltalk.Point||(typeof Point=="undefined"?nil:Point)}
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=_st($Point())._x_y_(_st(_st(self)._width()).__minus(_st(self)._padding()),_st(_st(_st(_st(self)._height()).__minus(_st(self)._fullTitleBarHeight())).__minus(_st(_st(self)._padding()).__star((3)))).__minus((35)));
+$1=_st($Point())._x_y_(_st(_st(self)._width()).__minus(_st(self)._padding()),_st(_st(_st(_st(self)._height()).__minus(_st(self)._fullTitleBarHeight())).__minus(_st(_st(self)._padding()).__star((3)))).__minus((34)));
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"contentExtent",{},smalltalk.SystemWindow)})},
 args: [],
-source: "contentExtent\x0a\x09^ Point\x0a\x09\x09x: self width - self padding\x0a\x09\x09y: self height - self fullTitleBarHeight - (self padding * 3) - 35.",
+source: "contentExtent\x0a\x09^ Point\x0a\x09\x09x: self width - self padding\x0a\x09\x09y: self height - self fullTitleBarHeight - (self padding * 3) - 34.",
 messageSends: ["x:y:", "-", "padding", "width", "*", "fullTitleBarHeight", "height"],
 referencedClasses: ["Point"]
 }),

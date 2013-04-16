@@ -3819,11 +3819,11 @@ var self=this;
 return smalltalk.withContext(function($ctx1) { 
 _st(container)._with_((function(){
 return smalltalk.withContext(function($ctx2) {
-self["@textarea"]=_st(html)._textarea();
+self["@textarea"]=_st(_st(html)._textarea())._style_("resize: none;");
 return self["@textarea"];
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"render:with:",{container:container,html:html},smalltalk.PluggableTextMorph)})},
-messageSends: ["with:", "textarea"]}),
+messageSends: ["with:", "style:", "textarea"]}),
 smalltalk.PluggableTextMorph);
 
 smalltalk.addMethod(
@@ -4033,7 +4033,7 @@ var self=this;
 function $Point(){return smalltalk.Point||(typeof Point=="undefined"?nil:Point)}
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=_st($Point())._x_y_(_st(_st(self)._width()).__minus(_st(self)._padding()),_st(_st(_st(_st(self)._height()).__minus(_st(self)._fullTitleBarHeight())).__minus(_st(_st(self)._padding()).__star((3)))).__minus((35)));
+$1=_st($Point())._x_y_(_st(_st(self)._width()).__minus(_st(self)._padding()),_st(_st(_st(_st(self)._height()).__minus(_st(self)._fullTitleBarHeight())).__minus(_st(_st(self)._padding()).__star((3)))).__minus((34)));
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"contentExtent",{},smalltalk.SystemWindow)})},
 messageSends: ["x:y:", "-", "padding", "width", "*", "fullTitleBarHeight", "height"]}),

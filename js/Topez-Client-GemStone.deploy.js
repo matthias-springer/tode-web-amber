@@ -2,6 +2,157 @@ smalltalk.addPackage('Topez-Client-GemStone');
 smalltalk.addClass('TDShell', smalltalk.Object, ['windowStatus', 'topezClient', 'inputStream', 'actionStack', 'promptString', 'shellWindow', 'shellId', 'autoCommit', 'adornmentColor', 'sessionName', 'history', 'historyIndex'], 'Topez-Client-GemStone');
 smalltalk.addMethod(
 smalltalk.method({
+selector: "accumulateText:",
+fn: function (line){
+var self=this;
+var actionArray,result,stream;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4;
+$1=_st(_st(line)._isNil())._or_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(line)._beginsWith_("%");
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+if(! smalltalk.assert($1)){
+$2=self["@inputStream"];
+_st($2)._nextPutAll_(line);
+$3=_st($2)._cr();
+$3;
+return "";
+};
+actionArray=_st(_st(self)._actionStack())._removeLast();
+stream=self["@inputStream"];
+self["@promptString"]=_st(actionArray)._at_((2));
+self["@inputStream"]=_st(actionArray)._at_((1));
+$4=_st(_st(_st(actionArray)._at_((3)))._value_(stream))._convertTDEvaluateTokenResponseToText();
+return $4;
+}, function($ctx1) {$ctx1.fill(self,"accumulateText:",{line:line,actionArray:actionArray,result:result,stream:stream},smalltalk.TDShell)})},
+messageSends: ["ifFalse:", "nextPutAll:", "cr", "or:", "beginsWith:", "isNil", "removeLast", "actionStack", "at:", "convertTDEvaluateTokenResponseToText", "value:"]}),
+smalltalk.TDShell);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "accumulateTextAndDo:",
+fn: function (resultBlock){
+var self=this;
+function $String(){return smalltalk.String||(typeof String=="undefined"?nil:String)}
+function $WriteStream(){return smalltalk.WriteStream||(typeof WriteStream=="undefined"?nil:WriteStream)}
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._actionStack())._add_([self["@inputStream"],_st(self)._promptString(),(function(input){
+return smalltalk.withContext(function($ctx2) {
+_st(self)._exception_(nil);
+return _st(resultBlock)._value_(input);
+}, function($ctx2) {$ctx2.fillBlock({input:input},$ctx1)})})]);
+self["@inputStream"]=_st($WriteStream())._on_(_st($String())._new());
+self["@promptString"]="";
+return self}, function($ctx1) {$ctx1.fill(self,"accumulateTextAndDo:",{resultBlock:resultBlock},smalltalk.TDShell)})},
+messageSends: ["add:", "promptString", "exception:", "value:", "actionStack", "on:", "new"]}),
+smalltalk.TDShell);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "accumulateTextAndServerDo:",
+fn: function (serverBlockOop){
+var self=this;
+var messageSend;
+function $TZGsMessageSend(){return smalltalk.TZGsMessageSend||(typeof TZGsMessageSend=="undefined"?nil:TZGsMessageSend)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st($TZGsMessageSend())._new();
+_st($1)._topez_(_st(self)._topezClient());
+_st($1)._receiver_(_st(_st(self)._topezClient())._topezServerProxy());
+_st($1)._selector_("serverTextDo:with:");
+_st($1)._arguments_([]);
+$2=_st($1)._transform_(_st("native").__minus_gt(nil));
+messageSend=$2;
+_st(self)._accumulateTextAndDo_((function(doitStream){
+return smalltalk.withContext(function($ctx2) {
+return _st(messageSend)._valueWithArguments_([_st(_st(self)._session())._asOopType_(serverBlockOop),_st(doitStream)._contents()]);
+}, function($ctx2) {$ctx2.fillBlock({doitStream:doitStream},$ctx1)})}));
+return nil;
+}, function($ctx1) {$ctx1.fill(self,"accumulateTextAndServerDo:",{serverBlockOop:serverBlockOop,messageSend:messageSend},smalltalk.TDShell)})},
+messageSends: ["topez:", "topezClient", "new", "receiver:", "topezServerProxy", "selector:", "arguments:", "transform:", "->", "accumulateTextAndDo:", "valueWithArguments:", "asOopType:", "session", "contents"]}),
+smalltalk.TDShell);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "actionStack",
+fn: function (){
+var self=this;
+function $OrderedCollection(){return smalltalk.OrderedCollection||(typeof OrderedCollection=="undefined"?nil:OrderedCollection)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=self["@actionStack"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@actionStack"]=_st($OrderedCollection())._new();
+self["@actionStack"];
+} else {
+$1;
+};
+$2=self["@actionStack"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"actionStack",{},smalltalk.TDShell)})},
+messageSends: ["ifNil:", "new"]}),
+smalltalk.TDShell);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "addToHistory:",
+fn: function (line){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._history())._add_(line);
+self["@historyIndex"]=_st(_st(self)._history())._size();
+return self}, function($ctx1) {$ctx1.fill(self,"addToHistory:",{line:line},smalltalk.TDShell)})},
+messageSends: ["add:", "history", "size"]}),
+smalltalk.TDShell);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "adornmentColor",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@adornmentColor"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"adornmentColor",{},smalltalk.TDShell)})},
+messageSends: []}),
+smalltalk.TDShell);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "autoCommit",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=self["@autoCommit"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@autoCommit"]=true;
+self["@autoCommit"];
+} else {
+$1;
+};
+$2=self["@autoCommit"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"autoCommit",{},smalltalk.TDShell)})},
+messageSends: ["ifNil:"]}),
+smalltalk.TDShell);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "autoCommitDisabled",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@autoCommit"]=false;
+self["@promptString"]=nil;
+return self}, function($ctx1) {$ctx1.fill(self,"autoCommitDisabled",{},smalltalk.TDShell)})},
+messageSends: []}),
+smalltalk.TDShell);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "builtIns",
 fn: function (){
 var self=this;
@@ -1580,7 +1731,7 @@ smalltalk.TDWindowStatus);
 
 
 
-smalltalk.addClass('TodeSession', smalltalk.GciSession, ['topez', 'sessionDescription', 'gciLibrary'], 'Topez-Client-GemStone');
+smalltalk.addClass('TodeSession', smalltalk.nil, ['topez', 'sessionDescription', 'gciLibrary'], 'Topez-Client-GemStone');
 smalltalk.addMethod(
 smalltalk.method({
 selector: "debuggerRequested:",

@@ -49,6 +49,74 @@ topezClient
 
 !TDShell methodsFor: 'evaluator engine'!
 
+accumulateText: line
+    | actionArray result stream |
+    (line isNil or: [ line beginsWith: '%' ])
+        ifFalse: [ 
+            inputStream
+                nextPutAll: line;
+                cr.
+            ^ '' ].
+    actionArray := self actionStack removeLast.
+    stream := inputStream.
+    promptString := actionArray at: 2.
+    inputStream := actionArray at: 1.
+    ^ ((actionArray at: 3) value: stream) convertTDEvaluateTokenResponseToText
+!
+
+accumulateTextAndDo: resultBlock
+  self actionStack
+    add:
+      {inputStream.
+      (self promptString).
+      [ :input | 
+      self exception: nil.
+      resultBlock value: input ]}.
+  inputStream := WriteStream on: String new.
+  promptString := ''
+!
+
+accumulateTextAndServerDo: serverBlockOop
+  | messageSend |
+  messageSend := TZGsMessageSend new
+    topez: self topezClient;
+    receiver: self topezClient topezServerProxy;
+    selector: 'serverTextDo:with:';
+    arguments: #();
+    transform: #'native' -> nil.
+  self
+    accumulateTextAndDo: [ :doitStream | 
+      messageSend
+        valueWithArguments:
+          {(self session asOopType: serverBlockOop).
+          (doitStream contents)} ].
+  ^ nil
+!
+
+actionStack
+    actionStack ifNil: [ actionStack := OrderedCollection new ].
+    ^ actionStack
+!
+
+addToHistory: line
+  self history add: line.
+  historyIndex := self history size
+!
+
+adornmentColor
+  ^ adornmentColor
+!
+
+autoCommit
+	autoCommit ifNil: [ autoCommit := true ].
+	^ autoCommit
+!
+
+autoCommitDisabled
+  autoCommit := false.
+  promptString := nil
+!
+
 builtIns
 	^ #('logout' 'close' 'collapse' 'exit' 'expand')
 !
@@ -692,7 +760,7 @@ initialize
     activeWindowIndex := 0
 ! !
 
-GciSession subclass: #TodeSession
+nil subclass: #TodeSession
 	instanceVariableNames: 'topez sessionDescription gciLibrary'
 	package: 'Topez-Client-GemStone'!
 
