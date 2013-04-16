@@ -1538,12 +1538,12 @@ smalltalk.method({
 selector: "shellWindows",
 fn: function (){
 var self=this;
-function $IdentitySet(){return smalltalk.IdentitySet||(typeof IdentitySet=="undefined"?nil:IdentitySet)}
+function $Set(){return smalltalk.Set||(typeof Set=="undefined"?nil:Set)}
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2;
 $1=self["@shellWindows"];
 if(($receiver = $1) == nil || $receiver == undefined){
-self["@shellWindows"]=_st($IdentitySet())._new();
+self["@shellWindows"]=_st($Set())._new();
 self["@shellWindows"];
 } else {
 $1;

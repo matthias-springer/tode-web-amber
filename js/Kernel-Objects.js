@@ -1,5 +1,5 @@
 smalltalk.addPackage('Kernel-Objects');
-smalltalk.addClass('Object', smalltalk.nil, [], 'Kernel-Objects');
+smalltalk.addClass('Object', smalltalk.nil, ['dependents'], 'Kernel-Objects');
 smalltalk.Object.comment="*Object is the root of the Smalltalk class system*. All classes in the system are subclasses of Object.\x0a\x0aObject provides default behavior common to all normal objects, such as:\x0a\x0a- access\x0a- copying\x0a- comparison\x0a- error handling\x0a- message sending\x0a- reflection\x0a\x0aAlso utility messages that all objects should respond to are defined here.\x0a\x0aObject has no instance variable.\x0a\x0a##Access\x0a\x0aInstance variables can be accessed with `#instVarAt:` and `#instVarAt:put:`. `Object >> instanceVariableNames` answers a collection of all instance variable names.\x0aAccessing JavaScript properties of an object is done through `#basicAt:`, `#basicAt:put:` and `basicDelete:`.\x0a\x0a##Copying\x0a\x0aCopying an object is handled by `#copy` and `#deepCopy`. The first one performs a shallow copy of the receiver, while the second one performs a deep copy.\x0aThe hook method `#postCopy` can be overriden in subclasses to copy fields as necessary to complete the full copy. It will be sent by the copy of the receiver.\x0a\x0a##Comparison\x0a\x0aObjects understand equality `#=` and identity `#==` comparison.\x0a\x0a##Error handling\x0a\x0a- `#halt` is the typical message to use for inserting breakpoints during debugging.\x0a- `#error:` throws a generic error exception\x0a- `#doesNotUnderstand:` handles the fact that there was an attempt to send the given message to the receiver but the receiver does not understand this message.\x0a\x09Overriding this message can be useful to implement proxies for example."
 smalltalk.addMethod(
 smalltalk.method({
@@ -53,6 +53,31 @@ args: ["anObject"],
 source: "== anObject\x0a\x09^self identityHash = anObject identityHash",
 messageSends: ["=", "identityHash"],
 referencedClasses: []
+}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "addDependent:",
+category: 'updating',
+fn: function (anObject){
+var self=this;
+function $OrderedCollection(){return smalltalk.OrderedCollection||(typeof OrderedCollection=="undefined"?nil:OrderedCollection)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@dependents"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@dependents"]=_st($OrderedCollection())._new();
+self["@dependents"];
+} else {
+$1;
+};
+_st(_st(self)._dependents())._add_(anObject);
+return self}, function($ctx1) {$ctx1.fill(self,"addDependent:",{anObject:anObject},smalltalk.Object)})},
+args: ["anObject"],
+source: "addDependent: anObject\x0a\x09dependents ifNil: [dependents := OrderedCollection new].\x0a\x09self dependents add: anObject.",
+messageSends: ["ifNil:", "new", "add:", "dependents"],
+referencedClasses: ["OrderedCollection"]
 }),
 smalltalk.Object);
 
@@ -259,6 +284,25 @@ smalltalk.Object);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "changed:",
+category: 'updating',
+fn: function (aParameter){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._dependents())._do_((function(aDependent){
+return smalltalk.withContext(function($ctx2) {
+return _st(aDependent)._update_(aParameter);
+}, function($ctx2) {$ctx2.fillBlock({aDependent:aDependent},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"changed:",{aParameter:aParameter},smalltalk.Object)})},
+args: ["aParameter"],
+source: "changed: aParameter \x0a\x09self dependents do: [:aDependent | aDependent update: aParameter]",
+messageSends: ["do:", "update:", "dependents"],
+referencedClasses: []
+}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "class",
 category: 'accessing',
 fn: function (){
@@ -311,6 +355,29 @@ return self}, function($ctx1) {$ctx1.fill(self,"deepCopy",{},smalltalk.Object)})
 args: [],
 source: "deepCopy\x0a\x09<\x0a\x09\x09var copy = self.klass._new();\x0a\x09\x09for(var i in self) {\x0a\x09\x09if(/^@.+/.test(i)) {\x0a\x09\x09\x09copy[i] = self[i]._deepCopy();\x0a\x09\x09}\x0a\x09\x09}\x0a\x09\x09return copy;\x0a\x09>",
 messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "dependents",
+category: 'updating',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$1;
+$2=self["@dependents"];
+if(($receiver = $2) == nil || $receiver == undefined){
+$1=[];
+} else {
+$1=$2;
+};
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"dependents",{},smalltalk.Object)})},
+args: [],
+source: "dependents\x0a\x09^ dependents ifNil: [#()]",
+messageSends: ["ifNil:"],
 referencedClasses: []
 }),
 smalltalk.Object);
@@ -1187,6 +1254,24 @@ try{return aBlock()} catch(e) {return anotherBlock(e)};
 return self}, function($ctx1) {$ctx1.fill(self,"try:catch:",{aBlock:aBlock,anotherBlock:anotherBlock},smalltalk.Object)})},
 args: ["aBlock", "anotherBlock"],
 source: "try: aBlock catch: anotherBlock\x0a\x09<try{return aBlock()} catch(e) {return anotherBlock(e)}>",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "update:",
+category: 'updating',
+fn: function (aParameter){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"update:",{aParameter:aParameter},smalltalk.Object)})},
+args: ["aParameter"],
+source: "update: aParameter \x0a\x09^ self",
 messageSends: [],
 referencedClasses: []
 }),
@@ -5478,12 +5563,16 @@ selector: "extent:",
 category: 'converting',
 fn: function (aPoint){
 var self=this;
+function $Rectangle(){return smalltalk.Rectangle||(typeof Rectangle=="undefined"?nil:Rectangle)}
 return smalltalk.withContext(function($ctx1) { 
-return self}, function($ctx1) {$ctx1.fill(self,"extent:",{aPoint:aPoint},smalltalk.Point)})},
+var $1;
+$1=_st($Rectangle())._origin_extent_(self,aPoint);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"extent:",{aPoint:aPoint},smalltalk.Point)})},
 args: ["aPoint"],
-source: "extent: aPoint\x0a\x09\x22TODO: convert to rectangle\x22",
-messageSends: [],
-referencedClasses: []
+source: "extent: aPoint \x0a\x09\x22Answer a Rectangle whose origin is the receiver and whose extent is \x0a\x09aPoint. This is one of the infix ways of expressing the creation of a \x0a\x09rectangle.\x22\x0a\x0a\x09^ Rectangle origin: self extent: aPoint",
+messageSends: ["origin:extent:"],
+referencedClasses: ["Rectangle"]
 }),
 smalltalk.Point);
 
@@ -5753,6 +5842,24 @@ smalltalk.Rectangle);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "extent",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@corner"]).__minus(self["@origin"]);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"extent",{},smalltalk.Rectangle)})},
+args: [],
+source: "extent\x0a\x09^ corner - origin",
+messageSends: ["-"],
+referencedClasses: []
+}),
+smalltalk.Rectangle);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "origin",
 category: 'accessing',
 fn: function (){
@@ -5785,6 +5892,25 @@ referencedClasses: []
 }),
 smalltalk.Rectangle);
 
+smalltalk.addMethod(
+smalltalk.method({
+selector: "translateBy:",
+category: 'transforming',
+fn: function (factor){
+var self=this;
+function $Rectangle(){return smalltalk.Rectangle||(typeof Rectangle=="undefined"?nil:Rectangle)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($Rectangle())._origin_corner_(_st(self["@origin"]).__plus(factor),_st(self["@corner"]).__plus(factor));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"translateBy:",{factor:factor},smalltalk.Rectangle)})},
+args: ["factor"],
+source: "translateBy: factor \x0a\x09\x22Answer a Rectangle translated by factor, a Point or a scalar.\x22\x0a\x0a\x09^Rectangle origin: origin + factor corner: corner + factor",
+messageSends: ["origin:corner:", "+"],
+referencedClasses: ["Rectangle"]
+}),
+smalltalk.Rectangle);
+
 
 smalltalk.addMethod(
 smalltalk.method({
@@ -5804,6 +5930,28 @@ return $1;
 args: ["originPoint", "cornerPoint"],
 source: "origin: originPoint corner: cornerPoint\x0a\x09^ self new\x0a\x09\x09origin: originPoint;\x0a\x09\x09corner: cornerPoint;\x0a\x09\x09yourself",
 messageSends: ["origin:", "new", "corner:", "yourself"],
+referencedClasses: []
+}),
+smalltalk.Rectangle.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "origin:extent:",
+category: 'instance creation',
+fn: function (originPoint,extentPoint){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=_st(self)._new();
+_st($2)._origin_(originPoint);
+_st($2)._corner_(_st(extentPoint).__plus(originPoint));
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"origin:extent:",{originPoint:originPoint,extentPoint:extentPoint},smalltalk.Rectangle.klass)})},
+args: ["originPoint", "extentPoint"],
+source: "origin: originPoint extent: extentPoint\x0a\x09^ self new\x0a\x09\x09origin: originPoint;\x0a\x09\x09corner: extentPoint + originPoint;\x0a\x09\x09yourself",
+messageSends: ["origin:", "new", "corner:", "+", "yourself"],
 referencedClasses: []
 }),
 smalltalk.Rectangle.klass);

@@ -3463,9 +3463,10 @@ selector: "text:",
 fn: function (aString){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
+_st(_st(_st(self)._morphElement())._asJQuery())._empty();
 _st(_st(self)._morphElement())._with_(aString);
 return self}, function($ctx1) {$ctx1.fill(self,"text:",{aString:aString},smalltalk.TextMorph)})},
-messageSends: ["with:", "morphElement"]}),
+messageSends: ["empty", "asJQuery", "morphElement", "with:"]}),
 smalltalk.TextMorph);
 
 
@@ -4027,6 +4028,19 @@ smalltalk.SystemWindow);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "bounds:",
+fn: function (aRectangle){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._position_(_st(aRectangle)._origin());
+_st(self)._extent_(_st(aRectangle)._extent());
+_st(self)._updateLayout();
+return self}, function($ctx1) {$ctx1.fill(self,"bounds:",{aRectangle:aRectangle},smalltalk.SystemWindow)})},
+messageSends: ["position:", "origin", "extent:", "extent", "updateLayout"]}),
+smalltalk.SystemWindow);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "contentExtent",
 fn: function (){
 var self=this;
@@ -4170,6 +4184,18 @@ $2=self["@morphFrames"];
 return $2;
 }, function($ctx1) {$ctx1.fill(self,"morphFrames",{},smalltalk.SystemWindow)})},
 messageSends: ["ifNil:", "new"]}),
+smalltalk.SystemWindow);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "openInWorld",
+fn: function (){
+var self=this;
+function $WorkspaceMorph(){return smalltalk.WorkspaceMorph||(typeof WorkspaceMorph=="undefined"?nil:WorkspaceMorph)}
+return smalltalk.withContext(function($ctx1) { 
+_st(_st($WorkspaceMorph())._current())._addMorph_(self);
+return self}, function($ctx1) {$ctx1.fill(self,"openInWorld",{},smalltalk.SystemWindow)})},
+messageSends: ["addMorph:", "current"]}),
 smalltalk.SystemWindow);
 
 smalltalk.addMethod(

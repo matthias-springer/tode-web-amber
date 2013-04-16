@@ -680,7 +680,8 @@ shellWindowCount
 !
 
 shellWindows
-  shellWindows ifNil: [ shellWindows := IdentitySet new ].
+	"TODO: this was IdentitySet"
+  shellWindows ifNil: [ shellWindows := Set new ].
   ^ shellWindows
 !
 

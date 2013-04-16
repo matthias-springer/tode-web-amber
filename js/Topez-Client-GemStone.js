@@ -1954,12 +1954,12 @@ selector: "shellWindows",
 category: 'accessing',
 fn: function (){
 var self=this;
-function $IdentitySet(){return smalltalk.IdentitySet||(typeof IdentitySet=="undefined"?nil:IdentitySet)}
+function $Set(){return smalltalk.Set||(typeof Set=="undefined"?nil:Set)}
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2;
 $1=self["@shellWindows"];
 if(($receiver = $1) == nil || $receiver == undefined){
-self["@shellWindows"]=_st($IdentitySet())._new();
+self["@shellWindows"]=_st($Set())._new();
 self["@shellWindows"];
 } else {
 $1;
@@ -1968,9 +1968,9 @@ $2=self["@shellWindows"];
 return $2;
 }, function($ctx1) {$ctx1.fill(self,"shellWindows",{},smalltalk.TDWindowStatus)})},
 args: [],
-source: "shellWindows\x0a  shellWindows ifNil: [ shellWindows := IdentitySet new ].\x0a  ^ shellWindows",
+source: "shellWindows\x0a\x09\x22TODO: this was IdentitySet\x22\x0a  shellWindows ifNil: [ shellWindows := Set new ].\x0a  ^ shellWindows",
 messageSends: ["ifNil:", "new"],
-referencedClasses: ["IdentitySet"]
+referencedClasses: ["Set"]
 }),
 smalltalk.TDWindowStatus);
 

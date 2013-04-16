@@ -4796,11 +4796,12 @@ category: 'accessing',
 fn: function (aString){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
+_st(_st(_st(self)._morphElement())._asJQuery())._empty();
 _st(_st(self)._morphElement())._with_(aString);
 return self}, function($ctx1) {$ctx1.fill(self,"text:",{aString:aString},smalltalk.TextMorph)})},
 args: ["aString"],
-source: "text: aString\x0a\x09self morphElement\x0a\x09\x09with: aString.",
-messageSends: ["with:", "morphElement"],
+source: "text: aString\x0a\x09self morphElement asJQuery empty.\x0a\x09self morphElement\x0a\x09\x09with: aString.",
+messageSends: ["empty", "asJQuery", "morphElement", "with:"],
 referencedClasses: []
 }),
 smalltalk.TextMorph);
@@ -5554,6 +5555,24 @@ smalltalk.SystemWindow);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "bounds:",
+category: 'geometry',
+fn: function (aRectangle){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._position_(_st(aRectangle)._origin());
+_st(self)._extent_(_st(aRectangle)._extent());
+_st(self)._updateLayout();
+return self}, function($ctx1) {$ctx1.fill(self,"bounds:",{aRectangle:aRectangle},smalltalk.SystemWindow)})},
+args: ["aRectangle"],
+source: "bounds: aRectangle\x0a\x09self position: aRectangle origin.\x0a\x09self extent: aRectangle extent.\x0a\x09self updateLayout.",
+messageSends: ["position:", "origin", "extent:", "extent", "updateLayout"],
+referencedClasses: []
+}),
+smalltalk.SystemWindow);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "contentExtent",
 category: 'geometry',
 fn: function (){
@@ -5741,6 +5760,23 @@ args: [],
 source: "morphFrames\x0a\x09morphFrames ifNil: [morphFrames := Dictionary new].\x0a\x09^ morphFrames",
 messageSends: ["ifNil:", "new"],
 referencedClasses: ["Dictionary"]
+}),
+smalltalk.SystemWindow);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "openInWorld",
+category: 'display',
+fn: function (){
+var self=this;
+function $WorkspaceMorph(){return smalltalk.WorkspaceMorph||(typeof WorkspaceMorph=="undefined"?nil:WorkspaceMorph)}
+return smalltalk.withContext(function($ctx1) { 
+_st(_st($WorkspaceMorph())._current())._addMorph_(self);
+return self}, function($ctx1) {$ctx1.fill(self,"openInWorld",{},smalltalk.SystemWindow)})},
+args: [],
+source: "openInWorld\x0a\x09WorkspaceMorph current addMorph: self",
+messageSends: ["addMorph:", "current"],
+referencedClasses: ["WorkspaceMorph"]
 }),
 smalltalk.SystemWindow);
 

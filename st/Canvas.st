@@ -1349,6 +1349,7 @@ text
 !
 
 text: aString
+	self morphElement asJQuery empty.
 	self morphElement
 		with: aString.
 ! !
@@ -1613,7 +1614,19 @@ titleBarHeight
 	^ 30
 ! !
 
+!SystemWindow methodsFor: 'display'!
+
+openInWorld
+	WorkspaceMorph current addMorph: self
+! !
+
 !SystemWindow methodsFor: 'geometry'!
+
+bounds: aRectangle
+	self position: aRectangle origin.
+	self extent: aRectangle extent.
+	self updateLayout.
+!
 
 contentExtent
 	^ Point

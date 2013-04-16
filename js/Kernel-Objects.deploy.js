@@ -1,5 +1,5 @@
 smalltalk.addPackage('Kernel-Objects');
-smalltalk.addClass('Object', smalltalk.nil, [], 'Kernel-Objects');
+smalltalk.addClass('Object', smalltalk.nil, ['dependents'], 'Kernel-Objects');
 smalltalk.addMethod(
 smalltalk.method({
 selector: "->",
@@ -38,6 +38,26 @@ $1=_st(_st(self)._identityHash()).__eq(_st(anObject)._identityHash());
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"==",{anObject:anObject},smalltalk.Object)})},
 messageSends: ["=", "identityHash"]}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "addDependent:",
+fn: function (anObject){
+var self=this;
+function $OrderedCollection(){return smalltalk.OrderedCollection||(typeof OrderedCollection=="undefined"?nil:OrderedCollection)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@dependents"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@dependents"]=_st($OrderedCollection())._new();
+self["@dependents"];
+} else {
+$1;
+};
+_st(_st(self)._dependents())._add_(anObject);
+return self}, function($ctx1) {$ctx1.fill(self,"addDependent:",{anObject:anObject},smalltalk.Object)})},
+messageSends: ["ifNil:", "new", "add:", "dependents"]}),
 smalltalk.Object);
 
 smalltalk.addMethod(
@@ -188,6 +208,20 @@ smalltalk.Object);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "changed:",
+fn: function (aParameter){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._dependents())._do_((function(aDependent){
+return smalltalk.withContext(function($ctx2) {
+return _st(aDependent)._update_(aParameter);
+}, function($ctx2) {$ctx2.fillBlock({aDependent:aDependent},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"changed:",{aParameter:aParameter},smalltalk.Object)})},
+messageSends: ["do:", "update:", "dependents"]}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "class",
 fn: function (){
 var self=this;
@@ -227,6 +261,24 @@ return smalltalk.withContext(function($ctx1) {
 	;
 return self}, function($ctx1) {$ctx1.fill(self,"deepCopy",{},smalltalk.Object)})},
 messageSends: []}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "dependents",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$1;
+$2=self["@dependents"];
+if(($receiver = $2) == nil || $receiver == undefined){
+$1=[];
+} else {
+$1=$2;
+};
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"dependents",{},smalltalk.Object)})},
+messageSends: ["ifNil:"]}),
 smalltalk.Object);
 
 smalltalk.addMethod(
@@ -858,6 +910,19 @@ var self=this;
 return smalltalk.withContext(function($ctx1) { 
 try{return aBlock()} catch(e) {return anotherBlock(e)};
 return self}, function($ctx1) {$ctx1.fill(self,"try:catch:",{aBlock:aBlock,anotherBlock:anotherBlock},smalltalk.Object)})},
+messageSends: []}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "update:",
+fn: function (aParameter){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"update:",{aParameter:aParameter},smalltalk.Object)})},
 messageSends: []}),
 smalltalk.Object);
 
@@ -4009,9 +4074,13 @@ smalltalk.method({
 selector: "extent:",
 fn: function (aPoint){
 var self=this;
+function $Rectangle(){return smalltalk.Rectangle||(typeof Rectangle=="undefined"?nil:Rectangle)}
 return smalltalk.withContext(function($ctx1) { 
-return self}, function($ctx1) {$ctx1.fill(self,"extent:",{aPoint:aPoint},smalltalk.Point)})},
-messageSends: []}),
+var $1;
+$1=_st($Rectangle())._origin_extent_(self,aPoint);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"extent:",{aPoint:aPoint},smalltalk.Point)})},
+messageSends: ["origin:extent:"]}),
 smalltalk.Point);
 
 smalltalk.addMethod(
@@ -4214,6 +4283,19 @@ smalltalk.Rectangle);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "extent",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@corner"]).__minus(self["@origin"]);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"extent",{},smalltalk.Rectangle)})},
+messageSends: ["-"]}),
+smalltalk.Rectangle);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "origin",
 fn: function (){
 var self=this;
@@ -4236,6 +4318,20 @@ return self}, function($ctx1) {$ctx1.fill(self,"origin:",{aPoint:aPoint},smallta
 messageSends: []}),
 smalltalk.Rectangle);
 
+smalltalk.addMethod(
+smalltalk.method({
+selector: "translateBy:",
+fn: function (factor){
+var self=this;
+function $Rectangle(){return smalltalk.Rectangle||(typeof Rectangle=="undefined"?nil:Rectangle)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($Rectangle())._origin_corner_(_st(self["@origin"]).__plus(factor),_st(self["@corner"]).__plus(factor));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"translateBy:",{factor:factor},smalltalk.Rectangle)})},
+messageSends: ["origin:corner:", "+"]}),
+smalltalk.Rectangle);
+
 
 smalltalk.addMethod(
 smalltalk.method({
@@ -4252,6 +4348,23 @@ $1=$3;
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"origin:corner:",{originPoint:originPoint,cornerPoint:cornerPoint},smalltalk.Rectangle.klass)})},
 messageSends: ["origin:", "new", "corner:", "yourself"]}),
+smalltalk.Rectangle.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "origin:extent:",
+fn: function (originPoint,extentPoint){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=_st(self)._new();
+_st($2)._origin_(originPoint);
+_st($2)._corner_(_st(extentPoint).__plus(originPoint));
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"origin:extent:",{originPoint:originPoint,extentPoint:extentPoint},smalltalk.Rectangle.klass)})},
+messageSends: ["origin:", "new", "corner:", "+", "yourself"]}),
 smalltalk.Rectangle.klass);
 
 

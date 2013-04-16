@@ -1,6 +1,6 @@
 Smalltalk current createPackage: 'Kernel-Objects'!
 nil subclass: #Object
-	instanceVariableNames: ''
+	instanceVariableNames: 'dependents'
 	package: 'Kernel-Objects'!
 !Object commentStamp!
 *Object is the root of the Smalltalk class system*. All classes in the system are subclasses of Object.
@@ -410,6 +410,25 @@ notNil
 
 respondsTo: aSelector
 	^self class canUnderstand: aSelector
+! !
+
+!Object methodsFor: 'updating'!
+
+addDependent: anObject
+	dependents ifNil: [dependents := OrderedCollection new].
+	self dependents add: anObject.
+!
+
+changed: aParameter 
+	self dependents do: [:aDependent | aDependent update: aParameter]
+!
+
+dependents
+	^ dependents ifNil: [#()]
+!
+
+update: aParameter 
+	^ self
 ! !
 
 !Object class methodsFor: 'initialization'!
@@ -1813,8 +1832,12 @@ corner: aPoint
 	^Rectangle origin: self corner: aPoint
 !
 
-extent: aPoint
-	"TODO: convert to rectangle"
+extent: aPoint 
+	"Answer a Rectangle whose origin is the receiver and whose extent is 
+	aPoint. This is one of the infix ways of expressing the creation of a 
+	rectangle."
+
+	^ Rectangle origin: self extent: aPoint
 ! !
 
 !Point methodsFor: 'printing'!
@@ -1915,6 +1938,10 @@ corner: aPoint
 	corner := aPoint.
 !
 
+extent
+	^ corner - origin
+!
+
 origin
 	^ origin
 !
@@ -1923,12 +1950,27 @@ origin: aPoint
 	origin := aPoint.
 ! !
 
+!Rectangle methodsFor: 'transforming'!
+
+translateBy: factor 
+	"Answer a Rectangle translated by factor, a Point or a scalar."
+
+	^Rectangle origin: origin + factor corner: corner + factor
+! !
+
 !Rectangle class methodsFor: 'instance creation'!
 
 origin: originPoint corner: cornerPoint
 	^ self new
 		origin: originPoint;
 		corner: cornerPoint;
+		yourself
+!
+
+origin: originPoint extent: extentPoint
+	^ self new
+		origin: originPoint;
+		corner: extentPoint + originPoint;
 		yourself
 ! !
 
