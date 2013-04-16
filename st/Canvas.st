@@ -1024,8 +1024,14 @@ renderOn: html
 ! !
 
 Widget subclass: #Morph
-	instanceVariableNames: 'morphElement submorphs owner'
+	instanceVariableNames: 'morphElement submorphs owner adherentToEdge'
 	package: 'Canvas'!
+
+!Morph methodsFor: 'accessing'!
+
+adherentToEdge
+	^ adherentToEdge
+! !
 
 !Morph methodsFor: 'css'!
 
@@ -1084,6 +1090,7 @@ positionRelative
 setToAdhereToEdge: anEdge
 	self autoPosition.
 	self positionAbsolute.
+	adherentToEdge := anEdge.
 	anEdge = #top ifTrue: [self top: self ownerPadding].
 	anEdge = #left ifTrue: [self left: self ownerPadding].
 	anEdge = #bottom ifTrue: [self bottomCss: self ownerPadding].
@@ -1096,6 +1103,11 @@ top
 
 top: aNumber
 	self morphElement asJQuery css: 'top' a: aNumber asString, 'px'.
+!
+
+updateLayout
+	self adherentToEdge ~~ #none 
+		ifTrue: [self setToAdhereToEdge: self adherentToEdge].
 !
 
 width
@@ -1117,12 +1129,23 @@ windowPadding
 			(self owner ~~ nil and: [self owner isMorph])
 				ifTrue: [^ self owner windowPadding]
 				ifFalse: [^ 0]].
+!
+
+zIndex
+	^ (self morphElement asJQuery css: 'zIndex') asNumber
+!
+
+zIndex: aNumber
+	self morphElement asJQuery css: 'zIndex' a: aNumber
 ! !
 
 !Morph methodsFor: 'initializing'!
 
 initialize
+	super initialize.
+	adherentToEdge := #none.
 	submorphs := OrderedCollection new.
+	self appendToJQuery: self temporaryRenderContainer.
 ! !
 
 !Morph methodsFor: 'private'!
@@ -1142,12 +1165,20 @@ morphElement
 	^ morphElement
 !
 
+moveToJQuery: aJQuery
+	aJQuery append: self morphElement asJQuery.
+!
+
 owner: aMorph
 	owner := aMorph.
 !
 
 rightCss: aNumber
 	self morphElement asJQuery css: 'right' a: aNumber asString, 'px'.
+!
+
+temporaryRenderContainer
+	^ '#temp-render' asJQuery
 ! !
 
 !Morph methodsFor: 'rendering'!
@@ -1163,10 +1194,10 @@ renderOn: html
 !Morph methodsFor: 'submorphs'!
 
 addMorph: aMorph
-	"TODO: cause rendering before addMorph: to allow changing properties before rendering."
 	self submorphs add: aMorph.
 	aMorph owner: self.
-	aMorph appendToJQuery: self submorphContainer asJQuery.
+	aMorph moveToJQuery: self submorphContainer asJQuery.
+	aMorph ownerChanged.
 !
 
 delete
@@ -1177,6 +1208,10 @@ delete
 
 owner
 	^ owner
+!
+
+ownerChanged
+	self updateLayout.
 !
 
 submorphContainer
@@ -1239,6 +1274,16 @@ adhereToTop
 	self width: self owner width - self ownerPadding.
 ! !
 
+!DockingBarMorph methodsFor: 'geometry'!
+
+updateLayout
+	super updateLayout.
+	self adherentToEdge = #left ifTrue: [self adhereToLeft].
+	self adherentToEdge = #right ifTrue: [self adhereToRight].
+	self adherentToEdge = #top ifTrue: [self adhereToTop].
+	self adherentToEdge = #bottom ifTrue: [self adhereToBottom].
+! !
+
 !DockingBarMorph methodsFor: 'private'!
 
 adhereTo: edgeSymbol
@@ -1246,6 +1291,12 @@ adhereTo: edgeSymbol
 	(#(#left #top #right #bottom #none ) includes: edgeSymbol)
 		ifFalse: [^ self error: 'invalid option'].
 	self setToAdhereToEdge: edgeSymbol.
+! !
+
+!DockingBarMorph methodsFor: 'submorphs'!
+
+ownerChanged
+	super ownerChanged.
 ! !
 
 DockingBarMorph subclass: #NavbarMorph
@@ -1257,6 +1308,21 @@ DockingBarMorph subclass: #NavbarMorph
 render: container with: html
 	container
 		class: 'window-title'.
+! !
+
+RectangleMorph subclass: #TextMorph
+	instanceVariableNames: 'morphElement'
+	package: 'Canvas'!
+
+!TextMorph methodsFor: 'accessing'!
+
+text
+	^ self morphElement asJQuery html
+!
+
+text: aString
+	self morphElement
+		with: aString.
 ! !
 
 Morph subclass: #GlyphIconMorph
@@ -1271,7 +1337,7 @@ icon
 !
 
 icon: anIcon
-	self removeClass: 'icon-', self icon.
+	icon ~~ nil ifTrue: [self removeClass: 'icon-', self icon].
 	icon := anIcon.
 	self addClass: 'icon-', anIcon.
 !
@@ -1283,19 +1349,10 @@ spin
 
 spin: aBoolean
 	spin := aBoolean.
-	spin
-		ifTrue: [self addClass: 'icon-spin']
-		ifFalse: [self removeClass: 'icon-spin'].
-! !
-
-!GlyphIconMorph methodsFor: 'private'!
-
-iconNoRender: anIcon
-	icon := anIcon.
-!
-
-spinNoRender
-	spin := true.
+	spin ifNotNil: [
+		spin
+			ifTrue: [self addClass: 'icon-spin']
+			ifFalse: [self removeClass: 'icon-spin']].
 ! !
 
 !GlyphIconMorph methodsFor: 'rendering'!
@@ -1316,44 +1373,44 @@ render: container with: html
 
 edit
 	^ self new
-		iconNoRender: 'edit';
+		icon: 'edit';
 		yourself
 !
 
 home
 	^ self new
-		iconNoRender: 'home';
+		icon: 'home';
 		yourself
 !
 
 ok
 	^ self new
-		iconNoRender: 'ok';
+		icon: 'ok';
 		yourself
 !
 
 pencil
 	^ self new
-		iconNoRender: 'pencil';
+		icon: 'pencil';
 		yourself
 !
 
 refresh
 	^ self new
-		iconNoRender: 'refresh';
+		icon: 'refresh';
 		yourself
 !
 
 remove
 	^ self new
-		iconNoRender: 'remove';
+		icon: 'remove';
 		yourself
 !
 
 wait
 	^ self new
-		iconNoRender: 'refresh';
-		spinNoRender;
+		icon: 'refresh';
+		spin;
 		yourself
 ! !
 
@@ -1459,16 +1516,18 @@ Morph subclass: #SystemWindow
 !SystemWindow methodsFor: 'rendering'!
 
 drawTitleBar
-	|navbar closeBtn|
+	|navbar|
 	navbar := NavbarMorph new.
 	self addMorph: navbar.
-	navbar adhereToTop.
-	navbar height: 30.
-	closeBtn := SimpleButtonMorph new.
-	navbar addMorph: closeBtn.
-	closeBtn addMorph: GlyphIconMorph remove.
-	closeBtn setToAdhereToEdge: #right.
-	closeBtn onClick: [self delete].
+	navbar
+		adhereToTop;
+		height: 30.
+	navbar addMorph: (SimpleButtonMorph new
+		addMorph: GlyphIconMorph remove;
+		setToAdhereToEdge: #right;
+		top: navbar padding;
+		onClick: [self delete];
+		yourself).
 !
 
 render: container with: html
@@ -1494,11 +1553,29 @@ Morph subclass: #WorkspaceMorph
 	instanceVariableNames: 'morphElement'
 	package: 'Canvas'!
 
+!WorkspaceMorph methodsFor: 'geometry'!
+
+moveToFront: aMorph
+	|zMax zMin|
+	zMin := (self submorphs collect: [:morph | morph zIndex]) min.
+	zMin > 0 ifTrue: [
+		self submorphs do: [:morph | morph zIndex: morph zIndex - zMin]].
+	zMax := (self submorphs collect: [:morph | morph zIndex]) max.
+	aMorph zIndex: zMax + 1.
+! !
+
 !WorkspaceMorph methodsFor: 'rendering'!
 
 render: container with: html
 	container
 		id: 'workspace'.
+! !
+
+!WorkspaceMorph methodsFor: 'submorphs'!
+
+addMorph: aMorph
+	super addMorph: aMorph.
+	aMorph morphElement onMouseDown: [self moveToFront: aMorph].
 ! !
 
 WorkspaceMorph class instanceVariableNames: 'workspace'!

@@ -764,6 +764,74 @@ smalltalk.Collection);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "max",
+category: 'enumerating',
+fn: function (){
+var self=this;
+var greatest;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+$1=_st(_st(self)._size()).__eq_eq((0));
+if(smalltalk.assert($1)){
+_st(self)._error_("collection is empty");
+};
+_st(self)._do_((function(el){
+return smalltalk.withContext(function($ctx2) {
+$2=_st(_st(greatest).__eq(nil))._or_((function(){
+return smalltalk.withContext(function($ctx3) {
+return _st(el).__gt(greatest);
+}, function($ctx3) {$ctx3.fillBlock({},$ctx1)})}));
+if(smalltalk.assert($2)){
+greatest=el;
+return greatest;
+};
+}, function($ctx2) {$ctx2.fillBlock({el:el},$ctx1)})}));
+$3=greatest;
+return $3;
+}, function($ctx1) {$ctx1.fill(self,"max",{greatest:greatest},smalltalk.Collection)})},
+args: [],
+source: "max\x0a\x09|greatest|\x0a\x09self size == 0\x0a\x09\x09ifTrue: [self error: 'collection is empty'].\x0a\x09self do: [:el |\x0a\x09\x09(greatest = nil or: [el > greatest])\x0a\x09\x09\x09ifTrue: [greatest := el]].\x0a\x09^ greatest",
+messageSends: ["ifTrue:", "error:", "==", "size", "do:", "or:", ">", "="],
+referencedClasses: []
+}),
+smalltalk.Collection);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "min",
+category: 'enumerating',
+fn: function (){
+var self=this;
+var smallest;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+$1=_st(_st(self)._size()).__eq_eq((0));
+if(smalltalk.assert($1)){
+_st(self)._error_("collection is empty");
+};
+_st(self)._do_((function(el){
+return smalltalk.withContext(function($ctx2) {
+$2=_st(_st(smallest).__eq(nil))._or_((function(){
+return smalltalk.withContext(function($ctx3) {
+return _st(el).__lt(smallest);
+}, function($ctx3) {$ctx3.fillBlock({},$ctx1)})}));
+if(smalltalk.assert($2)){
+smallest=el;
+return smallest;
+};
+}, function($ctx2) {$ctx2.fillBlock({el:el},$ctx1)})}));
+$3=smallest;
+return $3;
+}, function($ctx1) {$ctx1.fill(self,"min",{smallest:smallest},smalltalk.Collection)})},
+args: [],
+source: "min\x0a\x09|smallest|\x0a\x09self size == 0\x0a\x09\x09ifTrue: [self error: 'collection is empty'].\x0a\x09self do: [:el |\x0a\x09\x09(smallest = nil or: [el < smallest])\x0a\x09\x09\x09ifTrue: [smallest := el]].\x0a\x09^ smallest",
+messageSends: ["ifTrue:", "error:", "==", "size", "do:", "or:", "<", "="],
+referencedClasses: []
+}),
+smalltalk.Collection);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "notEmpty",
 category: 'testing',
 fn: function (){

@@ -2697,7 +2697,7 @@ smalltalk.Widget);
 
 
 
-smalltalk.addClass('Morph', smalltalk.Widget, ['morphElement', 'submorphs', 'owner'], 'Canvas');
+smalltalk.addClass('Morph', smalltalk.Widget, ['morphElement', 'submorphs', 'owner', 'adherentToEdge'], 'Canvas');
 smalltalk.addMethod(
 smalltalk.method({
 selector: "addClass:",
@@ -2717,9 +2717,23 @@ var self=this;
 return smalltalk.withContext(function($ctx1) { 
 _st(_st(self)._submorphs())._add_(aMorph);
 _st(aMorph)._owner_(self);
-_st(aMorph)._appendToJQuery_(_st(_st(self)._submorphContainer())._asJQuery());
+_st(aMorph)._moveToJQuery_(_st(_st(self)._submorphContainer())._asJQuery());
+_st(aMorph)._ownerChanged();
 return self}, function($ctx1) {$ctx1.fill(self,"addMorph:",{aMorph:aMorph},smalltalk.Morph)})},
-messageSends: ["add:", "submorphs", "owner:", "appendToJQuery:", "asJQuery", "submorphContainer"]}),
+messageSends: ["add:", "submorphs", "owner:", "moveToJQuery:", "asJQuery", "submorphContainer", "ownerChanged"]}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "adherentToEdge",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@adherentToEdge"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"adherentToEdge",{},smalltalk.Morph)})},
+messageSends: []}),
 smalltalk.Morph);
 
 smalltalk.addMethod(
@@ -2805,9 +2819,12 @@ fn: function (){
 var self=this;
 function $OrderedCollection(){return smalltalk.OrderedCollection||(typeof OrderedCollection=="undefined"?nil:OrderedCollection)}
 return smalltalk.withContext(function($ctx1) { 
+smalltalk.Widget.fn.prototype._initialize.apply(_st(self), []);
+self["@adherentToEdge"]="none";
 self["@submorphs"]=_st($OrderedCollection())._new();
+_st(self)._appendToJQuery_(_st(self)._temporaryRenderContainer());
 return self}, function($ctx1) {$ctx1.fill(self,"initialize",{},smalltalk.Morph)})},
-messageSends: ["new"]}),
+messageSends: ["initialize", "new", "appendToJQuery:", "temporaryRenderContainer"]}),
 smalltalk.Morph);
 
 smalltalk.addMethod(
@@ -2860,6 +2877,17 @@ smalltalk.Morph);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "moveToJQuery:",
+fn: function (aJQuery){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(aJQuery)._append_(_st(_st(self)._morphElement())._asJQuery());
+return self}, function($ctx1) {$ctx1.fill(self,"moveToJQuery:",{aJQuery:aJQuery},smalltalk.Morph)})},
+messageSends: ["append:", "asJQuery", "morphElement"]}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "owner",
 fn: function (){
 var self=this;
@@ -2880,6 +2908,17 @@ return smalltalk.withContext(function($ctx1) {
 self["@owner"]=aMorph;
 return self}, function($ctx1) {$ctx1.fill(self,"owner:",{aMorph:aMorph},smalltalk.Morph)})},
 messageSends: []}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "ownerChanged",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._updateLayout();
+return self}, function($ctx1) {$ctx1.fill(self,"ownerChanged",{},smalltalk.Morph)})},
+messageSends: ["updateLayout"]}),
 smalltalk.Morph);
 
 smalltalk.addMethod(
@@ -3000,6 +3039,7 @@ return smalltalk.withContext(function($ctx1) {
 var $1,$2,$3,$4;
 _st(self)._autoPosition();
 _st(self)._positionAbsolute();
+self["@adherentToEdge"]=anEdge;
 $1=_st(anEdge).__eq("top");
 if(smalltalk.assert($1)){
 _st(self)._top_(_st(self)._ownerPadding());
@@ -3059,6 +3099,19 @@ smalltalk.Morph);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "temporaryRenderContainer",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st("#temp-render")._asJQuery();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"temporaryRenderContainer",{},smalltalk.Morph)})},
+messageSends: ["asJQuery"]}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "top",
 fn: function (){
 var self=this;
@@ -3079,6 +3132,21 @@ return smalltalk.withContext(function($ctx1) {
 _st(_st(_st(self)._morphElement())._asJQuery())._css_a_("top",_st(_st(aNumber)._asString()).__comma("px"));
 return self}, function($ctx1) {$ctx1.fill(self,"top:",{aNumber:aNumber},smalltalk.Morph)})},
 messageSends: ["css:a:", ",", "asString", "asJQuery", "morphElement"]}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "updateLayout",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._adherentToEdge()).__tild_tild("none");
+if(smalltalk.assert($1)){
+_st(self)._setToAdhereToEdge_(_st(self)._adherentToEdge());
+};
+return self}, function($ctx1) {$ctx1.fill(self,"updateLayout",{},smalltalk.Morph)})},
+messageSends: ["ifTrue:", "setToAdhereToEdge:", "adherentToEdge", "~~"]}),
 smalltalk.Morph);
 
 smalltalk.addMethod(
@@ -3142,6 +3210,30 @@ return $5;
 };
 return self}, function($ctx1) {$ctx1.fill(self,"windowPadding",{},smalltalk.Morph)})},
 messageSends: ["ifTrue:ifFalse:", "padding", "windowPadding", "owner", "and:", "isMorph", "~~", "isSystemWindow"]}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "zIndex",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(_st(self)._morphElement())._asJQuery())._css_("zIndex"))._asNumber();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"zIndex",{},smalltalk.Morph)})},
+messageSends: ["asNumber", "css:", "asJQuery", "morphElement"]}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "zIndex:",
+fn: function (aNumber){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(_st(self)._morphElement())._asJQuery())._css_a_("zIndex",aNumber);
+return self}, function($ctx1) {$ctx1.fill(self,"zIndex:",{aNumber:aNumber},smalltalk.Morph)})},
+messageSends: ["css:a:", "asJQuery", "morphElement"]}),
 smalltalk.Morph);
 
 
@@ -3221,6 +3313,45 @@ return self}, function($ctx1) {$ctx1.fill(self,"adhereToTop",{},smalltalk.Dockin
 messageSends: ["adhereTo:", "width:", "-", "ownerPadding", "width", "owner"]}),
 smalltalk.DockingBarMorph);
 
+smalltalk.addMethod(
+smalltalk.method({
+selector: "ownerChanged",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+smalltalk.AlignmentMorph.fn.prototype._ownerChanged.apply(_st(self), []);
+return self}, function($ctx1) {$ctx1.fill(self,"ownerChanged",{},smalltalk.DockingBarMorph)})},
+messageSends: ["ownerChanged"]}),
+smalltalk.DockingBarMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "updateLayout",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4;
+smalltalk.AlignmentMorph.fn.prototype._updateLayout.apply(_st(self), []);
+$1=_st(_st(self)._adherentToEdge()).__eq("left");
+if(smalltalk.assert($1)){
+_st(self)._adhereToLeft();
+};
+$2=_st(_st(self)._adherentToEdge()).__eq("right");
+if(smalltalk.assert($2)){
+_st(self)._adhereToRight();
+};
+$3=_st(_st(self)._adherentToEdge()).__eq("top");
+if(smalltalk.assert($3)){
+_st(self)._adhereToTop();
+};
+$4=_st(_st(self)._adherentToEdge()).__eq("bottom");
+if(smalltalk.assert($4)){
+_st(self)._adhereToBottom();
+};
+return self}, function($ctx1) {$ctx1.fill(self,"updateLayout",{},smalltalk.DockingBarMorph)})},
+messageSends: ["updateLayout", "ifTrue:", "adhereToLeft", "=", "adherentToEdge", "adhereToRight", "adhereToTop", "adhereToBottom"]}),
+smalltalk.DockingBarMorph);
+
 
 
 smalltalk.addClass('NavbarMorph', smalltalk.DockingBarMorph, ['morphElement'], 'Canvas');
@@ -3234,6 +3365,33 @@ _st(container)._class_("window-title");
 return self}, function($ctx1) {$ctx1.fill(self,"render:with:",{container:container,html:html},smalltalk.NavbarMorph)})},
 messageSends: ["class:"]}),
 smalltalk.NavbarMorph);
+
+
+
+smalltalk.addClass('TextMorph', smalltalk.RectangleMorph, ['morphElement'], 'Canvas');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "text",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(self)._morphElement())._asJQuery())._html();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"text",{},smalltalk.TextMorph)})},
+messageSends: ["html", "asJQuery", "morphElement"]}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "text:",
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._morphElement())._with_(aString);
+return self}, function($ctx1) {$ctx1.fill(self,"text:",{aString:aString},smalltalk.TextMorph)})},
+messageSends: ["with:", "morphElement"]}),
+smalltalk.TextMorph);
 
 
 
@@ -3283,22 +3441,15 @@ selector: "icon:",
 fn: function (anIcon){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@icon"]).__tild_tild(nil);
+if(smalltalk.assert($1)){
 _st(self)._removeClass_(_st("icon-").__comma(_st(self)._icon()));
+};
 self["@icon"]=anIcon;
 _st(self)._addClass_(_st("icon-").__comma(anIcon));
 return self}, function($ctx1) {$ctx1.fill(self,"icon:",{anIcon:anIcon},smalltalk.GlyphIconMorph)})},
-messageSends: ["removeClass:", ",", "icon", "addClass:"]}),
-smalltalk.GlyphIconMorph);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "iconNoRender:",
-fn: function (anIcon){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-self["@icon"]=anIcon;
-return self}, function($ctx1) {$ctx1.fill(self,"iconNoRender:",{anIcon:anIcon},smalltalk.GlyphIconMorph)})},
-messageSends: []}),
+messageSends: ["ifTrue:", "removeClass:", ",", "icon", "~~", "addClass:"]}),
 smalltalk.GlyphIconMorph);
 
 smalltalk.addMethod(
@@ -3337,27 +3488,21 @@ selector: "spin:",
 fn: function (aBoolean){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-var $1;
+var $1,$2;
 self["@spin"]=aBoolean;
 $1=self["@spin"];
-if(smalltalk.assert($1)){
+if(($receiver = $1) == nil || $receiver == undefined){
+$1;
+} else {
+$2=self["@spin"];
+if(smalltalk.assert($2)){
 _st(self)._addClass_("icon-spin");
 } else {
 _st(self)._removeClass_("icon-spin");
 };
+};
 return self}, function($ctx1) {$ctx1.fill(self,"spin:",{aBoolean:aBoolean},smalltalk.GlyphIconMorph)})},
-messageSends: ["ifTrue:ifFalse:", "addClass:", "removeClass:"]}),
-smalltalk.GlyphIconMorph);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "spinNoRender",
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-self["@spin"]=true;
-return self}, function($ctx1) {$ctx1.fill(self,"spinNoRender",{},smalltalk.GlyphIconMorph)})},
-messageSends: []}),
+messageSends: ["ifNotNil:", "ifTrue:ifFalse:", "addClass:", "removeClass:"]}),
 smalltalk.GlyphIconMorph);
 
 
@@ -3369,12 +3514,12 @@ var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $2,$3,$1;
 $2=_st(self)._new();
-_st($2)._iconNoRender_("edit");
+_st($2)._icon_("edit");
 $3=_st($2)._yourself();
 $1=$3;
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"edit",{},smalltalk.GlyphIconMorph.klass)})},
-messageSends: ["iconNoRender:", "new", "yourself"]}),
+messageSends: ["icon:", "new", "yourself"]}),
 smalltalk.GlyphIconMorph.klass);
 
 smalltalk.addMethod(
@@ -3385,12 +3530,12 @@ var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $2,$3,$1;
 $2=_st(self)._new();
-_st($2)._iconNoRender_("home");
+_st($2)._icon_("home");
 $3=_st($2)._yourself();
 $1=$3;
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"home",{},smalltalk.GlyphIconMorph.klass)})},
-messageSends: ["iconNoRender:", "new", "yourself"]}),
+messageSends: ["icon:", "new", "yourself"]}),
 smalltalk.GlyphIconMorph.klass);
 
 smalltalk.addMethod(
@@ -3401,12 +3546,12 @@ var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $2,$3,$1;
 $2=_st(self)._new();
-_st($2)._iconNoRender_("ok");
+_st($2)._icon_("ok");
 $3=_st($2)._yourself();
 $1=$3;
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"ok",{},smalltalk.GlyphIconMorph.klass)})},
-messageSends: ["iconNoRender:", "new", "yourself"]}),
+messageSends: ["icon:", "new", "yourself"]}),
 smalltalk.GlyphIconMorph.klass);
 
 smalltalk.addMethod(
@@ -3417,12 +3562,12 @@ var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $2,$3,$1;
 $2=_st(self)._new();
-_st($2)._iconNoRender_("pencil");
+_st($2)._icon_("pencil");
 $3=_st($2)._yourself();
 $1=$3;
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"pencil",{},smalltalk.GlyphIconMorph.klass)})},
-messageSends: ["iconNoRender:", "new", "yourself"]}),
+messageSends: ["icon:", "new", "yourself"]}),
 smalltalk.GlyphIconMorph.klass);
 
 smalltalk.addMethod(
@@ -3433,12 +3578,12 @@ var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $2,$3,$1;
 $2=_st(self)._new();
-_st($2)._iconNoRender_("refresh");
+_st($2)._icon_("refresh");
 $3=_st($2)._yourself();
 $1=$3;
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"refresh",{},smalltalk.GlyphIconMorph.klass)})},
-messageSends: ["iconNoRender:", "new", "yourself"]}),
+messageSends: ["icon:", "new", "yourself"]}),
 smalltalk.GlyphIconMorph.klass);
 
 smalltalk.addMethod(
@@ -3449,12 +3594,12 @@ var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $2,$3,$1;
 $2=_st(self)._new();
-_st($2)._iconNoRender_("remove");
+_st($2)._icon_("remove");
 $3=_st($2)._yourself();
 $1=$3;
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"remove",{},smalltalk.GlyphIconMorph.klass)})},
-messageSends: ["iconNoRender:", "new", "yourself"]}),
+messageSends: ["icon:", "new", "yourself"]}),
 smalltalk.GlyphIconMorph.klass);
 
 smalltalk.addMethod(
@@ -3465,13 +3610,13 @@ var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $2,$3,$1;
 $2=_st(self)._new();
-_st($2)._iconNoRender_("refresh");
-_st($2)._spinNoRender();
+_st($2)._icon_("refresh");
+_st($2)._spin();
 $3=_st($2)._yourself();
 $1=$3;
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"wait",{},smalltalk.GlyphIconMorph.klass)})},
-messageSends: ["iconNoRender:", "new", "spinNoRender", "yourself"]}),
+messageSends: ["icon:", "new", "spin", "yourself"]}),
 smalltalk.GlyphIconMorph.klass);
 
 
@@ -3690,25 +3835,29 @@ smalltalk.method({
 selector: "drawTitleBar",
 fn: function (){
 var self=this;
-var navbar,closeBtn;
+var navbar;
 function $NavbarMorph(){return smalltalk.NavbarMorph||(typeof NavbarMorph=="undefined"?nil:NavbarMorph)}
-function $SimpleButtonMorph(){return smalltalk.SimpleButtonMorph||(typeof SimpleButtonMorph=="undefined"?nil:SimpleButtonMorph)}
 function $GlyphIconMorph(){return smalltalk.GlyphIconMorph||(typeof GlyphIconMorph=="undefined"?nil:GlyphIconMorph)}
+function $SimpleButtonMorph(){return smalltalk.SimpleButtonMorph||(typeof SimpleButtonMorph=="undefined"?nil:SimpleButtonMorph)}
 return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4;
 navbar=_st($NavbarMorph())._new();
 _st(self)._addMorph_(navbar);
-_st(navbar)._adhereToTop();
-_st(navbar)._height_((30));
-closeBtn=_st($SimpleButtonMorph())._new();
-_st(navbar)._addMorph_(closeBtn);
-_st(closeBtn)._addMorph_(_st($GlyphIconMorph())._remove());
-_st(closeBtn)._setToAdhereToEdge_("right");
-_st(closeBtn)._onClick_((function(){
+$1=navbar;
+_st($1)._adhereToTop();
+$2=_st($1)._height_((30));
+$3=_st($SimpleButtonMorph())._new();
+_st($3)._addMorph_(_st($GlyphIconMorph())._remove());
+_st($3)._setToAdhereToEdge_("right");
+_st($3)._top_(_st(navbar)._padding());
+_st($3)._onClick_((function(){
 return smalltalk.withContext(function($ctx2) {
 return _st(self)._delete();
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"drawTitleBar",{navbar:navbar,closeBtn:closeBtn},smalltalk.SystemWindow)})},
-messageSends: ["new", "addMorph:", "adhereToTop", "height:", "remove", "setToAdhereToEdge:", "onClick:", "delete"]}),
+$4=_st($3)._yourself();
+_st(navbar)._addMorph_($4);
+return self}, function($ctx1) {$ctx1.fill(self,"drawTitleBar",{navbar:navbar},smalltalk.SystemWindow)})},
+messageSends: ["new", "addMorph:", "adhereToTop", "height:", "remove", "setToAdhereToEdge:", "top:", "padding", "onClick:", "delete", "yourself"]}),
 smalltalk.SystemWindow);
 
 smalltalk.addMethod(
@@ -3753,6 +3902,49 @@ smalltalk.SystemWindow);
 
 
 smalltalk.addClass('WorkspaceMorph', smalltalk.Morph, ['morphElement'], 'Canvas');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "addMorph:",
+fn: function (aMorph){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+smalltalk.Morph.fn.prototype._addMorph_.apply(_st(self), [aMorph]);
+_st(_st(aMorph)._morphElement())._onMouseDown_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._moveToFront_(aMorph);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"addMorph:",{aMorph:aMorph},smalltalk.WorkspaceMorph)})},
+messageSends: ["addMorph:", "onMouseDown:", "moveToFront:", "morphElement"]}),
+smalltalk.WorkspaceMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "moveToFront:",
+fn: function (aMorph){
+var self=this;
+var zMax,zMin;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+zMin=_st(_st(_st(self)._submorphs())._collect_((function(morph){
+return smalltalk.withContext(function($ctx2) {
+return _st(morph)._zIndex();
+}, function($ctx2) {$ctx2.fillBlock({morph:morph},$ctx1)})})))._min();
+$1=_st(zMin).__gt((0));
+if(smalltalk.assert($1)){
+_st(_st(self)._submorphs())._do_((function(morph){
+return smalltalk.withContext(function($ctx2) {
+return _st(morph)._zIndex_(_st(_st(morph)._zIndex()).__minus(zMin));
+}, function($ctx2) {$ctx2.fillBlock({morph:morph},$ctx1)})}));
+};
+zMax=_st(_st(_st(self)._submorphs())._collect_((function(morph){
+return smalltalk.withContext(function($ctx2) {
+return _st(morph)._zIndex();
+}, function($ctx2) {$ctx2.fillBlock({morph:morph},$ctx1)})})))._max();
+_st(aMorph)._zIndex_(_st(zMax).__plus((1)));
+return self}, function($ctx1) {$ctx1.fill(self,"moveToFront:",{aMorph:aMorph,zMax:zMax,zMin:zMin},smalltalk.WorkspaceMorph)})},
+messageSends: ["min", "collect:", "zIndex", "submorphs", "ifTrue:", "do:", "zIndex:", "-", ">", "max", "+"]}),
+smalltalk.WorkspaceMorph);
+
 smalltalk.addMethod(
 smalltalk.method({
 selector: "render:with:",

@@ -225,6 +225,26 @@ intersection: aCollection
 	^ self class withAll: outputSet asArray
 !
 
+max
+	|greatest|
+	self size == 0
+		ifTrue: [self error: 'collection is empty'].
+	self do: [:el |
+		(greatest = nil or: [el > greatest])
+			ifTrue: [greatest := el]].
+	^ greatest
+!
+
+min
+	|smallest|
+	self size == 0
+		ifTrue: [self error: 'collection is empty'].
+	self do: [:el |
+		(smallest = nil or: [el < smallest])
+			ifTrue: [smallest := el]].
+	^ smallest
+!
+
 reject: aBlock
 	^self select: [:each | (aBlock value: each) = false]
 !
