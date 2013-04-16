@@ -5047,7 +5047,41 @@ referencedClasses: []
 smalltalk.GlyphIconMorph.klass);
 
 
-smalltalk.addClass('PluggableTextMorph', smalltalk.Morph, ['morphElement', 'textarea', 'model', 'getTextSelector', 'setTextSelector'], 'Canvas');
+smalltalk.addClass('PluggableTextMorph', smalltalk.Morph, ['morphElement', 'textarea', 'model', 'getTextSelector', 'setTextSelector', 'acceptOnCR'], 'Canvas');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "acceptOnCR",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@acceptOnCR"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"acceptOnCR",{},smalltalk.PluggableTextMorph)})},
+args: [],
+source: "acceptOnCR\x0a\x09^ acceptOnCR",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.PluggableTextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "acceptOnCR:",
+category: 'accessing',
+fn: function (aBoolean){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@acceptOnCR"]=aBoolean;
+return self}, function($ctx1) {$ctx1.fill(self,"acceptOnCR:",{aBoolean:aBoolean},smalltalk.PluggableTextMorph)})},
+args: ["aBoolean"],
+source: "acceptOnCR: aBoolean\x0a\x09acceptOnCR := aBoolean.",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.PluggableTextMorph);
+
 smalltalk.addMethod(
 smalltalk.method({
 selector: "getTextSelector",
@@ -5207,6 +5241,24 @@ referencedClasses: []
 }),
 smalltalk.PluggableTextMorph.klass);
 
+smalltalk.addMethod(
+smalltalk.method({
+selector: "on:text:accept:readSelection:menu:",
+category: 'instance creation',
+fn: function (anObject,getTextSel,setTextSel,getSelectionSel,getMenuSel){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._on_text_accept_(anObject,getTextSel,setTextSel);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"on:text:accept:readSelection:menu:",{anObject:anObject,getTextSel:getTextSel,setTextSel:setTextSel,getSelectionSel:getSelectionSel,getMenuSel:getMenuSel},smalltalk.PluggableTextMorph.klass)})},
+args: ["anObject", "getTextSel", "setTextSel", "getSelectionSel", "getMenuSel"],
+source: "on: anObject text: getTextSel accept: setTextSel readSelection: getSelectionSel menu: getMenuSel\x0a\x09\x22TODO: evaluate the other parameters\x22\x0a\x09^ self on: anObject text: getTextSel accept: setTextSel",
+messageSends: ["on:text:accept:"],
+referencedClasses: []
+}),
+smalltalk.PluggableTextMorph.klass);
+
 
 smalltalk.addClass('SimpleButtonMorph', smalltalk.Morph, ['morphElement', 'button'], 'Canvas');
 smalltalk.addMethod(
@@ -5336,7 +5388,25 @@ smalltalk.SimpleButtonMorph);
 
 
 
-smalltalk.addClass('SystemWindow', smalltalk.Morph, ['morphElement'], 'Canvas');
+smalltalk.addClass('SystemWindow', smalltalk.Morph, ['morphElement', 'label', 'model', 'morphFrames'], 'Canvas');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "addMorph:frame:",
+category: 'submorphs',
+fn: function (aMorph,aRectangle){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._addMorph_(aMorph);
+_st(_st(self)._morphFrames())._at_put_(aMorph,aRectangle);
+_st(self)._updateLayout();
+return self}, function($ctx1) {$ctx1.fill(self,"addMorph:frame:",{aMorph:aMorph,aRectangle:aRectangle},smalltalk.SystemWindow)})},
+args: ["aMorph", "aRectangle"],
+source: "addMorph: aMorph frame: aRectangle\x0a\x09self addMorph: aMorph.\x0a\x09self morphFrames at: aMorph put: aRectangle.\x0a\x09self updateLayout.",
+messageSends: ["addMorph:", "at:put:", "morphFrames", "updateLayout"],
+referencedClasses: []
+}),
+smalltalk.SystemWindow);
+
 smalltalk.addMethod(
 smalltalk.method({
 selector: "drawTitleBar",
@@ -5370,10 +5440,11 @@ _st($5)._text_("a SystemWindow");
 _st($5)._setToAdhereToEdge_("left");
 _st($5)._paddingTop_((4));
 $6=_st($5)._yourself();
-_st(navbar)._addMorph_($6);
+self["@label"]=$6;
+_st(navbar)._addMorph_(self["@label"]);
 return self}, function($ctx1) {$ctx1.fill(self,"drawTitleBar",{navbar:navbar},smalltalk.SystemWindow)})},
 args: [],
-source: "drawTitleBar\x0a\x09|navbar|\x0a\x09navbar := NavbarMorph new.\x0a\x09self addMorph: navbar.\x0a\x09navbar\x0a\x09\x09adhereToTop;\x0a\x09\x09height: 30.\x0a\x09navbar addMorph: (SimpleButtonMorph new\x0a\x09\x09addMorph: GlyphIconMorph remove;\x0a\x09\x09setToAdhereToEdge: #right;\x0a\x09\x09top: navbar padding;\x0a\x09\x09onClick: [self delete];\x0a\x09\x09yourself).\x0a\x09navbar addMorph: (TextMorph new\x0a\x09\x09text: 'a SystemWindow';\x0a\x09\x09setToAdhereToEdge: #left;\x0a\x09\x09paddingTop: 4;\x0a\x09\x09yourself).",
+source: "drawTitleBar\x0a\x09|navbar|\x0a\x09navbar := NavbarMorph new.\x0a\x09self addMorph: navbar.\x0a\x09navbar\x0a\x09\x09adhereToTop;\x0a\x09\x09height: 30.\x0a\x09navbar addMorph: (SimpleButtonMorph new\x0a\x09\x09addMorph: GlyphIconMorph remove;\x0a\x09\x09setToAdhereToEdge: #right;\x0a\x09\x09top: navbar padding;\x0a\x09\x09onClick: [self delete];\x0a\x09\x09yourself).\x0a\x09navbar addMorph: (label := TextMorph new\x0a\x09\x09text: 'a SystemWindow';\x0a\x09\x09setToAdhereToEdge: #left;\x0a\x09\x09paddingTop: 4;\x0a\x09\x09yourself).",
 messageSends: ["new", "addMorph:", "adhereToTop", "height:", "remove", "setToAdhereToEdge:", "top:", "padding", "onClick:", "delete", "yourself", "text:", "paddingTop:"],
 referencedClasses: ["NavbarMorph", "GlyphIconMorph", "SimpleButtonMorph", "TextMorph"]
 }),
@@ -5392,6 +5463,84 @@ args: [],
 source: "isSystemWindow\x0a\x09^ true",
 messageSends: [],
 referencedClasses: []
+}),
+smalltalk.SystemWindow);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "label",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._labelMorph())._text();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"label",{},smalltalk.SystemWindow)})},
+args: [],
+source: "label\x0a\x09^ self labelMorph text",
+messageSends: ["text", "labelMorph"],
+referencedClasses: []
+}),
+smalltalk.SystemWindow);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "labelMorph",
+category: 'private',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@label"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"labelMorph",{},smalltalk.SystemWindow)})},
+args: [],
+source: "labelMorph\x0a\x09^ label",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.SystemWindow);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "model:",
+category: 'accessing',
+fn: function (aModel){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@model"]=aModel;
+return self}, function($ctx1) {$ctx1.fill(self,"model:",{aModel:aModel},smalltalk.SystemWindow)})},
+args: ["aModel"],
+source: "model: aModel\x0a\x09model := aModel.",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.SystemWindow);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "morphFrames",
+category: 'private',
+fn: function (){
+var self=this;
+function $Dictionary(){return smalltalk.Dictionary||(typeof Dictionary=="undefined"?nil:Dictionary)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=self["@morphFrames"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@morphFrames"]=_st($Dictionary())._new();
+self["@morphFrames"];
+} else {
+$1;
+};
+$2=self["@morphFrames"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"morphFrames",{},smalltalk.SystemWindow)})},
+args: [],
+source: "morphFrames\x0a\x09morphFrames ifNil: [morphFrames := Dictionary new].\x0a\x09^ morphFrames",
+messageSends: ["ifNil:", "new"],
+referencedClasses: ["Dictionary"]
 }),
 smalltalk.SystemWindow);
 
@@ -5433,6 +5582,43 @@ referencedClasses: []
 }),
 smalltalk.SystemWindow);
 
+smalltalk.addMethod(
+smalltalk.method({
+selector: "setLabel:",
+category: 'accessing',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._labelMorph())._text_(aString);
+return self}, function($ctx1) {$ctx1.fill(self,"setLabel:",{aString:aString},smalltalk.SystemWindow)})},
+args: ["aString"],
+source: "setLabel: aString\x0a\x09self labelMorph text: aString.",
+messageSends: ["text:", "labelMorph"],
+referencedClasses: []
+}),
+smalltalk.SystemWindow);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "labelled:",
+category: 'instance creation',
+fn: function (labelString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=_st(self)._new();
+_st($2)._setLabel_(labelString);
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"labelled:",{labelString:labelString},smalltalk.SystemWindow.klass)})},
+args: ["labelString"],
+source: "labelled: labelString\x0a\x09^ self new \x0a\x09\x09setLabel: labelString;\x0a\x09\x09yourself",
+messageSends: ["setLabel:", "new", "yourself"],
+referencedClasses: []
+}),
+smalltalk.SystemWindow.klass);
 
 
 smalltalk.addClass('WorkspaceMorph', smalltalk.Morph, ['morphElement'], 'Canvas');

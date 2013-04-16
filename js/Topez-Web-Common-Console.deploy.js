@@ -972,3 +972,6 @@ messageSends: ["at:ifAbsent:", "error:", "classSymbol:wording:brightColor:pastel
 smalltalk.TodeConsole.klass);
 
 
+smalltalk.addClass('TodeConsoleWindowMorph', smalltalk.PluggableTextMorph, ['inputMark'], 'Topez-Web-Common-Console');
+
+

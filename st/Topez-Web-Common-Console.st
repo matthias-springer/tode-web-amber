@@ -476,3 +476,7 @@ windowColorSpecification
       'Tode Console window for running remote GemStone/S tODE session'
 ! !
 
+PluggableTextMorph subclass: #TodeConsoleWindowMorph
+	instanceVariableNames: 'inputMark'
+	package: 'Topez-Web-Common-Console'!
+

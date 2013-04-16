@@ -1431,10 +1431,18 @@ wait
 ! !
 
 Morph subclass: #PluggableTextMorph
-	instanceVariableNames: 'morphElement textarea model getTextSelector setTextSelector'
+	instanceVariableNames: 'morphElement textarea model getTextSelector setTextSelector acceptOnCR'
 	package: 'Canvas'!
 
 !PluggableTextMorph methodsFor: 'accessing'!
+
+acceptOnCR
+	^ acceptOnCR
+!
+
+acceptOnCR: aBoolean
+	acceptOnCR := aBoolean.
+!
 
 getTextSelector
 	^ getTextSelector
@@ -1482,6 +1490,11 @@ on: anObject text: getTextSel accept: setTextSel
 		on: anObject
 		text: getTextSel
 		accept: setTextSel
+!
+
+on: anObject text: getTextSel accept: setTextSel readSelection: getSelectionSel menu: getMenuSel
+	"TODO: evaluate the other parameters"
+	^ self on: anObject text: getTextSel accept: setTextSel
 ! !
 
 Morph subclass: #SimpleButtonMorph
@@ -1526,8 +1539,33 @@ render: container with: html
 ! !
 
 Morph subclass: #SystemWindow
-	instanceVariableNames: 'morphElement'
+	instanceVariableNames: 'morphElement label model morphFrames'
 	package: 'Canvas'!
+
+!SystemWindow methodsFor: 'accessing'!
+
+label
+	^ self labelMorph text
+!
+
+model: aModel
+	model := aModel.
+!
+
+setLabel: aString
+	self labelMorph text: aString.
+! !
+
+!SystemWindow methodsFor: 'private'!
+
+labelMorph
+	^ label
+!
+
+morphFrames
+	morphFrames ifNil: [morphFrames := Dictionary new].
+	^ morphFrames
+! !
 
 !SystemWindow methodsFor: 'rendering'!
 
@@ -1544,7 +1582,7 @@ drawTitleBar
 		top: navbar padding;
 		onClick: [self delete];
 		yourself).
-	navbar addMorph: (TextMorph new
+	navbar addMorph: (label := TextMorph new
 		text: 'a SystemWindow';
 		setToAdhereToEdge: #left;
 		paddingTop: 4;
@@ -1564,10 +1602,26 @@ setDefaultSize
 	self width: 250.
 ! !
 
+!SystemWindow methodsFor: 'submorphs'!
+
+addMorph: aMorph frame: aRectangle
+	self addMorph: aMorph.
+	self morphFrames at: aMorph put: aRectangle.
+	self updateLayout.
+! !
+
 !SystemWindow methodsFor: 'testing'!
 
 isSystemWindow
 	^ true
+! !
+
+!SystemWindow class methodsFor: 'instance creation'!
+
+labelled: labelString
+	^ self new 
+		setLabel: labelString;
+		yourself
 ! !
 
 Morph subclass: #WorkspaceMorph

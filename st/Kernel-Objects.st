@@ -1769,6 +1769,14 @@ asPoint
 	^self
 !
 
+corner: aPoint 
+	"Answer a Rectangle whose origin is the receiver and whose corner is 
+	aPoint. This is one of the infix ways of expressing the creation of a 
+	rectangle."
+
+	^Rectangle origin: self corner: aPoint
+!
+
 extent: aPoint
 	"TODO: convert to rectangle"
 ! !
@@ -1855,6 +1863,37 @@ next
 
 next: anInteger
 	^(1 to: anInteger) collect: [:each | self next]
+! !
+
+Object subclass: #Rectangle
+	instanceVariableNames: 'topLeft bottomRight'
+	package: 'Kernel-Objects'!
+
+!Rectangle methodsFor: 'accessing'!
+
+bottomRight
+	^ bottomRight
+!
+
+bottomRight: aPoint
+	bottomRight := aPoint
+!
+
+topLeft
+	^ topLeft
+!
+
+topLeft: aPoint
+	topLeft := aPoint.
+! !
+
+!Rectangle class methodsFor: 'instance creation'!
+
+origin: originPoint corner: cornerPoint
+	^ self new
+		topLeft: originPoint;
+		bottomRight: cornerPoint;
+		yourself
 ! !
 
 Object subclass: #Smalltalk

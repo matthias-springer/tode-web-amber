@@ -5293,6 +5293,25 @@ smalltalk.Point);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "corner:",
+category: 'converting',
+fn: function (aPoint){
+var self=this;
+function $Rectangle(){return smalltalk.Rectangle||(typeof Rectangle=="undefined"?nil:Rectangle)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($Rectangle())._origin_corner_(self,aPoint);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"corner:",{aPoint:aPoint},smalltalk.Point)})},
+args: ["aPoint"],
+source: "corner: aPoint \x0a\x09\x22Answer a Rectangle whose origin is the receiver and whose corner is \x0a\x09aPoint. This is one of the infix ways of expressing the creation of a \x0a\x09rectangle.\x22\x0a\x0a\x09^Rectangle origin: self corner: aPoint",
+messageSends: ["origin:corner:"],
+referencedClasses: ["Rectangle"]
+}),
+smalltalk.Point);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "extent:",
 category: 'converting',
 fn: function (aPoint){
@@ -5533,6 +5552,99 @@ referencedClasses: []
 }),
 smalltalk.Random);
 
+
+
+smalltalk.addClass('Rectangle', smalltalk.Object, ['topLeft', 'bottomRight'], 'Kernel-Objects');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "bottomRight",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@bottomRight"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"bottomRight",{},smalltalk.Rectangle)})},
+args: [],
+source: "bottomRight\x0a\x09^ bottomRight",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Rectangle);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "bottomRight:",
+category: 'accessing',
+fn: function (aPoint){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@bottomRight"]=aPoint;
+return self}, function($ctx1) {$ctx1.fill(self,"bottomRight:",{aPoint:aPoint},smalltalk.Rectangle)})},
+args: ["aPoint"],
+source: "bottomRight: aPoint\x0a\x09bottomRight := aPoint",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Rectangle);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "topLeft",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@topLeft"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"topLeft",{},smalltalk.Rectangle)})},
+args: [],
+source: "topLeft\x0a\x09^ topLeft",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Rectangle);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "topLeft:",
+category: 'accessing',
+fn: function (aPoint){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@topLeft"]=aPoint;
+return self}, function($ctx1) {$ctx1.fill(self,"topLeft:",{aPoint:aPoint},smalltalk.Rectangle)})},
+args: ["aPoint"],
+source: "topLeft: aPoint\x0a\x09topLeft := aPoint.",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Rectangle);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "origin:corner:",
+category: 'instance creation',
+fn: function (originPoint,cornerPoint){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=_st(self)._new();
+_st($2)._topLeft_(originPoint);
+_st($2)._bottomRight_(cornerPoint);
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"origin:corner:",{originPoint:originPoint,cornerPoint:cornerPoint},smalltalk.Rectangle.klass)})},
+args: ["originPoint", "cornerPoint"],
+source: "origin: originPoint corner: cornerPoint\x0a\x09^ self new\x0a\x09\x09topLeft: originPoint;\x0a\x09\x09bottomRight: cornerPoint;\x0a\x09\x09yourself",
+messageSends: ["topLeft:", "new", "bottomRight:", "yourself"],
+referencedClasses: []
+}),
+smalltalk.Rectangle.klass);
 
 
 smalltalk.addClass('Smalltalk', smalltalk.Object, [], 'Kernel-Objects');
