@@ -726,16 +726,16 @@ action: aString
 	self at: 'action' put: aString
 !
 
+addClass: aString
+	self element asJQuery addClass: aString
+!
+
 align: aString
 	self at: 'align' put: aString
 !
 
 alt: aString
 	self at: 'alt' put: aString
-!
-
-appendClass: aString
-	self element asJQuery addClass: aString
 !
 
 at: aString put: aValue
@@ -759,7 +759,7 @@ contextmenu: aString
 !
 
 draggable
-	self appendClass: 'draggable'.
+	self addClass: 'draggable'.
 	self element asJQuery draggable.
 !
 
@@ -1027,6 +1027,16 @@ Widget subclass: #Morph
 	instanceVariableNames: 'morphElement submorphs owner'
 	package: 'Canvas'!
 
+!Morph methodsFor: 'css'!
+
+addClass: aString
+	self morphElement asJQuery addClass: aString.
+!
+
+removeClass: aString
+	self morphElement asJQuery removeClass: aString.
+! !
+
 !Morph methodsFor: 'geometry'!
 
 height
@@ -1156,11 +1166,21 @@ addMorph: aMorph
 	"TODO: cause rendering before addMorph: to allow changing properties before rendering."
 	self submorphs add: aMorph.
 	aMorph owner: self.
-	aMorph appendToJQuery: self morphElement asJQuery.
+	aMorph appendToJQuery: self submorphContainer asJQuery.
+!
+
+delete
+	self owner isMorph ifTrue: [
+		self owner submorphs remove: self.
+		self morphElement asJQuery remove].
 !
 
 owner
 	^ owner
+!
+
+submorphContainer
+	^ self morphElement
 !
 
 submorphs
@@ -1198,25 +1218,25 @@ AlignmentMorph subclass: #DockingBarMorph
 adhereToBottom
 	"Instract the receiver to adhere to bottom"
 	 self adhereTo:#bottom.
-	 self width: self owner width.
+	 self width: self owner width - self ownerPadding.
 !
 
 adhereToLeft
 	"Instract the receiver to adhere to left"
 	self adhereTo: #left.
-	self heightPercent: 100.
+	self height: self owner height - self ownerPadding.
 !
 
 adhereToRight
 	"Instract the receiver to adhere to right"
 	self adhereTo: #right.
-	self heightPercent: 100.
+	self height: self owner height - self ownerPadding.
 !
 
 adhereToTop
 	"Instract the receiver to adhere to top"
 	self adhereTo: #top.
-	self width: self owner width.
+	self width: self owner width - self ownerPadding.
 ! !
 
 !DockingBarMorph methodsFor: 'private'!
@@ -1237,6 +1257,104 @@ DockingBarMorph subclass: #NavbarMorph
 render: container with: html
 	container
 		class: 'window-title'.
+! !
+
+Morph subclass: #GlyphIconMorph
+	instanceVariableNames: 'morphElement icon spin'
+	package: 'Canvas'!
+
+!GlyphIconMorph methodsFor: 'accessing'!
+
+icon
+	icon ifNil: [self icon: 'star'].
+	^ icon
+!
+
+icon: anIcon
+	self removeClass: 'icon-', self icon.
+	icon := anIcon.
+	self addClass: 'icon-', anIcon.
+!
+
+spin
+	spin ifNil: [self spin: false].
+	^ spin
+!
+
+spin: aBoolean
+	spin := aBoolean.
+	spin
+		ifTrue: [self addClass: 'icon-spin']
+		ifFalse: [self removeClass: 'icon-spin'].
+! !
+
+!GlyphIconMorph methodsFor: 'private'!
+
+iconNoRender: anIcon
+	icon := anIcon.
+!
+
+spinNoRender
+	spin := true.
+! !
+
+!GlyphIconMorph methodsFor: 'rendering'!
+
+cssClasses
+	|str|
+	str := 'icon-', self icon.
+	self spin ifTrue: [str := str, ' icon-spin'].
+	^ str
+!
+
+render: container with: html
+	container
+		class: self cssClasses.
+! !
+
+!GlyphIconMorph class methodsFor: 'icons'!
+
+edit
+	^ self new
+		iconNoRender: 'edit';
+		yourself
+!
+
+home
+	^ self new
+		iconNoRender: 'home';
+		yourself
+!
+
+ok
+	^ self new
+		iconNoRender: 'ok';
+		yourself
+!
+
+pencil
+	^ self new
+		iconNoRender: 'pencil';
+		yourself
+!
+
+refresh
+	^ self new
+		iconNoRender: 'refresh';
+		yourself
+!
+
+remove
+	^ self new
+		iconNoRender: 'remove';
+		yourself
+!
+
+wait
+	^ self new
+		iconNoRender: 'refresh';
+		spinNoRender;
+		yourself
 ! !
 
 Morph subclass: #PluggableTextMorph
@@ -1299,8 +1417,8 @@ Morph subclass: #SimpleButtonMorph
 
 !SimpleButtonMorph methodsFor: 'accessing'!
 
-appendClass: aString
-	button asJQuery addClass: aString.
+button
+	^ button
 !
 
 label
@@ -1309,6 +1427,16 @@ label
 
 label: aString
 	button with: aString.
+!
+
+submorphContainer
+	^ self button
+! !
+
+!SimpleButtonMorph methodsFor: 'css'!
+
+addClass: aString
+	button asJQuery addClass: aString.
 ! !
 
 !SimpleButtonMorph methodsFor: 'events'!
@@ -1335,10 +1463,12 @@ drawTitleBar
 	navbar := NavbarMorph new.
 	self addMorph: navbar.
 	navbar adhereToTop.
+	navbar height: 30.
 	closeBtn := SimpleButtonMorph new.
 	navbar addMorph: closeBtn.
-	closeBtn label: 'close'.
+	closeBtn addMorph: GlyphIconMorph remove.
 	closeBtn setToAdhereToEdge: #right.
+	closeBtn onClick: [self delete].
 !
 
 render: container with: html
