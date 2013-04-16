@@ -3749,7 +3749,7 @@ smalltalk.Widget);
 
 
 
-smalltalk.addClass('Morph', smalltalk.Widget, ['morphElement', 'submorphs'], 'Canvas');
+smalltalk.addClass('Morph', smalltalk.Widget, ['morphElement', 'submorphs', 'owner'], 'Canvas');
 smalltalk.addMethod(
 smalltalk.method({
 selector: "addMorph:",
@@ -3758,11 +3758,12 @@ fn: function (aMorph){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 _st(_st(self)._submorphs())._add_(aMorph);
+_st(aMorph)._owner_(self);
 _st(aMorph)._appendToJQuery_(_st(_st(self)._morphElement())._asJQuery());
 return self}, function($ctx1) {$ctx1.fill(self,"addMorph:",{aMorph:aMorph},smalltalk.Morph)})},
 args: ["aMorph"],
-source: "addMorph: aMorph\x0a\x09\x22TODO: cause rendering before addMorph: to allow changing properties before rendering.\x22\x0a\x09self submorphs add: aMorph.\x0a\x09aMorph appendToJQuery: self morphElement asJQuery.",
-messageSends: ["add:", "submorphs", "appendToJQuery:", "asJQuery", "morphElement"],
+source: "addMorph: aMorph\x0a\x09\x22TODO: cause rendering before addMorph: to allow changing properties before rendering.\x22\x0a\x09self submorphs add: aMorph.\x0a\x09aMorph owner: self.\x0a\x09aMorph appendToJQuery: self morphElement asJQuery.",
+messageSends: ["add:", "submorphs", "owner:", "appendToJQuery:", "asJQuery", "morphElement"],
 referencedClasses: []
 }),
 smalltalk.Morph);
@@ -3871,6 +3872,22 @@ smalltalk.Morph);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "isMorph",
+category: 'testing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return true;
+}, function($ctx1) {$ctx1.fill(self,"isMorph",{},smalltalk.Morph)})},
+args: [],
+source: "isMorph\x0a\x09^ true",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "left",
 category: 'geometry',
 fn: function (){
@@ -3917,6 +3934,98 @@ return $1;
 args: [],
 source: "morphElement\x0a\x09^ morphElement",
 messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "owner",
+category: 'submorphs',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@owner"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"owner",{},smalltalk.Morph)})},
+args: [],
+source: "owner\x0a\x09^ owner",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "owner:",
+category: 'private',
+fn: function (aMorph){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@owner"]=aMorph;
+return self}, function($ctx1) {$ctx1.fill(self,"owner:",{aMorph:aMorph},smalltalk.Morph)})},
+args: ["aMorph"],
+source: "owner: aMorph\x0a\x09owner := aMorph.",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "ownerPadding",
+category: 'geometry',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+$1=_st(_st(self)._owner())._isMorph();
+if(smalltalk.assert($1)){
+$2=_st(_st(self)._owner())._padding();
+return $2;
+} else {
+$3=(0);
+return $3;
+};
+return self}, function($ctx1) {$ctx1.fill(self,"ownerPadding",{},smalltalk.Morph)})},
+args: [],
+source: "ownerPadding\x0a\x09self owner isMorph\x0a\x09\x09ifTrue: [^ self owner padding]\x0a\x09\x09ifFalse: [ ^ 0].",
+messageSends: ["ifTrue:ifFalse:", "padding", "owner", "isMorph"],
+referencedClasses: []
+}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "padding",
+category: 'geometry',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(_st(self)._morphElement())._asJQuery())._css_("padding"))._parseFloat();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"padding",{},smalltalk.Morph)})},
+args: [],
+source: "padding\x0a\x09^ (self morphElement asJQuery css: 'padding') parseFloat",
+messageSends: ["parseFloat", "css:", "asJQuery", "morphElement"],
+referencedClasses: []
+}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "padding:",
+category: 'geometry',
+fn: function (aNumber){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(_st(self)._morphElement())._asJQuery())._css_a_("padding",_st(_st(aNumber)._asString()).__comma("px"));
+return self}, function($ctx1) {$ctx1.fill(self,"padding:",{aNumber:aNumber},smalltalk.Morph)})},
+args: ["aNumber"],
+source: "padding: aNumber\x0a\x09self morphElement asJQuery css: 'padding' a: aNumber asString, 'px'.",
+messageSends: ["css:a:", ",", "asString", "asJQuery", "morphElement"],
 referencedClasses: []
 }),
 smalltalk.Morph);
@@ -4013,24 +4122,24 @@ _st(self)._autoPosition();
 _st(self)._positionAbsolute();
 $1=_st(anEdge).__eq("top");
 if(smalltalk.assert($1)){
-_st(self)._top_((0));
+_st(self)._top_(_st(self)._ownerPadding());
 };
 $2=_st(anEdge).__eq("left");
 if(smalltalk.assert($2)){
-_st(self)._left_((0));
+_st(self)._left_(_st(self)._ownerPadding());
 };
 $3=_st(anEdge).__eq("bottom");
 if(smalltalk.assert($3)){
-_st(self)._bottomCss_((0));
+_st(self)._bottomCss_(_st(self)._ownerPadding());
 };
 $4=_st(anEdge).__eq("right");
 if(smalltalk.assert($4)){
-_st(self)._rightCss_((0));
+_st(self)._rightCss_(_st(self)._ownerPadding());
 };
 return self}, function($ctx1) {$ctx1.fill(self,"setToAdhereToEdge:",{anEdge:anEdge},smalltalk.Morph)})},
 args: ["anEdge"],
-source: "setToAdhereToEdge: anEdge\x0a\x09self autoPosition.\x0a\x09self positionAbsolute.\x0a\x09anEdge = #top ifTrue: [self top: 0].\x0a\x09anEdge = #left ifTrue: [self left: 0].\x0a\x09anEdge = #bottom ifTrue: [self bottomCss: 0].\x0a\x09anEdge = #right ifTrue: [self rightCss: 0].",
-messageSends: ["autoPosition", "positionAbsolute", "ifTrue:", "top:", "=", "left:", "bottomCss:", "rightCss:"],
+source: "setToAdhereToEdge: anEdge\x0a\x09self autoPosition.\x0a\x09self positionAbsolute.\x0a\x09anEdge = #top ifTrue: [self top: self ownerPadding].\x0a\x09anEdge = #left ifTrue: [self left: self ownerPadding].\x0a\x09anEdge = #bottom ifTrue: [self bottomCss: self ownerPadding].\x0a\x09anEdge = #right ifTrue: [self rightCss: self ownerPadding].",
+messageSends: ["autoPosition", "positionAbsolute", "ifTrue:", "top:", "ownerPadding", "=", "left:", "bottomCss:", "rightCss:"],
 referencedClasses: []
 }),
 smalltalk.Morph);
@@ -4153,6 +4262,39 @@ referencedClasses: []
 }),
 smalltalk.Morph);
 
+smalltalk.addMethod(
+smalltalk.method({
+selector: "windowPadding",
+category: 'geometry',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5;
+$1=_st(self)._isSystemWindow();
+if(smalltalk.assert($1)){
+$2=_st(self)._padding();
+return $2;
+} else {
+$3=_st(_st(_st(self)._owner()).__tild_tild(nil))._and_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(self)._owner())._isMorph();
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+if(smalltalk.assert($3)){
+$4=_st(_st(self)._owner())._windowPadding();
+return $4;
+} else {
+$5=(0);
+return $5;
+};
+};
+return self}, function($ctx1) {$ctx1.fill(self,"windowPadding",{},smalltalk.Morph)})},
+args: [],
+source: "windowPadding\x0a\x09self isSystemWindow\x0a\x09\x09ifTrue: [^ self padding]\x0a\x09\x09ifFalse: [\x0a\x09\x09\x09(self owner ~~ nil and: [self owner isMorph])\x0a\x09\x09\x09\x09ifTrue: [^ self owner windowPadding]\x0a\x09\x09\x09\x09ifFalse: [^ 0]].",
+messageSends: ["ifTrue:ifFalse:", "padding", "windowPadding", "owner", "and:", "isMorph", "~~", "isSystemWindow"],
+referencedClasses: []
+}),
+smalltalk.Morph);
+
 
 
 smalltalk.addClass('BorderedMorph', smalltalk.Morph, ['morphElement'], 'Canvas');
@@ -4195,11 +4337,11 @@ fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 _st(self)._adhereTo_("bottom");
-_st(self)._widthPercent_((100));
+_st(self)._width_(_st(_st(self)._owner())._width());
 return self}, function($ctx1) {$ctx1.fill(self,"adhereToBottom",{},smalltalk.DockingBarMorph)})},
 args: [],
-source: "adhereToBottom\x0a\x09\x22Instract the receiver to adhere to bottom\x22\x0a\x09 self adhereTo:#bottom.\x0a\x09 self widthPercent: 100.",
-messageSends: ["adhereTo:", "widthPercent:"],
+source: "adhereToBottom\x0a\x09\x22Instract the receiver to adhere to bottom\x22\x0a\x09 self adhereTo:#bottom.\x0a\x09 self width: self owner width.",
+messageSends: ["adhereTo:", "width:", "width", "owner"],
 referencedClasses: []
 }),
 smalltalk.DockingBarMorph);
@@ -4246,11 +4388,11 @@ fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 _st(self)._adhereTo_("top");
-_st(self)._widthPercent_((100));
+_st(self)._width_(_st(_st(self)._owner())._width());
 return self}, function($ctx1) {$ctx1.fill(self,"adhereToTop",{},smalltalk.DockingBarMorph)})},
 args: [],
-source: "adhereToTop\x0a\x09\x22Instract the receiver to adhere to top\x22\x0a\x09self adhereTo: #top.\x0a\x09self widthPercent: 100.",
-messageSends: ["adhereTo:", "widthPercent:"],
+source: "adhereToTop\x0a\x09\x22Instract the receiver to adhere to top\x22\x0a\x09self adhereTo: #top.\x0a\x09self width: self owner width.",
+messageSends: ["adhereTo:", "width:", "width", "owner"],
 referencedClasses: []
 }),
 smalltalk.DockingBarMorph);
@@ -4557,6 +4699,22 @@ smalltalk.SystemWindow);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "isSystemWindow",
+category: 'testing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return true;
+}, function($ctx1) {$ctx1.fill(self,"isSystemWindow",{},smalltalk.SystemWindow)})},
+args: [],
+source: "isSystemWindow\x0a\x09^ true",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.SystemWindow);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "render:with:",
 category: 'rendering',
 fn: function (container,html){
@@ -4566,12 +4724,12 @@ var $1,$2;
 $1=container;
 _st($1)._class_("component window");
 $2=_st($1)._draggable();
-_st(self)._drawTitleBar();
 _st(self)._setDefaultSize();
+_st(self)._drawTitleBar();
 return self}, function($ctx1) {$ctx1.fill(self,"render:with:",{container:container,html:html},smalltalk.SystemWindow)})},
 args: ["container", "html"],
-source: "render: container with: html\x0a\x09container  \x0a\x09\x09class: 'component window';\x0a\x09\x09draggable.\x0a\x09self drawTitleBar.\x0a\x09self setDefaultSize.",
-messageSends: ["class:", "draggable", "drawTitleBar", "setDefaultSize"],
+source: "render: container with: html\x0a\x09container  \x0a\x09\x09class: 'component window';\x0a\x09\x09draggable.\x0a\x09self setDefaultSize.\x0a\x09self drawTitleBar.",
+messageSends: ["class:", "draggable", "setDefaultSize", "drawTitleBar"],
 referencedClasses: []
 }),
 smalltalk.SystemWindow);

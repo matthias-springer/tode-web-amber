@@ -368,6 +368,10 @@ isMetaclass
 	^false
 !
 
+isMorph
+	^ false
+!
+
 isNil
 	^false
 !
@@ -394,6 +398,10 @@ isString
 
 isSymbol
 	^false
+!
+
+isSystemWindow
+	^ false
 !
 
 notNil

@@ -1024,7 +1024,7 @@ renderOn: html
 ! !
 
 Widget subclass: #Morph
-	instanceVariableNames: 'morphElement submorphs'
+	instanceVariableNames: 'morphElement submorphs owner'
 	package: 'Canvas'!
 
 !Morph methodsFor: 'geometry'!
@@ -1049,6 +1049,20 @@ left: aNumber
 	self morphElement asJQuery css: 'left' a: aNumber asString, 'px'.
 !
 
+ownerPadding
+	self owner isMorph
+		ifTrue: [^ self owner padding]
+		ifFalse: [ ^ 0].
+!
+
+padding
+	^ (self morphElement asJQuery css: 'padding') parseFloat
+!
+
+padding: aNumber
+	self morphElement asJQuery css: 'padding' a: aNumber asString, 'px'.
+!
+
 positionAbsolute
 	self morphElement asJQuery css: 'position' a: 'absolute'.
 !
@@ -1060,10 +1074,10 @@ positionRelative
 setToAdhereToEdge: anEdge
 	self autoPosition.
 	self positionAbsolute.
-	anEdge = #top ifTrue: [self top: 0].
-	anEdge = #left ifTrue: [self left: 0].
-	anEdge = #bottom ifTrue: [self bottomCss: 0].
-	anEdge = #right ifTrue: [self rightCss: 0].
+	anEdge = #top ifTrue: [self top: self ownerPadding].
+	anEdge = #left ifTrue: [self left: self ownerPadding].
+	anEdge = #bottom ifTrue: [self bottomCss: self ownerPadding].
+	anEdge = #right ifTrue: [self rightCss: self ownerPadding].
 !
 
 top
@@ -1084,6 +1098,15 @@ width: aNumber
 
 widthPercent: aNumber
 	self morphElement asJQuery css: 'width' a: aNumber asString, '%'.
+!
+
+windowPadding
+	self isSystemWindow
+		ifTrue: [^ self padding]
+		ifFalse: [
+			(self owner ~~ nil and: [self owner isMorph])
+				ifTrue: [^ self owner windowPadding]
+				ifFalse: [^ 0]].
 ! !
 
 !Morph methodsFor: 'initializing'!
@@ -1109,6 +1132,10 @@ morphElement
 	^ morphElement
 !
 
+owner: aMorph
+	owner := aMorph.
+!
+
 rightCss: aNumber
 	self morphElement asJQuery css: 'right' a: aNumber asString, 'px'.
 ! !
@@ -1128,7 +1155,12 @@ renderOn: html
 addMorph: aMorph
 	"TODO: cause rendering before addMorph: to allow changing properties before rendering."
 	self submorphs add: aMorph.
+	aMorph owner: self.
 	aMorph appendToJQuery: self morphElement asJQuery.
+!
+
+owner
+	^ owner
 !
 
 submorphs
@@ -1137,6 +1169,12 @@ submorphs
 
 submorphsDo: aBlock
 	self submorphs do: aBlock.
+! !
+
+!Morph methodsFor: 'testing'!
+
+isMorph
+	^ true
 ! !
 
 Morph subclass: #BorderedMorph
@@ -1160,7 +1198,7 @@ AlignmentMorph subclass: #DockingBarMorph
 adhereToBottom
 	"Instract the receiver to adhere to bottom"
 	 self adhereTo:#bottom.
-	 self widthPercent: 100.
+	 self width: self owner width.
 !
 
 adhereToLeft
@@ -1178,7 +1216,7 @@ adhereToRight
 adhereToTop
 	"Instract the receiver to adhere to top"
 	self adhereTo: #top.
-	self widthPercent: 100.
+	self width: self owner width.
 ! !
 
 !DockingBarMorph methodsFor: 'private'!
@@ -1307,13 +1345,19 @@ render: container with: html
 	container  
 		class: 'component window';
 		draggable.
-	self drawTitleBar.
 	self setDefaultSize.
+	self drawTitleBar.
 !
 
 setDefaultSize
 	self height: 250.
 	self width: 250.
+! !
+
+!SystemWindow methodsFor: 'testing'!
+
+isSystemWindow
+	^ true
 ! !
 
 Morph subclass: #WorkspaceMorph

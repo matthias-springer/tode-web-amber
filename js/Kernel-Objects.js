@@ -706,6 +706,22 @@ smalltalk.Object);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "isMorph",
+category: 'testing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return false;
+}, function($ctx1) {$ctx1.fill(self,"isMorph",{},smalltalk.Object)})},
+args: [],
+source: "isMorph\x0a\x09^ false",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "isNil",
 category: 'testing',
 fn: function (){
@@ -827,6 +843,22 @@ return false;
 }, function($ctx1) {$ctx1.fill(self,"isSymbol",{},smalltalk.Object)})},
 args: [],
 source: "isSymbol\x0a\x09^false",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "isSystemWindow",
+category: 'testing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return false;
+}, function($ctx1) {$ctx1.fill(self,"isSystemWindow",{},smalltalk.Object)})},
+args: [],
+source: "isSystemWindow\x0a\x09^ false",
 messageSends: [],
 referencedClasses: []
 }),
