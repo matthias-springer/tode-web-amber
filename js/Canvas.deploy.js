@@ -2405,6 +2405,17 @@ smalltalk.TagBrush);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "onResize:",
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._asJQuery())._bind_do_("resize",aBlock);
+return self}, function($ctx1) {$ctx1.fill(self,"onResize:",{aBlock:aBlock},smalltalk.TagBrush)})},
+messageSends: ["bind:do:", "asJQuery"]}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "onSelect:",
 fn: function (aBlock){
 var self=this;
@@ -2467,6 +2478,18 @@ return smalltalk.withContext(function($ctx1) {
 self['@element'].removeAttribute(aString);
 return self}, function($ctx1) {$ctx1.fill(self,"removeAt:",{aString:aString},smalltalk.TagBrush)})},
 messageSends: []}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "resizable",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._addClass_("resizable");
+_st(_st(_st(self)._element())._asJQuery())._resizable();
+return self}, function($ctx1) {$ctx1.fill(self,"resizable",{},smalltalk.TagBrush)})},
+messageSends: ["addClass:", "resizable", "asJQuery", "element"]}),
 smalltalk.TagBrush);
 
 smalltalk.addMethod(
@@ -4036,11 +4059,16 @@ return smalltalk.withContext(function($ctx1) {
 var $1,$2;
 $1=container;
 _st($1)._class_("component window");
-$2=_st($1)._draggable();
+_st($1)._draggable();
+_st($1)._resizable();
+$2=_st($1)._onResize_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._updateLayout();
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 _st(self)._setDefaultSize();
 _st(self)._drawTitleBar();
 return self}, function($ctx1) {$ctx1.fill(self,"render:with:",{container:container,html:html},smalltalk.SystemWindow)})},
-messageSends: ["class:", "draggable", "setDefaultSize", "drawTitleBar"]}),
+messageSends: ["class:", "draggable", "resizable", "onResize:", "updateLayout", "setDefaultSize", "drawTitleBar"]}),
 smalltalk.SystemWindow);
 
 smalltalk.addMethod(
