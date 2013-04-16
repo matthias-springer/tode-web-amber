@@ -1866,33 +1866,33 @@ next: anInteger
 ! !
 
 Object subclass: #Rectangle
-	instanceVariableNames: 'topLeft bottomRight'
+	instanceVariableNames: 'origin corner'
 	package: 'Kernel-Objects'!
 
 !Rectangle methodsFor: 'accessing'!
 
-bottomRight
-	^ bottomRight
+corner
+	^ corner
 !
 
-bottomRight: aPoint
-	bottomRight := aPoint
+corner: aPoint
+	corner := aPoint.
 !
 
-topLeft
-	^ topLeft
+origin
+	^ origin
 !
 
-topLeft: aPoint
-	topLeft := aPoint.
+origin: aPoint
+	origin := aPoint.
 ! !
 
 !Rectangle class methodsFor: 'instance creation'!
 
 origin: originPoint corner: cornerPoint
 	^ self new
-		topLeft: originPoint;
-		bottomRight: cornerPoint;
+		origin: originPoint;
+		corner: cornerPoint;
 		yourself
 ! !
 

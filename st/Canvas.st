@@ -1054,6 +1054,11 @@ removeClass: aString
 
 !Morph methodsFor: 'geometry'!
 
+extent: aPoint
+	self width: aPoint x.
+	self height: aPoint y.
+!
+
 height
 	^ (self morphElement asJQuery css: 'height') parseFloat
 !
@@ -1096,6 +1101,11 @@ paddingTop: aNumber
 	self morphElement asJQuery css: 'padding-top' a: aNumber asString, 'px'.
 !
 
+position: aPoint
+	self left: aPoint x.
+	self top: aPoint y.
+!
+
 positionAbsolute
 	self morphElement asJQuery css: 'position' a: 'absolute'.
 !
@@ -1125,6 +1135,7 @@ top: aNumber
 updateLayout
 	self adherentToEdge ~~ #none 
 		ifTrue: [self setToAdhereToEdge: self adherentToEdge].
+	self submorphsDo: [:morph | morph updateLayout].
 !
 
 width
@@ -1475,6 +1486,26 @@ setTextSelector
 
 setTextSelector: aSelector
 	setTextSelector := aSelector
+!
+
+textarea
+	^ textarea
+! !
+
+!PluggableTextMorph methodsFor: 'geometry'!
+
+height: aNumber
+	|textareaHeight|
+	super height: aNumber.
+	textareaHeight := aNumber - (3 * self textareaPadding) - 1.
+	self textarea asJQuery css: 'height' a: textareaHeight asString, 'px'.
+!
+
+width: aNumber
+	|textareaWidth|
+	super width: aNumber.
+	textareaWidth := aNumber - (3 * self textareaPadding) - 1.
+	self textarea asJQuery css: 'width' a: textareaWidth asString, 'px'.
 ! !
 
 !PluggableTextMorph methodsFor: 'initialization'!
@@ -1483,6 +1514,12 @@ on: anObject text: getTextSel accept: setTextSel
 	self model: anObject.
 	self getTextSelector: getTextSel.
 	self setTextSelector: setTextSel.
+! !
+
+!PluggableTextMorph methodsFor: 'private'!
+
+textareaPadding
+	^ (self textarea asJQuery css: 'padding') parseFloat
 ! !
 
 !PluggableTextMorph methodsFor: 'rendering'!
@@ -1548,7 +1585,7 @@ render: container with: html
 ! !
 
 Morph subclass: #SystemWindow
-	instanceVariableNames: 'morphElement label model morphFrames'
+	instanceVariableNames: 'morphElement label model morphFrames titlebar'
 	package: 'Canvas'!
 
 !SystemWindow methodsFor: 'accessing'!
@@ -1565,6 +1602,39 @@ setLabel: aString
 	self labelMorph text: aString.
 ! !
 
+!SystemWindow methodsFor: 'constants'!
+
+fullTitleBarHeight
+	^ self titleBarHeight + (2 * titlebar padding)
+!
+
+titleBarHeight
+	^ 30
+! !
+
+!SystemWindow methodsFor: 'geometry'!
+
+contentExtent
+	^ Point
+		x: self width - self padding
+		y: self height - self fullTitleBarHeight - (self padding * 3) - 35.
+!
+
+contentOrigin
+	^ Point
+		x: self padding
+		y: self fullTitleBarHeight + (self padding * 2)
+!
+
+updateLayout
+	super updateLayout.
+	self morphFrames keysAndValuesDo: [:morph :frame | 
+		morph
+			positionAbsolute;
+			position: frame origin * self contentExtent + self contentOrigin;
+			extent: frame corner * self contentExtent + self contentOrigin].
+! !
+
 !SystemWindow methodsFor: 'private'!
 
 labelMorph
@@ -1574,24 +1644,27 @@ labelMorph
 morphFrames
 	morphFrames ifNil: [morphFrames := Dictionary new].
 	^ morphFrames
+!
+
+titlebar
+	^ titlebar
 ! !
 
 !SystemWindow methodsFor: 'rendering'!
 
 drawTitleBar
-	|navbar|
-	navbar := NavbarMorph new.
-	self addMorph: navbar.
-	navbar
+	titlebar := NavbarMorph new.
+	self addMorph: titlebar.
+	titlebar
 		adhereToTop;
-		height: 30.
-	navbar addMorph: (SimpleButtonMorph new
+		height: self titleBarHeight.
+	titlebar addMorph: (SimpleButtonMorph new
 		addMorph: GlyphIconMorph remove;
 		setToAdhereToEdge: #right;
-		top: navbar padding;
+		top: titlebar padding;
 		onClick: [self delete];
 		yourself).
-	navbar addMorph: (label := TextMorph new
+	titlebar addMorph: (label := TextMorph new
 		text: 'a SystemWindow';
 		setToAdhereToEdge: #left;
 		paddingTop: 4;

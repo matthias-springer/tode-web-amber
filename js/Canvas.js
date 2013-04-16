@@ -3894,6 +3894,23 @@ smalltalk.Morph);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "extent:",
+category: 'geometry',
+fn: function (aPoint){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._width_(_st(aPoint)._x());
+_st(self)._height_(_st(aPoint)._y());
+return self}, function($ctx1) {$ctx1.fill(self,"extent:",{aPoint:aPoint},smalltalk.Morph)})},
+args: ["aPoint"],
+source: "extent: aPoint\x0a\x09self width: aPoint x.\x0a\x09self height: aPoint y.",
+messageSends: ["width:", "x", "height:", "y"],
+referencedClasses: []
+}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "height",
 category: 'geometry',
 fn: function (){
@@ -4190,6 +4207,23 @@ smalltalk.Morph);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "position:",
+category: 'geometry',
+fn: function (aPoint){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._left_(_st(aPoint)._x());
+_st(self)._top_(_st(aPoint)._y());
+return self}, function($ctx1) {$ctx1.fill(self,"position:",{aPoint:aPoint},smalltalk.Morph)})},
+args: ["aPoint"],
+source: "position: aPoint\x0a\x09self left: aPoint x.\x0a\x09self top: aPoint y.",
+messageSends: ["left:", "x", "top:", "y"],
+referencedClasses: []
+}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "positionAbsolute",
 category: 'geometry',
 fn: function (){
@@ -4435,10 +4469,14 @@ $1=_st(_st(self)._adherentToEdge()).__tild_tild("none");
 if(smalltalk.assert($1)){
 _st(self)._setToAdhereToEdge_(_st(self)._adherentToEdge());
 };
+_st(self)._submorphsDo_((function(morph){
+return smalltalk.withContext(function($ctx2) {
+return _st(morph)._updateLayout();
+}, function($ctx2) {$ctx2.fillBlock({morph:morph},$ctx1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"updateLayout",{},smalltalk.Morph)})},
 args: [],
-source: "updateLayout\x0a\x09self adherentToEdge ~~ #none \x0a\x09\x09ifTrue: [self setToAdhereToEdge: self adherentToEdge].",
-messageSends: ["ifTrue:", "setToAdhereToEdge:", "adherentToEdge", "~~"],
+source: "updateLayout\x0a\x09self adherentToEdge ~~ #none \x0a\x09\x09ifTrue: [self setToAdhereToEdge: self adherentToEdge].\x0a\x09self submorphsDo: [:morph | morph updateLayout].",
+messageSends: ["ifTrue:", "setToAdhereToEdge:", "adherentToEdge", "~~", "submorphsDo:", "updateLayout"],
 referencedClasses: []
 }),
 smalltalk.Morph);
@@ -5151,6 +5189,25 @@ smalltalk.PluggableTextMorph);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "height:",
+category: 'geometry',
+fn: function (aNumber){
+var self=this;
+var textareaHeight;
+return smalltalk.withContext(function($ctx1) { 
+smalltalk.Morph.fn.prototype._height_.apply(_st(self), [aNumber]);
+textareaHeight=_st(_st(aNumber).__minus(_st((3)).__star(_st(self)._textareaPadding()))).__minus((1));
+_st(_st(_st(self)._textarea())._asJQuery())._css_a_("height",_st(_st(textareaHeight)._asString()).__comma("px"));
+return self}, function($ctx1) {$ctx1.fill(self,"height:",{aNumber:aNumber,textareaHeight:textareaHeight},smalltalk.PluggableTextMorph)})},
+args: ["aNumber"],
+source: "height: aNumber\x0a\x09|textareaHeight|\x0a\x09super height: aNumber.\x0a\x09textareaHeight := aNumber - (3 * self textareaPadding) - 1.\x0a\x09self textarea asJQuery css: 'height' a: textareaHeight asString, 'px'.",
+messageSends: ["height:", "-", "*", "textareaPadding", "css:a:", ",", "asString", "asJQuery", "textarea"],
+referencedClasses: []
+}),
+smalltalk.PluggableTextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "model",
 category: 'accessing',
 fn: function (){
@@ -5251,6 +5308,61 @@ return self}, function($ctx1) {$ctx1.fill(self,"setTextSelector:",{aSelector:aSe
 args: ["aSelector"],
 source: "setTextSelector: aSelector\x0a\x09setTextSelector := aSelector",
 messageSends: [],
+referencedClasses: []
+}),
+smalltalk.PluggableTextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "textarea",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@textarea"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"textarea",{},smalltalk.PluggableTextMorph)})},
+args: [],
+source: "textarea\x0a\x09^ textarea",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.PluggableTextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "textareaPadding",
+category: 'private',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(_st(self)._textarea())._asJQuery())._css_("padding"))._parseFloat();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"textareaPadding",{},smalltalk.PluggableTextMorph)})},
+args: [],
+source: "textareaPadding\x0a\x09^ (self textarea asJQuery css: 'padding') parseFloat",
+messageSends: ["parseFloat", "css:", "asJQuery", "textarea"],
+referencedClasses: []
+}),
+smalltalk.PluggableTextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "width:",
+category: 'geometry',
+fn: function (aNumber){
+var self=this;
+var textareaWidth;
+return smalltalk.withContext(function($ctx1) { 
+smalltalk.Morph.fn.prototype._width_.apply(_st(self), [aNumber]);
+textareaWidth=_st(_st(aNumber).__minus(_st((3)).__star(_st(self)._textareaPadding()))).__minus((1));
+_st(_st(_st(self)._textarea())._asJQuery())._css_a_("width",_st(_st(textareaWidth)._asString()).__comma("px"));
+return self}, function($ctx1) {$ctx1.fill(self,"width:",{aNumber:aNumber,textareaWidth:textareaWidth},smalltalk.PluggableTextMorph)})},
+args: ["aNumber"],
+source: "width: aNumber\x0a\x09|textareaWidth|\x0a\x09super width: aNumber.\x0a\x09textareaWidth := aNumber - (3 * self textareaPadding) - 1.\x0a\x09self textarea asJQuery css: 'width' a: textareaWidth asString, 'px'.",
+messageSends: ["width:", "-", "*", "textareaPadding", "css:a:", ",", "asString", "asJQuery", "textarea"],
 referencedClasses: []
 }),
 smalltalk.PluggableTextMorph);
@@ -5421,7 +5533,7 @@ smalltalk.SimpleButtonMorph);
 
 
 
-smalltalk.addClass('SystemWindow', smalltalk.Morph, ['morphElement', 'label', 'model', 'morphFrames'], 'Canvas');
+smalltalk.addClass('SystemWindow', smalltalk.Morph, ['morphElement', 'label', 'model', 'morphFrames', 'titlebar'], 'Canvas');
 smalltalk.addMethod(
 smalltalk.method({
 selector: "addMorph:frame:",
@@ -5442,44 +5554,99 @@ smalltalk.SystemWindow);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "contentExtent",
+category: 'geometry',
+fn: function (){
+var self=this;
+function $Point(){return smalltalk.Point||(typeof Point=="undefined"?nil:Point)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($Point())._x_y_(_st(_st(self)._width()).__minus(_st(self)._padding()),_st(_st(_st(_st(self)._height()).__minus(_st(self)._fullTitleBarHeight())).__minus(_st(_st(self)._padding()).__star((3)))).__minus((35)));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"contentExtent",{},smalltalk.SystemWindow)})},
+args: [],
+source: "contentExtent\x0a\x09^ Point\x0a\x09\x09x: self width - self padding\x0a\x09\x09y: self height - self fullTitleBarHeight - (self padding * 3) - 35.",
+messageSends: ["x:y:", "-", "padding", "width", "*", "fullTitleBarHeight", "height"],
+referencedClasses: ["Point"]
+}),
+smalltalk.SystemWindow);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "contentOrigin",
+category: 'geometry',
+fn: function (){
+var self=this;
+function $Point(){return smalltalk.Point||(typeof Point=="undefined"?nil:Point)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($Point())._x_y_(_st(self)._padding(),_st(_st(self)._fullTitleBarHeight()).__plus(_st(_st(self)._padding()).__star((2))));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"contentOrigin",{},smalltalk.SystemWindow)})},
+args: [],
+source: "contentOrigin\x0a\x09^ Point\x0a\x09\x09x: self padding\x0a\x09\x09y: self fullTitleBarHeight + (self padding * 2)",
+messageSends: ["x:y:", "padding", "+", "*", "fullTitleBarHeight"],
+referencedClasses: ["Point"]
+}),
+smalltalk.SystemWindow);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "drawTitleBar",
 category: 'rendering',
 fn: function (){
 var self=this;
-var navbar;
 function $NavbarMorph(){return smalltalk.NavbarMorph||(typeof NavbarMorph=="undefined"?nil:NavbarMorph)}
 function $GlyphIconMorph(){return smalltalk.GlyphIconMorph||(typeof GlyphIconMorph=="undefined"?nil:GlyphIconMorph)}
 function $SimpleButtonMorph(){return smalltalk.SimpleButtonMorph||(typeof SimpleButtonMorph=="undefined"?nil:SimpleButtonMorph)}
 function $TextMorph(){return smalltalk.TextMorph||(typeof TextMorph=="undefined"?nil:TextMorph)}
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2,$3,$4,$5,$6;
-navbar=_st($NavbarMorph())._new();
-_st(self)._addMorph_(navbar);
-$1=navbar;
+self["@titlebar"]=_st($NavbarMorph())._new();
+_st(self)._addMorph_(self["@titlebar"]);
+$1=self["@titlebar"];
 _st($1)._adhereToTop();
-$2=_st($1)._height_((30));
+$2=_st($1)._height_(_st(self)._titleBarHeight());
 $3=_st($SimpleButtonMorph())._new();
 _st($3)._addMorph_(_st($GlyphIconMorph())._remove());
 _st($3)._setToAdhereToEdge_("right");
-_st($3)._top_(_st(navbar)._padding());
+_st($3)._top_(_st(self["@titlebar"])._padding());
 _st($3)._onClick_((function(){
 return smalltalk.withContext(function($ctx2) {
 return _st(self)._delete();
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 $4=_st($3)._yourself();
-_st(navbar)._addMorph_($4);
+_st(self["@titlebar"])._addMorph_($4);
 $5=_st($TextMorph())._new();
 _st($5)._text_("a SystemWindow");
 _st($5)._setToAdhereToEdge_("left");
 _st($5)._paddingTop_((4));
 $6=_st($5)._yourself();
 self["@label"]=$6;
-_st(navbar)._addMorph_(self["@label"]);
-return self}, function($ctx1) {$ctx1.fill(self,"drawTitleBar",{navbar:navbar},smalltalk.SystemWindow)})},
+_st(self["@titlebar"])._addMorph_(self["@label"]);
+return self}, function($ctx1) {$ctx1.fill(self,"drawTitleBar",{},smalltalk.SystemWindow)})},
 args: [],
-source: "drawTitleBar\x0a\x09|navbar|\x0a\x09navbar := NavbarMorph new.\x0a\x09self addMorph: navbar.\x0a\x09navbar\x0a\x09\x09adhereToTop;\x0a\x09\x09height: 30.\x0a\x09navbar addMorph: (SimpleButtonMorph new\x0a\x09\x09addMorph: GlyphIconMorph remove;\x0a\x09\x09setToAdhereToEdge: #right;\x0a\x09\x09top: navbar padding;\x0a\x09\x09onClick: [self delete];\x0a\x09\x09yourself).\x0a\x09navbar addMorph: (label := TextMorph new\x0a\x09\x09text: 'a SystemWindow';\x0a\x09\x09setToAdhereToEdge: #left;\x0a\x09\x09paddingTop: 4;\x0a\x09\x09yourself).",
-messageSends: ["new", "addMorph:", "adhereToTop", "height:", "remove", "setToAdhereToEdge:", "top:", "padding", "onClick:", "delete", "yourself", "text:", "paddingTop:"],
+source: "drawTitleBar\x0a\x09titlebar := NavbarMorph new.\x0a\x09self addMorph: titlebar.\x0a\x09titlebar\x0a\x09\x09adhereToTop;\x0a\x09\x09height: self titleBarHeight.\x0a\x09titlebar addMorph: (SimpleButtonMorph new\x0a\x09\x09addMorph: GlyphIconMorph remove;\x0a\x09\x09setToAdhereToEdge: #right;\x0a\x09\x09top: titlebar padding;\x0a\x09\x09onClick: [self delete];\x0a\x09\x09yourself).\x0a\x09titlebar addMorph: (label := TextMorph new\x0a\x09\x09text: 'a SystemWindow';\x0a\x09\x09setToAdhereToEdge: #left;\x0a\x09\x09paddingTop: 4;\x0a\x09\x09yourself).",
+messageSends: ["new", "addMorph:", "adhereToTop", "height:", "titleBarHeight", "remove", "setToAdhereToEdge:", "top:", "padding", "onClick:", "delete", "yourself", "text:", "paddingTop:"],
 referencedClasses: ["NavbarMorph", "GlyphIconMorph", "SimpleButtonMorph", "TextMorph"]
+}),
+smalltalk.SystemWindow);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "fullTitleBarHeight",
+category: 'constants',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._titleBarHeight()).__plus(_st((2)).__star(_st(self["@titlebar"])._padding()));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"fullTitleBarHeight",{},smalltalk.SystemWindow)})},
+args: [],
+source: "fullTitleBarHeight\x0a\x09^ self titleBarHeight + (2 * titlebar padding)",
+messageSends: ["+", "*", "padding", "titleBarHeight"],
+referencedClasses: []
 }),
 smalltalk.SystemWindow);
 
@@ -5632,6 +5799,67 @@ return self}, function($ctx1) {$ctx1.fill(self,"setLabel:",{aString:aString},sma
 args: ["aString"],
 source: "setLabel: aString\x0a\x09self labelMorph text: aString.",
 messageSends: ["text:", "labelMorph"],
+referencedClasses: []
+}),
+smalltalk.SystemWindow);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "titleBarHeight",
+category: 'constants',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=(30);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"titleBarHeight",{},smalltalk.SystemWindow)})},
+args: [],
+source: "titleBarHeight\x0a\x09^ 30",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.SystemWindow);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "titlebar",
+category: 'private',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@titlebar"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"titlebar",{},smalltalk.SystemWindow)})},
+args: [],
+source: "titlebar\x0a\x09^ titlebar",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.SystemWindow);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "updateLayout",
+category: 'geometry',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+smalltalk.Morph.fn.prototype._updateLayout.apply(_st(self), []);
+_st(_st(self)._morphFrames())._keysAndValuesDo_((function(morph,frame){
+return smalltalk.withContext(function($ctx2) {
+$1=morph;
+_st($1)._positionAbsolute();
+_st($1)._position_(_st(_st(_st(frame)._origin()).__star(_st(self)._contentExtent())).__plus(_st(self)._contentOrigin()));
+$2=_st($1)._extent_(_st(_st(_st(frame)._corner()).__star(_st(self)._contentExtent())).__plus(_st(self)._contentOrigin()));
+return $2;
+}, function($ctx2) {$ctx2.fillBlock({morph:morph,frame:frame},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"updateLayout",{},smalltalk.SystemWindow)})},
+args: [],
+source: "updateLayout\x0a\x09super updateLayout.\x0a\x09self morphFrames keysAndValuesDo: [:morph :frame | \x0a\x09\x09morph\x0a\x09\x09\x09positionAbsolute;\x0a\x09\x09\x09position: frame origin * self contentExtent + self contentOrigin;\x0a\x09\x09\x09extent: frame corner * self contentExtent + self contentOrigin].",
+messageSends: ["updateLayout", "keysAndValuesDo:", "positionAbsolute", "position:", "+", "contentOrigin", "*", "contentExtent", "origin", "extent:", "corner", "morphFrames"],
 referencedClasses: []
 }),
 smalltalk.SystemWindow);
