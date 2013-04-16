@@ -1024,7 +1024,7 @@ renderOn: html
 ! !
 
 Widget subclass: #Morph
-	instanceVariableNames: 'morphElement'
+	instanceVariableNames: 'morphElement submorphs'
 	package: 'Canvas'!
 
 !Morph methodsFor: 'geometry'!
@@ -1037,12 +1037,33 @@ height: aNumber
 	self morphElement asJQuery css: 'height' a: aNumber asString, 'px'.
 !
 
+heightPercent: aNumber
+	self morphElement asJQuery css: 'height' a: aNumber asString, '%'.
+!
+
 left
 	^ (self morphElement asJQuery css: 'left') parseFloat
 !
 
 left: aNumber
 	self morphElement asJQuery css: 'left' a: aNumber asString, 'px'.
+!
+
+positionAbsolute
+	self morphElement asJQuery css: 'position' a: 'absolute'.
+!
+
+positionRelative
+	self morphElement asJQuery css: 'position' a: 'relative'.
+!
+
+setToAdhereToEdge: anEdge
+	self autoPosition.
+	self positionAbsolute.
+	anEdge = #top ifTrue: [self top: 0].
+	anEdge = #left ifTrue: [self left: 0].
+	anEdge = #bottom ifTrue: [self bottomCss: 0].
+	anEdge = #right ifTrue: [self rightCss: 0].
 !
 
 top
@@ -1059,12 +1080,37 @@ width
 
 width: aNumber
 	self morphElement asJQuery css: 'width' a: aNumber asString, 'px'.
+!
+
+widthPercent: aNumber
+	self morphElement asJQuery css: 'width' a: aNumber asString, '%'.
+! !
+
+!Morph methodsFor: 'initializing'!
+
+initialize
+	submorphs := OrderedCollection new.
 ! !
 
 !Morph methodsFor: 'private'!
 
+autoPosition
+	self morphElement asJQuery css: 'left' a: 'auto'.
+	self morphElement asJQuery css: 'right' a: 'auto'.
+	self morphElement asJQuery css: 'top' a: 'auto'.
+	self morphElement asJQuery css: 'bottom' a: 'auto'.
+!
+
+bottomCss: aNumber
+	self morphElement asJQuery css: 'bottom' a: aNumber asString, 'px'.
+!
+
 morphElement
 	^ morphElement
+!
+
+rightCss: aNumber
+	self morphElement asJQuery css: 'right' a: aNumber asString, 'px'.
 ! !
 
 !Morph methodsFor: 'rendering'!
@@ -1081,7 +1127,132 @@ renderOn: html
 
 addMorph: aMorph
 	"TODO: cause rendering before addMorph: to allow changing properties before rendering."
+	self submorphs add: aMorph.
 	aMorph appendToJQuery: self morphElement asJQuery.
+!
+
+submorphs
+	^ submorphs
+!
+
+submorphsDo: aBlock
+	self submorphs do: aBlock.
+! !
+
+Morph subclass: #BorderedMorph
+	instanceVariableNames: 'morphElement'
+	package: 'Canvas'!
+
+BorderedMorph subclass: #RectangleMorph
+	instanceVariableNames: 'morphElement'
+	package: 'Canvas'!
+
+RectangleMorph subclass: #AlignmentMorph
+	instanceVariableNames: 'morphElement'
+	package: 'Canvas'!
+
+AlignmentMorph subclass: #DockingBarMorph
+	instanceVariableNames: 'morphElement'
+	package: 'Canvas'!
+
+!DockingBarMorph methodsFor: 'accessing'!
+
+adhereToBottom
+	"Instract the receiver to adhere to bottom"
+	 self adhereTo:#bottom.
+	 self widthPercent: 100.
+!
+
+adhereToLeft
+	"Instract the receiver to adhere to left"
+	self adhereTo: #left.
+	self heightPercent: 100.
+!
+
+adhereToRight
+	"Instract the receiver to adhere to right"
+	self adhereTo: #right.
+	self heightPercent: 100.
+!
+
+adhereToTop
+	"Instract the receiver to adhere to top"
+	self adhereTo: #top.
+	self widthPercent: 100.
+! !
+
+!DockingBarMorph methodsFor: 'private'!
+
+adhereTo: edgeSymbol
+	"Options: #left #top #right #bottom or #none"
+	(#(#left #top #right #bottom #none ) includes: edgeSymbol)
+		ifFalse: [^ self error: 'invalid option'].
+	self setToAdhereToEdge: edgeSymbol.
+! !
+
+DockingBarMorph subclass: #NavbarMorph
+	instanceVariableNames: 'morphElement'
+	package: 'Canvas'!
+
+!NavbarMorph methodsFor: 'rendering'!
+
+render: container with: html
+	container
+		class: 'window-title'.
+! !
+
+Morph subclass: #PluggableTextMorph
+	instanceVariableNames: 'morphElement textarea model getTextSelector setTextSelector'
+	package: 'Canvas'!
+
+!PluggableTextMorph methodsFor: 'accessing'!
+
+getTextSelector
+	^ getTextSelector
+!
+
+getTextSelector: aSelector
+	getTextSelector := aSelector
+!
+
+model
+	^ model
+!
+
+model: aModel
+	model := aModel
+!
+
+setTextSelector
+	^ setTextSelector
+!
+
+setTextSelector: aSelector
+	setTextSelector := aSelector
+! !
+
+!PluggableTextMorph methodsFor: 'initialization'!
+
+on: anObject text: getTextSel accept: setTextSel
+	self model: anObject.
+	self getTextSelector: getTextSel.
+	self setTextSelector: setTextSel.
+! !
+
+!PluggableTextMorph methodsFor: 'rendering'!
+
+render: container with: html
+	container  
+		with: [textarea := html textarea].
+! !
+
+!PluggableTextMorph class methodsFor: 'instance creation'!
+
+on: anObject text: getTextSel accept: setTextSel
+	^ self new
+		on: anObject
+		text: getTextSel
+		accept: setTextSel
 ! !
 
 Morph subclass: #SimpleButtonMorph
@@ -1122,11 +1293,14 @@ Morph subclass: #SystemWindow
 !SystemWindow methodsFor: 'rendering'!
 
 drawTitleBar
-	|closeBtn|
+	|navbar closeBtn|
+	navbar := NavbarMorph new.
+	self addMorph: navbar.
+	navbar adhereToTop.
 	closeBtn := SimpleButtonMorph new.
-	self addMorph: closeBtn.
+	navbar addMorph: closeBtn.
 	closeBtn label: 'close'.
-	closeBtn onClick: [Transcript show: 'abc'].
+	closeBtn setToAdhereToEdge: #right.
 !
 
 render: container with: html
@@ -1134,6 +1308,12 @@ render: container with: html
 		class: 'component window';
 		draggable.
 	self drawTitleBar.
+	self setDefaultSize.
+!
+
+setDefaultSize
+	self height: 250.
+	self width: 250.
 ! !
 
 Morph subclass: #WorkspaceMorph
