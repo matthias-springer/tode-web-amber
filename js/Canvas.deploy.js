@@ -2966,6 +2966,30 @@ smalltalk.Morph);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "paddingTop",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(_st(self)._morphElement())._asJQuery())._css_("padding-top"))._parseFloat();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"paddingTop",{},smalltalk.Morph)})},
+messageSends: ["parseFloat", "css:", "asJQuery", "morphElement"]}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "paddingTop:",
+fn: function (aNumber){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(_st(self)._morphElement())._asJQuery())._css_a_("padding-top",_st(_st(aNumber)._asString()).__comma("px"));
+return self}, function($ctx1) {$ctx1.fill(self,"paddingTop:",{aNumber:aNumber},smalltalk.Morph)})},
+messageSends: ["css:a:", ",", "asString", "asJQuery", "morphElement"]}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "positionAbsolute",
 fn: function (){
 var self=this;
@@ -3393,6 +3417,22 @@ return self}, function($ctx1) {$ctx1.fill(self,"text:",{aString:aString},smallta
 messageSends: ["with:", "morphElement"]}),
 smalltalk.TextMorph);
 
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "new:",
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=_st(self)._new();
+_st($2)._text_(aString);
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"new:",{aString:aString},smalltalk.TextMorph.klass)})},
+messageSends: ["text:", "new", "yourself"]}),
+smalltalk.TextMorph.klass);
 
 
 smalltalk.addClass('GlyphIconMorph', smalltalk.Morph, ['morphElement', 'icon', 'spin'], 'Canvas');
@@ -3839,8 +3879,9 @@ var navbar;
 function $NavbarMorph(){return smalltalk.NavbarMorph||(typeof NavbarMorph=="undefined"?nil:NavbarMorph)}
 function $GlyphIconMorph(){return smalltalk.GlyphIconMorph||(typeof GlyphIconMorph=="undefined"?nil:GlyphIconMorph)}
 function $SimpleButtonMorph(){return smalltalk.SimpleButtonMorph||(typeof SimpleButtonMorph=="undefined"?nil:SimpleButtonMorph)}
+function $TextMorph(){return smalltalk.TextMorph||(typeof TextMorph=="undefined"?nil:TextMorph)}
 return smalltalk.withContext(function($ctx1) { 
-var $1,$2,$3,$4;
+var $1,$2,$3,$4,$5,$6;
 navbar=_st($NavbarMorph())._new();
 _st(self)._addMorph_(navbar);
 $1=navbar;
@@ -3856,8 +3897,14 @@ return _st(self)._delete();
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 $4=_st($3)._yourself();
 _st(navbar)._addMorph_($4);
+$5=_st($TextMorph())._new();
+_st($5)._text_("a SystemWindow");
+_st($5)._setToAdhereToEdge_("left");
+_st($5)._paddingTop_((4));
+$6=_st($5)._yourself();
+_st(navbar)._addMorph_($6);
 return self}, function($ctx1) {$ctx1.fill(self,"drawTitleBar",{navbar:navbar},smalltalk.SystemWindow)})},
-messageSends: ["new", "addMorph:", "adhereToTop", "height:", "remove", "setToAdhereToEdge:", "top:", "padding", "onClick:", "delete", "yourself"]}),
+messageSends: ["new", "addMorph:", "adhereToTop", "height:", "remove", "setToAdhereToEdge:", "top:", "padding", "onClick:", "delete", "yourself", "text:", "paddingTop:"]}),
 smalltalk.SystemWindow);
 
 smalltalk.addMethod(

@@ -4123,6 +4123,40 @@ smalltalk.Morph);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "paddingTop",
+category: 'geometry',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(_st(self)._morphElement())._asJQuery())._css_("padding-top"))._parseFloat();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"paddingTop",{},smalltalk.Morph)})},
+args: [],
+source: "paddingTop\x0a\x09^ (self morphElement asJQuery css: 'padding-top') parseFloat",
+messageSends: ["parseFloat", "css:", "asJQuery", "morphElement"],
+referencedClasses: []
+}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "paddingTop:",
+category: 'geometry',
+fn: function (aNumber){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(_st(self)._morphElement())._asJQuery())._css_a_("padding-top",_st(_st(aNumber)._asString()).__comma("px"));
+return self}, function($ctx1) {$ctx1.fill(self,"paddingTop:",{aNumber:aNumber},smalltalk.Morph)})},
+args: ["aNumber"],
+source: "paddingTop: aNumber\x0a\x09self morphElement asJQuery css: 'padding-top' a: aNumber asString, 'px'.",
+messageSends: ["css:a:", ",", "asString", "asJQuery", "morphElement"],
+referencedClasses: []
+}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "positionAbsolute",
 category: 'geometry',
 fn: function (){
@@ -4700,6 +4734,27 @@ referencedClasses: []
 }),
 smalltalk.TextMorph);
 
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "new:",
+category: 'instance creation',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=_st(self)._new();
+_st($2)._text_(aString);
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"new:",{aString:aString},smalltalk.TextMorph.klass)})},
+args: ["aString"],
+source: "new: aString\x0a\x09^ self new\x0a\x09\x09text: aString;\x0a\x09\x09yourself",
+messageSends: ["text:", "new", "yourself"],
+referencedClasses: []
+}),
+smalltalk.TextMorph.klass);
 
 
 smalltalk.addClass('GlyphIconMorph', smalltalk.Morph, ['morphElement', 'icon', 'spin'], 'Canvas');
@@ -5292,8 +5347,9 @@ var navbar;
 function $NavbarMorph(){return smalltalk.NavbarMorph||(typeof NavbarMorph=="undefined"?nil:NavbarMorph)}
 function $GlyphIconMorph(){return smalltalk.GlyphIconMorph||(typeof GlyphIconMorph=="undefined"?nil:GlyphIconMorph)}
 function $SimpleButtonMorph(){return smalltalk.SimpleButtonMorph||(typeof SimpleButtonMorph=="undefined"?nil:SimpleButtonMorph)}
+function $TextMorph(){return smalltalk.TextMorph||(typeof TextMorph=="undefined"?nil:TextMorph)}
 return smalltalk.withContext(function($ctx1) { 
-var $1,$2,$3,$4;
+var $1,$2,$3,$4,$5,$6;
 navbar=_st($NavbarMorph())._new();
 _st(self)._addMorph_(navbar);
 $1=navbar;
@@ -5309,11 +5365,17 @@ return _st(self)._delete();
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 $4=_st($3)._yourself();
 _st(navbar)._addMorph_($4);
+$5=_st($TextMorph())._new();
+_st($5)._text_("a SystemWindow");
+_st($5)._setToAdhereToEdge_("left");
+_st($5)._paddingTop_((4));
+$6=_st($5)._yourself();
+_st(navbar)._addMorph_($6);
 return self}, function($ctx1) {$ctx1.fill(self,"drawTitleBar",{navbar:navbar},smalltalk.SystemWindow)})},
 args: [],
-source: "drawTitleBar\x0a\x09|navbar|\x0a\x09navbar := NavbarMorph new.\x0a\x09self addMorph: navbar.\x0a\x09navbar\x0a\x09\x09adhereToTop;\x0a\x09\x09height: 30.\x0a\x09navbar addMorph: (SimpleButtonMorph new\x0a\x09\x09addMorph: GlyphIconMorph remove;\x0a\x09\x09setToAdhereToEdge: #right;\x0a\x09\x09top: navbar padding;\x0a\x09\x09onClick: [self delete];\x0a\x09\x09yourself).",
-messageSends: ["new", "addMorph:", "adhereToTop", "height:", "remove", "setToAdhereToEdge:", "top:", "padding", "onClick:", "delete", "yourself"],
-referencedClasses: ["NavbarMorph", "GlyphIconMorph", "SimpleButtonMorph"]
+source: "drawTitleBar\x0a\x09|navbar|\x0a\x09navbar := NavbarMorph new.\x0a\x09self addMorph: navbar.\x0a\x09navbar\x0a\x09\x09adhereToTop;\x0a\x09\x09height: 30.\x0a\x09navbar addMorph: (SimpleButtonMorph new\x0a\x09\x09addMorph: GlyphIconMorph remove;\x0a\x09\x09setToAdhereToEdge: #right;\x0a\x09\x09top: navbar padding;\x0a\x09\x09onClick: [self delete];\x0a\x09\x09yourself).\x0a\x09navbar addMorph: (TextMorph new\x0a\x09\x09text: 'a SystemWindow';\x0a\x09\x09setToAdhereToEdge: #left;\x0a\x09\x09paddingTop: 4;\x0a\x09\x09yourself).",
+messageSends: ["new", "addMorph:", "adhereToTop", "height:", "remove", "setToAdhereToEdge:", "top:", "padding", "onClick:", "delete", "yourself", "text:", "paddingTop:"],
+referencedClasses: ["NavbarMorph", "GlyphIconMorph", "SimpleButtonMorph", "TextMorph"]
 }),
 smalltalk.SystemWindow);
 

@@ -1079,6 +1079,14 @@ padding: aNumber
 	self morphElement asJQuery css: 'padding' a: aNumber asString, 'px'.
 !
 
+paddingTop
+	^ (self morphElement asJQuery css: 'padding-top') parseFloat
+!
+
+paddingTop: aNumber
+	self morphElement asJQuery css: 'padding-top' a: aNumber asString, 'px'.
+!
+
 positionAbsolute
 	self morphElement asJQuery css: 'position' a: 'absolute'.
 !
@@ -1325,6 +1333,14 @@ text: aString
 		with: aString.
 ! !
 
+!TextMorph class methodsFor: 'instance creation'!
+
+new: aString
+	^ self new
+		text: aString;
+		yourself
+! !
+
 Morph subclass: #GlyphIconMorph
 	instanceVariableNames: 'morphElement icon spin'
 	package: 'Canvas'!
@@ -1527,6 +1543,11 @@ drawTitleBar
 		setToAdhereToEdge: #right;
 		top: navbar padding;
 		onClick: [self delete];
+		yourself).
+	navbar addMorph: (TextMorph new
+		text: 'a SystemWindow';
+		setToAdhereToEdge: #left;
+		paddingTop: 4;
 		yourself).
 !
 
