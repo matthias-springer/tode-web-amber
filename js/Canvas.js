@@ -3336,6 +3336,22 @@ smalltalk.TagBrush);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "onResize:",
+category: 'events',
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._asJQuery())._bind_do_("resize",aBlock);
+return self}, function($ctx1) {$ctx1.fill(self,"onResize:",{aBlock:aBlock},smalltalk.TagBrush)})},
+args: ["aBlock"],
+source: "onResize: aBlock\x0a\x09self asJQuery bind: 'resize' do: aBlock",
+messageSends: ["bind:do:", "asJQuery"],
+referencedClasses: []
+}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "onSelect:",
 category: 'events',
 fn: function (aBlock){
@@ -3426,6 +3442,23 @@ return self}, function($ctx1) {$ctx1.fill(self,"removeAt:",{aString:aString},sma
 args: ["aString"],
 source: "removeAt: aString\x0a\x09<self['@element'].removeAttribute(aString)>",
 messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "resizable",
+category: 'attributes',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._addClass_("resizable");
+_st(_st(_st(self)._element())._asJQuery())._resizable();
+return self}, function($ctx1) {$ctx1.fill(self,"resizable",{},smalltalk.TagBrush)})},
+args: [],
+source: "resizable\x0a\x09self addClass: 'resizable'.\x0a\x09self element asJQuery resizable.",
+messageSends: ["addClass:", "resizable", "asJQuery", "element"],
 referencedClasses: []
 }),
 smalltalk.TagBrush);
@@ -5405,13 +5438,18 @@ return smalltalk.withContext(function($ctx1) {
 var $1,$2;
 $1=container;
 _st($1)._class_("component window");
-$2=_st($1)._draggable();
+_st($1)._draggable();
+_st($1)._resizable();
+$2=_st($1)._onResize_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._updateLayout();
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 _st(self)._setDefaultSize();
 _st(self)._drawTitleBar();
 return self}, function($ctx1) {$ctx1.fill(self,"render:with:",{container:container,html:html},smalltalk.SystemWindow)})},
 args: ["container", "html"],
-source: "render: container with: html\x0a\x09container  \x0a\x09\x09class: 'component window';\x0a\x09\x09draggable.\x0a\x09self setDefaultSize.\x0a\x09self drawTitleBar.",
-messageSends: ["class:", "draggable", "setDefaultSize", "drawTitleBar"],
+source: "render: container with: html\x0a\x09container  \x0a\x09\x09class: 'component window';\x0a\x09\x09draggable;\x0a\x09\x09resizable;\x0a\x09\x09onResize: [self updateLayout].\x0a\x09self setDefaultSize.\x0a\x09self drawTitleBar.",
+messageSends: ["class:", "draggable", "resizable", "onResize:", "updateLayout", "setDefaultSize", "drawTitleBar"],
 referencedClasses: []
 }),
 smalltalk.SystemWindow);

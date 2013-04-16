@@ -811,6 +811,11 @@ removeAt: aString
 	<self['@element'].removeAttribute(aString)>
 !
 
+resizable
+	self addClass: 'resizable'.
+	self element asJQuery resizable.
+!
+
 rows: aString
 	self at: 'rows' put: aString
 !
@@ -929,6 +934,10 @@ onMouseOver: aBlock
 
 onMouseUp: aBlock
 	self asJQuery bind: 'mouseup' do: aBlock
+!
+
+onResize: aBlock
+	self asJQuery bind: 'resize' do: aBlock
 !
 
 onSelect: aBlock
@@ -1554,7 +1563,9 @@ drawTitleBar
 render: container with: html
 	container  
 		class: 'component window';
-		draggable.
+		draggable;
+		resizable;
+		onResize: [self updateLayout].
 	self setDefaultSize.
 	self drawTitleBar.
 !
