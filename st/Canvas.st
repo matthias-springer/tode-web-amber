@@ -750,6 +750,10 @@ cols: aString
 	self at: 'cols' put: aString
 !
 
+contentEditable: aBoolean
+	self at: 'contenteditable' put: aBoolean asString
+!
+
 contenteditable: aString
 	self at: 'contenteditable' put: aString
 !
@@ -1079,6 +1083,30 @@ left: aNumber
 	self morphElement asJQuery css: 'left' a: aNumber asString, 'px'.
 !
 
+overflow
+	^ self morphElement asJQuery css: 'overflow'
+!
+
+overflow: aString
+	self morphElement asJQuery css: 'overflow' a: aString
+!
+
+overflowX
+	^ self morphElement asJQuery css: 'overflow-x'
+!
+
+overflowX: aString
+	self morphElement asJQuery css: 'overflow-x' a: aString
+!
+
+overflowY
+	^ self morphElement asJQuery css: 'overflow-y'
+!
+
+overflowY: aString
+	self morphElement asJQuery css: 'overflow-y' a: aString
+!
+
 ownerPadding
 	self owner isMorph
 		ifTrue: [^ self owner padding]
@@ -1339,10 +1367,20 @@ render: container with: html
 ! !
 
 RectangleMorph subclass: #TextMorph
-	instanceVariableNames: 'morphElement'
+	instanceVariableNames: 'morphElement editor readOnly'
 	package: 'Canvas'!
 
 !TextMorph methodsFor: 'accessing'!
+
+readOnly
+	readOnly ifNil: [readOnly := true].
+	^ readOnly
+!
+
+readOnly: aBoolean
+	readOnly := aBoolean.
+	self morphElement contentEditable: aBoolean not.
+!
 
 text
 	^ self morphElement asJQuery html
@@ -1352,6 +1390,13 @@ text: aString
 	self morphElement asJQuery empty.
 	self morphElement
 		with: aString.
+! !
+
+!TextMorph methodsFor: 'rendering'!
+
+render: container with: html
+	editor := NicEdit newOn: container asJQuery.
+	container contentEditable: self readOnly not.
 ! !
 
 !TextMorph class methodsFor: 'instance creation'!
@@ -1452,7 +1497,7 @@ wait
 ! !
 
 Morph subclass: #PluggableTextMorph
-	instanceVariableNames: 'morphElement textarea model getTextSelector setTextSelector acceptOnCR'
+	instanceVariableNames: 'morphElement textMorph model getTextSelector setTextSelector acceptOnCR'
 	package: 'Canvas'!
 
 !PluggableTextMorph methodsFor: 'accessing'!
@@ -1489,24 +1534,24 @@ setTextSelector: aSelector
 	setTextSelector := aSelector
 !
 
-textarea
-	^ textarea
+textMorph
+	^ textMorph
 ! !
 
 !PluggableTextMorph methodsFor: 'geometry'!
 
 height: aNumber
-	|textareaHeight|
+	|textHeight|
 	super height: aNumber.
-	textareaHeight := aNumber - (3 * self textareaPadding) - 1.
-	self textarea asJQuery css: 'height' a: textareaHeight asString, 'px'.
+	textHeight := aNumber - (3 * self textMorphPadding) - 1.
+	self textMorph height: textHeight.
 !
 
 width: aNumber
-	|textareaWidth|
+	|textWidth|
 	super width: aNumber.
-	textareaWidth := aNumber - (3 * self textareaPadding) - 1.
-	self textarea asJQuery css: 'width' a: textareaWidth asString, 'px'.
+	textWidth := aNumber - (3 * self textMorphPadding) - 1.
+	self textMorph width: textWidth.
 ! !
 
 !PluggableTextMorph methodsFor: 'initialization'!
@@ -1519,16 +1564,20 @@ on: anObject text: getTextSel accept: setTextSel
 
 !PluggableTextMorph methodsFor: 'private'!
 
-textareaPadding
-	^ (self textarea asJQuery css: 'padding') parseFloat
+textMorphPadding
+	^ self textMorph padding
 ! !
 
 !PluggableTextMorph methodsFor: 'rendering'!
 
+drawTextMorph
+	textMorph := TextMorph new.
+	textMorph overflowY: 'scroll'.
+	self addMorph: textMorph.
+!
+
 render: container with: html
-	container  
-		with: [textarea := html textarea
-			style: 'resize: none;'].
+	self drawTextMorph.
 ! !
 
 !PluggableTextMorph class methodsFor: 'instance creation'!

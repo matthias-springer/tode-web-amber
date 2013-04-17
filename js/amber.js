@@ -116,6 +116,7 @@ amber = (function() {
 				'SUnit-Tests',
         'JQuery',
         'Morphic',
+        'NicEditor',
         'STON-Core',
         'Topez-Client-Common',
         'Topez-Client-GCI',

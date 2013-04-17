@@ -2736,6 +2736,22 @@ smalltalk.TagBrush);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "contentEditable:",
+category: 'attributes',
+fn: function (aBoolean){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._at_put_("contenteditable",_st(aBoolean)._asString());
+return self}, function($ctx1) {$ctx1.fill(self,"contentEditable:",{aBoolean:aBoolean},smalltalk.TagBrush)})},
+args: ["aBoolean"],
+source: "contentEditable: aBoolean\x0a\x09self at: 'contenteditable' put: aBoolean asString",
+messageSends: ["at:put:", "asString"],
+referencedClasses: []
+}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "contenteditable:",
 category: 'attributes',
 fn: function (aString){
@@ -4065,6 +4081,108 @@ smalltalk.Morph);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "overflow",
+category: 'geometry',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(self)._morphElement())._asJQuery())._css_("overflow");
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"overflow",{},smalltalk.Morph)})},
+args: [],
+source: "overflow\x0a\x09^ self morphElement asJQuery css: 'overflow'",
+messageSends: ["css:", "asJQuery", "morphElement"],
+referencedClasses: []
+}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "overflow:",
+category: 'geometry',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(_st(self)._morphElement())._asJQuery())._css_a_("overflow",aString);
+return self}, function($ctx1) {$ctx1.fill(self,"overflow:",{aString:aString},smalltalk.Morph)})},
+args: ["aString"],
+source: "overflow: aString\x0a\x09self morphElement asJQuery css: 'overflow' a: aString",
+messageSends: ["css:a:", "asJQuery", "morphElement"],
+referencedClasses: []
+}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "overflowX",
+category: 'geometry',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(self)._morphElement())._asJQuery())._css_("overflow-x");
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"overflowX",{},smalltalk.Morph)})},
+args: [],
+source: "overflowX\x0a\x09^ self morphElement asJQuery css: 'overflow-x'",
+messageSends: ["css:", "asJQuery", "morphElement"],
+referencedClasses: []
+}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "overflowX:",
+category: 'geometry',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(_st(self)._morphElement())._asJQuery())._css_a_("overflow-x",aString);
+return self}, function($ctx1) {$ctx1.fill(self,"overflowX:",{aString:aString},smalltalk.Morph)})},
+args: ["aString"],
+source: "overflowX: aString\x0a\x09self morphElement asJQuery css: 'overflow-x' a: aString",
+messageSends: ["css:a:", "asJQuery", "morphElement"],
+referencedClasses: []
+}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "overflowY",
+category: 'geometry',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(self)._morphElement())._asJQuery())._css_("overflow-y");
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"overflowY",{},smalltalk.Morph)})},
+args: [],
+source: "overflowY\x0a\x09^ self morphElement asJQuery css: 'overflow-y'",
+messageSends: ["css:", "asJQuery", "morphElement"],
+referencedClasses: []
+}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "overflowY:",
+category: 'geometry',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(_st(self)._morphElement())._asJQuery())._css_a_("overflow-y",aString);
+return self}, function($ctx1) {$ctx1.fill(self,"overflowY:",{aString:aString},smalltalk.Morph)})},
+args: ["aString"],
+source: "overflowY: aString\x0a\x09self morphElement asJQuery css: 'overflow-y' a: aString",
+messageSends: ["css:a:", "asJQuery", "morphElement"],
+referencedClasses: []
+}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "owner",
 category: 'submorphs',
 fn: function (){
@@ -4770,7 +4888,67 @@ smalltalk.NavbarMorph);
 
 
 
-smalltalk.addClass('TextMorph', smalltalk.RectangleMorph, ['morphElement'], 'Canvas');
+smalltalk.addClass('TextMorph', smalltalk.RectangleMorph, ['morphElement', 'editor', 'readOnly'], 'Canvas');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "readOnly",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=self["@readOnly"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@readOnly"]=true;
+self["@readOnly"];
+} else {
+$1;
+};
+$2=self["@readOnly"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"readOnly",{},smalltalk.TextMorph)})},
+args: [],
+source: "readOnly\x0a\x09readOnly ifNil: [readOnly := true].\x0a\x09^ readOnly",
+messageSends: ["ifNil:"],
+referencedClasses: []
+}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "readOnly:",
+category: 'accessing',
+fn: function (aBoolean){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@readOnly"]=aBoolean;
+_st(_st(self)._morphElement())._contentEditable_(_st(aBoolean)._not());
+return self}, function($ctx1) {$ctx1.fill(self,"readOnly:",{aBoolean:aBoolean},smalltalk.TextMorph)})},
+args: ["aBoolean"],
+source: "readOnly: aBoolean\x0a\x09readOnly := aBoolean.\x0a\x09self morphElement contentEditable: aBoolean not.",
+messageSends: ["contentEditable:", "not", "morphElement"],
+referencedClasses: []
+}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "render:with:",
+category: 'rendering',
+fn: function (container,html){
+var self=this;
+function $NicEdit(){return smalltalk.NicEdit||(typeof NicEdit=="undefined"?nil:NicEdit)}
+return smalltalk.withContext(function($ctx1) { 
+self["@editor"]=_st($NicEdit())._newOn_(_st(container)._asJQuery());
+_st(container)._contentEditable_(_st(_st(self)._readOnly())._not());
+return self}, function($ctx1) {$ctx1.fill(self,"render:with:",{container:container,html:html},smalltalk.TextMorph)})},
+args: ["container", "html"],
+source: "render: container with: html\x0a\x09editor := NicEdit newOn: container asJQuery.\x0a\x09container contentEditable: self readOnly not.",
+messageSends: ["newOn:", "asJQuery", "contentEditable:", "not", "readOnly"],
+referencedClasses: ["NicEdit"]
+}),
+smalltalk.TextMorph);
+
 smalltalk.addMethod(
 smalltalk.method({
 selector: "text",
@@ -5119,7 +5297,7 @@ referencedClasses: []
 smalltalk.GlyphIconMorph.klass);
 
 
-smalltalk.addClass('PluggableTextMorph', smalltalk.Morph, ['morphElement', 'textarea', 'model', 'getTextSelector', 'setTextSelector', 'acceptOnCR'], 'Canvas');
+smalltalk.addClass('PluggableTextMorph', smalltalk.Morph, ['morphElement', 'textMorph', 'model', 'getTextSelector', 'setTextSelector', 'acceptOnCR'], 'Canvas');
 smalltalk.addMethod(
 smalltalk.method({
 selector: "acceptOnCR",
@@ -5151,6 +5329,25 @@ args: ["aBoolean"],
 source: "acceptOnCR: aBoolean\x0a\x09acceptOnCR := aBoolean.",
 messageSends: [],
 referencedClasses: []
+}),
+smalltalk.PluggableTextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "drawTextMorph",
+category: 'rendering',
+fn: function (){
+var self=this;
+function $TextMorph(){return smalltalk.TextMorph||(typeof TextMorph=="undefined"?nil:TextMorph)}
+return smalltalk.withContext(function($ctx1) { 
+self["@textMorph"]=_st($TextMorph())._new();
+_st(self["@textMorph"])._overflowY_("scroll");
+_st(self)._addMorph_(self["@textMorph"]);
+return self}, function($ctx1) {$ctx1.fill(self,"drawTextMorph",{},smalltalk.PluggableTextMorph)})},
+args: [],
+source: "drawTextMorph\x0a\x09textMorph := TextMorph new.\x0a\x09textMorph overflowY: 'scroll'.\x0a\x09self addMorph: textMorph.",
+messageSends: ["new", "overflowY:", "addMorph:"],
+referencedClasses: ["TextMorph"]
 }),
 smalltalk.PluggableTextMorph);
 
@@ -5194,15 +5391,15 @@ selector: "height:",
 category: 'geometry',
 fn: function (aNumber){
 var self=this;
-var textareaHeight;
+var textHeight;
 return smalltalk.withContext(function($ctx1) { 
 smalltalk.Morph.fn.prototype._height_.apply(_st(self), [aNumber]);
-textareaHeight=_st(_st(aNumber).__minus(_st((3)).__star(_st(self)._textareaPadding()))).__minus((1));
-_st(_st(_st(self)._textarea())._asJQuery())._css_a_("height",_st(_st(textareaHeight)._asString()).__comma("px"));
-return self}, function($ctx1) {$ctx1.fill(self,"height:",{aNumber:aNumber,textareaHeight:textareaHeight},smalltalk.PluggableTextMorph)})},
+textHeight=_st(_st(aNumber).__minus(_st((3)).__star(_st(self)._textMorphPadding()))).__minus((1));
+_st(_st(self)._textMorph())._height_(textHeight);
+return self}, function($ctx1) {$ctx1.fill(self,"height:",{aNumber:aNumber,textHeight:textHeight},smalltalk.PluggableTextMorph)})},
 args: ["aNumber"],
-source: "height: aNumber\x0a\x09|textareaHeight|\x0a\x09super height: aNumber.\x0a\x09textareaHeight := aNumber - (3 * self textareaPadding) - 1.\x0a\x09self textarea asJQuery css: 'height' a: textareaHeight asString, 'px'.",
-messageSends: ["height:", "-", "*", "textareaPadding", "css:a:", ",", "asString", "asJQuery", "textarea"],
+source: "height: aNumber\x0a\x09|textHeight|\x0a\x09super height: aNumber.\x0a\x09textHeight := aNumber - (3 * self textMorphPadding) - 1.\x0a\x09self textMorph height: textHeight.",
+messageSends: ["height:", "-", "*", "textMorphPadding", "textMorph"],
 referencedClasses: []
 }),
 smalltalk.PluggableTextMorph);
@@ -5266,15 +5463,11 @@ category: 'rendering',
 fn: function (container,html){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-_st(container)._with_((function(){
-return smalltalk.withContext(function($ctx2) {
-self["@textarea"]=_st(_st(html)._textarea())._style_("resize: none;");
-return self["@textarea"];
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+_st(self)._drawTextMorph();
 return self}, function($ctx1) {$ctx1.fill(self,"render:with:",{container:container,html:html},smalltalk.PluggableTextMorph)})},
 args: ["container", "html"],
-source: "render: container with: html\x0a\x09container  \x0a\x09\x09with: [textarea := html textarea\x0a\x09\x09\x09style: 'resize: none;'].",
-messageSends: ["with:", "style:", "textarea"],
+source: "render: container with: html\x0a\x09self drawTextMorph.",
+messageSends: ["drawTextMorph"],
 referencedClasses: []
 }),
 smalltalk.PluggableTextMorph);
@@ -5315,17 +5508,17 @@ smalltalk.PluggableTextMorph);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "textarea",
+selector: "textMorph",
 category: 'accessing',
 fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=self["@textarea"];
+$1=self["@textMorph"];
 return $1;
-}, function($ctx1) {$ctx1.fill(self,"textarea",{},smalltalk.PluggableTextMorph)})},
+}, function($ctx1) {$ctx1.fill(self,"textMorph",{},smalltalk.PluggableTextMorph)})},
 args: [],
-source: "textarea\x0a\x09^ textarea",
+source: "textMorph\x0a\x09^ textMorph",
 messageSends: [],
 referencedClasses: []
 }),
@@ -5333,18 +5526,18 @@ smalltalk.PluggableTextMorph);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "textareaPadding",
+selector: "textMorphPadding",
 category: 'private',
 fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=_st(_st(_st(_st(self)._textarea())._asJQuery())._css_("padding"))._parseFloat();
+$1=_st(_st(self)._textMorph())._padding();
 return $1;
-}, function($ctx1) {$ctx1.fill(self,"textareaPadding",{},smalltalk.PluggableTextMorph)})},
+}, function($ctx1) {$ctx1.fill(self,"textMorphPadding",{},smalltalk.PluggableTextMorph)})},
 args: [],
-source: "textareaPadding\x0a\x09^ (self textarea asJQuery css: 'padding') parseFloat",
-messageSends: ["parseFloat", "css:", "asJQuery", "textarea"],
+source: "textMorphPadding\x0a\x09^ self textMorph padding",
+messageSends: ["padding", "textMorph"],
 referencedClasses: []
 }),
 smalltalk.PluggableTextMorph);
@@ -5355,15 +5548,15 @@ selector: "width:",
 category: 'geometry',
 fn: function (aNumber){
 var self=this;
-var textareaWidth;
+var textWidth;
 return smalltalk.withContext(function($ctx1) { 
 smalltalk.Morph.fn.prototype._width_.apply(_st(self), [aNumber]);
-textareaWidth=_st(_st(aNumber).__minus(_st((3)).__star(_st(self)._textareaPadding()))).__minus((1));
-_st(_st(_st(self)._textarea())._asJQuery())._css_a_("width",_st(_st(textareaWidth)._asString()).__comma("px"));
-return self}, function($ctx1) {$ctx1.fill(self,"width:",{aNumber:aNumber,textareaWidth:textareaWidth},smalltalk.PluggableTextMorph)})},
+textWidth=_st(_st(aNumber).__minus(_st((3)).__star(_st(self)._textMorphPadding()))).__minus((1));
+_st(_st(self)._textMorph())._width_(textWidth);
+return self}, function($ctx1) {$ctx1.fill(self,"width:",{aNumber:aNumber,textWidth:textWidth},smalltalk.PluggableTextMorph)})},
 args: ["aNumber"],
-source: "width: aNumber\x0a\x09|textareaWidth|\x0a\x09super width: aNumber.\x0a\x09textareaWidth := aNumber - (3 * self textareaPadding) - 1.\x0a\x09self textarea asJQuery css: 'width' a: textareaWidth asString, 'px'.",
-messageSends: ["width:", "-", "*", "textareaPadding", "css:a:", ",", "asString", "asJQuery", "textarea"],
+source: "width: aNumber\x0a\x09|textWidth|\x0a\x09super width: aNumber.\x0a\x09textWidth := aNumber - (3 * self textMorphPadding) - 1.\x0a\x09self textMorph width: textWidth.",
+messageSends: ["width:", "-", "*", "textMorphPadding", "textMorph"],
 referencedClasses: []
 }),
 smalltalk.PluggableTextMorph);

@@ -1990,6 +1990,17 @@ smalltalk.TagBrush);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "contentEditable:",
+fn: function (aBoolean){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._at_put_("contenteditable",_st(aBoolean)._asString());
+return self}, function($ctx1) {$ctx1.fill(self,"contentEditable:",{aBoolean:aBoolean},smalltalk.TagBrush)})},
+messageSends: ["at:put:", "asString"]}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "contenteditable:",
 fn: function (aString){
 var self=this;
@@ -2923,6 +2934,78 @@ smalltalk.Morph);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "overflow",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(self)._morphElement())._asJQuery())._css_("overflow");
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"overflow",{},smalltalk.Morph)})},
+messageSends: ["css:", "asJQuery", "morphElement"]}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "overflow:",
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(_st(self)._morphElement())._asJQuery())._css_a_("overflow",aString);
+return self}, function($ctx1) {$ctx1.fill(self,"overflow:",{aString:aString},smalltalk.Morph)})},
+messageSends: ["css:a:", "asJQuery", "morphElement"]}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "overflowX",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(self)._morphElement())._asJQuery())._css_("overflow-x");
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"overflowX",{},smalltalk.Morph)})},
+messageSends: ["css:", "asJQuery", "morphElement"]}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "overflowX:",
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(_st(self)._morphElement())._asJQuery())._css_a_("overflow-x",aString);
+return self}, function($ctx1) {$ctx1.fill(self,"overflowX:",{aString:aString},smalltalk.Morph)})},
+messageSends: ["css:a:", "asJQuery", "morphElement"]}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "overflowY",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(self)._morphElement())._asJQuery())._css_("overflow-y");
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"overflowY",{},smalltalk.Morph)})},
+messageSends: ["css:", "asJQuery", "morphElement"]}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "overflowY:",
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(_st(self)._morphElement())._asJQuery())._css_a_("overflow-y",aString);
+return self}, function($ctx1) {$ctx1.fill(self,"overflowY:",{aString:aString},smalltalk.Morph)})},
+messageSends: ["css:a:", "asJQuery", "morphElement"]}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "owner",
 fn: function (){
 var self=this;
@@ -3443,7 +3526,52 @@ smalltalk.NavbarMorph);
 
 
 
-smalltalk.addClass('TextMorph', smalltalk.RectangleMorph, ['morphElement'], 'Canvas');
+smalltalk.addClass('TextMorph', smalltalk.RectangleMorph, ['morphElement', 'editor', 'readOnly'], 'Canvas');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "readOnly",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=self["@readOnly"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@readOnly"]=true;
+self["@readOnly"];
+} else {
+$1;
+};
+$2=self["@readOnly"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"readOnly",{},smalltalk.TextMorph)})},
+messageSends: ["ifNil:"]}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "readOnly:",
+fn: function (aBoolean){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@readOnly"]=aBoolean;
+_st(_st(self)._morphElement())._contentEditable_(_st(aBoolean)._not());
+return self}, function($ctx1) {$ctx1.fill(self,"readOnly:",{aBoolean:aBoolean},smalltalk.TextMorph)})},
+messageSends: ["contentEditable:", "not", "morphElement"]}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "render:with:",
+fn: function (container,html){
+var self=this;
+function $NicEdit(){return smalltalk.NicEdit||(typeof NicEdit=="undefined"?nil:NicEdit)}
+return smalltalk.withContext(function($ctx1) { 
+self["@editor"]=_st($NicEdit())._newOn_(_st(container)._asJQuery());
+_st(container)._contentEditable_(_st(_st(self)._readOnly())._not());
+return self}, function($ctx1) {$ctx1.fill(self,"render:with:",{container:container,html:html},smalltalk.TextMorph)})},
+messageSends: ["newOn:", "asJQuery", "contentEditable:", "not", "readOnly"]}),
+smalltalk.TextMorph);
+
 smalltalk.addMethod(
 smalltalk.method({
 selector: "text",
@@ -3712,7 +3840,7 @@ messageSends: ["icon:", "new", "spin", "yourself"]}),
 smalltalk.GlyphIconMorph.klass);
 
 
-smalltalk.addClass('PluggableTextMorph', smalltalk.Morph, ['morphElement', 'textarea', 'model', 'getTextSelector', 'setTextSelector', 'acceptOnCR'], 'Canvas');
+smalltalk.addClass('PluggableTextMorph', smalltalk.Morph, ['morphElement', 'textMorph', 'model', 'getTextSelector', 'setTextSelector', 'acceptOnCR'], 'Canvas');
 smalltalk.addMethod(
 smalltalk.method({
 selector: "acceptOnCR",
@@ -3735,6 +3863,20 @@ return smalltalk.withContext(function($ctx1) {
 self["@acceptOnCR"]=aBoolean;
 return self}, function($ctx1) {$ctx1.fill(self,"acceptOnCR:",{aBoolean:aBoolean},smalltalk.PluggableTextMorph)})},
 messageSends: []}),
+smalltalk.PluggableTextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "drawTextMorph",
+fn: function (){
+var self=this;
+function $TextMorph(){return smalltalk.TextMorph||(typeof TextMorph=="undefined"?nil:TextMorph)}
+return smalltalk.withContext(function($ctx1) { 
+self["@textMorph"]=_st($TextMorph())._new();
+_st(self["@textMorph"])._overflowY_("scroll");
+_st(self)._addMorph_(self["@textMorph"]);
+return self}, function($ctx1) {$ctx1.fill(self,"drawTextMorph",{},smalltalk.PluggableTextMorph)})},
+messageSends: ["new", "overflowY:", "addMorph:"]}),
 smalltalk.PluggableTextMorph);
 
 smalltalk.addMethod(
@@ -3766,13 +3908,13 @@ smalltalk.method({
 selector: "height:",
 fn: function (aNumber){
 var self=this;
-var textareaHeight;
+var textHeight;
 return smalltalk.withContext(function($ctx1) { 
 smalltalk.Morph.fn.prototype._height_.apply(_st(self), [aNumber]);
-textareaHeight=_st(_st(aNumber).__minus(_st((3)).__star(_st(self)._textareaPadding()))).__minus((1));
-_st(_st(_st(self)._textarea())._asJQuery())._css_a_("height",_st(_st(textareaHeight)._asString()).__comma("px"));
-return self}, function($ctx1) {$ctx1.fill(self,"height:",{aNumber:aNumber,textareaHeight:textareaHeight},smalltalk.PluggableTextMorph)})},
-messageSends: ["height:", "-", "*", "textareaPadding", "css:a:", ",", "asString", "asJQuery", "textarea"]}),
+textHeight=_st(_st(aNumber).__minus(_st((3)).__star(_st(self)._textMorphPadding()))).__minus((1));
+_st(_st(self)._textMorph())._height_(textHeight);
+return self}, function($ctx1) {$ctx1.fill(self,"height:",{aNumber:aNumber,textHeight:textHeight},smalltalk.PluggableTextMorph)})},
+messageSends: ["height:", "-", "*", "textMorphPadding", "textMorph"]}),
 smalltalk.PluggableTextMorph);
 
 smalltalk.addMethod(
@@ -3818,13 +3960,9 @@ selector: "render:with:",
 fn: function (container,html){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-_st(container)._with_((function(){
-return smalltalk.withContext(function($ctx2) {
-self["@textarea"]=_st(_st(html)._textarea())._style_("resize: none;");
-return self["@textarea"];
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+_st(self)._drawTextMorph();
 return self}, function($ctx1) {$ctx1.fill(self,"render:with:",{container:container,html:html},smalltalk.PluggableTextMorph)})},
-messageSends: ["with:", "style:", "textarea"]}),
+messageSends: ["drawTextMorph"]}),
 smalltalk.PluggableTextMorph);
 
 smalltalk.addMethod(
@@ -3853,28 +3991,28 @@ smalltalk.PluggableTextMorph);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "textarea",
+selector: "textMorph",
 fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=self["@textarea"];
+$1=self["@textMorph"];
 return $1;
-}, function($ctx1) {$ctx1.fill(self,"textarea",{},smalltalk.PluggableTextMorph)})},
+}, function($ctx1) {$ctx1.fill(self,"textMorph",{},smalltalk.PluggableTextMorph)})},
 messageSends: []}),
 smalltalk.PluggableTextMorph);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "textareaPadding",
+selector: "textMorphPadding",
 fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=_st(_st(_st(_st(self)._textarea())._asJQuery())._css_("padding"))._parseFloat();
+$1=_st(_st(self)._textMorph())._padding();
 return $1;
-}, function($ctx1) {$ctx1.fill(self,"textareaPadding",{},smalltalk.PluggableTextMorph)})},
-messageSends: ["parseFloat", "css:", "asJQuery", "textarea"]}),
+}, function($ctx1) {$ctx1.fill(self,"textMorphPadding",{},smalltalk.PluggableTextMorph)})},
+messageSends: ["padding", "textMorph"]}),
 smalltalk.PluggableTextMorph);
 
 smalltalk.addMethod(
@@ -3882,13 +4020,13 @@ smalltalk.method({
 selector: "width:",
 fn: function (aNumber){
 var self=this;
-var textareaWidth;
+var textWidth;
 return smalltalk.withContext(function($ctx1) { 
 smalltalk.Morph.fn.prototype._width_.apply(_st(self), [aNumber]);
-textareaWidth=_st(_st(aNumber).__minus(_st((3)).__star(_st(self)._textareaPadding()))).__minus((1));
-_st(_st(_st(self)._textarea())._asJQuery())._css_a_("width",_st(_st(textareaWidth)._asString()).__comma("px"));
-return self}, function($ctx1) {$ctx1.fill(self,"width:",{aNumber:aNumber,textareaWidth:textareaWidth},smalltalk.PluggableTextMorph)})},
-messageSends: ["width:", "-", "*", "textareaPadding", "css:a:", ",", "asString", "asJQuery", "textarea"]}),
+textWidth=_st(_st(aNumber).__minus(_st((3)).__star(_st(self)._textMorphPadding()))).__minus((1));
+_st(_st(self)._textMorph())._width_(textWidth);
+return self}, function($ctx1) {$ctx1.fill(self,"width:",{aNumber:aNumber,textWidth:textWidth},smalltalk.PluggableTextMorph)})},
+messageSends: ["width:", "-", "*", "textMorphPadding", "textMorph"]}),
 smalltalk.PluggableTextMorph);
 
 
