@@ -824,6 +824,11 @@ rows: aString
 	self at: 'rows' put: aString
 !
 
+selectable
+	self addClass: 'selectable'.
+	self element asJQuery selectable.
+!
+
 src: aString
 	self at: 'src' put: aString
 !
@@ -1270,6 +1275,11 @@ ownerChanged
 	self updateLayout.
 !
 
+removeAllSubmorphs
+	self submorphs do: [:m| m delete].
+	self updateLayout
+!
+
 submorphContainer
 	^ self morphElement
 !
@@ -1289,8 +1299,140 @@ isMorph
 ! !
 
 Morph subclass: #BorderedMorph
-	instanceVariableNames: 'morphElement'
+	instanceVariableNames: 'morphElement borderWidth'
 	package: 'Canvas'!
+
+BorderedMorph subclass: #PluggableListMorph
+	instanceVariableNames: 'morphElement list listElement getListSelector getListElementSelector getIndexSelector setIndexSelector model listMorph keyStrokeSelector'
+	package: 'Canvas'!
+
+!PluggableListMorph methodsFor: 'not yet classified'!
+
+getList
+	"Answer the list to be displayed.  Caches the returned list in the 'list' ivar"
+	getListSelector == nil ifTrue: [^ #()].
+	list := model perform: getListSelector.
+	list == nil ifTrue: [^ #()].
+	list := list collect: [:each| each asString].
+	^ list
+!
+
+getListItem: index
+	"get the index-th item in the displayed list"
+	| element |
+	getListElementSelector ifNotNil: [ ^ (self model perform: getListElementSelector with: index) asString].
+	list ifNotNil: [ ^ list at: index ].
+	
+	element := self getList at: index.
+	^ self element asString
+!
+
+getListSelector
+	^ getListSelector
+!
+
+getListSelector: sel
+	"Set the receiver's getListSelector as indicated, and trigger a recomputation of the list"
+
+	getListSelector := sel.
+	self updateList.
+!
+
+getListSize
+	"return the current number of items in the displayed list"
+	^self getList size
+!
+
+list
+	^list
+!
+
+list: anArray
+	list := anArray
+!
+
+listElement
+	^listElement
+!
+
+listElement: anObject
+	list := anObject
+!
+
+model
+	^ model
+!
+
+model: aModel
+	model := aModel
+!
+
+on: anObject list: getListSel selected: getSelectionSel changeSelected: setSelectionSel
+	self model: anObject.
+	getListSelector := getListSel.
+	getIndexSelector := getSelectionSel.
+	setIndexSelector := setSelectionSel.
+	self updateList
+!
+
+render: container with: html
+	container  
+		with: [listElement := html select
+			at: 'size' put: '3'].
+	self getList.
+	self updateContents
+!
+
+update: aSymbol 
+	"Refer to the comment in View|update:."
+
+	(aSymbol == getListSelector or: [ aSymbol == getListElementSelector ]) ifTrue: 
+		[self updateList.
+		^ self].
+	aSymbol == getIndexSelector ifTrue:
+		[self selectionIndex: self getCurrentSelectionIndex.
+		^ self].
+	aSymbol == #allSelections ifTrue:
+		[self selectionIndex: self getCurrentSelectionIndex.
+		^ self].
+!
+
+updateContents
+	self removeAllSubmorphs.
+	self list do:[:each| self listElement asJQuery append: '<option>', each, '</option>'].
+	self updateLayout
+!
+
+updateList
+	"the list has changed -- update from the model"
+	self getList.
+	self listElement notNil ifTrue:[self updateContents]
+! !
+
+!PluggableListMorph class methodsFor: 'not yet classified'!
+
+on: anObject list: listSel primarySelection: getSelectionSel changePrimarySelection: setSelectionSel listSelection: getListSel changeListSelection: setListSel
+	^ self basicNew
+			on: anObject
+			list: listSel
+			primarySelection: getSelectionSel
+			changePrimarySelection: setSelectionSel
+			listSelection: getListSel
+			changeListSelection: setListSel;
+		initialize;
+		yourself
+!
+
+tryList
+|listMorph|
+	listMorph := self basicNew.
+	^listMorph
+		list: #(1 2 3);
+		model: listMorph;
+		getListSelector: #list;
+		initialize;
+		yourself
+! !
 
 BorderedMorph subclass: #RectangleMorph
 	instanceVariableNames: 'morphElement'
@@ -1502,14 +1644,6 @@ Morph subclass: #PluggableTextMorph
 
 !PluggableTextMorph methodsFor: 'accessing'!
 
-acceptOnCR
-	^ acceptOnCR
-!
-
-acceptOnCR: aBoolean
-	acceptOnCR := aBoolean.
-!
-
 getTextSelector
 	^ getTextSelector
 !
@@ -1587,11 +1721,6 @@ on: anObject text: getTextSel accept: setTextSel
 		on: anObject
 		text: getTextSel
 		accept: setTextSel
-!
-
-on: anObject text: getTextSel accept: setTextSel readSelection: getSelectionSel menu: getMenuSel
-	"TODO: evaluate the other parameters"
-	^ self on: anObject text: getTextSel accept: setTextSel
 ! !
 
 Morph subclass: #SimpleButtonMorph
@@ -1749,26 +1878,10 @@ setDefaultSize
 	self width: 250.
 ! !
 
-!SystemWindow methodsFor: 'submorphs'!
-
-addMorph: aMorph frame: aRectangle
-	self addMorph: aMorph.
-	self morphFrames at: aMorph put: aRectangle.
-	self updateLayout.
-! !
-
 !SystemWindow methodsFor: 'testing'!
 
 isSystemWindow
 	^ true
-! !
-
-!SystemWindow class methodsFor: 'instance creation'!
-
-labelled: labelString
-	^ self new 
-		setLabel: labelString;
-		yourself
 ! !
 
 Morph subclass: #WorkspaceMorph

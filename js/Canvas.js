@@ -3497,6 +3497,23 @@ smalltalk.TagBrush);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "selectable",
+category: 'attributes',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._addClass_("selectable");
+_st(_st(_st(self)._element())._asJQuery())._selectable();
+return self}, function($ctx1) {$ctx1.fill(self,"selectable",{},smalltalk.TagBrush)})},
+args: [],
+source: "selectable\x0a\x09self addClass: 'selectable'.\x0a\x09self element asJQuery selectable.",
+messageSends: ["addClass:", "selectable", "asJQuery", "element"],
+referencedClasses: []
+}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "src:",
 category: 'attributes',
 fn: function (aString){
@@ -4374,6 +4391,26 @@ smalltalk.Morph);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "removeAllSubmorphs",
+category: 'submorphs',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._submorphs())._do_((function(m){
+return smalltalk.withContext(function($ctx2) {
+return _st(m)._delete();
+}, function($ctx2) {$ctx2.fillBlock({m:m},$ctx1)})}));
+_st(self)._updateLayout();
+return self}, function($ctx1) {$ctx1.fill(self,"removeAllSubmorphs",{},smalltalk.Morph)})},
+args: [],
+source: "removeAllSubmorphs\x0a\x09self submorphs do: [:m| m delete].\x0a\x09self updateLayout",
+messageSends: ["do:", "delete", "submorphs", "updateLayout"],
+referencedClasses: []
+}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "removeClass:",
 category: 'css',
 fn: function (aString){
@@ -4718,7 +4755,401 @@ smalltalk.Morph);
 
 
 
-smalltalk.addClass('BorderedMorph', smalltalk.Morph, ['morphElement'], 'Canvas');
+smalltalk.addClass('BorderedMorph', smalltalk.Morph, ['morphElement', 'borderWidth'], 'Canvas');
+
+
+smalltalk.addClass('PluggableListMorph', smalltalk.BorderedMorph, ['morphElement', 'list', 'listElement', 'getListSelector', 'getListElementSelector', 'getIndexSelector', 'setIndexSelector', 'model', 'listMorph', 'keyStrokeSelector'], 'Canvas');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "getList",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5;
+$1=_st(self["@getListSelector"]).__eq_eq(nil);
+if(smalltalk.assert($1)){
+$2=[];
+return $2;
+};
+self["@list"]=_st(self["@model"])._perform_(self["@getListSelector"]);
+$3=_st(self["@list"]).__eq_eq(nil);
+if(smalltalk.assert($3)){
+$4=[];
+return $4;
+};
+self["@list"]=_st(self["@list"])._collect_((function(each){
+return smalltalk.withContext(function($ctx2) {
+return _st(each)._asString();
+}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1)})}));
+$5=self["@list"];
+return $5;
+}, function($ctx1) {$ctx1.fill(self,"getList",{},smalltalk.PluggableListMorph)})},
+args: [],
+source: "getList\x0a\x09\x22Answer the list to be displayed.  Caches the returned list in the 'list' ivar\x22\x0a\x09getListSelector == nil ifTrue: [^ #()].\x0a\x09list := model perform: getListSelector.\x0a\x09list == nil ifTrue: [^ #()].\x0a\x09list := list collect: [:each| each asString].\x0a\x09^ list",
+messageSends: ["ifTrue:", "==", "perform:", "collect:", "asString"],
+referencedClasses: []
+}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "getListItem:",
+category: 'not yet classified',
+fn: function (index){
+var self=this;
+var element;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5;
+$1=self["@getListElementSelector"];
+if(($receiver = $1) == nil || $receiver == undefined){
+$1;
+} else {
+$2=_st(_st(_st(self)._model())._perform_with_(self["@getListElementSelector"],index))._asString();
+return $2;
+};
+$3=self["@list"];
+if(($receiver = $3) == nil || $receiver == undefined){
+$3;
+} else {
+$4=_st(self["@list"])._at_(index);
+return $4;
+};
+element=_st(_st(self)._getList())._at_(index);
+$5=_st(_st(self)._element())._asString();
+return $5;
+}, function($ctx1) {$ctx1.fill(self,"getListItem:",{index:index,element:element},smalltalk.PluggableListMorph)})},
+args: ["index"],
+source: "getListItem: index\x0a\x09\x22get the index-th item in the displayed list\x22\x0a\x09| element |\x0a\x09getListElementSelector ifNotNil: [ ^ (self model perform: getListElementSelector with: index) asString].\x0a\x09list ifNotNil: [ ^ list at: index ].\x0a\x09\x0a\x09element := self getList at: index.\x0a\x09^ self element asString",
+messageSends: ["ifNotNil:", "asString", "perform:with:", "model", "at:", "getList", "element"],
+referencedClasses: []
+}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "getListSelector",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@getListSelector"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"getListSelector",{},smalltalk.PluggableListMorph)})},
+args: [],
+source: "getListSelector\x0a\x09^ getListSelector",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "getListSelector:",
+category: 'not yet classified',
+fn: function (sel){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@getListSelector"]=sel;
+_st(self)._updateList();
+return self}, function($ctx1) {$ctx1.fill(self,"getListSelector:",{sel:sel},smalltalk.PluggableListMorph)})},
+args: ["sel"],
+source: "getListSelector: sel\x0a\x09\x22Set the receiver's getListSelector as indicated, and trigger a recomputation of the list\x22\x0a\x0a\x09getListSelector := sel.\x0a\x09self updateList.",
+messageSends: ["updateList"],
+referencedClasses: []
+}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "getListSize",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._getList())._size();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"getListSize",{},smalltalk.PluggableListMorph)})},
+args: [],
+source: "getListSize\x0a\x09\x22return the current number of items in the displayed list\x22\x0a\x09^self getList size",
+messageSends: ["size", "getList"],
+referencedClasses: []
+}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "list",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@list"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"list",{},smalltalk.PluggableListMorph)})},
+args: [],
+source: "list\x0a\x09^list\x0a\x09",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "list:",
+category: 'not yet classified',
+fn: function (anArray){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@list"]=anArray;
+return self}, function($ctx1) {$ctx1.fill(self,"list:",{anArray:anArray},smalltalk.PluggableListMorph)})},
+args: ["anArray"],
+source: "list: anArray\x0a\x09list := anArray\x0a\x09",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "listElement",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@listElement"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"listElement",{},smalltalk.PluggableListMorph)})},
+args: [],
+source: "listElement\x0a\x09^listElement\x0a\x09",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "listElement:",
+category: 'not yet classified',
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@list"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"listElement:",{anObject:anObject},smalltalk.PluggableListMorph)})},
+args: ["anObject"],
+source: "listElement: anObject\x0a\x09list := anObject\x0a\x09",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "model",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@model"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"model",{},smalltalk.PluggableListMorph)})},
+args: [],
+source: "model\x0a\x09^ model",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "model:",
+category: 'not yet classified',
+fn: function (aModel){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@model"]=aModel;
+return self}, function($ctx1) {$ctx1.fill(self,"model:",{aModel:aModel},smalltalk.PluggableListMorph)})},
+args: ["aModel"],
+source: "model: aModel\x0a\x09model := aModel",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "on:list:selected:changeSelected:",
+category: 'not yet classified',
+fn: function (anObject,getListSel,getSelectionSel,setSelectionSel){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._model_(anObject);
+self["@getListSelector"]=getListSel;
+self["@getIndexSelector"]=getSelectionSel;
+self["@setIndexSelector"]=setSelectionSel;
+_st(self)._updateList();
+return self}, function($ctx1) {$ctx1.fill(self,"on:list:selected:changeSelected:",{anObject:anObject,getListSel:getListSel,getSelectionSel:getSelectionSel,setSelectionSel:setSelectionSel},smalltalk.PluggableListMorph)})},
+args: ["anObject", "getListSel", "getSelectionSel", "setSelectionSel"],
+source: "on: anObject list: getListSel selected: getSelectionSel changeSelected: setSelectionSel\x0a\x09self model: anObject.\x0a\x09getListSelector := getListSel.\x0a\x09getIndexSelector := getSelectionSel.\x0a\x09setIndexSelector := setSelectionSel.\x0a\x09self updateList",
+messageSends: ["model:", "updateList"],
+referencedClasses: []
+}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "render:with:",
+category: 'not yet classified',
+fn: function (container,html){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(container)._with_((function(){
+return smalltalk.withContext(function($ctx2) {
+self["@listElement"]=_st(_st(html)._select())._at_put_("size","3");
+return self["@listElement"];
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+_st(self)._getList();
+_st(self)._updateContents();
+return self}, function($ctx1) {$ctx1.fill(self,"render:with:",{container:container,html:html},smalltalk.PluggableListMorph)})},
+args: ["container", "html"],
+source: "render: container with: html\x0a\x09container  \x0a\x09\x09with: [listElement := html select\x0a\x09\x09\x09at: 'size' put: '3'].\x0a\x09self getList.\x0a\x09self updateContents",
+messageSends: ["with:", "at:put:", "select", "getList", "updateContents"],
+referencedClasses: []
+}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "update:",
+category: 'not yet classified',
+fn: function (aSymbol){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5,$6;
+$1=_st(_st(aSymbol).__eq_eq(self["@getListSelector"]))._or_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(aSymbol).__eq_eq(self["@getListElementSelector"]);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+if(smalltalk.assert($1)){
+_st(self)._updateList();
+$2=self;
+return $2;
+};
+$3=_st(aSymbol).__eq_eq(self["@getIndexSelector"]);
+if(smalltalk.assert($3)){
+_st(self)._selectionIndex_(_st(self)._getCurrentSelectionIndex());
+$4=self;
+return $4;
+};
+$5=_st(aSymbol).__eq_eq("allSelections");
+if(smalltalk.assert($5)){
+_st(self)._selectionIndex_(_st(self)._getCurrentSelectionIndex());
+$6=self;
+return $6;
+};
+return self}, function($ctx1) {$ctx1.fill(self,"update:",{aSymbol:aSymbol},smalltalk.PluggableListMorph)})},
+args: ["aSymbol"],
+source: "update: aSymbol \x0a\x09\x22Refer to the comment in View|update:.\x22\x0a\x0a\x09(aSymbol == getListSelector or: [ aSymbol == getListElementSelector ]) ifTrue: \x0a\x09\x09[self updateList.\x0a\x09\x09^ self].\x0a\x09aSymbol == getIndexSelector ifTrue:\x0a\x09\x09[self selectionIndex: self getCurrentSelectionIndex.\x0a\x09\x09^ self].\x0a\x09aSymbol == #allSelections ifTrue:\x0a\x09\x09[self selectionIndex: self getCurrentSelectionIndex.\x0a\x09\x09^ self].",
+messageSends: ["ifTrue:", "updateList", "or:", "==", "selectionIndex:", "getCurrentSelectionIndex"],
+referencedClasses: []
+}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "updateContents",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._removeAllSubmorphs();
+_st(_st(self)._list())._do_((function(each){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(_st(self)._listElement())._asJQuery())._append_(_st(_st("<option>").__comma(each)).__comma("</option>"));
+}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1)})}));
+_st(self)._updateLayout();
+return self}, function($ctx1) {$ctx1.fill(self,"updateContents",{},smalltalk.PluggableListMorph)})},
+args: [],
+source: "updateContents\x0a\x09self removeAllSubmorphs.\x0a\x09self list do:[:each| self listElement asJQuery append: '<option>', each, '</option>'].\x0a\x09self updateLayout",
+messageSends: ["removeAllSubmorphs", "do:", "append:", ",", "asJQuery", "listElement", "list", "updateLayout"],
+referencedClasses: []
+}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "updateList",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+_st(self)._getList();
+$1=_st(_st(self)._listElement())._notNil();
+if(smalltalk.assert($1)){
+_st(self)._updateContents();
+};
+return self}, function($ctx1) {$ctx1.fill(self,"updateList",{},smalltalk.PluggableListMorph)})},
+args: [],
+source: "updateList\x0a\x09\x22the list has changed -- update from the model\x22\x0a\x09self getList.\x0a\x09self listElement notNil ifTrue:[self updateContents]",
+messageSends: ["getList", "ifTrue:", "updateContents", "notNil", "listElement"],
+referencedClasses: []
+}),
+smalltalk.PluggableListMorph);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "on:list:primarySelection:changePrimarySelection:listSelection:changeListSelection:",
+category: 'not yet classified',
+fn: function (anObject,listSel,getSelectionSel,setSelectionSel,getListSel,setListSel){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=_st(self)._basicNew();
+_st($2)._on_list_primarySelection_changePrimarySelection_listSelection_changeListSelection_(anObject,listSel,getSelectionSel,setSelectionSel,getListSel,setListSel);
+_st($2)._initialize();
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"on:list:primarySelection:changePrimarySelection:listSelection:changeListSelection:",{anObject:anObject,listSel:listSel,getSelectionSel:getSelectionSel,setSelectionSel:setSelectionSel,getListSel:getListSel,setListSel:setListSel},smalltalk.PluggableListMorph.klass)})},
+args: ["anObject", "listSel", "getSelectionSel", "setSelectionSel", "getListSel", "setListSel"],
+source: "on: anObject list: listSel primarySelection: getSelectionSel changePrimarySelection: setSelectionSel listSelection: getListSel changeListSelection: setListSel\x0a\x09^ self basicNew\x0a\x09\x09\x09on: anObject\x0a\x09\x09\x09list: listSel\x0a\x09\x09\x09primarySelection: getSelectionSel\x0a\x09\x09\x09changePrimarySelection: setSelectionSel\x0a\x09\x09\x09listSelection: getListSel\x0a\x09\x09\x09changeListSelection: setListSel;\x0a\x09\x09initialize;\x0a\x09\x09yourself",
+messageSends: ["on:list:primarySelection:changePrimarySelection:listSelection:changeListSelection:", "basicNew", "initialize", "yourself"],
+referencedClasses: []
+}),
+smalltalk.PluggableListMorph.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "tryList",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+var listMorph;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+listMorph=_st(self)._basicNew();
+$2=listMorph;
+_st($2)._list_([(1), (2), (3)]);
+_st($2)._model_(listMorph);
+_st($2)._getListSelector_("list");
+_st($2)._initialize();
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"tryList",{listMorph:listMorph},smalltalk.PluggableListMorph.klass)})},
+args: [],
+source: "tryList\x0a|listMorph|\x0a\x09listMorph := self basicNew.\x0a\x09^listMorph\x0a\x09\x09list: #(1 2 3);\x0a\x09\x09model: listMorph;\x0a\x09\x09getListSelector: #list;\x0a\x09\x09initialize;\x0a\x09\x09yourself",
+messageSends: ["basicNew", "list:", "model:", "getListSelector:", "initialize", "yourself"],
+referencedClasses: []
+}),
+smalltalk.PluggableListMorph.klass);
 
 
 smalltalk.addClass('RectangleMorph', smalltalk.BorderedMorph, ['morphElement'], 'Canvas');
@@ -5576,24 +6007,6 @@ return $1;
 args: ["anObject", "getTextSel", "setTextSel"],
 source: "on: anObject text: getTextSel accept: setTextSel\x0a\x09^ self new\x0a\x09\x09on: anObject\x0a\x09\x09text: getTextSel\x0a\x09\x09accept: setTextSel",
 messageSends: ["on:text:accept:", "new"],
-referencedClasses: []
-}),
-smalltalk.PluggableTextMorph.klass);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "on:text:accept:readSelection:menu:",
-category: 'instance creation',
-fn: function (anObject,getTextSel,setTextSel,getSelectionSel,getMenuSel){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st(self)._on_text_accept_(anObject,getTextSel,setTextSel);
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"on:text:accept:readSelection:menu:",{anObject:anObject,getTextSel:getTextSel,setTextSel:setTextSel,getSelectionSel:getSelectionSel,getMenuSel:getMenuSel},smalltalk.PluggableTextMorph.klass)})},
-args: ["anObject", "getTextSel", "setTextSel", "getSelectionSel", "getMenuSel"],
-source: "on: anObject text: getTextSel accept: setTextSel readSelection: getSelectionSel menu: getMenuSel\x0a\x09\x22TODO: evaluate the other parameters\x22\x0a\x09^ self on: anObject text: getTextSel accept: setTextSel",
-messageSends: ["on:text:accept:"],
 referencedClasses: []
 }),
 smalltalk.PluggableTextMorph.klass);
