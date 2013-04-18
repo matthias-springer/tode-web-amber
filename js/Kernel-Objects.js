@@ -969,6 +969,24 @@ smalltalk.Object);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "perform:with:",
+category: 'message handling',
+fn: function (aString,argument1){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._perform_withArguments_(aString,[argument1]);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"perform:with:",{aString:aString,argument1:argument1},smalltalk.Object)})},
+args: ["aString", "argument1"],
+source: "perform: aString with: argument1\x0a\x09^self perform: aString withArguments: {argument1}",
+messageSends: ["perform:withArguments:"],
+referencedClasses: []
+}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "perform:withArguments:",
 category: 'message handling',
 fn: function (aString,aCollection){

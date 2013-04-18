@@ -241,6 +241,10 @@ perform: aString
 	^self perform: aString withArguments: #()
 !
 
+perform: aString with: argument1
+	^self perform: aString withArguments: {argument1}
+!
+
 perform: aString withArguments: aCollection
 	<return smalltalk.send(self, aString._asSelector(), aCollection)>
 ! !

@@ -2218,6 +2218,44 @@ smalltalk.TagBrush);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "onArrowKeyDown:",
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+_st(self)._onKeyDown_((function(e){
+return smalltalk.withContext(function($ctx2) {
+_st(e)._preventDefault();
+$1=_st(_st(e)._keyCode()).__eq((40));
+if(smalltalk.assert($1)){
+return _st(aBlock)._value();
+};
+}, function($ctx2) {$ctx2.fillBlock({e:e},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"onArrowKeyDown:",{aBlock:aBlock},smalltalk.TagBrush)})},
+messageSends: ["onKeyDown:", "preventDefault", "ifTrue:", "value", "=", "keyCode"]}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "onArrowKeyUp:",
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+_st(self)._onKeyDown_((function(e){
+return smalltalk.withContext(function($ctx2) {
+_st(e)._preventDefault();
+$1=_st(_st(e)._keyCode()).__eq((38));
+if(smalltalk.assert($1)){
+return _st(aBlock)._value();
+};
+}, function($ctx2) {$ctx2.fillBlock({e:e},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"onArrowKeyUp:",{aBlock:aBlock},smalltalk.TagBrush)})},
+messageSends: ["onKeyDown:", "preventDefault", "ifTrue:", "value", "=", "keyCode"]}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "onBlur:",
 fn: function (aBlock){
 var self=this;
@@ -2438,6 +2476,28 @@ smalltalk.TagBrush);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "onSelected:",
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._asJQuery())._bind_do_("selectableselected",aBlock);
+return self}, function($ctx1) {$ctx1.fill(self,"onSelected:",{aBlock:aBlock},smalltalk.TagBrush)})},
+messageSends: ["bind:do:", "asJQuery"]}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "onStop:",
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._asJQuery())._bind_do_("selectablestop",aBlock);
+return self}, function($ctx1) {$ctx1.fill(self,"onStop:",{aBlock:aBlock},smalltalk.TagBrush)})},
+messageSends: ["bind:do:", "asJQuery"]}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "onSubmit:",
 fn: function (aBlock){
 var self=this;
@@ -2521,9 +2581,8 @@ fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 _st(self)._addClass_("selectable");
-_st(_st(_st(self)._element())._asJQuery())._selectable();
 return self}, function($ctx1) {$ctx1.fill(self,"selectable",{},smalltalk.TagBrush)})},
-messageSends: ["addClass:", "selectable", "asJQuery", "element"]}),
+messageSends: ["addClass:"]}),
 smalltalk.TagBrush);
 
 smalltalk.addMethod(
@@ -2579,6 +2638,17 @@ return smalltalk.withContext(function($ctx1) {
 _st(self)._at_put_("title",aString);
 return self}, function($ctx1) {$ctx1.fill(self,"title:",{aString:aString},smalltalk.TagBrush)})},
 messageSends: ["at:put:"]}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "trigger:",
+fn: function (anEventString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._asJQuery())._trigger_(anEventString);
+return self}, function($ctx1) {$ctx1.fill(self,"trigger:",{anEventString:anEventString},smalltalk.TagBrush)})},
+messageSends: ["trigger:", "asJQuery"]}),
 smalltalk.TagBrush);
 
 smalltalk.addMethod(
@@ -3426,7 +3496,45 @@ smalltalk.Morph);
 smalltalk.addClass('BorderedMorph', smalltalk.Morph, ['morphElement', 'borderWidth'], 'Canvas');
 
 
-smalltalk.addClass('PluggableListMorph', smalltalk.BorderedMorph, ['morphElement', 'list', 'listElement', 'getListSelector', 'getListElementSelector', 'getIndexSelector', 'setIndexSelector', 'model', 'listMorph', 'keyStrokeSelector'], 'Canvas');
+smalltalk.addClass('PluggableListMorph', smalltalk.BorderedMorph, ['morphElement', 'list', 'listElement', 'getListSelector', 'getListElementSelector', 'getIndexSelector', 'setIndexSelector', 'model', 'listMorph', 'keyStrokeSelector', 'listEntries', 'listIndex', 'xhtml', 'scroll'], 'Canvas');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "clearEntries",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._listEntries())._do_((function(each){
+return smalltalk.withContext(function($ctx2) {
+return _st(each)._remove();
+}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"clearEntries",{},smalltalk.PluggableListMorph)})},
+messageSends: ["do:", "remove", "listEntries"]}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "getIndexSelector",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@getIndexSelector"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"getIndexSelector",{},smalltalk.PluggableListMorph)})},
+messageSends: []}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "getIndexSelector:",
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@getIndexSelector"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"getIndexSelector:",{anObject:anObject},smalltalk.PluggableListMorph)})},
+messageSends: []}),
+smalltalk.PluggableListMorph);
+
 smalltalk.addMethod(
 smalltalk.method({
 selector: "getList",
@@ -3524,6 +3632,19 @@ smalltalk.PluggableListMorph);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "initialize",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._listEntries_([]);
+self["@scroll"]=(0);
+smalltalk.BorderedMorph.fn.prototype._initialize.apply(_st(self), []);
+return self}, function($ctx1) {$ctx1.fill(self,"initialize",{},smalltalk.PluggableListMorph)})},
+messageSends: ["listEntries:", "initialize"]}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "list",
 fn: function (){
 var self=this;
@@ -3565,9 +3686,69 @@ selector: "listElement:",
 fn: function (anObject){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-self["@list"]=anObject;
+self["@listElement"]=anObject;
 return self}, function($ctx1) {$ctx1.fill(self,"listElement:",{anObject:anObject},smalltalk.PluggableListMorph)})},
 messageSends: []}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "listEntries",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@listEntries"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"listEntries",{},smalltalk.PluggableListMorph)})},
+messageSends: []}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "listEntries:",
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@listEntries"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"listEntries:",{anObject:anObject},smalltalk.PluggableListMorph)})},
+messageSends: []}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "listIndex",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=self["@listIndex"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@listIndex"]=(0);
+self["@listIndex"];
+} else {
+$1;
+};
+$2=self["@listIndex"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"listIndex",{},smalltalk.PluggableListMorph)})},
+messageSends: ["ifNil:"]}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "listIndex:",
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(anObject)._isNumber();
+if(! smalltalk.assert($1)){
+_st(self)._halt();
+};
+self["@listIndex"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"listIndex:",{anObject:anObject},smalltalk.PluggableListMorph)})},
+messageSends: ["ifFalse:", "halt", "isNumber"]}),
 smalltalk.PluggableListMorph);
 
 smalltalk.addMethod(
@@ -3596,6 +3777,60 @@ smalltalk.PluggableListMorph);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "moveSelectionDown",
+fn: function (){
+var self=this;
+var index,element,half;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+index=_st(_st(self)._model())._perform_(_st(self)._getIndexSelector());
+$1=_st(index).__eq(_st(self)._getListSize());
+if(! smalltalk.assert($1)){
+index=_st(index).__plus((1));
+index;
+};
+element=_st(_st(self)._listEntries())._at_(index);
+_st(_st(element)._entry())._trigger_("click");
+half=_st(_st(self)._getListSize()).__slash(_st((2))._rounded());
+$2=_st(self)._outOfView_(element);
+if(smalltalk.assert($2)){
+self["@scroll"]=_st(_st(self)._getListSize())._min_(_st(self["@scroll"]).__plus((1)));
+self["@scroll"];
+_st(_st(_st(_st(_st(self)._listElement())._asJQuery())._find_("li.selectee"))._at_(self["@scroll"]))._scrollIntoView();
+};
+return self}, function($ctx1) {$ctx1.fill(self,"moveSelectionDown",{index:index,element:element,half:half},smalltalk.PluggableListMorph)})},
+messageSends: ["perform:", "getIndexSelector", "model", "ifFalse:", "+", "=", "getListSize", "at:", "listEntries", "trigger:", "entry", "/", "rounded", "ifTrue:", "min:", "scrollIntoView", "find:", "asJQuery", "listElement", "outOfView:"]}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "moveSelectionUp",
+fn: function (){
+var self=this;
+var index,element,half;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+index=_st(_st(self)._model())._perform_(_st(self)._getIndexSelector());
+$1=_st(index).__eq((1));
+if(! smalltalk.assert($1)){
+index=_st(index).__minus((1));
+index;
+};
+element=_st(_st(self)._listEntries())._at_(index);
+_st(_st(element)._entry())._trigger_("click");
+half=_st(_st(self)._getListSize()).__slash(_st((2))._rounded());
+$2=_st(self)._outOfView_(element);
+if(smalltalk.assert($2)){
+self["@scroll"]=_st((0))._max_(_st(self["@scroll"]).__minus((1)));
+self["@scroll"];
+_st(_st(_st(_st(_st(self)._listElement())._asJQuery())._find_("li.selectee"))._at_(self["@scroll"]))._scrollIntoView();
+};
+return self}, function($ctx1) {$ctx1.fill(self,"moveSelectionUp",{index:index,element:element,half:half},smalltalk.PluggableListMorph)})},
+messageSends: ["perform:", "getIndexSelector", "model", "ifFalse:", "-", "=", "at:", "listEntries", "trigger:", "entry", "/", "rounded", "getListSize", "ifTrue:", "max:", "scrollIntoView", "find:", "asJQuery", "listElement", "outOfView:"]}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "on:list:selected:changeSelected:",
 fn: function (anObject,getListSel,getSelectionSel,setSelectionSel){
 var self=this;
@@ -3611,19 +3846,96 @@ smalltalk.PluggableListMorph);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "outOfView:",
+fn: function (element){
+var self=this;
+function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+$1=$Transcript();
+_st($1)._cr();
+$2=_st($1)._show_(_st(_st(_st(_st(_st(_st(_st(element)._entry())._asJQuery())._position())._top())._asString()).__comma("  ")).__comma(_st(_st(_st(_st(_st(self)._morphElement())._asJQuery())._position())._top())._asString()));
+$3=_st(_st(_st(_st(_st(_st(_st(element)._entry())._asJQuery())._position())._top()).__plus(_st(_st(_st(element)._entry())._asJQuery())._height())).__gt(_st(_st(_st(self)._morphElement())._asJQuery())._height()))._or_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(_st(_st(_st(element)._entry())._asJQuery())._position())._top()).__lt((0));
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $3;
+}, function($ctx1) {$ctx1.fill(self,"outOfView:",{element:element},smalltalk.PluggableListMorph)})},
+messageSends: ["cr", "show:", ",", "asString", "top", "position", "asJQuery", "morphElement", "entry", "or:", "<", ">", "height", "+"]}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "render:with:",
 fn: function (container,html){
 var self=this;
+function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
 return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+self["@xhtml"]=html;
 _st(container)._with_((function(){
 return smalltalk.withContext(function($ctx2) {
-self["@listElement"]=_st(_st(html)._select())._at_put_("size","3");
+$1=_st(html)._ul();
+_st($1)._selectable();
+_st($1)._addClass_("nav nav-pills nav-stacked");
+_st($1)._at_put_("tabindex","1");
+_st($1)._onFocus_((function(){
+return smalltalk.withContext(function($ctx3) {
+return _st($Transcript())._show_("FOCUS");
+}, function($ctx3) {$ctx3.fillBlock({},$ctx1)})}));
+_st($1)._onArrowKeyDown_((function(){
+return smalltalk.withContext(function($ctx3) {
+return _st(self)._moveSelectionDown();
+}, function($ctx3) {$ctx3.fillBlock({},$ctx1)})}));
+$2=_st($1)._onArrowKeyUp_((function(){
+return smalltalk.withContext(function($ctx3) {
+return _st(self)._moveSelectionUp();
+}, function($ctx3) {$ctx3.fillBlock({},$ctx1)})}));
+self["@listElement"]=$2;
 return self["@listElement"];
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+_st(self)._overflow_("auto");
 _st(self)._getList();
 _st(self)._updateContents();
 return self}, function($ctx1) {$ctx1.fill(self,"render:with:",{container:container,html:html},smalltalk.PluggableListMorph)})},
-messageSends: ["with:", "at:put:", "select", "getList", "updateContents"]}),
+messageSends: ["with:", "selectable", "ul", "addClass:", "at:put:", "onFocus:", "show:", "onArrowKeyDown:", "moveSelectionDown", "onArrowKeyUp:", "moveSelectionUp", "overflow:", "getList", "updateContents"]}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "selected:",
+fn: function (anObject){
+var self=this;
+function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
+return smalltalk.withContext(function($ctx1) { 
+_st($Transcript())._show_(_st("Selected: ").__comma(_st(anObject)._index()));
+_st(_st(self)._model())._perform_with_(self["@setIndexSelector"],_st(anObject)._index());
+return self}, function($ctx1) {$ctx1.fill(self,"selected:",{anObject:anObject},smalltalk.PluggableListMorph)})},
+messageSends: ["show:", ",", "index", "perform:with:", "model"]}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "setIndexSelector",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@setIndexSelector"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"setIndexSelector",{},smalltalk.PluggableListMorph)})},
+messageSends: []}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "setIndexSelector:",
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@setIndexSelector"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"setIndexSelector:",{anObject:anObject},smalltalk.PluggableListMorph)})},
+messageSends: []}),
 smalltalk.PluggableListMorph);
 
 smalltalk.addMethod(
@@ -3663,15 +3975,25 @@ smalltalk.method({
 selector: "updateContents",
 fn: function (){
 var self=this;
+var i;
+function $LazyListMorph(){return smalltalk.LazyListMorph||(typeof LazyListMorph=="undefined"?nil:LazyListMorph)}
 return smalltalk.withContext(function($ctx1) { 
-_st(self)._removeAllSubmorphs();
+i=(1);
+_st(_st(self)._listElement())._empty();
+_st(self)._clearEntries();
 _st(_st(self)._list())._do_((function(each){
+var element;
 return smalltalk.withContext(function($ctx2) {
-return _st(_st(_st(self)._listElement())._asJQuery())._append_(_st(_st("<option>").__comma(each)).__comma("</option>"));
-}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1)})}));
+element=_st($LazyListMorph())._index_dependent_content_(i,self,each);
+element;
+_st(_st(self)._listEntries())._add_(element);
+_st(element)._appendToJQuery_(_st(_st(self)._listElement())._asJQuery());
+i=_st(i).__plus((1));
+return i;
+}, function($ctx2) {$ctx2.fillBlock({each:each,element:element},$ctx1)})}));
 _st(self)._updateLayout();
-return self}, function($ctx1) {$ctx1.fill(self,"updateContents",{},smalltalk.PluggableListMorph)})},
-messageSends: ["removeAllSubmorphs", "do:", "append:", ",", "asJQuery", "listElement", "list", "updateLayout"]}),
+return self}, function($ctx1) {$ctx1.fill(self,"updateContents",{i:i},smalltalk.PluggableListMorph)})},
+messageSends: ["empty", "listElement", "clearEntries", "do:", "index:dependent:content:", "add:", "listEntries", "appendToJQuery:", "asJQuery", "+", "list", "updateLayout"]}),
 smalltalk.PluggableListMorph);
 
 smalltalk.addMethod(
@@ -3718,15 +4040,17 @@ return smalltalk.withContext(function($ctx1) {
 var $2,$3,$1;
 listMorph=_st(self)._basicNew();
 $2=listMorph;
-_st($2)._list_([(1), (2), (3)]);
+_st($2)._list_([(1), (2), (3), (4), (5), (6), (7), (8), (9), (10), (11), (12), (13), (14), (15), (16), (17), (18), (19), (20), (21), (22)]);
 _st($2)._model_(listMorph);
 _st($2)._getListSelector_("list");
+_st($2)._getIndexSelector_("listIndex");
+_st($2)._setIndexSelector_("listIndex:");
 _st($2)._initialize();
 $3=_st($2)._yourself();
 $1=$3;
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"tryList",{listMorph:listMorph},smalltalk.PluggableListMorph.klass)})},
-messageSends: ["basicNew", "list:", "model:", "getListSelector:", "initialize", "yourself"]}),
+messageSends: ["basicNew", "list:", "model:", "getListSelector:", "getIndexSelector:", "setIndexSelector:", "initialize", "yourself"]}),
 smalltalk.PluggableListMorph.klass);
 
 
@@ -4169,6 +4493,124 @@ return $1;
 }, function($ctx1) {$ctx1.fill(self,"wait",{},smalltalk.GlyphIconMorph.klass)})},
 messageSends: ["icon:", "new", "spin", "yourself"]}),
 smalltalk.GlyphIconMorph.klass);
+
+
+smalltalk.addClass('LazyListMorph', smalltalk.Morph, ['morphElement', 'entry', 'myIndex', 'content'], 'Canvas');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "content",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@content"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"content",{},smalltalk.LazyListMorph)})},
+messageSends: []}),
+smalltalk.LazyListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "content:",
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@content"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"content:",{anObject:anObject},smalltalk.LazyListMorph)})},
+messageSends: []}),
+smalltalk.LazyListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "entry",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@entry"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"entry",{},smalltalk.LazyListMorph)})},
+messageSends: []}),
+smalltalk.LazyListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "index",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@myIndex"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"index",{},smalltalk.LazyListMorph)})},
+messageSends: []}),
+smalltalk.LazyListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "index:",
+fn: function (aNumber){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(aNumber)._isNumber();
+if(! smalltalk.assert($1)){
+_st(self)._halt();
+};
+self["@myIndex"]=aNumber;
+return self}, function($ctx1) {$ctx1.fill(self,"index:",{aNumber:aNumber},smalltalk.LazyListMorph)})},
+messageSends: ["ifFalse:", "halt", "isNumber"]}),
+smalltalk.LazyListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "renderOn:",
+fn: function (html){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+self["@entry"]=_st(html)._li_(self["@content"]);
+$1=self["@entry"];
+_st($1)._addClass_("selectee");
+$2=_st($1)._onClick_((function(){
+return smalltalk.withContext(function($ctx2) {
+_st(self["@entry"])._addClass_("selected");
+_st(_st(_st(self["@entry"])._asJQuery())._siblings())._removeClass_("selected");
+return _st(self)._selected();
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"renderOn:",{html:html},smalltalk.LazyListMorph)})},
+messageSends: ["li:", "addClass:", "onClick:", "removeClass:", "siblings", "asJQuery", "selected"]}),
+smalltalk.LazyListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "selected",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._owner())._selected_(self);
+return self}, function($ctx1) {$ctx1.fill(self,"selected",{},smalltalk.LazyListMorph)})},
+messageSends: ["selected:", "owner"]}),
+smalltalk.LazyListMorph);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "index:dependent:content:",
+fn: function (anIndex,aDependent,aContent){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=_st(self)._basicNew();
+_st($2)._index_(anIndex);
+_st($2)._content_(aContent);
+_st($2)._owner_(aDependent);
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"index:dependent:content:",{anIndex:anIndex,aDependent:aDependent,aContent:aContent},smalltalk.LazyListMorph.klass)})},
+messageSends: ["index:", "basicNew", "content:", "owner:", "yourself"]}),
+smalltalk.LazyListMorph.klass);
 
 
 smalltalk.addClass('PluggableTextMorph', smalltalk.Morph, ['morphElement', 'textMorph', 'model', 'getTextSelector', 'setTextSelector', 'acceptOnCR'], 'Canvas');

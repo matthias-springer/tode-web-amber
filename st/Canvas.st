@@ -826,7 +826,7 @@ rows: aString
 
 selectable
 	self addClass: 'selectable'.
-	self element asJQuery selectable.
+	"self element asJQuery selectable."
 !
 
 src: aString
@@ -872,6 +872,14 @@ asJQuery
 ! !
 
 !TagBrush methodsFor: 'events'!
+
+onArrowKeyDown: aBlock
+	self onKeyDown: [:e| e preventDefault. e keyCode = 40 ifTrue:[aBlock value]]
+!
+
+onArrowKeyUp: aBlock
+	self onKeyDown: [:e| e preventDefault. e keyCode = 38 ifTrue:[aBlock value]]
+!
 
 onBlur: aBlock
 	self asJQuery bind: 'blur' do: aBlock
@@ -953,12 +961,24 @@ onSelect: aBlock
 	self asJQuery bind: 'select' do: aBlock
 !
 
+onSelected: aBlock
+	self asJQuery bind: 'selectableselected' do: aBlock
+!
+
+onStop: aBlock
+	self asJQuery bind: 'selectablestop' do: aBlock
+!
+
 onSubmit: aBlock
 	self asJQuery bind: 'submit' do: aBlock
 !
 
 onUnload: aBlock
 	self asJQuery bind: 'unload' do: aBlock
+!
+
+trigger: anEventString
+	self asJQuery trigger: anEventString
 ! !
 
 !TagBrush methodsFor: 'initialization'!
@@ -1303,10 +1323,27 @@ Morph subclass: #BorderedMorph
 	package: 'Canvas'!
 
 BorderedMorph subclass: #PluggableListMorph
-	instanceVariableNames: 'morphElement list listElement getListSelector getListElementSelector getIndexSelector setIndexSelector model listMorph keyStrokeSelector'
+	instanceVariableNames: 'morphElement list listElement getListSelector getListElementSelector getIndexSelector setIndexSelector model listMorph keyStrokeSelector listEntries listIndex xhtml scroll'
 	package: 'Canvas'!
+!PluggableListMorph commentStamp!
+Instance Variables:
+	list				holds the list that was retrieved by the model
+	listElement		the ul dom element of the list
+	model			 e.g.: List is retreived from here!
 
 !PluggableListMorph methodsFor: 'not yet classified'!
+
+clearEntries
+	self listEntries do:[:each| each remove]
+!
+
+getIndexSelector
+	^getIndexSelector
+!
+
+getIndexSelector: anObject
+	getIndexSelector:= anObject
+!
 
 getList
 	"Answer the list to be displayed.  Caches the returned list in the 'list' ivar"
@@ -1343,6 +1380,12 @@ getListSize
 	^self getList size
 !
 
+initialize
+	self listEntries: #().
+	scroll := 0.
+	super initialize
+!
+
 list
 	^list
 !
@@ -1356,7 +1399,25 @@ listElement
 !
 
 listElement: anObject
-	list := anObject
+	listElement := anObject
+!
+
+listEntries
+	^listEntries
+!
+
+listEntries: anObject
+	listEntries := anObject
+!
+
+listIndex
+	listIndex ifNil: [listIndex := 0].
+	^listIndex
+!
+
+listIndex: anObject
+	anObject isNumber ifFalse: [self halt].
+	listIndex := anObject
 !
 
 model
@@ -1367,6 +1428,28 @@ model: aModel
 	model := aModel
 !
 
+moveSelectionDown
+	|index element half |
+	index := self model perform: self getIndexSelector.
+	index = self getListSize ifFalse: [ index := index +1].
+	element := self listEntries at: index.
+	element entry trigger: 'click'.
+	half := self getListSize/2 rounded.
+	(self outOfView: element) ifTrue:[ scroll := self getListSize min: scroll +1.
+	((self listElement asJQuery find: 'li.selectee')at: scroll) scrollIntoView]
+!
+
+moveSelectionUp
+	|index element half |
+	index := self model perform: self getIndexSelector.
+	index = 1 ifFalse: [ index := index - 1].
+	element := self listEntries at: index.
+	element entry trigger: 'click'.
+	half := self getListSize/2 rounded.
+	(self outOfView: element) ifTrue:[  scroll := 0 max: scroll -1.
+	((self listElement asJQuery find: 'li.selectee')at: scroll) scrollIntoView]
+!
+
 on: anObject list: getListSel selected: getSelectionSel changeSelected: setSelectionSel
 	self model: anObject.
 	getListSelector := getListSel.
@@ -1375,12 +1458,38 @@ on: anObject list: getListSel selected: getSelectionSel changeSelected: setSelec
 	self updateList
 !
 
+outOfView: element
+		Transcript cr; show: element entry asJQuery position top asString, '  ',  self morphElement asJQuery position top asString.
+		^(element entry asJQuery position top + element entry asJQuery height) > self morphElement asJQuery height 
+			or: [element entry asJQuery position top  < 0]
+!
+
 render: container with: html
+	xhtml := html.
 	container  
-		with: [listElement := html select
-			at: 'size' put: '3'].
+		with: [listElement := html ul
+			selectable;
+			addClass: 'nav nav-pills nav-stacked';
+			at: 'tabindex' put: '1';
+			onFocus:[Transcript show: 'FOCUS'];
+			onArrowKeyDown:[self moveSelectionDown];
+			onArrowKeyUp:[self moveSelectionUp]].
+	self overflow: 'auto'.
 	self getList.
 	self updateContents
+!
+
+selected: anObject
+	Transcript show: 'Selected: ', anObject index.
+	self model perform: setIndexSelector with: anObject index
+!
+
+setIndexSelector
+	^setIndexSelector
+!
+
+setIndexSelector: anObject
+	setIndexSelector:= anObject
 !
 
 update: aSymbol 
@@ -1398,8 +1507,15 @@ update: aSymbol
 !
 
 updateContents
-	self removeAllSubmorphs.
-	self list do:[:each| self listElement asJQuery append: '<option>', each, '</option>'].
+	|i|
+	i := 1.
+	self listElement empty.
+	self clearEntries.
+	self list do:[:each| |element| 
+		element := LazyListMorph index: i dependent: self content: each.
+		self listEntries add: element.
+		element appendToJQuery: self listElement asJQuery.
+		i := i +1].
 	self updateLayout
 !
 
@@ -1427,9 +1543,11 @@ tryList
 |listMorph|
 	listMorph := self basicNew.
 	^listMorph
-		list: #(1 2 3);
+		list: #(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22);
 		model: listMorph;
 		getListSelector: #list;
+		getIndexSelector: #listIndex;
+		setIndexSelector: #listIndex:;
 		initialize;
 		yourself
 ! !
@@ -1638,11 +1756,68 @@ wait
 		yourself
 ! !
 
+Morph subclass: #LazyListMorph
+	instanceVariableNames: 'morphElement entry myIndex content'
+	package: 'Canvas'!
+
+!LazyListMorph methodsFor: 'not yet classified'!
+
+content
+	^content
+!
+
+content: anObject
+	content := anObject
+!
+
+entry
+	^entry
+!
+
+index
+	^myIndex
+!
+
+index: aNumber
+	aNumber isNumber ifFalse: [self halt].
+	myIndex := aNumber
+!
+
+renderOn: html
+	entry := html li: content.
+		entry
+			addClass: 'selectee';
+			onClick: [entry addClass: 'selected'. entry asJQuery siblings removeClass: 'selected'.
+						self selected].
+!
+
+selected
+	self owner selected: self
+! !
+
+!LazyListMorph class methodsFor: 'not yet classified'!
+
+index: anIndex dependent: aDependent content: aContent
+	^self basicNew
+		index: anIndex;
+		content: aContent;
+		owner: aDependent;
+		yourself
+! !
+
 Morph subclass: #PluggableTextMorph
 	instanceVariableNames: 'morphElement textMorph model getTextSelector setTextSelector acceptOnCR'
 	package: 'Canvas'!
 
 !PluggableTextMorph methodsFor: 'accessing'!
+
+acceptOnCR
+	^ acceptOnCR
+!
+
+acceptOnCR: aBoolean
+	acceptOnCR := aBoolean.
+!
 
 getTextSelector
 	^ getTextSelector
@@ -1878,10 +2053,26 @@ setDefaultSize
 	self width: 250.
 ! !
 
+!SystemWindow methodsFor: 'submorphs'!
+
+addMorph: aMorph frame: aRectangle
+	self addMorph: aMorph.
+	self morphFrames at: aMorph put: aRectangle.
+	self updateLayout.
+! !
+
 !SystemWindow methodsFor: 'testing'!
 
 isSystemWindow
 	^ true
+! !
+
+!SystemWindow class methodsFor: 'instance creation'!
+
+labelled: labelString
+	^ self new 
+		setLabel: labelString;
+		yourself
 ! !
 
 Morph subclass: #WorkspaceMorph

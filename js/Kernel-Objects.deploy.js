@@ -698,6 +698,19 @@ smalltalk.Object);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "perform:with:",
+fn: function (aString,argument1){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._perform_withArguments_(aString,[argument1]);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"perform:with:",{aString:aString,argument1:argument1},smalltalk.Object)})},
+messageSends: ["perform:withArguments:"]}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "perform:withArguments:",
 fn: function (aString,aCollection){
 var self=this;
