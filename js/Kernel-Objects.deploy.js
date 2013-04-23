@@ -222,6 +222,20 @@ smalltalk.Object);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "changed:with:",
+fn: function (anAspect,anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._dependents())._do_((function(aDependent){
+return smalltalk.withContext(function($ctx2) {
+return _st(aDependent)._update_with_(anAspect,anObject);
+}, function($ctx2) {$ctx2.fillBlock({aDependent:aDependent},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"changed:with:",{anAspect:anAspect,anObject:anObject},smalltalk.Object)})},
+messageSends: ["do:", "update:with:", "dependents"]}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "class",
 fn: function (){
 var self=this;
@@ -937,6 +951,19 @@ $1=self;
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"update:",{aParameter:aParameter},smalltalk.Object)})},
 messageSends: []}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "update:with:",
+fn: function (anAspect,anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._update_(anAspect);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"update:with:",{anAspect:anAspect,anObject:anObject},smalltalk.Object)})},
+messageSends: ["update:"]}),
 smalltalk.Object);
 
 smalltalk.addMethod(

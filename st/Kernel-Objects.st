@@ -427,12 +427,29 @@ changed: aParameter
 	self dependents do: [:aDependent | aDependent update: aParameter]
 !
 
+changed: anAspect with: anObject
+	"Receiver changed. The change is denoted by the argument anAspect. 
+	Usually the argument is a Symbol that is part of the dependent's change 
+	protocol. Inform all of the dependents. Also pass anObject for additional information."
+
+	self dependents do: [:aDependent | aDependent update: anAspect with: anObject]
+!
+
 dependents
 	^ dependents ifNil: [#()]
 !
 
 update: aParameter 
 	^ self
+!
+
+update: anAspect with: anObject
+	"Receive a change notice from an object of whom the receiver is a 
+	dependent. The default behavior is to call update:,
+	which by default does nothing; a subclass might want 
+	to change itself in some way."
+
+	^ self update: anAspect
 ! !
 
 !Object class methodsFor: 'initialization'!
