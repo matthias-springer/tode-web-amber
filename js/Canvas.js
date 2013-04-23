@@ -5183,13 +5183,13 @@ return smalltalk.withContext(function($ctx1) {
 var $1;
 $1=_st(anObject)._isNumber();
 if(! smalltalk.assert($1)){
-_st(self)._halt();
+_st(self)._error_("List index must be numerical");
 };
 self["@listIndex"]=anObject;
 return self}, function($ctx1) {$ctx1.fill(self,"listIndex:",{anObject:anObject},smalltalk.PluggableListMorph)})},
 args: ["anObject"],
-source: "listIndex: anObject\x0a\x09anObject isNumber ifFalse: [self halt].\x0a\x09listIndex := anObject",
-messageSends: ["ifFalse:", "halt", "isNumber"],
+source: "listIndex: anObject\x0a\x09anObject isNumber ifFalse: [self error: 'List index must be numerical'].\x0a\x09listIndex := anObject",
+messageSends: ["ifFalse:", "error:", "isNumber"],
 referencedClasses: []
 }),
 smalltalk.PluggableListMorph);
@@ -5234,7 +5234,7 @@ selector: "moveSelectionDown",
 category: 'not yet classified',
 fn: function (){
 var self=this;
-var index,element,half;
+var index,element;
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2;
 index=_st(_st(self)._model())._perform_(_st(self)._getIndexSelector());
@@ -5245,17 +5245,16 @@ index;
 };
 element=_st(_st(self)._listEntries())._at_(index);
 _st(_st(element)._entry())._trigger_("click");
-half=_st(_st(self)._getListSize()).__slash(_st((2))._rounded());
 $2=_st(self)._outOfView_(element);
 if(smalltalk.assert($2)){
 self["@scroll"]=_st(_st(self)._getListSize())._min_(_st(self["@scroll"]).__plus((1)));
 self["@scroll"];
 _st(_st(_st(_st(_st(self)._listElement())._asJQuery())._find_("li.selectee"))._at_(self["@scroll"]))._scrollIntoView();
 };
-return self}, function($ctx1) {$ctx1.fill(self,"moveSelectionDown",{index:index,element:element,half:half},smalltalk.PluggableListMorph)})},
+return self}, function($ctx1) {$ctx1.fill(self,"moveSelectionDown",{index:index,element:element},smalltalk.PluggableListMorph)})},
 args: [],
-source: "moveSelectionDown\x0a\x09|index element half |\x0a\x09index := self model perform: self getIndexSelector.\x0a\x09index = self getListSize ifFalse: [ index := index +1].\x0a\x09element := self listEntries at: index.\x0a\x09element entry trigger: 'click'.\x0a\x09half := self getListSize/2 rounded.\x0a\x09(self outOfView: element) ifTrue:[ scroll := self getListSize min: scroll +1.\x0a\x09((self listElement asJQuery find: 'li.selectee')at: scroll) scrollIntoView]",
-messageSends: ["perform:", "getIndexSelector", "model", "ifFalse:", "+", "=", "getListSize", "at:", "listEntries", "trigger:", "entry", "/", "rounded", "ifTrue:", "min:", "scrollIntoView", "find:", "asJQuery", "listElement", "outOfView:"],
+source: "moveSelectionDown\x0a\x09|index element |\x0a\x09index := self model perform: self getIndexSelector.\x0a\x09index = self getListSize ifFalse: [ index := index +1].\x0a\x09element := self listEntries at: index.\x0a\x09element entry trigger: 'click'.\x0a\x09(self outOfView: element) ifTrue:[ scroll := self getListSize min: scroll +1.\x0a\x09((self listElement asJQuery find: 'li.selectee')at: scroll) scrollIntoView]",
+messageSends: ["perform:", "getIndexSelector", "model", "ifFalse:", "+", "=", "getListSize", "at:", "listEntries", "trigger:", "entry", "ifTrue:", "min:", "scrollIntoView", "find:", "asJQuery", "listElement", "outOfView:"],
 referencedClasses: []
 }),
 smalltalk.PluggableListMorph);
@@ -5266,7 +5265,7 @@ selector: "moveSelectionUp",
 category: 'not yet classified',
 fn: function (){
 var self=this;
-var index,element,half;
+var index,element;
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2;
 index=_st(_st(self)._model())._perform_(_st(self)._getIndexSelector());
@@ -5277,17 +5276,16 @@ index;
 };
 element=_st(_st(self)._listEntries())._at_(index);
 _st(_st(element)._entry())._trigger_("click");
-half=_st(_st(self)._getListSize()).__slash(_st((2))._rounded());
 $2=_st(self)._outOfView_(element);
 if(smalltalk.assert($2)){
 self["@scroll"]=_st((0))._max_(_st(self["@scroll"]).__minus((1)));
 self["@scroll"];
 _st(_st(_st(_st(_st(self)._listElement())._asJQuery())._find_("li.selectee"))._at_(self["@scroll"]))._scrollIntoView();
 };
-return self}, function($ctx1) {$ctx1.fill(self,"moveSelectionUp",{index:index,element:element,half:half},smalltalk.PluggableListMorph)})},
+return self}, function($ctx1) {$ctx1.fill(self,"moveSelectionUp",{index:index,element:element},smalltalk.PluggableListMorph)})},
 args: [],
-source: "moveSelectionUp\x0a\x09|index element half |\x0a\x09index := self model perform: self getIndexSelector.\x0a\x09index = 1 ifFalse: [ index := index - 1].\x0a\x09element := self listEntries at: index.\x0a\x09element entry trigger: 'click'.\x0a\x09half := self getListSize/2 rounded.\x0a\x09(self outOfView: element) ifTrue:[  scroll := 0 max: scroll -1.\x0a\x09((self listElement asJQuery find: 'li.selectee')at: scroll) scrollIntoView]",
-messageSends: ["perform:", "getIndexSelector", "model", "ifFalse:", "-", "=", "at:", "listEntries", "trigger:", "entry", "/", "rounded", "getListSize", "ifTrue:", "max:", "scrollIntoView", "find:", "asJQuery", "listElement", "outOfView:"],
+source: "moveSelectionUp\x0a\x09|index element|\x0a\x09index := self model perform: self getIndexSelector.\x0a\x09index = 1 ifFalse: [ index := index - 1].\x0a\x09element := self listEntries at: index.\x0a\x09element entry trigger: 'click'.\x0a\x09(self outOfView: element) ifTrue:[  scroll := 0 max: scroll -1.\x0a\x09((self listElement asJQuery find: 'li.selectee')at: scroll) scrollIntoView]",
+messageSends: ["perform:", "getIndexSelector", "model", "ifFalse:", "-", "=", "at:", "listEntries", "trigger:", "entry", "ifTrue:", "max:", "scrollIntoView", "find:", "asJQuery", "listElement", "outOfView:"],
 referencedClasses: []
 }),
 smalltalk.PluggableListMorph);
@@ -5318,22 +5316,18 @@ selector: "outOfView:",
 category: 'not yet classified',
 fn: function (element){
 var self=this;
-function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
 return smalltalk.withContext(function($ctx1) { 
-var $1,$2,$3;
-$1=$Transcript();
-_st($1)._cr();
-$2=_st($1)._show_(_st(_st(_st(_st(_st(_st(_st(element)._entry())._asJQuery())._position())._top())._asString()).__comma("  ")).__comma(_st(_st(_st(_st(_st(self)._morphElement())._asJQuery())._position())._top())._asString()));
-$3=_st(_st(_st(_st(_st(_st(_st(element)._entry())._asJQuery())._position())._top()).__plus(_st(_st(_st(element)._entry())._asJQuery())._height())).__gt(_st(_st(_st(self)._morphElement())._asJQuery())._height()))._or_((function(){
+var $1;
+$1=_st(_st(_st(_st(_st(_st(_st(element)._entry())._asJQuery())._position())._top()).__plus(_st(_st(_st(element)._entry())._asJQuery())._height())).__gt(_st(_st(_st(self)._morphElement())._asJQuery())._height()))._or_((function(){
 return smalltalk.withContext(function($ctx2) {
 return _st(_st(_st(_st(_st(element)._entry())._asJQuery())._position())._top()).__lt((0));
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
-return $3;
+return $1;
 }, function($ctx1) {$ctx1.fill(self,"outOfView:",{element:element},smalltalk.PluggableListMorph)})},
 args: ["element"],
-source: "outOfView: element\x0a\x09\x09Transcript cr; show: element entry asJQuery position top asString, '  ',  self morphElement asJQuery position top asString.\x0a\x09\x09^(element entry asJQuery position top + element entry asJQuery height) > self morphElement asJQuery height \x0a\x09\x09\x09or: [element entry asJQuery position top  < 0]",
-messageSends: ["cr", "show:", ",", "asString", "top", "position", "asJQuery", "morphElement", "entry", "or:", "<", ">", "height", "+"],
-referencedClasses: ["Transcript"]
+source: "outOfView: element\x0a\x09\x09^(element entry asJQuery position top + element entry asJQuery height) > self morphElement asJQuery height \x0a\x09\x09\x09or: [element entry asJQuery position top  < 0]",
+messageSends: ["or:", "<", "top", "position", "asJQuery", "entry", ">", "height", "morphElement", "+"],
+referencedClasses: []
 }),
 smalltalk.PluggableListMorph);
 
@@ -5343,7 +5337,6 @@ selector: "render:with:",
 category: 'not yet classified',
 fn: function (container,html){
 var self=this;
-function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2;
 self["@xhtml"]=html;
@@ -5353,10 +5346,6 @@ $1=_st(html)._ul();
 _st($1)._selectable();
 _st($1)._addClass_("nav nav-pills nav-stacked");
 _st($1)._at_put_("tabindex","1");
-_st($1)._onFocus_((function(){
-return smalltalk.withContext(function($ctx3) {
-return _st($Transcript())._show_("FOCUS");
-}, function($ctx3) {$ctx3.fillBlock({},$ctx1)})}));
 _st($1)._onArrowKeyDown_((function(){
 return smalltalk.withContext(function($ctx3) {
 return _st(self)._moveSelectionDown();
@@ -5373,9 +5362,9 @@ _st(self)._getList();
 _st(self)._updateContents();
 return self}, function($ctx1) {$ctx1.fill(self,"render:with:",{container:container,html:html},smalltalk.PluggableListMorph)})},
 args: ["container", "html"],
-source: "render: container with: html\x0a\x09xhtml := html.\x0a\x09container  \x0a\x09\x09with: [listElement := html ul\x0a\x09\x09\x09selectable;\x0a\x09\x09\x09addClass: 'nav nav-pills nav-stacked';\x0a\x09\x09\x09at: 'tabindex' put: '1';\x0a\x09\x09\x09onFocus:[Transcript show: 'FOCUS'];\x0a\x09\x09\x09onArrowKeyDown:[self moveSelectionDown];\x0a\x09\x09\x09onArrowKeyUp:[self moveSelectionUp]].\x0a\x09self overflow: 'auto'.\x0a\x09self getList.\x0a\x09self updateContents",
-messageSends: ["with:", "selectable", "ul", "addClass:", "at:put:", "onFocus:", "show:", "onArrowKeyDown:", "moveSelectionDown", "onArrowKeyUp:", "moveSelectionUp", "overflow:", "getList", "updateContents"],
-referencedClasses: ["Transcript"]
+source: "render: container with: html\x0a\x09xhtml := html.\x0a\x09container  \x0a\x09\x09with: [listElement := html ul\x0a\x09\x09\x09selectable;\x0a\x09\x09\x09addClass: 'nav nav-pills nav-stacked';\x0a\x09\x09\x09at: 'tabindex' put: '1';\x0a\x09\x09\x09onArrowKeyDown:[self moveSelectionDown];\x0a\x09\x09\x09onArrowKeyUp:[self moveSelectionUp]].\x0a\x09self overflow: 'auto'.\x0a\x09self getList.\x0a\x09self updateContents",
+messageSends: ["with:", "selectable", "ul", "addClass:", "at:put:", "onArrowKeyDown:", "moveSelectionDown", "onArrowKeyUp:", "moveSelectionUp", "overflow:", "getList", "updateContents"],
+referencedClasses: []
 }),
 smalltalk.PluggableListMorph);
 
@@ -5385,15 +5374,13 @@ selector: "selected:",
 category: 'not yet classified',
 fn: function (anObject){
 var self=this;
-function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
 return smalltalk.withContext(function($ctx1) { 
-_st($Transcript())._show_(_st("Selected: ").__comma(_st(anObject)._index()));
 _st(_st(self)._model())._perform_with_(self["@setIndexSelector"],_st(anObject)._index());
 return self}, function($ctx1) {$ctx1.fill(self,"selected:",{anObject:anObject},smalltalk.PluggableListMorph)})},
 args: ["anObject"],
-source: "selected: anObject\x0a\x09Transcript show: 'Selected: ', anObject index.\x0a\x09self model perform: setIndexSelector with: anObject index",
-messageSends: ["show:", ",", "index", "perform:with:", "model"],
-referencedClasses: ["Transcript"]
+source: "selected: anObject\x0a\x09self model perform: setIndexSelector with: anObject index",
+messageSends: ["perform:with:", "index", "model"],
+referencedClasses: []
 }),
 smalltalk.PluggableListMorph);
 
@@ -5464,6 +5451,49 @@ return self}, function($ctx1) {$ctx1.fill(self,"update:",{aSymbol:aSymbol},small
 args: ["aSymbol"],
 source: "update: aSymbol \x0a\x09\x22Refer to the comment in View|update:.\x22\x0a\x0a\x09(aSymbol == getListSelector or: [ aSymbol == getListElementSelector ]) ifTrue: \x0a\x09\x09[self updateList.\x0a\x09\x09^ self].\x0a\x09aSymbol == getIndexSelector ifTrue:\x0a\x09\x09[self selectionIndex: self getCurrentSelectionIndex.\x0a\x09\x09^ self].\x0a\x09aSymbol == #allSelections ifTrue:\x0a\x09\x09[self selectionIndex: self getCurrentSelectionIndex.\x0a\x09\x09^ self].",
 messageSends: ["ifTrue:", "updateList", "or:", "==", "selectionIndex:", "getCurrentSelectionIndex"],
+referencedClasses: []
+}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "update:with:",
+category: 'not yet classified',
+fn: function (aSymbol,anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5,$6,$7,$8;
+$1=_st(aSymbol).__eq_eq("selected:");
+if(smalltalk.assert($1)){
+_st(self)._selected_(anObject);
+$2=self;
+return $2;
+};
+$3=_st(_st(aSymbol).__eq_eq(self["@getListSelector"]))._or_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(aSymbol).__eq_eq(self["@getListElementSelector"]);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+if(smalltalk.assert($3)){
+_st(self)._updateList();
+$4=self;
+return $4;
+};
+$5=_st(aSymbol).__eq_eq(self["@getIndexSelector"]);
+if(smalltalk.assert($5)){
+_st(self)._selectionIndex_(_st(self)._getCurrentSelectionIndex());
+$6=self;
+return $6;
+};
+$7=_st(aSymbol).__eq_eq("allSelections");
+if(smalltalk.assert($7)){
+_st(self)._selectionIndex_(_st(self)._getCurrentSelectionIndex());
+$8=self;
+return $8;
+};
+return self}, function($ctx1) {$ctx1.fill(self,"update:with:",{aSymbol:aSymbol,anObject:anObject},smalltalk.PluggableListMorph)})},
+args: ["aSymbol", "anObject"],
+source: "update: aSymbol with: anObject\x0a\x09\x22Refer to the comment in View|update:.\x22\x0a\x09\x0a\x09aSymbol == #selected: ifTrue: \x0a\x09\x09[self selected: anObject. \x0a\x09\x09^self].\x0a\x09(aSymbol == getListSelector or: [ aSymbol == getListElementSelector ]) ifTrue: \x0a\x09\x09[self updateList.\x0a\x09\x09^ self].\x0a\x09aSymbol == getIndexSelector ifTrue:\x0a\x09\x09[self selectionIndex: self getCurrentSelectionIndex.\x0a\x09\x09^ self].\x0a\x09aSymbol == #allSelections ifTrue:\x0a\x09\x09[self selectionIndex: self getCurrentSelectionIndex.\x0a\x09\x09^ self].",
+messageSends: ["ifTrue:", "selected:", "==", "updateList", "or:", "selectionIndex:", "getCurrentSelectionIndex"],
 referencedClasses: []
 }),
 smalltalk.PluggableListMorph);
@@ -6272,11 +6302,11 @@ category: 'not yet classified',
 fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-_st(_st(self)._owner())._selected_(self);
+_st(self)._changed_with_("selected:",self);
 return self}, function($ctx1) {$ctx1.fill(self,"selected",{},smalltalk.LazyListMorph)})},
 args: [],
-source: "selected\x0a\x09self owner selected: self\x0a\x09",
-messageSends: ["selected:", "owner"],
+source: "selected\x0a\x09self changed: #selected: with: self\x0a\x09",
+messageSends: ["changed:with:"],
 referencedClasses: []
 }),
 smalltalk.LazyListMorph);
@@ -6293,14 +6323,15 @@ var $2,$3,$1;
 $2=_st(self)._basicNew();
 _st($2)._index_(anIndex);
 _st($2)._content_(aContent);
+_st($2)._addDependent_(aDependent);
 _st($2)._owner_(aDependent);
 $3=_st($2)._yourself();
 $1=$3;
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"index:dependent:content:",{anIndex:anIndex,aDependent:aDependent,aContent:aContent},smalltalk.LazyListMorph.klass)})},
 args: ["anIndex", "aDependent", "aContent"],
-source: "index: anIndex dependent: aDependent content: aContent\x0a\x09^self basicNew\x0a\x09\x09index: anIndex;\x0a\x09\x09content: aContent;\x0a\x09\x09owner: aDependent;\x0a\x09\x09yourself",
-messageSends: ["index:", "basicNew", "content:", "owner:", "yourself"],
+source: "index: anIndex dependent: aDependent content: aContent\x0a\x09^self basicNew\x0a\x09\x09index: anIndex;\x0a\x09\x09content: aContent;\x0a\x09\x09addDependent: aDependent;\x0a\x09\x09owner: aDependent;\x0a\x09\x09yourself",
+messageSends: ["index:", "basicNew", "content:", "addDependent:", "owner:", "yourself"],
 referencedClasses: []
 }),
 smalltalk.LazyListMorph.klass);

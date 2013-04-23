@@ -3744,11 +3744,11 @@ return smalltalk.withContext(function($ctx1) {
 var $1;
 $1=_st(anObject)._isNumber();
 if(! smalltalk.assert($1)){
-_st(self)._halt();
+_st(self)._error_("List index must be numerical");
 };
 self["@listIndex"]=anObject;
 return self}, function($ctx1) {$ctx1.fill(self,"listIndex:",{anObject:anObject},smalltalk.PluggableListMorph)})},
-messageSends: ["ifFalse:", "halt", "isNumber"]}),
+messageSends: ["ifFalse:", "error:", "isNumber"]}),
 smalltalk.PluggableListMorph);
 
 smalltalk.addMethod(
@@ -3780,7 +3780,7 @@ smalltalk.method({
 selector: "moveSelectionDown",
 fn: function (){
 var self=this;
-var index,element,half;
+var index,element;
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2;
 index=_st(_st(self)._model())._perform_(_st(self)._getIndexSelector());
@@ -3791,15 +3791,14 @@ index;
 };
 element=_st(_st(self)._listEntries())._at_(index);
 _st(_st(element)._entry())._trigger_("click");
-half=_st(_st(self)._getListSize()).__slash(_st((2))._rounded());
 $2=_st(self)._outOfView_(element);
 if(smalltalk.assert($2)){
 self["@scroll"]=_st(_st(self)._getListSize())._min_(_st(self["@scroll"]).__plus((1)));
 self["@scroll"];
 _st(_st(_st(_st(_st(self)._listElement())._asJQuery())._find_("li.selectee"))._at_(self["@scroll"]))._scrollIntoView();
 };
-return self}, function($ctx1) {$ctx1.fill(self,"moveSelectionDown",{index:index,element:element,half:half},smalltalk.PluggableListMorph)})},
-messageSends: ["perform:", "getIndexSelector", "model", "ifFalse:", "+", "=", "getListSize", "at:", "listEntries", "trigger:", "entry", "/", "rounded", "ifTrue:", "min:", "scrollIntoView", "find:", "asJQuery", "listElement", "outOfView:"]}),
+return self}, function($ctx1) {$ctx1.fill(self,"moveSelectionDown",{index:index,element:element},smalltalk.PluggableListMorph)})},
+messageSends: ["perform:", "getIndexSelector", "model", "ifFalse:", "+", "=", "getListSize", "at:", "listEntries", "trigger:", "entry", "ifTrue:", "min:", "scrollIntoView", "find:", "asJQuery", "listElement", "outOfView:"]}),
 smalltalk.PluggableListMorph);
 
 smalltalk.addMethod(
@@ -3807,7 +3806,7 @@ smalltalk.method({
 selector: "moveSelectionUp",
 fn: function (){
 var self=this;
-var index,element,half;
+var index,element;
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2;
 index=_st(_st(self)._model())._perform_(_st(self)._getIndexSelector());
@@ -3818,15 +3817,14 @@ index;
 };
 element=_st(_st(self)._listEntries())._at_(index);
 _st(_st(element)._entry())._trigger_("click");
-half=_st(_st(self)._getListSize()).__slash(_st((2))._rounded());
 $2=_st(self)._outOfView_(element);
 if(smalltalk.assert($2)){
 self["@scroll"]=_st((0))._max_(_st(self["@scroll"]).__minus((1)));
 self["@scroll"];
 _st(_st(_st(_st(_st(self)._listElement())._asJQuery())._find_("li.selectee"))._at_(self["@scroll"]))._scrollIntoView();
 };
-return self}, function($ctx1) {$ctx1.fill(self,"moveSelectionUp",{index:index,element:element,half:half},smalltalk.PluggableListMorph)})},
-messageSends: ["perform:", "getIndexSelector", "model", "ifFalse:", "-", "=", "at:", "listEntries", "trigger:", "entry", "/", "rounded", "getListSize", "ifTrue:", "max:", "scrollIntoView", "find:", "asJQuery", "listElement", "outOfView:"]}),
+return self}, function($ctx1) {$ctx1.fill(self,"moveSelectionUp",{index:index,element:element},smalltalk.PluggableListMorph)})},
+messageSends: ["perform:", "getIndexSelector", "model", "ifFalse:", "-", "=", "at:", "listEntries", "trigger:", "entry", "ifTrue:", "max:", "scrollIntoView", "find:", "asJQuery", "listElement", "outOfView:"]}),
 smalltalk.PluggableListMorph);
 
 smalltalk.addMethod(
@@ -3849,19 +3847,15 @@ smalltalk.method({
 selector: "outOfView:",
 fn: function (element){
 var self=this;
-function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
 return smalltalk.withContext(function($ctx1) { 
-var $1,$2,$3;
-$1=$Transcript();
-_st($1)._cr();
-$2=_st($1)._show_(_st(_st(_st(_st(_st(_st(_st(element)._entry())._asJQuery())._position())._top())._asString()).__comma("  ")).__comma(_st(_st(_st(_st(_st(self)._morphElement())._asJQuery())._position())._top())._asString()));
-$3=_st(_st(_st(_st(_st(_st(_st(element)._entry())._asJQuery())._position())._top()).__plus(_st(_st(_st(element)._entry())._asJQuery())._height())).__gt(_st(_st(_st(self)._morphElement())._asJQuery())._height()))._or_((function(){
+var $1;
+$1=_st(_st(_st(_st(_st(_st(_st(element)._entry())._asJQuery())._position())._top()).__plus(_st(_st(_st(element)._entry())._asJQuery())._height())).__gt(_st(_st(_st(self)._morphElement())._asJQuery())._height()))._or_((function(){
 return smalltalk.withContext(function($ctx2) {
 return _st(_st(_st(_st(_st(element)._entry())._asJQuery())._position())._top()).__lt((0));
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
-return $3;
+return $1;
 }, function($ctx1) {$ctx1.fill(self,"outOfView:",{element:element},smalltalk.PluggableListMorph)})},
-messageSends: ["cr", "show:", ",", "asString", "top", "position", "asJQuery", "morphElement", "entry", "or:", "<", ">", "height", "+"]}),
+messageSends: ["or:", "<", "top", "position", "asJQuery", "entry", ">", "height", "morphElement", "+"]}),
 smalltalk.PluggableListMorph);
 
 smalltalk.addMethod(
@@ -3869,7 +3863,6 @@ smalltalk.method({
 selector: "render:with:",
 fn: function (container,html){
 var self=this;
-function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2;
 self["@xhtml"]=html;
@@ -3879,10 +3872,6 @@ $1=_st(html)._ul();
 _st($1)._selectable();
 _st($1)._addClass_("nav nav-pills nav-stacked");
 _st($1)._at_put_("tabindex","1");
-_st($1)._onFocus_((function(){
-return smalltalk.withContext(function($ctx3) {
-return _st($Transcript())._show_("FOCUS");
-}, function($ctx3) {$ctx3.fillBlock({},$ctx1)})}));
 _st($1)._onArrowKeyDown_((function(){
 return smalltalk.withContext(function($ctx3) {
 return _st(self)._moveSelectionDown();
@@ -3898,7 +3887,7 @@ _st(self)._overflow_("auto");
 _st(self)._getList();
 _st(self)._updateContents();
 return self}, function($ctx1) {$ctx1.fill(self,"render:with:",{container:container,html:html},smalltalk.PluggableListMorph)})},
-messageSends: ["with:", "selectable", "ul", "addClass:", "at:put:", "onFocus:", "show:", "onArrowKeyDown:", "moveSelectionDown", "onArrowKeyUp:", "moveSelectionUp", "overflow:", "getList", "updateContents"]}),
+messageSends: ["with:", "selectable", "ul", "addClass:", "at:put:", "onArrowKeyDown:", "moveSelectionDown", "onArrowKeyUp:", "moveSelectionUp", "overflow:", "getList", "updateContents"]}),
 smalltalk.PluggableListMorph);
 
 smalltalk.addMethod(
@@ -3906,12 +3895,10 @@ smalltalk.method({
 selector: "selected:",
 fn: function (anObject){
 var self=this;
-function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
 return smalltalk.withContext(function($ctx1) { 
-_st($Transcript())._show_(_st("Selected: ").__comma(_st(anObject)._index()));
 _st(_st(self)._model())._perform_with_(self["@setIndexSelector"],_st(anObject)._index());
 return self}, function($ctx1) {$ctx1.fill(self,"selected:",{anObject:anObject},smalltalk.PluggableListMorph)})},
-messageSends: ["show:", ",", "index", "perform:with:", "model"]}),
+messageSends: ["perform:with:", "index", "model"]}),
 smalltalk.PluggableListMorph);
 
 smalltalk.addMethod(
@@ -3968,6 +3955,44 @@ return $6;
 };
 return self}, function($ctx1) {$ctx1.fill(self,"update:",{aSymbol:aSymbol},smalltalk.PluggableListMorph)})},
 messageSends: ["ifTrue:", "updateList", "or:", "==", "selectionIndex:", "getCurrentSelectionIndex"]}),
+smalltalk.PluggableListMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "update:with:",
+fn: function (aSymbol,anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5,$6,$7,$8;
+$1=_st(aSymbol).__eq_eq("selected:");
+if(smalltalk.assert($1)){
+_st(self)._selected_(anObject);
+$2=self;
+return $2;
+};
+$3=_st(_st(aSymbol).__eq_eq(self["@getListSelector"]))._or_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(aSymbol).__eq_eq(self["@getListElementSelector"]);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+if(smalltalk.assert($3)){
+_st(self)._updateList();
+$4=self;
+return $4;
+};
+$5=_st(aSymbol).__eq_eq(self["@getIndexSelector"]);
+if(smalltalk.assert($5)){
+_st(self)._selectionIndex_(_st(self)._getCurrentSelectionIndex());
+$6=self;
+return $6;
+};
+$7=_st(aSymbol).__eq_eq("allSelections");
+if(smalltalk.assert($7)){
+_st(self)._selectionIndex_(_st(self)._getCurrentSelectionIndex());
+$8=self;
+return $8;
+};
+return self}, function($ctx1) {$ctx1.fill(self,"update:with:",{aSymbol:aSymbol,anObject:anObject},smalltalk.PluggableListMorph)})},
+messageSends: ["ifTrue:", "selected:", "==", "updateList", "or:", "selectionIndex:", "getCurrentSelectionIndex"]}),
 smalltalk.PluggableListMorph);
 
 smalltalk.addMethod(
@@ -4588,9 +4613,9 @@ selector: "selected",
 fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-_st(_st(self)._owner())._selected_(self);
+_st(self)._changed_with_("selected:",self);
 return self}, function($ctx1) {$ctx1.fill(self,"selected",{},smalltalk.LazyListMorph)})},
-messageSends: ["selected:", "owner"]}),
+messageSends: ["changed:with:"]}),
 smalltalk.LazyListMorph);
 
 
@@ -4604,12 +4629,13 @@ var $2,$3,$1;
 $2=_st(self)._basicNew();
 _st($2)._index_(anIndex);
 _st($2)._content_(aContent);
+_st($2)._addDependent_(aDependent);
 _st($2)._owner_(aDependent);
 $3=_st($2)._yourself();
 $1=$3;
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"index:dependent:content:",{anIndex:anIndex,aDependent:aDependent,aContent:aContent},smalltalk.LazyListMorph.klass)})},
-messageSends: ["index:", "basicNew", "content:", "owner:", "yourself"]}),
+messageSends: ["index:", "basicNew", "content:", "addDependent:", "owner:", "yourself"]}),
 smalltalk.LazyListMorph.klass);
 
 

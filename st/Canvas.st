@@ -1416,7 +1416,7 @@ listIndex
 !
 
 listIndex: anObject
-	anObject isNumber ifFalse: [self halt].
+	anObject isNumber ifFalse: [self error: 'List index must be numerical'].
 	listIndex := anObject
 !
 
@@ -1429,23 +1429,21 @@ model: aModel
 !
 
 moveSelectionDown
-	|index element half |
+	|index element |
 	index := self model perform: self getIndexSelector.
 	index = self getListSize ifFalse: [ index := index +1].
 	element := self listEntries at: index.
 	element entry trigger: 'click'.
-	half := self getListSize/2 rounded.
 	(self outOfView: element) ifTrue:[ scroll := self getListSize min: scroll +1.
 	((self listElement asJQuery find: 'li.selectee')at: scroll) scrollIntoView]
 !
 
 moveSelectionUp
-	|index element half |
+	|index element|
 	index := self model perform: self getIndexSelector.
 	index = 1 ifFalse: [ index := index - 1].
 	element := self listEntries at: index.
 	element entry trigger: 'click'.
-	half := self getListSize/2 rounded.
 	(self outOfView: element) ifTrue:[  scroll := 0 max: scroll -1.
 	((self listElement asJQuery find: 'li.selectee')at: scroll) scrollIntoView]
 !
@@ -1459,7 +1457,6 @@ on: anObject list: getListSel selected: getSelectionSel changeSelected: setSelec
 !
 
 outOfView: element
-		Transcript cr; show: element entry asJQuery position top asString, '  ',  self morphElement asJQuery position top asString.
 		^(element entry asJQuery position top + element entry asJQuery height) > self morphElement asJQuery height 
 			or: [element entry asJQuery position top  < 0]
 !
@@ -1471,7 +1468,6 @@ render: container with: html
 			selectable;
 			addClass: 'nav nav-pills nav-stacked';
 			at: 'tabindex' put: '1';
-			onFocus:[Transcript show: 'FOCUS'];
 			onArrowKeyDown:[self moveSelectionDown];
 			onArrowKeyUp:[self moveSelectionUp]].
 	self overflow: 'auto'.
@@ -1480,7 +1476,6 @@ render: container with: html
 !
 
 selected: anObject
-	Transcript show: 'Selected: ', anObject index.
 	self model perform: setIndexSelector with: anObject index
 !
 
@@ -1495,6 +1490,23 @@ setIndexSelector: anObject
 update: aSymbol 
 	"Refer to the comment in View|update:."
 
+	(aSymbol == getListSelector or: [ aSymbol == getListElementSelector ]) ifTrue: 
+		[self updateList.
+		^ self].
+	aSymbol == getIndexSelector ifTrue:
+		[self selectionIndex: self getCurrentSelectionIndex.
+		^ self].
+	aSymbol == #allSelections ifTrue:
+		[self selectionIndex: self getCurrentSelectionIndex.
+		^ self].
+!
+
+update: aSymbol with: anObject
+	"Refer to the comment in View|update:."
+	
+	aSymbol == #selected: ifTrue: 
+		[self selected: anObject. 
+		^self].
 	(aSymbol == getListSelector or: [ aSymbol == getListElementSelector ]) ifTrue: 
 		[self updateList.
 		^ self].
@@ -1792,7 +1804,7 @@ renderOn: html
 !
 
 selected
-	self owner selected: self
+	self changed: #selected: with: self
 ! !
 
 !LazyListMorph class methodsFor: 'not yet classified'!
@@ -1801,6 +1813,7 @@ index: anIndex dependent: aDependent content: aContent
 	^self basicNew
 		index: anIndex;
 		content: aContent;
+		addDependent: aDependent;
 		owner: aDependent;
 		yourself
 ! !
