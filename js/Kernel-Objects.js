@@ -306,6 +306,25 @@ smalltalk.Object);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "changed:with:",
+category: 'updating',
+fn: function (anAspect,anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._dependents())._do_((function(aDependent){
+return smalltalk.withContext(function($ctx2) {
+return _st(aDependent)._update_with_(anAspect,anObject);
+}, function($ctx2) {$ctx2.fillBlock({aDependent:aDependent},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"changed:with:",{anAspect:anAspect,anObject:anObject},smalltalk.Object)})},
+args: ["anAspect", "anObject"],
+source: "changed: anAspect with: anObject\x0a\x09\x22Receiver changed. The change is denoted by the argument anAspect. \x0a\x09Usually the argument is a Symbol that is part of the dependent's change \x0a\x09protocol. Inform all of the dependents. Also pass anObject for additional information.\x22\x0a\x0a\x09self dependents do: [:aDependent | aDependent update: anAspect with: anObject]",
+messageSends: ["do:", "update:with:", "dependents"],
+referencedClasses: []
+}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "class",
 category: 'accessing',
 fn: function (){
@@ -972,6 +991,24 @@ smalltalk.Object);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "perform:with:",
+category: 'message handling',
+fn: function (aString,argument1){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._perform_withArguments_(aString,[argument1]);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"perform:with:",{aString:aString,argument1:argument1},smalltalk.Object)})},
+args: ["aString", "argument1"],
+source: "perform: aString with: argument1\x0a\x09^self perform: aString withArguments: {argument1}",
+messageSends: ["perform:withArguments:"],
+referencedClasses: []
+}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "perform:withArguments:",
 category: 'message handling',
 fn: function (aString,aCollection){
@@ -1276,6 +1313,24 @@ return $1;
 args: ["aParameter"],
 source: "update: aParameter \x0a\x09^ self",
 messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "update:with:",
+category: 'updating',
+fn: function (anAspect,anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._update_(anAspect);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"update:with:",{anAspect:anAspect,anObject:anObject},smalltalk.Object)})},
+args: ["anAspect", "anObject"],
+source: "update: anAspect with: anObject\x0a\x09\x22Receive a change notice from an object of whom the receiver is a \x0a\x09dependent. The default behavior is to call update:,\x0a\x09which by default does nothing; a subclass might want \x0a\x09to change itself in some way.\x22\x0a\x0a\x09^ self update: anAspect",
+messageSends: ["update:"],
 referencedClasses: []
 }),
 smalltalk.Object);
