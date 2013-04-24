@@ -655,6 +655,47 @@ new
 	self shouldNotImplement
 ! !
 
+Object subclass: #KeyboardEvent
+	instanceVariableNames: 'keyValue'
+	package: 'Canvas'!
+
+!KeyboardEvent methodsFor: 'accessing'!
+
+keyCharacter
+	^ Character codePoint: self keyValue
+!
+
+keyValue
+	^ keyValue
+!
+
+keyValue: anInteger
+	keyValue := anInteger.
+! !
+
+!KeyboardEvent methodsFor: 'modifier keys'!
+
+altKeyPressed
+	^ self commandKeyPressed
+!
+
+commandKeyPressed
+	"TODO: implement"
+	^ false
+! !
+
+!KeyboardEvent class methodsFor: 'instance creation'!
+
+value: anInteger
+	^ self new
+		keyValue: anInteger;
+		yourself
+! !
+
+NicEdit subclass: #SmalltalkEditor
+	instanceVariableNames: ''
+	package: 'Canvas'!
+
 Object subclass: #TagBrush
 	instanceVariableNames: 'canvas element'
 	package: 'Canvas'!
@@ -763,8 +804,7 @@ contextmenu: aString
 !
 
 draggable
-	self addClass: 'draggable'.
-	self element asJQuery draggable.
+	< $(self._element()).draggable({cancel: '.drag-stop'}); >
 !
 
 draggable: aString
@@ -813,6 +853,10 @@ rel: aString
 
 removeAt: aString
 	<self['@element'].removeAttribute(aString)>
+!
+
+removeClass: aString
+	self element asJQuery removeClass: aString
 !
 
 resizable
@@ -1016,6 +1060,10 @@ canvas: aCanvas
 	yourself
 ! !
 
+Object subclass: #TextMorphForEditView
+	instanceVariableNames: 'textMorph'
+	package: 'Canvas'!
+
 Object subclass: #Widget
 	instanceVariableNames: ''
 	package: 'Canvas'!
@@ -1054,6 +1102,11 @@ addClass: aString
 
 removeClass: aString
 	self morphElement asJQuery removeClass: aString.
+! !
+
+!Morph methodsFor: 'events handling'!
+
+bindEvents
 ! !
 
 !Morph methodsFor: 'geometry'!
@@ -1245,6 +1298,7 @@ render: container with: html
 renderOn: html
 	morphElement := html div.
 	self render: morphElement with: html.
+	self bindEvents.
 ! !
 
 !Morph methodsFor: 'submorphs'!
@@ -1367,10 +1421,18 @@ render: container with: html
 ! !
 
 RectangleMorph subclass: #TextMorph
-	instanceVariableNames: 'morphElement editor readOnly'
+	instanceVariableNames: 'morphElement editor readOnly selectionStart selectionEnd selectionText textElement'
 	package: 'Canvas'!
 
 !TextMorph methodsFor: 'accessing'!
+
+contents
+	^ self text
+!
+
+newContents: stringOrText
+	self text: stringOrText.
+!
 
 readOnly
 	readOnly ifNil: [readOnly := true].
@@ -1379,7 +1441,10 @@ readOnly
 
 readOnly: aBoolean
 	readOnly := aBoolean.
-	self morphElement contentEditable: aBoolean not.
+	self textElement contentEditable: aBoolean not.
+	aBoolean
+		ifTrue: [self morphElement removeClass: 'drag-stop']
+		ifFalse: [self morphElement addClass: 'drag-stop']
 !
 
 text
@@ -1390,13 +1455,81 @@ text: aString
 	self morphElement asJQuery empty.
 	self morphElement
 		with: aString.
+!
+
+textElement
+	^ textElement
+! !
+
+!TextMorph methodsFor: 'converting'!
+
+asText
+	^ self text
+! !
+
+!TextMorph methodsFor: 'events handlings'!
+
+bindEvents
+	super bindEvents.
+	self morphElement onKeyPress: [:evt | self keyStroke: (KeyboardEvent value: evt charCode)].
+!
+
+keyStroke: evt
+! !
+
+!TextMorph methodsFor: 'initializing'!
+
+initialize
+	super initialize.
+	self initializeCallbacks.
+!
+
+initializeCallbacks
+	self textElement onKeyUp: [self updateCursor].
+	self textElement onMouseUp: [self updateCursor].
+! !
+
+!TextMorph methodsFor: 'interactions'!
+
+updateCursor
+	< 
+	// TODO: only for Chrome
+	var range = window.getSelection().getRangeAt(0);
+	var preCaretRange = range.cloneRange();
+	preCaretRange.selectNodeContents(self._textElement()._asJQuery()[0]);
+	preCaretRange.setEnd(range.endContainer, range.endOffset);
+	var clonedSelection = preCaretRange.cloneContents();
+	var div = document.createElement('div');
+	div.appendChild(clonedSelection);
+	// workaround: Amber does not support writing the tag brackets in String (syntax error)
+	var brTag = String.fromCharCode(60) + 'br' + String.fromCharCode(62);
+	var divBrs = div.innerHTML.match(new RegExp(brTag, 'g'));
+	var countBrs = divBrs ? divBrs.length : 0;
+	self['@selectionEnd'] = preCaretRange.toString().length + countBrs;
+	self['@selectionText'] = window.getSelection().toString();
+	self['@selectionStart'] = self['@selectionEnd'] - self['@selectionText'].length
+	console.log('start:', self['@selectionStart']);
+	console.log('end:', self['@selectionEnd']);
+	console.log('text:', self['@selectionText']);
+	>
+! !
+
+!TextMorph methodsFor: 'pharo compatibility'!
+
+editor
+	editor ifNil: [editor := self editorClass forMorph: self].
+	^ editor
+!
+
+editorClass
+	^ SmalltalkEditor
 ! !
 
 !TextMorph methodsFor: 'rendering'!
 
 render: container with: html
-	editor := NicEdit newOn: container asJQuery.
-	container contentEditable: self readOnly not.
+	container 
+		with: [textElement := html span].
 ! !
 
 !TextMorph class methodsFor: 'instance creation'!
@@ -1534,8 +1667,23 @@ setTextSelector: aSelector
 	setTextSelector := aSelector
 !
 
+text
+	^ self textMorph contents
+!
+
 textMorph
 	^ textMorph
+! !
+
+!PluggableTextMorph methodsFor: 'events handling'!
+
+bindEvents
+	super bindEvents.
+	self textMorph morphElement onKeyPress: [:evt | self keyStroke: (KeyboardEvent value: evt charCode)].
+!
+
+keyStroke: evt
+	Transcript show: evt keyValue.
 ! !
 
 !PluggableTextMorph methodsFor: 'geometry'!
@@ -1558,8 +1706,36 @@ width: aNumber
 
 on: anObject text: getTextSel accept: setTextSel
 	self model: anObject.
+	anObject addDependent: self.
 	self getTextSelector: getTextSel.
 	self setTextSelector: setTextSel.
+	self setText: self getText.
+! !
+
+!PluggableTextMorph methodsFor: 'interactions'!
+
+selectFrom: start to: stop
+	self textMorph editor selectFrom: start to: stop.
+! !
+
+!PluggableTextMorph methodsFor: 'model access'!
+
+getText
+	| newText |
+	getTextSelector ifNil: [^Text new].
+	newText := model perform: getTextSelector.
+	newText ifNil: [^Text new].
+	^ newText copy
+!
+
+setText: aText
+	self textMorph newContents: aText.
+! !
+
+!PluggableTextMorph methodsFor: 'pharo compatibility'!
+
+textMorphClass
+	^ TextMorphForEditView
 ! !
 
 !PluggableTextMorph methodsFor: 'private'!
@@ -1573,11 +1749,47 @@ textMorphPadding
 drawTextMorph
 	textMorph := TextMorph new.
 	textMorph overflowY: 'scroll'.
+	textMorph readOnly: false.
 	self addMorph: textMorph.
 !
 
 render: container with: html
 	self drawTextMorph.
+! !
+
+!PluggableTextMorph methodsFor: 'updating'!
+
+replaceSelectionWith: aText
+	"TODO: implement"
+	Transcript show: Character cr, 'adding text:', aText.
+	self textMorph text: self textMorph text, aText asString
+!
+
+selectInvisiblyFrom: start to: stop
+	"TODO: implement"
+!
+
+update: aSymbol 
+	aSymbol ifNil: [^self].
+	aSymbol == #flash ifTrue: [^self flash].
+	aSymbol == getTextSelector 
+		ifTrue: 
+			[self setText: self getText.
+			^self setSelection: self getSelection].
+	aSymbol == #clearUserEdits ifTrue: [^self hasUnacceptedEdits: false].
+	aSymbol == #wantToChange 
+		ifTrue: 
+			[self canDiscardEdits ifFalse: [^self promptForCancel].
+			^self].
+	aSymbol == #appendEntry 
+		ifTrue: 
+			[self appendEntry.
+			^self ].
+	aSymbol == #clearText 
+		ifTrue: 
+			[self handleEdit: [self changeText: Text new].
+			^self ].
+	^ self
 ! !
 
 !PluggableTextMorph class methodsFor: 'instance creation'!

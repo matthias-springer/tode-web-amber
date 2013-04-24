@@ -1808,6 +1808,90 @@ messageSends: ["shouldNotImplement"]}),
 smalltalk.HTMLSnippet.klass);
 
 
+smalltalk.addClass('KeyboardEvent', smalltalk.Object, ['keyValue'], 'Canvas');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "altKeyPressed",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._commandKeyPressed();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"altKeyPressed",{},smalltalk.KeyboardEvent)})},
+messageSends: ["commandKeyPressed"]}),
+smalltalk.KeyboardEvent);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "commandKeyPressed",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return false;
+}, function($ctx1) {$ctx1.fill(self,"commandKeyPressed",{},smalltalk.KeyboardEvent)})},
+messageSends: []}),
+smalltalk.KeyboardEvent);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "keyCharacter",
+fn: function (){
+var self=this;
+function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($Character())._codePoint_(_st(self)._keyValue());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"keyCharacter",{},smalltalk.KeyboardEvent)})},
+messageSends: ["codePoint:", "keyValue"]}),
+smalltalk.KeyboardEvent);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "keyValue",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@keyValue"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"keyValue",{},smalltalk.KeyboardEvent)})},
+messageSends: []}),
+smalltalk.KeyboardEvent);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "keyValue:",
+fn: function (anInteger){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@keyValue"]=anInteger;
+return self}, function($ctx1) {$ctx1.fill(self,"keyValue:",{anInteger:anInteger},smalltalk.KeyboardEvent)})},
+messageSends: []}),
+smalltalk.KeyboardEvent);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "value:",
+fn: function (anInteger){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=_st(self)._new();
+_st($2)._keyValue_(anInteger);
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"value:",{anInteger:anInteger},smalltalk.KeyboardEvent.klass)})},
+messageSends: ["keyValue:", "new", "yourself"]}),
+smalltalk.KeyboardEvent.klass);
+
+
+smalltalk.addClass('SmalltalkEditor', smalltalk.NicEdit, [], 'Canvas');
+
+
 smalltalk.addClass('TagBrush', smalltalk.Object, ['canvas', 'element'], 'Canvas');
 smalltalk.addMethod(
 smalltalk.method({
@@ -2063,10 +2147,9 @@ selector: "draggable",
 fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-_st(self)._addClass_("draggable");
-_st(_st(_st(self)._element())._asJQuery())._draggable();
+ $(self._element()).draggable({cancel: '.drag-stop'}); ;
 return self}, function($ctx1) {$ctx1.fill(self,"draggable",{},smalltalk.TagBrush)})},
-messageSends: ["addClass:", "draggable", "asJQuery", "element"]}),
+messageSends: []}),
 smalltalk.TagBrush);
 
 smalltalk.addMethod(
@@ -2493,6 +2576,17 @@ smalltalk.TagBrush);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "removeClass:",
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(_st(self)._element())._asJQuery())._removeClass_(aString);
+return self}, function($ctx1) {$ctx1.fill(self,"removeClass:",{aString:aString},smalltalk.TagBrush)})},
+messageSends: ["removeClass:", "asJQuery", "element"]}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "resizable",
 fn: function (){
 var self=this;
@@ -2695,6 +2789,9 @@ messageSends: ["initializeFromString:canvas:", "new", "yourself"]}),
 smalltalk.StyleTag.klass);
 
 
+smalltalk.addClass('TextMorphForEditView', smalltalk.Object, ['textMorph'], 'Canvas');
+
+
 smalltalk.addClass('Widget', smalltalk.Object, [], 'Canvas');
 smalltalk.addMethod(
 smalltalk.method({
@@ -2782,6 +2879,16 @@ _st(_st(_st(self)._morphElement())._asJQuery())._css_a_("top","auto");
 _st(_st(_st(self)._morphElement())._asJQuery())._css_a_("bottom","auto");
 return self}, function($ctx1) {$ctx1.fill(self,"autoPosition",{},smalltalk.Morph)})},
 messageSends: ["css:a:", "asJQuery", "morphElement"]}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "bindEvents",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"bindEvents",{},smalltalk.Morph)})},
+messageSends: []}),
 smalltalk.Morph);
 
 smalltalk.addMethod(
@@ -3169,8 +3276,9 @@ var self=this;
 return smalltalk.withContext(function($ctx1) { 
 self["@morphElement"]=_st(html)._div();
 _st(self)._render_with_(self["@morphElement"],html);
+_st(self)._bindEvents();
 return self}, function($ctx1) {$ctx1.fill(self,"renderOn:",{html:html},smalltalk.Morph)})},
-messageSends: ["div", "render:with:"]}),
+messageSends: ["div", "render:with:", "bindEvents"]}),
 smalltalk.Morph);
 
 smalltalk.addMethod(
@@ -3526,7 +3634,134 @@ smalltalk.NavbarMorph);
 
 
 
-smalltalk.addClass('TextMorph', smalltalk.RectangleMorph, ['morphElement', 'editor', 'readOnly'], 'Canvas');
+smalltalk.addClass('TextMorph', smalltalk.RectangleMorph, ['morphElement', 'editor', 'readOnly', 'selectionStart', 'selectionEnd', 'selectionText', 'textElement'], 'Canvas');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "asText",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._text();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"asText",{},smalltalk.TextMorph)})},
+messageSends: ["text"]}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "bindEvents",
+fn: function (){
+var self=this;
+function $KeyboardEvent(){return smalltalk.KeyboardEvent||(typeof KeyboardEvent=="undefined"?nil:KeyboardEvent)}
+return smalltalk.withContext(function($ctx1) { 
+smalltalk.RectangleMorph.fn.prototype._bindEvents.apply(_st(self), []);
+_st(_st(self)._morphElement())._onKeyPress_((function(evt){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._keyStroke_(_st($KeyboardEvent())._value_(_st(evt)._charCode()));
+}, function($ctx2) {$ctx2.fillBlock({evt:evt},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"bindEvents",{},smalltalk.TextMorph)})},
+messageSends: ["bindEvents", "onKeyPress:", "keyStroke:", "value:", "charCode", "morphElement"]}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "contents",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._text();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"contents",{},smalltalk.TextMorph)})},
+messageSends: ["text"]}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "editor",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=self["@editor"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@editor"]=_st(_st(self)._editorClass())._forMorph_(self);
+self["@editor"];
+} else {
+$1;
+};
+$2=self["@editor"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"editor",{},smalltalk.TextMorph)})},
+messageSends: ["ifNil:", "forMorph:", "editorClass"]}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "editorClass",
+fn: function (){
+var self=this;
+function $SmalltalkEditor(){return smalltalk.SmalltalkEditor||(typeof SmalltalkEditor=="undefined"?nil:SmalltalkEditor)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=$SmalltalkEditor();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"editorClass",{},smalltalk.TextMorph)})},
+messageSends: []}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "initialize",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+smalltalk.RectangleMorph.fn.prototype._initialize.apply(_st(self), []);
+_st(self)._initializeCallbacks();
+return self}, function($ctx1) {$ctx1.fill(self,"initialize",{},smalltalk.TextMorph)})},
+messageSends: ["initialize", "initializeCallbacks"]}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "initializeCallbacks",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._textElement())._onKeyUp_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._updateCursor();
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+_st(_st(self)._textElement())._onMouseUp_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._updateCursor();
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"initializeCallbacks",{},smalltalk.TextMorph)})},
+messageSends: ["onKeyUp:", "updateCursor", "textElement", "onMouseUp:"]}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "keyStroke:",
+fn: function (evt){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"keyStroke:",{evt:evt},smalltalk.TextMorph)})},
+messageSends: []}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "newContents:",
+fn: function (stringOrText){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._text_(stringOrText);
+return self}, function($ctx1) {$ctx1.fill(self,"newContents:",{stringOrText:stringOrText},smalltalk.TextMorph)})},
+messageSends: ["text:"]}),
+smalltalk.TextMorph);
+
 smalltalk.addMethod(
 smalltalk.method({
 selector: "readOnly",
@@ -3553,10 +3788,17 @@ selector: "readOnly:",
 fn: function (aBoolean){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
+var $1;
 self["@readOnly"]=aBoolean;
-_st(_st(self)._morphElement())._contentEditable_(_st(aBoolean)._not());
+_st(_st(self)._textElement())._contentEditable_(_st(aBoolean)._not());
+$1=aBoolean;
+if(smalltalk.assert($1)){
+_st(_st(self)._morphElement())._removeClass_("drag-stop");
+} else {
+_st(_st(self)._morphElement())._addClass_("drag-stop");
+};
 return self}, function($ctx1) {$ctx1.fill(self,"readOnly:",{aBoolean:aBoolean},smalltalk.TextMorph)})},
-messageSends: ["contentEditable:", "not", "morphElement"]}),
+messageSends: ["contentEditable:", "not", "textElement", "ifTrue:ifFalse:", "removeClass:", "morphElement", "addClass:"]}),
 smalltalk.TextMorph);
 
 smalltalk.addMethod(
@@ -3564,12 +3806,14 @@ smalltalk.method({
 selector: "render:with:",
 fn: function (container,html){
 var self=this;
-function $NicEdit(){return smalltalk.NicEdit||(typeof NicEdit=="undefined"?nil:NicEdit)}
 return smalltalk.withContext(function($ctx1) { 
-self["@editor"]=_st($NicEdit())._newOn_(_st(container)._asJQuery());
-_st(container)._contentEditable_(_st(_st(self)._readOnly())._not());
+_st(container)._with_((function(){
+return smalltalk.withContext(function($ctx2) {
+self["@textElement"]=_st(html)._span();
+return self["@textElement"];
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"render:with:",{container:container,html:html},smalltalk.TextMorph)})},
-messageSends: ["newOn:", "asJQuery", "contentEditable:", "not", "readOnly"]}),
+messageSends: ["with:", "span"]}),
 smalltalk.TextMorph);
 
 smalltalk.addMethod(
@@ -3595,6 +3839,49 @@ _st(_st(_st(self)._morphElement())._asJQuery())._empty();
 _st(_st(self)._morphElement())._with_(aString);
 return self}, function($ctx1) {$ctx1.fill(self,"text:",{aString:aString},smalltalk.TextMorph)})},
 messageSends: ["empty", "asJQuery", "morphElement", "with:"]}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "textElement",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@textElement"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"textElement",{},smalltalk.TextMorph)})},
+messageSends: []}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "updateCursor",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+ 
+	// TODO: only for Chrome
+	var range = window.getSelection().getRangeAt(0);
+	var preCaretRange = range.cloneRange();
+	preCaretRange.selectNodeContents(self._textElement()._asJQuery()[0]);
+	preCaretRange.setEnd(range.endContainer, range.endOffset);
+	var clonedSelection = preCaretRange.cloneContents();
+	var div = document.createElement('div');
+	div.appendChild(clonedSelection);
+	// workaround: Amber does not support writing the tag brackets in String (syntax error)
+	var brTag = String.fromCharCode(60) + 'br' + String.fromCharCode(62);
+	var divBrs = div.innerHTML.match(new RegExp(brTag, 'g'));
+	var countBrs = divBrs ? divBrs.length : 0;
+	self['@selectionEnd'] = preCaretRange.toString().length + countBrs;
+	self['@selectionText'] = window.getSelection().toString();
+	self['@selectionStart'] = self['@selectionEnd'] - self['@selectionText'].length
+	console.log('start:', self['@selectionStart']);
+	console.log('end:', self['@selectionEnd']);
+	console.log('text:', self['@selectionText']);
+	;
+return self}, function($ctx1) {$ctx1.fill(self,"updateCursor",{},smalltalk.TextMorph)})},
+messageSends: []}),
 smalltalk.TextMorph);
 
 
@@ -3867,6 +4154,22 @@ smalltalk.PluggableTextMorph);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "bindEvents",
+fn: function (){
+var self=this;
+function $KeyboardEvent(){return smalltalk.KeyboardEvent||(typeof KeyboardEvent=="undefined"?nil:KeyboardEvent)}
+return smalltalk.withContext(function($ctx1) { 
+smalltalk.Morph.fn.prototype._bindEvents.apply(_st(self), []);
+_st(_st(_st(self)._textMorph())._morphElement())._onKeyPress_((function(evt){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._keyStroke_(_st($KeyboardEvent())._value_(_st(evt)._charCode()));
+}, function($ctx2) {$ctx2.fillBlock({evt:evt},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"bindEvents",{},smalltalk.PluggableTextMorph)})},
+messageSends: ["bindEvents", "onKeyPress:", "keyStroke:", "value:", "charCode", "morphElement", "textMorph"]}),
+smalltalk.PluggableTextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "drawTextMorph",
 fn: function (){
 var self=this;
@@ -3874,9 +4177,40 @@ function $TextMorph(){return smalltalk.TextMorph||(typeof TextMorph=="undefined"
 return smalltalk.withContext(function($ctx1) { 
 self["@textMorph"]=_st($TextMorph())._new();
 _st(self["@textMorph"])._overflowY_("scroll");
+_st(self["@textMorph"])._readOnly_(false);
 _st(self)._addMorph_(self["@textMorph"]);
 return self}, function($ctx1) {$ctx1.fill(self,"drawTextMorph",{},smalltalk.PluggableTextMorph)})},
-messageSends: ["new", "overflowY:", "addMorph:"]}),
+messageSends: ["new", "overflowY:", "readOnly:", "addMorph:"]}),
+smalltalk.PluggableTextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "getText",
+fn: function (){
+var self=this;
+var newText;
+function $Text(){return smalltalk.Text||(typeof Text=="undefined"?nil:Text)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5;
+$1=self["@getTextSelector"];
+if(($receiver = $1) == nil || $receiver == undefined){
+$2=_st($Text())._new();
+return $2;
+} else {
+$1;
+};
+newText=_st(self["@model"])._perform_(self["@getTextSelector"]);
+$3=newText;
+if(($receiver = $3) == nil || $receiver == undefined){
+$4=_st($Text())._new();
+return $4;
+} else {
+$3;
+};
+$5=_st(newText)._copy();
+return $5;
+}, function($ctx1) {$ctx1.fill(self,"getText",{newText:newText},smalltalk.PluggableTextMorph)})},
+messageSends: ["ifNil:", "new", "perform:", "copy"]}),
 smalltalk.PluggableTextMorph);
 
 smalltalk.addMethod(
@@ -3919,6 +4253,18 @@ smalltalk.PluggableTextMorph);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "keyStroke:",
+fn: function (evt){
+var self=this;
+function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
+return smalltalk.withContext(function($ctx1) { 
+_st($Transcript())._show_(_st(evt)._keyValue());
+return self}, function($ctx1) {$ctx1.fill(self,"keyStroke:",{evt:evt},smalltalk.PluggableTextMorph)})},
+messageSends: ["show:", "keyValue"]}),
+smalltalk.PluggableTextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "model",
 fn: function (){
 var self=this;
@@ -3948,10 +4294,12 @@ fn: function (anObject,getTextSel,setTextSel){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 _st(self)._model_(anObject);
+_st(anObject)._addDependent_(self);
 _st(self)._getTextSelector_(getTextSel);
 _st(self)._setTextSelector_(setTextSel);
+_st(self)._setText_(_st(self)._getText());
 return self}, function($ctx1) {$ctx1.fill(self,"on:text:accept:",{anObject:anObject,getTextSel:getTextSel,setTextSel:setTextSel},smalltalk.PluggableTextMorph)})},
-messageSends: ["model:", "getTextSelector:", "setTextSelector:"]}),
+messageSends: ["model:", "addDependent:", "getTextSelector:", "setTextSelector:", "setText:", "getText"]}),
 smalltalk.PluggableTextMorph);
 
 smalltalk.addMethod(
@@ -3963,6 +4311,52 @@ return smalltalk.withContext(function($ctx1) {
 _st(self)._drawTextMorph();
 return self}, function($ctx1) {$ctx1.fill(self,"render:with:",{container:container,html:html},smalltalk.PluggableTextMorph)})},
 messageSends: ["drawTextMorph"]}),
+smalltalk.PluggableTextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "replaceSelectionWith:",
+fn: function (aText){
+var self=this;
+function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
+function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
+return smalltalk.withContext(function($ctx1) { 
+_st($Transcript())._show_(_st(_st(_st($Character())._cr()).__comma("adding text:")).__comma(aText));
+_st(_st(self)._textMorph())._text_(_st(_st(_st(self)._textMorph())._text()).__comma(_st(aText)._asString()));
+return self}, function($ctx1) {$ctx1.fill(self,"replaceSelectionWith:",{aText:aText},smalltalk.PluggableTextMorph)})},
+messageSends: ["show:", ",", "cr", "text:", "asString", "text", "textMorph"]}),
+smalltalk.PluggableTextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "selectFrom:to:",
+fn: function (start,stop){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(_st(self)._textMorph())._editor())._selectFrom_to_(start,stop);
+return self}, function($ctx1) {$ctx1.fill(self,"selectFrom:to:",{start:start,stop:stop},smalltalk.PluggableTextMorph)})},
+messageSends: ["selectFrom:to:", "editor", "textMorph"]}),
+smalltalk.PluggableTextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "selectInvisiblyFrom:to:",
+fn: function (start,stop){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"selectInvisiblyFrom:to:",{start:start,stop:stop},smalltalk.PluggableTextMorph)})},
+messageSends: []}),
+smalltalk.PluggableTextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "setText:",
+fn: function (aText){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._textMorph())._newContents_(aText);
+return self}, function($ctx1) {$ctx1.fill(self,"setText:",{aText:aText},smalltalk.PluggableTextMorph)})},
+messageSends: ["newContents:", "textMorph"]}),
 smalltalk.PluggableTextMorph);
 
 smalltalk.addMethod(
@@ -3991,6 +4385,19 @@ smalltalk.PluggableTextMorph);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "text",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._textMorph())._contents();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"text",{},smalltalk.PluggableTextMorph)})},
+messageSends: ["contents", "textMorph"]}),
+smalltalk.PluggableTextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "textMorph",
 fn: function (){
 var self=this;
@@ -3999,6 +4406,20 @@ var $1;
 $1=self["@textMorph"];
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"textMorph",{},smalltalk.PluggableTextMorph)})},
+messageSends: []}),
+smalltalk.PluggableTextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "textMorphClass",
+fn: function (){
+var self=this;
+function $TextMorphForEditView(){return smalltalk.TextMorphForEditView||(typeof TextMorphForEditView=="undefined"?nil:TextMorphForEditView)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=$TextMorphForEditView();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"textMorphClass",{},smalltalk.PluggableTextMorph)})},
 messageSends: []}),
 smalltalk.PluggableTextMorph);
 
@@ -4013,6 +4434,68 @@ $1=_st(_st(self)._textMorph())._padding();
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"textMorphPadding",{},smalltalk.PluggableTextMorph)})},
 messageSends: ["padding", "textMorph"]}),
+smalltalk.PluggableTextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "update:",
+fn: function (aSymbol){
+var self=this;
+function $Text(){return smalltalk.Text||(typeof Text=="undefined"?nil:Text)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17;
+$1=aSymbol;
+if(($receiver = $1) == nil || $receiver == undefined){
+$2=self;
+return $2;
+} else {
+$1;
+};
+$3=_st(aSymbol).__eq_eq("flash");
+if(smalltalk.assert($3)){
+$4=_st(self)._flash();
+return $4;
+};
+$5=_st(aSymbol).__eq_eq(self["@getTextSelector"]);
+if(smalltalk.assert($5)){
+_st(self)._setText_(_st(self)._getText());
+$6=_st(self)._setSelection_(_st(self)._getSelection());
+return $6;
+};
+$7=_st(aSymbol).__eq_eq("clearUserEdits");
+if(smalltalk.assert($7)){
+$8=_st(self)._hasUnacceptedEdits_(false);
+return $8;
+};
+$9=_st(aSymbol).__eq_eq("wantToChange");
+if(smalltalk.assert($9)){
+$10=_st(self)._canDiscardEdits();
+if(! smalltalk.assert($10)){
+$11=_st(self)._promptForCancel();
+return $11;
+};
+$12=self;
+return $12;
+};
+$13=_st(aSymbol).__eq_eq("appendEntry");
+if(smalltalk.assert($13)){
+_st(self)._appendEntry();
+$14=self;
+return $14;
+};
+$15=_st(aSymbol).__eq_eq("clearText");
+if(smalltalk.assert($15)){
+_st(self)._handleEdit_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._changeText_(_st($Text())._new());
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+$16=self;
+return $16;
+};
+$17=self;
+return $17;
+}, function($ctx1) {$ctx1.fill(self,"update:",{aSymbol:aSymbol},smalltalk.PluggableTextMorph)})},
+messageSends: ["ifNil:", "ifTrue:", "flash", "==", "setText:", "getText", "setSelection:", "getSelection", "hasUnacceptedEdits:", "ifFalse:", "promptForCancel", "canDiscardEdits", "appendEntry", "handleEdit:", "changeText:", "new"]}),
 smalltalk.PluggableTextMorph);
 
 smalltalk.addMethod(

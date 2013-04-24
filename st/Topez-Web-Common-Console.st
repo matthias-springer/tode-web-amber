@@ -362,7 +362,7 @@ clear
 
 endEntry
   "Display all the characters since the last endEntry, and reset the stream"
-
+	Transcript show: 'TodeConsole>>endEntry called.'.
   self changed: #'appendEntry'.
   self reset
 !
@@ -479,4 +479,147 @@ windowColorSpecification
 PluggableTextMorph subclass: #TodeConsoleWindowMorph
 	instanceVariableNames: 'inputMark'
 	package: 'Topez-Web-Common-Console'!
+
+!TodeConsoleWindowMorph methodsFor: 'accessing'!
+
+inputMark
+  ^ inputMark
+!
+
+markInput
+  inputMark := self text size
+! !
+
+!TodeConsoleWindowMorph methodsFor: 'command input'!
+
+commandLineInput
+  | start stop |
+  start := self positionAfterPromptString.
+  stop := self text size.
+  stop < start
+    ifTrue: [ ^ '' ].
+  ^ (self text copyFrom: start to: stop) asString
+!
+
+positionAfterPromptString
+  "Answer the index of the first character after the last prompt string in my text. If
+	not found, then assume that the contents of the text are all intended to be command
+	input."
+
+  ^ self inputMark + 1
+! !
+
+!TodeConsoleWindowMorph methodsFor: 'events'!
+
+keyStroke: evt
+  | interval |
+  evt altKeyPressed
+    ifTrue: [ ^ super keyStroke: evt ].
+  interval := self textMorph editor selectionInterval.
+  (interval first > self inputMark and: [ interval first <= self text size ])
+    ifTrue: [ ^ super keyStroke: evt ].
+  evt keyCharacter = Character tab
+    ifTrue: [ 
+      | ans |
+      ans := self model tabCompletion: self commandLineInput.
+      textMorph
+        selectInvisiblyFrom: self positionAfterPromptString
+        to: self text size.
+      textMorph replaceSelectionWith: ans.
+      self selectFrom: self text size + 1 to: self text size.
+      ^ true ].
+  (evt keyValue = 30 or: [ evt keyValue = 11 ])
+    ifTrue: [ 
+      self model previousHistory.
+      self selectFrom: self text size + 1 to: self text size.
+      ^ true ].
+  (evt keyValue = 31 or: [ evt keyValue = 12 ])
+    ifTrue: [ 
+      self model nextHistory.
+      self selectFrom: self text size + 1 to: self text size.
+      ^ true ].
+  self selectFrom: self text size + 1 to: self text size.
+  ^ super keyStroke: evt
+! !
+
+!TodeConsoleWindowMorph methodsFor: 'initializing'!
+
+initialize
+  "initialize the state of the receiver"
+
+  super initialize.
+  inputMark := 1
+! !
+
+!TodeConsoleWindowMorph methodsFor: 'menu commands'!
+
+accept
+  self model
+    cr;
+    flush;
+    processCommand: self commandLineInput asString
+!
+
+adornmentColor
+    ^ self model adornmentColor
+!
+
+drawOn: aCanvas
+    "Indicate which Evaluator you are running on"
+
+    super drawOn: aCanvas.
+    true
+        ifTrue: [ self theme drawTopezAdornmentFor: self color: self adornmentColor on: aCanvas ]
+!
+
+wantsFrameAdornments
+    "nothing to save, nothing to indicate"
+
+    ^ false
+! !
+
+!TodeConsoleWindowMorph methodsFor: 'model access'!
+
+setText: aText
+	"TODO: method changed"
+	super setText: aText.
+! !
+
+!TodeConsoleWindowMorph methodsFor: 'updating'!
+
+appendEntry
+  | txt |
+  Transcript show: Character cr, 'TodeConsoleWindowMorph>>appendEntry'.
+  "Append the text in the model's writeStream to the editable text. "
+  textMorph asText size > model characterLimit
+    ifTrue: [ 
+      "Knock off first half of text"
+      self selectInvisiblyFrom: 1 to: textMorph asText size // 2.
+      self replaceSelectionWith: Text new ].
+  self selectInvisiblyFrom: textMorph asText size + 1 to: textMorph asText size.
+  txt := model contents.
+  Transcript show: Character cr, 'model contents: ', txt asString.
+  txt size > 0
+    ifTrue: [ 
+      self replaceSelectionWith: txt.
+      self
+        selectInvisiblyFrom: textMorph asText size + 1
+        to: textMorph asText size.
+      model reset ]
+!
+
+update: something
+	Transcript show: 'TodeConsoleWindowMorph>>update:', something.
+	
+  something == #'markInput'
+    ifTrue: [ ^ self markInput ].
+  something == #'doCommand'
+    ifTrue: [ ^ self accept ].
+  something == #'exit'
+    ifTrue: [ 
+      ^ self owner
+        release;
+        delete ].
+  ^ super update: something
+! !
 

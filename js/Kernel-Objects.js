@@ -288,16 +288,19 @@ selector: "changed:",
 category: 'updating',
 fn: function (aParameter){
 var self=this;
+function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
 return smalltalk.withContext(function($ctx1) { 
+_st($Transcript())._show_(_st("Object>>changed:").__comma(aParameter));
 _st(_st(self)._dependents())._do_((function(aDependent){
 return smalltalk.withContext(function($ctx2) {
+_st($Transcript())._show_(_st("sending to ").__comma(aDependent));
 return _st(aDependent)._update_(aParameter);
 }, function($ctx2) {$ctx2.fillBlock({aDependent:aDependent},$ctx1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"changed:",{aParameter:aParameter},smalltalk.Object)})},
 args: ["aParameter"],
-source: "changed: aParameter \x0a\x09self dependents do: [:aDependent | aDependent update: aParameter]",
-messageSends: ["do:", "update:", "dependents"],
-referencedClasses: []
+source: "changed: aParameter \x0a\x09Transcript show: 'Object>>changed:', aParameter.\x0a\x09self dependents do: [:aDependent | \x0a\x09\x09Transcript show: 'sending to ', aDependent.\x0a\x09\x09aDependent update: aParameter]",
+messageSends: ["show:", ",", "do:", "update:", "dependents"],
+referencedClasses: ["Transcript"]
 }),
 smalltalk.Object);
 
@@ -3466,6 +3469,65 @@ referencedClasses: ["Smalltalk"]
 }),
 smalltalk.Environment);
 
+
+
+smalltalk.addClass('Interval', smalltalk.Object, ['start', 'stop'], 'Kernel-Objects');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "first",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@start"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"first",{},smalltalk.Interval)})},
+args: [],
+source: "first\x0a\x09^ start",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Interval);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "setFrom:to:",
+category: 'accessing',
+fn: function (aNumber,anotherNumber){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@start"]=aNumber;
+self["@stop"]=anotherNumber;
+return self}, function($ctx1) {$ctx1.fill(self,"setFrom:to:",{aNumber:aNumber,anotherNumber:anotherNumber},smalltalk.Interval)})},
+args: ["aNumber", "anotherNumber"],
+source: "setFrom: aNumber to: anotherNumber\x0a\x09start := aNumber.\x0a\x09stop := anotherNumber.",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Interval);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "from:to:",
+category: 'instance creation',
+fn: function (startInteger,stopInteger){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=_st(self)._new();
+_st($2)._setFrom_to_(startInteger,stopInteger);
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"from:to:",{startInteger:startInteger,stopInteger:stopInteger},smalltalk.Interval.klass)})},
+args: ["startInteger", "stopInteger"],
+source: "from: startInteger to: stopInteger \x0a\x09^ self new\x0a\x09\x09setFrom: startInteger\x0a\x09\x09to: stopInteger;\x0a\x09\x09yourself",
+messageSends: ["setFrom:to:", "new", "yourself"],
+referencedClasses: []
+}),
+smalltalk.Interval.klass);
 
 
 smalltalk.addClass('JSObjectProxy', smalltalk.Object, ['jsObject'], 'Kernel-Objects');

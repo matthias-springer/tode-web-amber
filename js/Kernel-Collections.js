@@ -4208,6 +4208,24 @@ smalltalk.String);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "copyReplaceAll:with:",
+category: 'regular expressions',
+fn: function (aString,anotherString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._replace_with_(aString,anotherString);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"copyReplaceAll:with:",{aString:aString,anotherString:anotherString},smalltalk.String)})},
+args: ["aString", "anotherString"],
+source: "copyReplaceAll: aString with: anotherString\x0a\x09^ self replace: aString with: anotherString",
+messageSends: ["replace:with:"],
+referencedClasses: []
+}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "crlfSanitized",
 category: 'converting',
 fn: function (){
@@ -7111,6 +7129,34 @@ smalltalk.RunArray.klass);
 smalltalk.addClass('Text', smalltalk.SequenceableCollection, ['string', 'runs'], 'Kernel-Collections');
 smalltalk.addMethod(
 smalltalk.method({
+selector: ",",
+category: 'copying',
+fn: function (anObject){
+var self=this;
+var aString;
+function $Text(){return smalltalk.Text||(typeof Text=="undefined"?nil:Text)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(anObject)._isText();
+if(smalltalk.assert($1)){
+aString=_st(anObject)._string();
+aString;
+} else {
+aString=_st(anObject)._asString();
+aString;
+};
+$2=_st($Text())._string_runs_(_st(self["@string"]).__comma(aString),self["@runs"]);
+return $2;
+}, function($ctx1) {$ctx1.fill(self,",",{anObject:anObject,aString:aString},smalltalk.Text)})},
+args: ["anObject"],
+source: ", anObject\x0a\x09|aString|\x0a\x09\x22TODO: concatenate runs array.\x22\x0a\x09anObject isText \x0a\x09\x09ifTrue: [aString := anObject string]\x0a\x09\x09ifFalse: [aString := anObject asString].\x0a\x09^ Text string: string, aString runs: runs",
+messageSends: ["ifTrue:ifFalse:", "string", "asString", "isText", "string:runs:", ","],
+referencedClasses: ["Text"]
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "=",
 category: 'comparing',
 fn: function (other){
@@ -7291,13 +7337,33 @@ realStart;
 realStart=start;
 realStart;
 };
-$3=_st(_st(self)._class())._string_runs_(_st(self["@string"])._copyFrom_to_(realStart,realStop),_st(self["@runs"])._copyFrom_to_(realStart,realStop));
+$3=_st(_st(self)._class())._string_runs_(_st(self["@string"])._copyFrom_to_(realStart,realStop),nil);
 return $3;
 }, function($ctx1) {$ctx1.fill(self,"copyFrom:to:",{start:start,stop:stop,realStart:realStart,realStop:realStop},smalltalk.Text)})},
 args: ["start", "stop"],
-source: "copyFrom: start to: stop \x0a\x09\x22Answer a copied subrange of the receiver.\x22\x0a\x0a\x09| realStart realStop |\x0a\x09stop > self size\x0a\x09\x09ifTrue: [realStop := self size]\x09\x09\x22handle selection at end of string\x22\x0a\x09\x09ifFalse: [realStop := stop].\x0a\x09start < 1\x0a\x09\x09ifTrue: [realStart := 1]\x09\x09\x09\x22handle selection before start of string\x22\x0a\x09\x09ifFalse: [realStart := start].\x0a\x09^self class \x0a\x09\x09string: (string copyFrom: realStart to: realStop)\x0a\x09\x09runs: (runs copyFrom: realStart to: realStop)",
+source: "copyFrom: start to: stop \x0a\x09\x22Answer a copied subrange of the receiver.\x22\x0a\x0a\x09| realStart realStop |\x0a\x09stop > self size\x0a\x09\x09ifTrue: [realStop := self size]\x09\x09\x22handle selection at end of string\x22\x0a\x09\x09ifFalse: [realStop := stop].\x0a\x09start < 1\x0a\x09\x09ifTrue: [realStart := 1]\x09\x09\x09\x22handle selection before start of string\x22\x0a\x09\x09ifFalse: [realStart := start].\x0a\x09^self class \x0a\x09\x09string: (string copyFrom: realStart to: realStop)\x0a\x09\x09runs: nil \x22(runs copyFrom: realStart to: realStop)\x22",
 messageSends: ["ifTrue:ifFalse:", "size", ">", "<", "string:runs:", "copyFrom:to:", "class"],
 referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "copyReplaceAll:with:",
+category: 'copying',
+fn: function (aString,anotherString){
+var self=this;
+function $String(){return smalltalk.String||(typeof String=="undefined"?nil:String)}
+function $Text(){return smalltalk.Text||(typeof Text=="undefined"?nil:Text)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($Text())._string_runs_(_st(_st($String())._fromString_(self["@string"]))._replace_with_(aString,anotherString),self["@runs"]);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"copyReplaceAll:with:",{aString:aString,anotherString:anotherString},smalltalk.Text)})},
+args: ["aString", "anotherString"],
+source: "copyReplaceAll: aString with: anotherString\x0a\x09^ Text string: ((String fromString: string) replace: aString with: anotherString) runs: runs",
+messageSends: ["string:runs:", "replace:with:", "fromString:"],
+referencedClasses: ["String", "Text"]
 }),
 smalltalk.Text);
 
@@ -7731,6 +7797,22 @@ return $1;
 }, function($ctx1) {$ctx1.fill(self,"string",{},smalltalk.Text)})},
 args: [],
 source: "string\x0a\x09\x22Answer the string representation of the receiver.\x22\x0a\x0a\x09^string",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Text);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "string:",
+category: 'private',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@string"]=aString;
+return self}, function($ctx1) {$ctx1.fill(self,"string:",{aString:aString},smalltalk.Text)})},
+args: ["aString"],
+source: "string: aString\x0a\x09string := aString.",
 messageSends: [],
 referencedClasses: []
 }),

@@ -1527,6 +1527,10 @@ printOn: aStream
 
 !String methodsFor: 'regular expressions'!
 
+copyReplaceAll: aString with: anotherString
+	^ self replace: aString with: anotherString
+!
+
 match: aRegexp
 	<return self.search(aRegexp) !!= -1>
 !
@@ -2618,6 +2622,15 @@ replaceFrom: start to: stop with: replacement startingAt: repStart
 
 !Text methodsFor: 'copying'!
 
+, anObject
+	|aString|
+	"TODO: concatenate runs array."
+	anObject isText 
+		ifTrue: [aString := anObject string]
+		ifFalse: [aString := anObject asString].
+	^ Text string: string, aString runs: runs
+!
+
 copyFrom: start to: stop 
 	"Answer a copied subrange of the receiver."
 
@@ -2630,7 +2643,11 @@ copyFrom: start to: stop
 		ifFalse: [realStart := start].
 	^self class 
 		string: (string copyFrom: realStart to: realStop)
-		runs: (runs copyFrom: realStart to: realStop)
+		runs: nil "(runs copyFrom: realStart to: realStop)"
+!
+
+copyReplaceAll: aString with: anotherString
+	^ Text string: ((String fromString: string) replace: aString with: anotherString) runs: runs
 !
 
 copyReplaceFrom: start to: stop with: aTextOrString
@@ -2700,6 +2717,10 @@ setString: aString setRunsChecking: aRunArray
 	aRunArray size = aString size ifFalse: [^ aString asText].
 	
 	runs := aRunArray.
+!
+
+string: aString
+	string := aString.
 ! !
 
 !Text class methodsFor: 'instance creation'!

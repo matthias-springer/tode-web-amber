@@ -420,7 +420,10 @@ addDependent: anObject
 !
 
 changed: aParameter 
-	self dependents do: [:aDependent | aDependent update: aParameter]
+	Transcript show: 'Object>>changed:', aParameter.
+	self dependents do: [:aDependent | 
+		Transcript show: 'sending to ', aDependent.
+		aDependent update: aParameter]
 !
 
 dependents
@@ -1060,6 +1063,30 @@ compileMethod: sourceCode for: class protocol: protocol
 	^ class
 		compile: sourceCode
 		category: protocol
+! !
+
+Object subclass: #Interval
+	instanceVariableNames: 'start stop'
+	package: 'Kernel-Objects'!
+
+!Interval methodsFor: 'accessing'!
+
+first
+	^ start
+!
+
+setFrom: aNumber to: anotherNumber
+	start := aNumber.
+	stop := anotherNumber.
+! !
+
+!Interval class methodsFor: 'instance creation'!
+
+from: startInteger to: stopInteger 
+	^ self new
+		setFrom: startInteger
+		to: stopInteger;
+		yourself
 ! !
 
 Object subclass: #JSObjectProxy

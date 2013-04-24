@@ -226,11 +226,13 @@ smalltalk.method({
 selector: "endEntry",
 fn: function (){
 var self=this;
+function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
 return smalltalk.withContext(function($ctx1) { 
+_st($Transcript())._show_("TodeConsole>>endEntry called.");
 _st(self)._changed_("appendEntry");
 _st(self)._reset();
 return self}, function($ctx1) {$ctx1.fill(self,"endEntry",{},smalltalk.TodeConsole)})},
-messageSends: ["changed:", "reset"]}),
+messageSends: ["show:", "changed:", "reset"]}),
 smalltalk.TodeConsole);
 
 smalltalk.addMethod(
@@ -973,5 +975,259 @@ smalltalk.TodeConsole.klass);
 
 
 smalltalk.addClass('TodeConsoleWindowMorph', smalltalk.PluggableTextMorph, ['inputMark'], 'Topez-Web-Common-Console');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "accept",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(self)._model();
+_st($1)._cr();
+_st($1)._flush();
+$2=_st($1)._processCommand_(_st(_st(self)._commandLineInput())._asString());
+return self}, function($ctx1) {$ctx1.fill(self,"accept",{},smalltalk.TodeConsoleWindowMorph)})},
+messageSends: ["cr", "model", "flush", "processCommand:", "asString", "commandLineInput"]}),
+smalltalk.TodeConsoleWindowMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "adornmentColor",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._model())._adornmentColor();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"adornmentColor",{},smalltalk.TodeConsoleWindowMorph)})},
+messageSends: ["adornmentColor", "model"]}),
+smalltalk.TodeConsoleWindowMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "appendEntry",
+fn: function (){
+var self=this;
+var txt;
+function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
+function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
+function $Text(){return smalltalk.Text||(typeof Text=="undefined"?nil:Text)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+_st($Transcript())._show_(_st(_st($Character())._cr()).__comma("TodeConsoleWindowMorph>>appendEntry"));
+$1=_st(_st(_st(self["@textMorph"])._asText())._size()).__gt(_st(self["@model"])._characterLimit());
+if(smalltalk.assert($1)){
+_st(self)._selectInvisiblyFrom_to_((1),_st(_st(_st(self["@textMorph"])._asText())._size()).__slash_slash((2)));
+_st(self)._replaceSelectionWith_(_st($Text())._new());
+};
+_st(self)._selectInvisiblyFrom_to_(_st(_st(_st(self["@textMorph"])._asText())._size()).__plus((1)),_st(_st(self["@textMorph"])._asText())._size());
+txt=_st(self["@model"])._contents();
+_st($Transcript())._show_(_st(_st(_st($Character())._cr()).__comma("model contents: ")).__comma(_st(txt)._asString()));
+$2=_st(_st(txt)._size()).__gt((0));
+if(smalltalk.assert($2)){
+_st(self)._replaceSelectionWith_(txt);
+_st(self)._selectInvisiblyFrom_to_(_st(_st(_st(self["@textMorph"])._asText())._size()).__plus((1)),_st(_st(self["@textMorph"])._asText())._size());
+_st(self["@model"])._reset();
+};
+return self}, function($ctx1) {$ctx1.fill(self,"appendEntry",{txt:txt},smalltalk.TodeConsoleWindowMorph)})},
+messageSends: ["show:", ",", "cr", "ifTrue:", "selectInvisiblyFrom:to:", "//", "size", "asText", "replaceSelectionWith:", "new", ">", "characterLimit", "+", "contents", "asString", "reset"]}),
+smalltalk.TodeConsoleWindowMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "commandLineInput",
+fn: function (){
+var self=this;
+var start,stop;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+start=_st(self)._positionAfterPromptString();
+stop=_st(_st(self)._text())._size();
+$1=_st(stop).__lt(start);
+if(smalltalk.assert($1)){
+return "";
+};
+$2=_st(_st(_st(self)._text())._copyFrom_to_(start,stop))._asString();
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"commandLineInput",{start:start,stop:stop},smalltalk.TodeConsoleWindowMorph)})},
+messageSends: ["positionAfterPromptString", "size", "text", "ifTrue:", "<", "asString", "copyFrom:to:"]}),
+smalltalk.TodeConsoleWindowMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "drawOn:",
+fn: function (aCanvas){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+smalltalk.PluggableTextMorph.fn.prototype._drawOn_.apply(_st(self), [aCanvas]);
+if(smalltalk.assert(true)){
+_st(_st(self)._theme())._drawTopezAdornmentFor_color_on_(self,_st(self)._adornmentColor(),aCanvas);
+};
+return self}, function($ctx1) {$ctx1.fill(self,"drawOn:",{aCanvas:aCanvas},smalltalk.TodeConsoleWindowMorph)})},
+messageSends: ["drawOn:", "ifTrue:", "drawTopezAdornmentFor:color:on:", "adornmentColor", "theme"]}),
+smalltalk.TodeConsoleWindowMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "initialize",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+smalltalk.PluggableTextMorph.fn.prototype._initialize.apply(_st(self), []);
+self["@inputMark"]=(1);
+return self}, function($ctx1) {$ctx1.fill(self,"initialize",{},smalltalk.TodeConsoleWindowMorph)})},
+messageSends: ["initialize"]}),
+smalltalk.TodeConsoleWindowMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "inputMark",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@inputMark"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"inputMark",{},smalltalk.TodeConsoleWindowMorph)})},
+messageSends: []}),
+smalltalk.TodeConsoleWindowMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "keyStroke:",
+fn: function (evt){
+var self=this;
+var interval;
+function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5,$6,$7,$8;
+$1=_st(evt)._altKeyPressed();
+if(smalltalk.assert($1)){
+$2=smalltalk.PluggableTextMorph.fn.prototype._keyStroke_.apply(_st(self), [evt]);
+return $2;
+};
+interval=_st(_st(_st(self)._textMorph())._editor())._selectionInterval();
+$3=_st(_st(_st(interval)._first()).__gt(_st(self)._inputMark()))._and_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(interval)._first()).__lt_eq(_st(_st(self)._text())._size());
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+if(smalltalk.assert($3)){
+$4=smalltalk.PluggableTextMorph.fn.prototype._keyStroke_.apply(_st(self), [evt]);
+return $4;
+};
+$5=_st(_st(evt)._keyCharacter()).__eq(_st($Character())._tab());
+if(smalltalk.assert($5)){
+var ans;
+ans=_st(_st(self)._model())._tabCompletion_(_st(self)._commandLineInput());
+ans;
+_st(self["@textMorph"])._selectInvisiblyFrom_to_(_st(self)._positionAfterPromptString(),_st(_st(self)._text())._size());
+_st(self["@textMorph"])._replaceSelectionWith_(ans);
+_st(self)._selectFrom_to_(_st(_st(_st(self)._text())._size()).__plus((1)),_st(_st(self)._text())._size());
+return true;
+};
+$6=_st(_st(_st(evt)._keyValue()).__eq((30)))._or_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(evt)._keyValue()).__eq((11));
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+if(smalltalk.assert($6)){
+_st(_st(self)._model())._previousHistory();
+_st(self)._selectFrom_to_(_st(_st(_st(self)._text())._size()).__plus((1)),_st(_st(self)._text())._size());
+return true;
+};
+$7=_st(_st(_st(evt)._keyValue()).__eq((31)))._or_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(evt)._keyValue()).__eq((12));
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+if(smalltalk.assert($7)){
+_st(_st(self)._model())._nextHistory();
+_st(self)._selectFrom_to_(_st(_st(_st(self)._text())._size()).__plus((1)),_st(_st(self)._text())._size());
+return true;
+};
+_st(self)._selectFrom_to_(_st(_st(_st(self)._text())._size()).__plus((1)),_st(_st(self)._text())._size());
+$8=smalltalk.PluggableTextMorph.fn.prototype._keyStroke_.apply(_st(self), [evt]);
+return $8;
+}, function($ctx1) {$ctx1.fill(self,"keyStroke:",{evt:evt,interval:interval},smalltalk.TodeConsoleWindowMorph)})},
+messageSends: ["ifTrue:", "keyStroke:", "altKeyPressed", "selectionInterval", "editor", "textMorph", "and:", "<=", "size", "text", "first", ">", "inputMark", "tabCompletion:", "commandLineInput", "model", "selectInvisiblyFrom:to:", "positionAfterPromptString", "replaceSelectionWith:", "selectFrom:to:", "+", "=", "tab", "keyCharacter", "previousHistory", "or:", "keyValue", "nextHistory"]}),
+smalltalk.TodeConsoleWindowMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "markInput",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@inputMark"]=_st(_st(self)._text())._size();
+return self}, function($ctx1) {$ctx1.fill(self,"markInput",{},smalltalk.TodeConsoleWindowMorph)})},
+messageSends: ["size", "text"]}),
+smalltalk.TodeConsoleWindowMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "positionAfterPromptString",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._inputMark()).__plus((1));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"positionAfterPromptString",{},smalltalk.TodeConsoleWindowMorph)})},
+messageSends: ["+", "inputMark"]}),
+smalltalk.TodeConsoleWindowMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "setText:",
+fn: function (aText){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+smalltalk.PluggableTextMorph.fn.prototype._setText_.apply(_st(self), [aText]);
+return self}, function($ctx1) {$ctx1.fill(self,"setText:",{aText:aText},smalltalk.TodeConsoleWindowMorph)})},
+messageSends: ["setText:"]}),
+smalltalk.TodeConsoleWindowMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "update:",
+fn: function (something){
+var self=this;
+function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5,$7,$8,$6,$9;
+_st($Transcript())._show_(_st("TodeConsoleWindowMorph>>update:").__comma(something));
+$1=_st(something).__eq_eq("markInput");
+if(smalltalk.assert($1)){
+$2=_st(self)._markInput();
+return $2;
+};
+$3=_st(something).__eq_eq("doCommand");
+if(smalltalk.assert($3)){
+$4=_st(self)._accept();
+return $4;
+};
+$5=_st(something).__eq_eq("exit");
+if(smalltalk.assert($5)){
+$7=_st(self)._owner();
+_st($7)._release();
+$8=_st($7)._delete();
+$6=$8;
+return $6;
+};
+$9=smalltalk.PluggableTextMorph.fn.prototype._update_.apply(_st(self), [something]);
+return $9;
+}, function($ctx1) {$ctx1.fill(self,"update:",{something:something},smalltalk.TodeConsoleWindowMorph)})},
+messageSends: ["show:", ",", "ifTrue:", "markInput", "==", "accept", "release", "owner", "delete", "update:"]}),
+smalltalk.TodeConsoleWindowMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "wantsFrameAdornments",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return false;
+}, function($ctx1) {$ctx1.fill(self,"wantsFrameAdornments",{},smalltalk.TodeConsoleWindowMorph)})},
+messageSends: []}),
+smalltalk.TodeConsoleWindowMorph);
+
 
 
