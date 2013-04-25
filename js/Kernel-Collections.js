@@ -2672,6 +2672,40 @@ smalltalk.SequenceableCollection);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "copyReplaceFrom:to:with:",
+category: 'copying',
+fn: function (start,stop,replacementCollection){
+var self=this;
+var newSequenceableCollection,newSize,endReplacement;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4;
+newSize=_st(_st(_st(self)._size()).__minus(_st(_st(stop).__minus(start)).__plus((1)))).__plus(_st(replacementCollection)._size());
+endReplacement=_st(_st(start).__minus((1))).__plus(_st(replacementCollection)._size());
+newSequenceableCollection=_st(_st(self)._species())._new_(newSize);
+$1=_st(start).__gt((1));
+if(smalltalk.assert($1)){
+_st(newSequenceableCollection)._replaceFrom_to_with_startingAt_((1),_st(start).__minus((1)),self,(1));
+};
+$2=_st(start).__lt_eq(endReplacement);
+if(smalltalk.assert($2)){
+_st(newSequenceableCollection)._replaceFrom_to_with_startingAt_(start,endReplacement,replacementCollection,(1));
+};
+$3=_st(endReplacement).__lt(newSize);
+if(smalltalk.assert($3)){
+_st(newSequenceableCollection)._replaceFrom_to_with_startingAt_(_st(endReplacement).__plus((1)),newSize,self,_st(stop).__plus((1)));
+};
+$4=newSequenceableCollection;
+return $4;
+}, function($ctx1) {$ctx1.fill(self,"copyReplaceFrom:to:with:",{start:start,stop:stop,replacementCollection:replacementCollection,newSequenceableCollection:newSequenceableCollection,newSize:newSize,endReplacement:endReplacement},smalltalk.SequenceableCollection)})},
+args: ["start", "stop", "replacementCollection"],
+source: "copyReplaceFrom: start to: stop with: replacementCollection \x0a\x09\x22Answer a copy of the receiver satisfying the following conditions: If \x0a\x09stop is less than start, then this is an insertion; stop should be exactly \x0a\x09start-1, start = 1 means insert before the first character, start = size+1 \x0a\x09means append after last character. Otherwise, this is a replacement; start \x0a\x09and stop have to be within the receiver's bounds.\x22\x0a\x0a\x09| newSequenceableCollection newSize endReplacement |\x0a\x09newSize := self size - (stop - start + 1) + replacementCollection size.\x0a\x09endReplacement := start - 1 + replacementCollection size.\x0a\x09newSequenceableCollection := self species new: newSize.\x0a\x09start > 1 ifTrue:[\x0a\x09\x09newSequenceableCollection\x0a\x09\x09\x09replaceFrom: 1\x0a\x09\x09\x09to: start - 1\x0a\x09\x09\x09with: self\x0a\x09\x09\x09startingAt: 1].\x0a\x09start <= endReplacement ifTrue:[\x0a\x09\x09newSequenceableCollection\x0a\x09\x09\x09replaceFrom: start\x0a\x09\x09\x09to: endReplacement\x0a\x09\x09\x09with: replacementCollection\x0a\x09\x09\x09startingAt: 1].\x0a\x09endReplacement < newSize ifTrue:[\x0a\x09\x09newSequenceableCollection\x0a\x09\x09\x09replaceFrom: endReplacement + 1\x0a\x09\x09\x09to: newSize\x0a\x09\x09\x09with: self\x0a\x09\x09\x09startingAt: stop + 1].\x0a\x09^newSequenceableCollection",
+messageSends: ["+", "size", "-", "new:", "species", "ifTrue:", "replaceFrom:to:with:startingAt:", ">", "<=", "<"],
+referencedClasses: []
+}),
+smalltalk.SequenceableCollection);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "deepCopy",
 category: 'copying',
 fn: function (){
@@ -4100,6 +4134,25 @@ args: [],
 source: "asSymbol\x0a\x09^ self",
 messageSends: [],
 referencedClasses: []
+}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "asText",
+category: 'converting',
+fn: function (){
+var self=this;
+function $Text(){return smalltalk.Text||(typeof Text=="undefined"?nil:Text)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($Text())._fromString_(self);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"asText",{},smalltalk.String)})},
+args: [],
+source: "asText\x0a\x09\x22Answer a Text whose string is the receiver.\x22\x0a\x0a\x09^Text fromString: self",
+messageSends: ["fromString:"],
+referencedClasses: ["Text"]
 }),
 smalltalk.String);
 

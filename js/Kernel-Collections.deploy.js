@@ -2036,6 +2036,35 @@ smalltalk.SequenceableCollection);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "copyReplaceFrom:to:with:",
+fn: function (start,stop,replacementCollection){
+var self=this;
+var newSequenceableCollection,newSize,endReplacement;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4;
+newSize=_st(_st(_st(self)._size()).__minus(_st(_st(stop).__minus(start)).__plus((1)))).__plus(_st(replacementCollection)._size());
+endReplacement=_st(_st(start).__minus((1))).__plus(_st(replacementCollection)._size());
+newSequenceableCollection=_st(_st(self)._species())._new_(newSize);
+$1=_st(start).__gt((1));
+if(smalltalk.assert($1)){
+_st(newSequenceableCollection)._replaceFrom_to_with_startingAt_((1),_st(start).__minus((1)),self,(1));
+};
+$2=_st(start).__lt_eq(endReplacement);
+if(smalltalk.assert($2)){
+_st(newSequenceableCollection)._replaceFrom_to_with_startingAt_(start,endReplacement,replacementCollection,(1));
+};
+$3=_st(endReplacement).__lt(newSize);
+if(smalltalk.assert($3)){
+_st(newSequenceableCollection)._replaceFrom_to_with_startingAt_(_st(endReplacement).__plus((1)),newSize,self,_st(stop).__plus((1)));
+};
+$4=newSequenceableCollection;
+return $4;
+}, function($ctx1) {$ctx1.fill(self,"copyReplaceFrom:to:with:",{start:start,stop:stop,replacementCollection:replacementCollection,newSequenceableCollection:newSequenceableCollection,newSize:newSize,endReplacement:endReplacement},smalltalk.SequenceableCollection)})},
+messageSends: ["+", "size", "-", "new:", "species", "ifTrue:", "replaceFrom:to:with:startingAt:", ">", "<=", "<"]}),
+smalltalk.SequenceableCollection);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "deepCopy",
 fn: function (){
 var self=this;
@@ -3077,6 +3106,20 @@ $1=self;
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"asSymbol",{},smalltalk.String)})},
 messageSends: []}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "asText",
+fn: function (){
+var self=this;
+function $Text(){return smalltalk.Text||(typeof Text=="undefined"?nil:Text)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($Text())._fromString_(self);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"asText",{},smalltalk.String)})},
+messageSends: ["fromString:"]}),
 smalltalk.String);
 
 smalltalk.addMethod(
