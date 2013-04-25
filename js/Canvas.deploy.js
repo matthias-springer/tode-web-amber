@@ -4316,7 +4316,7 @@ smalltalk.NavbarMorph);
 
 
 
-smalltalk.addClass('TextMorph', smalltalk.RectangleMorph, ['morphElement', 'editor', 'readOnly', 'selectionStart', 'selectionEnd', 'selectionText', 'textElement'], 'Canvas');
+smalltalk.addClass('TextMorph', smalltalk.RectangleMorph, ['morphElement', 'editor', 'readOnly', 'selectionStart', 'selectionEnd', 'selectionText', 'textElement', 'text'], 'Canvas');
 smalltalk.addMethod(
 smalltalk.method({
 selector: "asText",
@@ -4335,15 +4335,20 @@ smalltalk.method({
 selector: "bindEvents",
 fn: function (){
 var self=this;
-function $KeyboardEvent(){return smalltalk.KeyboardEvent||(typeof KeyboardEvent=="undefined"?nil:KeyboardEvent)}
 return smalltalk.withContext(function($ctx1) { 
 smalltalk.RectangleMorph.fn.prototype._bindEvents.apply(_st(self), []);
 _st(_st(self)._morphElement())._onKeyPress_((function(evt){
 return smalltalk.withContext(function($ctx2) {
-return _st(self)._keyStroke_(_st($KeyboardEvent())._value_(_st(evt)._charCode()));
+_st(evt)._preventDefault();
+return _st(self)._performKeyInput_(_st(evt)._charCode());
+}, function($ctx2) {$ctx2.fillBlock({evt:evt},$ctx1)})}));
+_st(_st(self)._morphElement())._onKeyDown_((function(evt){
+return smalltalk.withContext(function($ctx2) {
+_st(self)._performKeySpecial_event_(_st(evt)._keyCode(),evt);
+return _st(self)._updateCursor();
 }, function($ctx2) {$ctx2.fillBlock({evt:evt},$ctx1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"bindEvents",{},smalltalk.TextMorph)})},
-messageSends: ["bindEvents", "onKeyPress:", "keyStroke:", "value:", "charCode", "morphElement"]}),
+messageSends: ["bindEvents", "onKeyPress:", "preventDefault", "performKeyInput:", "charCode", "morphElement", "onKeyDown:", "performKeySpecial:event:", "keyCode", "updateCursor"]}),
 smalltalk.TextMorph);
 
 smalltalk.addMethod(
@@ -4425,6 +4430,73 @@ smalltalk.TextMorph);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "keyBackspace:",
+fn: function (evt){
+var self=this;
+var start,end,len,newPos;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+_st(evt)._preventDefault();
+start=_st(self)._selectionStart();
+end=_st(self)._selectionEnd();
+len=_st(self)._selectionLength();
+$1=_st(len).__eq((0));
+if(smalltalk.assert($1)){
+_st(self)._text_(_st(_st(self)._text())._replaceFrom_to_with_(_st(start).__minus((1)),end,""));
+newPos=_st(start).__minus((1));
+newPos;
+} else {
+_st(self)._text_(_st(_st(self)._text())._replaceFrom_to_with_(start,end,""));
+newPos=start;
+newPos;
+};
+_st(self)._setSelectionFrom_to_(newPos,_st(newPos).__minus((1)));
+_st(self)._updateCursor();
+return self}, function($ctx1) {$ctx1.fill(self,"keyBackspace:",{evt:evt,start:start,end:end,len:len,newPos:newPos},smalltalk.TextMorph)})},
+messageSends: ["preventDefault", "selectionStart", "selectionEnd", "selectionLength", "ifTrue:ifFalse:", "text:", "replaceFrom:to:with:", "-", "text", "=", "setSelectionFrom:to:", "updateCursor"]}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "keyDelete:",
+fn: function (evt){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"keyDelete:",{evt:evt},smalltalk.TextMorph)})},
+messageSends: []}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "keyReturn:",
+fn: function (evt){
+var self=this;
+var start,end,len,newPos,character;
+function $String(){return smalltalk.String||(typeof String=="undefined"?nil:String)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+start=_st(self)._selectionStart();
+end=_st(self)._selectionEnd();
+len=_st(self)._selectionLength();
+character=_st($String())._fromCharCode_((13));
+$1=_st(len).__eq((0));
+if(smalltalk.assert($1)){
+_st(self)._text_(_st(_st(self)._text())._replaceFrom_to_with_(_st(start).__minus((1)),end,character));
+newPos=_st(start).__plus((1));
+newPos;
+} else {
+_st(self)._text_(_st(_st(self)._text())._replaceFrom_to_with_(start,end,character));
+newPos=start;
+newPos;
+};
+_st(self)._setSelectionFrom_to_(newPos,_st(newPos).__minus((1)));
+_st(self)._updateCursor();
+return self}, function($ctx1) {$ctx1.fill(self,"keyReturn:",{evt:evt,start:start,end:end,len:len,newPos:newPos,character:character},smalltalk.TextMorph)})},
+messageSends: ["selectionStart", "selectionEnd", "selectionLength", "fromCharCode:", "ifTrue:ifFalse:", "text:", "replaceFrom:to:with:", "-", "text", "+", "=", "setSelectionFrom:to:", "updateCursor"]}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "keyStroke:",
 fn: function (evt){
 var self=this;
@@ -4442,6 +4514,66 @@ return smalltalk.withContext(function($ctx1) {
 _st(self)._text_(stringOrText);
 return self}, function($ctx1) {$ctx1.fill(self,"newContents:",{stringOrText:stringOrText},smalltalk.TextMorph)})},
 messageSends: ["text:"]}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "performKeyDefault:",
+fn: function (anInteger){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(self)._class())._keyDefaultBindings())._includes_(anInteger);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"performKeyDefault:",{anInteger:anInteger},smalltalk.TextMorph)})},
+messageSends: ["includes:", "keyDefaultBindings", "class"]}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "performKeyInput:",
+fn: function (anInteger){
+var self=this;
+var newPos,character;
+function $String(){return smalltalk.String||(typeof String=="undefined"?nil:String)}
+return smalltalk.withContext(function($ctx1) { 
+newPos=_st(_st(self)._selectionStart()).__plus((1));
+character=_st($String())._fromCharCode_(anInteger);
+_st(_st(self)._text())._replaceFrom_to_with_(_st(self)._selectionStart(),_st(self)._selectionEnd(),character);
+_st(self)._text_(_st(self)._text());
+_st(self)._setSelectionFrom_to_(newPos,_st(newPos).__minus((1)));
+_st(self)._updateCursor();
+return self}, function($ctx1) {$ctx1.fill(self,"performKeyInput:",{anInteger:anInteger,newPos:newPos,character:character},smalltalk.TextMorph)})},
+messageSends: ["+", "selectionStart", "fromCharCode:", "replaceFrom:to:with:", "selectionEnd", "text", "text:", "setSelectionFrom:to:", "-", "updateCursor"]}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "performKeySpecial:event:",
+fn: function (anInteger,evt){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(self)._class())._keySpecialBindings())._includesKey_(anInteger);
+if(smalltalk.assert($1)){
+_st(self)._perform_withArguments_(_st(_st(_st(self)._class())._keySpecialBindings())._at_(anInteger),[evt]);
+return true;
+} else {
+return false;
+};
+return self}, function($ctx1) {$ctx1.fill(self,"performKeySpecial:event:",{anInteger:anInteger,evt:evt},smalltalk.TextMorph)})},
+messageSends: ["ifTrue:ifFalse:", "perform:withArguments:", "at:", "keySpecialBindings", "class", "includesKey:"]}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "privateText:",
+fn: function (aText){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@text"]=aText;
+return self}, function($ctx1) {$ctx1.fill(self,"privateText:",{aText:aText},smalltalk.TextMorph)})},
+messageSends: []}),
 smalltalk.TextMorph);
 
 smalltalk.addMethod(
@@ -4500,27 +4632,103 @@ smalltalk.TextMorph);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "text",
+selector: "renderText:",
+fn: function (aText){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(_st(self)._textElement())._asJQuery())._empty();
+_st(_st(self)._textElement())._with_(_st(_st(self)._text())._string());
+return self}, function($ctx1) {$ctx1.fill(self,"renderText:",{aText:aText},smalltalk.TextMorph)})},
+messageSends: ["empty", "asJQuery", "textElement", "with:", "string", "text"]}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "selectionEnd",
 fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=_st(_st(_st(self)._morphElement())._asJQuery())._html();
+$1=self["@selectionEnd"];
 return $1;
+}, function($ctx1) {$ctx1.fill(self,"selectionEnd",{},smalltalk.TextMorph)})},
+messageSends: []}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "selectionLength",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(self)._selectionEnd()).__minus(_st(self)._selectionStart())).__plus((1));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"selectionLength",{},smalltalk.TextMorph)})},
+messageSends: ["+", "-", "selectionStart", "selectionEnd"]}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "selectionStart",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@selectionStart"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"selectionStart",{},smalltalk.TextMorph)})},
+messageSends: []}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "setSelectionFrom:to:",
+fn: function (start,end){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+ setSelectionRange(self._textElement()._asJQuery()[0], start - 1, end);	;
+return self}, function($ctx1) {$ctx1.fill(self,"setSelectionFrom:to:",{start:start,end:end},smalltalk.TextMorph)})},
+messageSends: []}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "text",
+fn: function (){
+var self=this;
+function $Text(){return smalltalk.Text||(typeof Text=="undefined"?nil:Text)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=self["@text"];
+if(($receiver = $1) == nil || $receiver == undefined){
+_st(self)._privateText_(_st($Text())._new());
+} else {
+$1;
+};
+$2=self["@text"];
+return $2;
 }, function($ctx1) {$ctx1.fill(self,"text",{},smalltalk.TextMorph)})},
-messageSends: ["html", "asJQuery", "morphElement"]}),
+messageSends: ["ifNil:", "privateText:", "new"]}),
 smalltalk.TextMorph);
 
 smalltalk.addMethod(
 smalltalk.method({
 selector: "text:",
-fn: function (aString){
+fn: function (textOrString){
 var self=this;
+function $Text(){return smalltalk.Text||(typeof Text=="undefined"?nil:Text)}
 return smalltalk.withContext(function($ctx1) { 
-_st(_st(_st(self)._morphElement())._asJQuery())._empty();
-_st(_st(self)._morphElement())._with_(aString);
-return self}, function($ctx1) {$ctx1.fill(self,"text:",{aString:aString},smalltalk.TextMorph)})},
-messageSends: ["empty", "asJQuery", "morphElement", "with:"]}),
+var $1;
+$1=_st(textOrString)._isString();
+if(smalltalk.assert($1)){
+_st(self)._privateText_(_st($Text())._fromString_(textOrString));
+} else {
+_st(self)._privateText_(textOrString);
+};
+_st(self)._renderText_(_st(self)._text());
+return self}, function($ctx1) {$ctx1.fill(self,"text:",{textOrString:textOrString},smalltalk.TextMorph)})},
+messageSends: ["ifTrue:ifFalse:", "privateText:", "fromString:", "isString", "renderText:", "text"]}),
 smalltalk.TextMorph);
 
 smalltalk.addMethod(
@@ -4557,15 +4765,66 @@ return smalltalk.withContext(function($ctx1) {
 	var countBrs = divBrs ? divBrs.length : 0;
 	self['@selectionEnd'] = preCaretRange.toString().length + countBrs;
 	self['@selectionText'] = window.getSelection().toString();
-	self['@selectionStart'] = self['@selectionEnd'] - self['@selectionText'].length
-	console.log('start:', self['@selectionStart']);
-	console.log('end:', self['@selectionEnd']);
-	console.log('text:', self['@selectionText']);
+	self['@selectionStart'] = self['@selectionEnd'] + 1 - self['@selectionText'].length
 	;
 return self}, function($ctx1) {$ctx1.fill(self,"updateCursor",{},smalltalk.TextMorph)})},
 messageSends: []}),
 smalltalk.TextMorph);
 
+
+smalltalk.TextMorph.klass.iVarNames = ['keySpecialBindings','keyDefaultBindings'];
+smalltalk.addMethod(
+smalltalk.method({
+selector: "keyDefaultBindings",
+fn: function (){
+var self=this;
+function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4;
+$1=self["@keyDefaultBindings"];
+if(($receiver = $1) == nil || $receiver == undefined){
+$2=_st($Array())._new();
+_st($2)._add_((37));
+_st($2)._add_((39));
+_st($2)._add_((38));
+_st($2)._add_((40));
+$3=_st($2)._yourself();
+self["@keyDefaultBindings"]=$3;
+self["@keyDefaultBindings"];
+} else {
+$1;
+};
+$4=self["@keyDefaultBindings"];
+return $4;
+}, function($ctx1) {$ctx1.fill(self,"keyDefaultBindings",{},smalltalk.TextMorph.klass)})},
+messageSends: ["ifNil:", "add:", "new", "yourself"]}),
+smalltalk.TextMorph.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "keySpecialBindings",
+fn: function (){
+var self=this;
+function $Dictionary(){return smalltalk.Dictionary||(typeof Dictionary=="undefined"?nil:Dictionary)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4;
+$1=self["@keySpecialBindings"];
+if(($receiver = $1) == nil || $receiver == undefined){
+$2=_st($Dictionary())._new();
+_st($2)._at_put_((8),"keyBackspace:");
+_st($2)._at_put_((46),"keyDelete:");
+_st($2)._at_put_((13),"keyReturn:");
+$3=_st($2)._yourself();
+self["@keySpecialBindings"]=$3;
+self["@keySpecialBindings"];
+} else {
+$1;
+};
+$4=self["@keySpecialBindings"];
+return $4;
+}, function($ctx1) {$ctx1.fill(self,"keySpecialBindings",{},smalltalk.TextMorph.klass)})},
+messageSends: ["ifNil:", "at:put:", "new", "yourself"]}),
+smalltalk.TextMorph.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
@@ -5325,6 +5584,19 @@ $1=_st(_st(self)._new())._on_text_accept_(anObject,getTextSel,setTextSel);
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"on:text:accept:",{anObject:anObject,getTextSel:getTextSel,setTextSel:setTextSel},smalltalk.PluggableTextMorph.klass)})},
 messageSends: ["on:text:accept:", "new"]}),
+smalltalk.PluggableTextMorph.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "on:text:accept:readSelection:menu:",
+fn: function (anObject,getTextSel,setTextSel,rSel,menu){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._on_text_accept_(anObject,getTextSel,setTextSel);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"on:text:accept:readSelection:menu:",{anObject:anObject,getTextSel:getTextSel,setTextSel:setTextSel,rSel:rSel,menu:menu},smalltalk.PluggableTextMorph.klass)})},
+messageSends: ["on:text:accept:"]}),
 smalltalk.PluggableTextMorph.klass);
 
 

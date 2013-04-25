@@ -363,3 +363,68 @@ window.loadHelios = amber.loadHelios;
 function toggleAmberIDE () {
     return smalltalk.TabManager._toggleAmberIDE();
 }
+
+function htmlDecodeWithLineBreaks(html) {
+    // TODO: quick and dirty, copied from http://stackoverflow.com/questions/4502673/jquery-text-function-loses-line-breaks-in-ie
+    var breakToken = '_______break_______',
+       lineBreakedHtml = html.replace(/<br\s?\/?>/gi, breakToken).replace(/<p\.*?>(.*?)<\/p>/gi, breakToken + '$1' + breakToken);
+    return $('<div>').html(lineBreakedHtml).text().replace(new RegExp(breakToken, 'g'), '\n');
+}
+
+function getTextNodesIn(node) {
+    // Copied from http://stackoverflow.com/questions/6240139/highlight-text-range-using-javascript/6242538#6242538
+    var textNodes = [];
+    if (node.nodeType == 3) {
+        textNodes.push(node);
+    } else {
+        var children = node.childNodes;
+        for (var i = 0, len = children.length; i < len; ++i) {
+            textNodes.push.apply(textNodes, getTextNodesIn(children[i]));
+        }
+    }
+    return textNodes;
+}
+
+function setSelectionRange(el, start, end) {
+    theEl = el;
+    if (document.createRange && window.getSelection) {
+        var range = document.createRange();
+        range.selectNodeContents(el);
+        var textNodes = getTextNodesIn(el);
+        var foundStart = false;
+        var charCount = 0, endCharCount;
+        var startIndex = 1;
+
+        for (var i = 0, textNode; textNode = textNodes[i++]; ) {
+            endCharCount = charCount + textNode.length;
+            if (!foundStart && start >= charCount && (start < endCharCount || (start == endCharCount && i < textNodes.length))) {
+                range.setStart(textNode, start - charCount);
+                startIndex = start - charCount;
+                foundStart = true;
+            }
+            if (foundStart && end <= endCharCount) {
+                range.setEnd(textNode, end - charCount);
+                break;
+            }
+            charCount = endCharCount;
+        }
+
+        if (!foundStart) {
+            var textNode = textNodes[textNodes.length - 1];
+            range.setStart(textNode, textNode.length);
+            range.setEnd(textNode, textNode.length);
+        }
+
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+    } else if (document.selection && document.body.createTextRange) {
+        var textRange = document.body.createTextRange();
+        textRange.moveToElementText(el);
+        textRange.collapse(true);
+        textRange.moveEnd("character", end);
+        textRange.moveStart("character", start);
+        textRange.select();
+    }
+}
+

@@ -408,6 +408,10 @@ isSystemWindow
 	^ false
 !
 
+isText
+	^ false
+!
+
 notNil
 	^self isNil not
 !

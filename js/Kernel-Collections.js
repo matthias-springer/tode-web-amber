@@ -2672,6 +2672,29 @@ smalltalk.SequenceableCollection);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "copyReplaceFrom:to:with:",
+category: 'copying',
+fn: function (start,stop,replacementCollection){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=_st(_st(self)._class())._new();
+_st($2)._addAll_(_st(self)._copyFrom_to_((1),_st(start).__minus((1))));
+_st($2)._addAll_(replacementCollection);
+_st($2)._addAll_(_st(self)._copyFrom_to_(_st(stop).__plus((1)),_st(self)._size()));
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"copyReplaceFrom:to:with:",{start:start,stop:stop,replacementCollection:replacementCollection},smalltalk.SequenceableCollection)})},
+args: ["start", "stop", "replacementCollection"],
+source: "copyReplaceFrom: start to: stop with: replacementCollection\x0a\x09\x22Answer a copy of the receiver satisfying the following conditions: If \x0a\x09stop is less than start, then this is an insertion; stop should be exactly \x0a\x09start-1, start = 1 means insert before the first character, start = size+1 \x0a\x09means append after last character. Otherwise, this is a replacement; start \x0a\x09and stop have to be within the receiver's bounds.\x22\x0a\x0a\x09\x22TODO: think about negative indices\x22\x0a\x09^ self class new\x0a\x09\x09addAll: (self copyFrom: 1 to: start - 1);\x0a\x09\x09addAll: replacementCollection;\x0a\x09\x09addAll: (self copyFrom: stop + 1 to: self size);\x0a\x09\x09yourself",
+messageSends: ["addAll:", "copyFrom:to:", "-", "new", "class", "+", "size", "yourself"],
+referencedClasses: []
+}),
+smalltalk.SequenceableCollection);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "deepCopy",
 category: 'copying',
 fn: function (){
@@ -4105,6 +4128,25 @@ smalltalk.String);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "asText",
+category: 'converting',
+fn: function (){
+var self=this;
+function $Text(){return smalltalk.Text||(typeof Text=="undefined"?nil:Text)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($Text())._fromString_(self);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"asText",{},smalltalk.String)})},
+args: [],
+source: "asText\x0a\x09^ Text fromString: self",
+messageSends: ["fromString:"],
+referencedClasses: ["Text"]
+}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "asUppercase",
 category: 'converting',
 fn: function (){
@@ -4226,6 +4268,22 @@ smalltalk.String);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "copyReplaceFrom:to:with:",
+category: 'copying',
+fn: function (start,stop,replacement){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+ return self.substr(0, start - 1) + replacement + self.substr(stop) ;
+return self}, function($ctx1) {$ctx1.fill(self,"copyReplaceFrom:to:with:",{start:start,stop:stop,replacement:replacement},smalltalk.String)})},
+args: ["start", "stop", "replacement"],
+source: "copyReplaceFrom: start to: stop with: replacement\x0a\x09\x22Answer a copy of the receiver satisfying the following conditions: If \x0a\x09stop is less than start, then this is an insertion; stop should be exactly \x0a\x09start-1, start = 1 means insert before the first character, start = size+1 \x0a\x09means append after last character. Otherwise, this is a replacement; start \x0a\x09and stop have to be within the receiver's bounds.\x22\x0a\x0a\x09\x22TODO: think about negative indices\x22\x0a\x09< return self.substr(0, start - 1) + replacement + self.substr(stop) >",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "crlfSanitized",
 category: 'converting',
 fn: function (){
@@ -4302,6 +4360,22 @@ for(var i=0;i<self.length;i++){aBlock(self.charAt(i));};
 return self}, function($ctx1) {$ctx1.fill(self,"do:",{aBlock:aBlock},smalltalk.String)})},
 args: ["aBlock"],
 source: "do: aBlock\x0a\x09<for(var i=0;i<self.length;i++){aBlock(self.charAt(i));}>",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "encodeAsHtml",
+category: 'converting',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+ return $(String.fromCharCode(60) + 'div/' + String.fromCharCode(62)).text(self).html(); ;
+return self}, function($ctx1) {$ctx1.fill(self,"encodeAsHtml",{},smalltalk.String)})},
+args: [],
+source: "encodeAsHtml\x0a\x09< return $(String.fromCharCode(60) + 'div/' + String.fromCharCode(62)).text(self).html(); >",
 messageSends: [],
 referencedClasses: []
 }),
@@ -7499,7 +7573,7 @@ smalltalk.Text);
 smalltalk.addMethod(
 smalltalk.method({
 selector: "isText",
-category: 'comparing',
+category: 'testing',
 fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
@@ -7617,11 +7691,10 @@ var txt;
 return smalltalk.withContext(function($ctx1) { 
 txt=_st(aText)._asText();
 self["@string"]=_st(self["@string"])._copyReplaceFrom_to_with_(start,stop,_st(txt)._string());
-self["@runs"]=_st(self["@runs"])._copyReplaceFrom_to_with_(start,stop,_st(txt)._runs());
 return self}, function($ctx1) {$ctx1.fill(self,"replaceFrom:to:with:",{start:start,stop:stop,aText:aText,txt:txt},smalltalk.Text)})},
 args: ["start", "stop", "aText"],
-source: "replaceFrom: start to: stop with: aText\x0a\x0a\x09| txt |\x0a\x09txt := aText asText.\x09\x22might be a string\x22\x0a\x09string := string copyReplaceFrom: start to: stop with: txt string.\x0a\x09runs := runs copyReplaceFrom: start to: stop with: txt runs",
-messageSends: ["asText", "copyReplaceFrom:to:with:", "string", "runs"],
+source: "replaceFrom: start to: stop with: aText\x0a\x0a\x09| txt |\x0a\x09txt := aText asText.\x09\x22might be a string\x22\x0a\x09string := string copyReplaceFrom: start to: stop with: txt string.\x0a\x09\x22TODO: RunArrays\x22\x0a\x09\x22runs := runs copyReplaceFrom: start to: stop with: txt runs\x22",
+messageSends: ["asText", "copyReplaceFrom:to:with:", "string"],
 referencedClasses: []
 }),
 smalltalk.Text);

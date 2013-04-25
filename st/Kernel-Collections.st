@@ -1003,6 +1003,21 @@ copyFrom: anIndex to: anotherIndex
 	^newCollection
 !
 
+copyReplaceFrom: start to: stop with: replacementCollection
+	"Answer a copy of the receiver satisfying the following conditions: If 
+	stop is less than start, then this is an insertion; stop should be exactly 
+	start-1, start = 1 means insert before the first character, start = size+1 
+	means append after last character. Otherwise, this is a replacement; start 
+	and stop have to be within the receiver's bounds."
+
+	"TODO: think about negative indices"
+	^ self class new
+		addAll: (self copyFrom: 1 to: start - 1);
+		addAll: replacementCollection;
+		addAll: (self copyFrom: stop + 1 to: self size);
+		yourself
+!
+
 deepCopy
 	| newCollection |
 	newCollection := self class new: self size.
@@ -1437,6 +1452,10 @@ asSymbol
 	^ self
 !
 
+asText
+	^ Text fromString: self
+!
+
 asUppercase
 	<return self.toUpperCase()>
 !
@@ -1451,6 +1470,10 @@ digitValue
 	(digitValue := ('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ' indexOf: self) - 1) >= 0
 		ifTrue: [^ digitValue ]
 		ifFalse: [Error signal: 'not implemented yet'].
+!
+
+encodeAsHtml
+	< return $(String.fromCharCode(60) + 'div/' + String.fromCharCode(62)).text(self).html(); >
 !
 
 parseFloat
@@ -1492,6 +1515,17 @@ writeStream
 
 copyFrom: anIndex to: anotherIndex
 	<return self.substring(anIndex - 1, anotherIndex)>
+!
+
+copyReplaceFrom: start to: stop with: replacement
+	"Answer a copy of the receiver satisfying the following conditions: If 
+	stop is less than start, then this is an insertion; stop should be exactly 
+	start-1, start = 1 means insert before the first character, start = size+1 
+	means append after last character. Otherwise, this is a replacement; start 
+	and stop have to be within the receiver's bounds."
+
+	"TODO: think about negative indices"
+	< return self.substr(0, start - 1) + replacement + self.substr(stop) >
 !
 
 deepCopy
@@ -2541,7 +2575,8 @@ replaceFrom: start to: stop with: aText
 	| txt |
 	txt := aText asText.	"might be a string"
 	string := string copyReplaceFrom: start to: stop with: txt string.
-	runs := runs copyReplaceFrom: start to: stop with: txt runs
+	"TODO: RunArrays"
+	"runs := runs copyReplaceFrom: start to: stop with: txt runs"
 !
 
 runs: anArray
@@ -2571,10 +2606,6 @@ size
 howManyMatch: aString
 
 	^ self string howManyMatch: aString
-!
-
-isText
-	^ true
 !
 
 string
@@ -2721,6 +2752,12 @@ setString: aString setRunsChecking: aRunArray
 
 string: aString
 	string := aString.
+! !
+
+!Text methodsFor: 'testing'!
+
+isText
+	^ true
 ! !
 
 !Text class methodsFor: 'instance creation'!

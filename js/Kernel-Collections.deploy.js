@@ -2036,6 +2036,24 @@ smalltalk.SequenceableCollection);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "copyReplaceFrom:to:with:",
+fn: function (start,stop,replacementCollection){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=_st(_st(self)._class())._new();
+_st($2)._addAll_(_st(self)._copyFrom_to_((1),_st(start).__minus((1))));
+_st($2)._addAll_(replacementCollection);
+_st($2)._addAll_(_st(self)._copyFrom_to_(_st(stop).__plus((1)),_st(self)._size()));
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"copyReplaceFrom:to:with:",{start:start,stop:stop,replacementCollection:replacementCollection},smalltalk.SequenceableCollection)})},
+messageSends: ["addAll:", "copyFrom:to:", "-", "new", "class", "+", "size", "yourself"]}),
+smalltalk.SequenceableCollection);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "deepCopy",
 fn: function (){
 var self=this;
@@ -3081,6 +3099,20 @@ smalltalk.String);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "asText",
+fn: function (){
+var self=this;
+function $Text(){return smalltalk.Text||(typeof Text=="undefined"?nil:Text)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($Text())._fromString_(self);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"asText",{},smalltalk.String)})},
+messageSends: ["fromString:"]}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "asUppercase",
 fn: function (){
 var self=this;
@@ -3167,6 +3199,17 @@ smalltalk.String);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "copyReplaceFrom:to:with:",
+fn: function (start,stop,replacement){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+ return self.substr(0, start - 1) + replacement + self.substr(stop) ;
+return self}, function($ctx1) {$ctx1.fill(self,"copyReplaceFrom:to:with:",{start:start,stop:stop,replacement:replacement},smalltalk.String)})},
+messageSends: []}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "crlfSanitized",
 fn: function (){
 var self=this;
@@ -3225,6 +3268,17 @@ var self=this;
 return smalltalk.withContext(function($ctx1) { 
 for(var i=0;i<self.length;i++){aBlock(self.charAt(i));};
 return self}, function($ctx1) {$ctx1.fill(self,"do:",{aBlock:aBlock},smalltalk.String)})},
+messageSends: []}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "encodeAsHtml",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+ return $(String.fromCharCode(60) + 'div/' + String.fromCharCode(62)).text(self).html(); ;
+return self}, function($ctx1) {$ctx1.fill(self,"encodeAsHtml",{},smalltalk.String)})},
 messageSends: []}),
 smalltalk.String);
 
@@ -5842,9 +5896,8 @@ var txt;
 return smalltalk.withContext(function($ctx1) { 
 txt=_st(aText)._asText();
 self["@string"]=_st(self["@string"])._copyReplaceFrom_to_with_(start,stop,_st(txt)._string());
-self["@runs"]=_st(self["@runs"])._copyReplaceFrom_to_with_(start,stop,_st(txt)._runs());
 return self}, function($ctx1) {$ctx1.fill(self,"replaceFrom:to:with:",{start:start,stop:stop,aText:aText,txt:txt},smalltalk.Text)})},
-messageSends: ["asText", "copyReplaceFrom:to:with:", "string", "runs"]}),
+messageSends: ["asText", "copyReplaceFrom:to:with:", "string"]}),
 smalltalk.Text);
 
 smalltalk.addMethod(

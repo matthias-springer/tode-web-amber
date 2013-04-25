@@ -1694,7 +1694,7 @@ render: container with: html
 ! !
 
 RectangleMorph subclass: #TextMorph
-	instanceVariableNames: 'morphElement editor readOnly selectionStart selectionEnd selectionText textElement'
+	instanceVariableNames: 'morphElement editor readOnly selectionStart selectionEnd selectionText textElement text'
 	package: 'Canvas'!
 
 !TextMorph methodsFor: 'accessing'!
@@ -1705,6 +1705,10 @@ contents
 
 newContents: stringOrText
 	self text: stringOrText.
+!
+
+privateText: aText
+	text := aText.
 !
 
 readOnly
@@ -1721,13 +1725,15 @@ readOnly: aBoolean
 !
 
 text
-	^ self morphElement asJQuery html
+	text ifNil: [self privateText: Text new].
+	^ text
 !
 
-text: aString
-	self morphElement asJQuery empty.
-	self morphElement
-		with: aString.
+text: textOrString
+	textOrString isString 
+		ifTrue: [self privateText: (Text fromString: textOrString)]
+		ifFalse: [self privateText: textOrString].
+	self renderText: self text.
 !
 
 textElement
@@ -1744,10 +1750,72 @@ asText
 
 bindEvents
 	super bindEvents.
-	self morphElement onKeyPress: [:evt | self keyStroke: (KeyboardEvent value: evt charCode)].
+	self morphElement onKeyPress: [:evt |
+		evt preventDefault.
+		self performKeyInput: evt charCode].
+	self morphElement onKeyDown: [:evt | 
+		self performKeySpecial: evt keyCode event: evt.
+		self updateCursor].
+!
+
+keyBackspace: evt
+	|start end len newPos|
+	evt preventDefault.
+	start := self selectionStart.
+	end := self selectionEnd.
+	len := self selectionLength.
+	len = 0
+		ifTrue: [
+			self text: (self text replaceFrom: start - 1 to: end with: '').
+			newPos := start - 1]
+		ifFalse: [
+			self text: (self text replaceFrom: start to: end with: '').
+			newPos := start].
+	self setSelectionFrom: newPos to: newPos - 1.
+	self updateCursor.
+!
+
+keyDelete: evt
+!
+
+keyReturn: evt
+	|start end len newPos character|
+	start := self selectionStart.
+	end := self selectionEnd.
+	len := self selectionLength.
+	character := String fromCharCode: 13.
+	len = 0
+		ifTrue: [
+			self text: (self text replaceFrom: start - 1 to: end with: character).
+			newPos := start + 1]
+		ifFalse: [
+			self text: (self text replaceFrom: start to: end with: character).
+			newPos := start].
+	self setSelectionFrom: newPos to: newPos - 1.
+	self updateCursor.
 !
 
 keyStroke: evt
+!
+
+performKeyDefault: anInteger
+	^ self class keyDefaultBindings includes: anInteger
+!
+
+performKeyInput: anInteger
+	|newPos character|
+	newPos := self selectionStart + 1.
+	character := String fromCharCode: anInteger.
+	self text replaceFrom: self selectionStart to: self selectionEnd with: character.
+	self text: self text.
+	self setSelectionFrom: newPos to: newPos - 1.
+	self updateCursor.
+!
+
+performKeySpecial: anInteger event: evt
+	(self class keySpecialBindings includesKey: anInteger)
+		ifTrue: [self perform: (self class keySpecialBindings at: anInteger) withArguments: {evt}. ^ true]
+		ifFalse: [^ false].
 ! !
 
 !TextMorph methodsFor: 'initializing'!
@@ -1763,6 +1831,22 @@ initializeCallbacks
 ! !
 
 !TextMorph methodsFor: 'interactions'!
+
+selectionEnd
+	^ selectionEnd
+!
+
+selectionLength
+	^ self selectionEnd -  self selectionStart + 1
+!
+
+selectionStart
+	^ selectionStart
+!
+
+setSelectionFrom: start to: end
+	< setSelectionRange(self._textElement()._asJQuery()[0], start - 1, end);	>
+!
 
 updateCursor
 	< 
@@ -1780,10 +1864,7 @@ updateCursor
 	var countBrs = divBrs ? divBrs.length : 0;
 	self['@selectionEnd'] = preCaretRange.toString().length + countBrs;
 	self['@selectionText'] = window.getSelection().toString();
-	self['@selectionStart'] = self['@selectionEnd'] - self['@selectionText'].length
-	console.log('start:', self['@selectionStart']);
-	console.log('end:', self['@selectionEnd']);
-	console.log('text:', self['@selectionText']);
+	self['@selectionStart'] = self['@selectionEnd'] + 1 - self['@selectionText'].length
 	>
 ! !
 
@@ -1803,7 +1884,15 @@ editorClass
 render: container with: html
 	container 
 		with: [textElement := html span].
+!
+
+renderText: aText
+	self textElement asJQuery empty.
+	self textElement
+		with: self text string.
 ! !
+
+TextMorph class instanceVariableNames: 'keySpecialBindings keyDefaultBindings'!
 
 !TextMorph class methodsFor: 'instance creation'!
 
@@ -1811,6 +1900,29 @@ new: aString
 	^ self new
 		text: aString;
 		yourself
+! !
+
+!TextMorph class methodsFor: 'interactions'!
+
+keyDefaultBindings
+	keyDefaultBindings ifNil: [
+		keyDefaultBindings := Array new
+			add: 37; "left arrow"
+			add: 39; "right arrow"
+			add: 38; "up arrow"
+			add: 40; "down arrow"
+			yourself].
+	^ keyDefaultBindings
+!
+
+keySpecialBindings
+	keySpecialBindings ifNil: [
+		keySpecialBindings := Dictionary new
+			at: 8 put: #keyBackspace:;
+			at: 46 put: #keyDelete:;
+			at: 13 put: #keyReturn:;
+			yourself].
+	^ keySpecialBindings
 ! !
 
 Morph subclass: #GlyphIconMorph
@@ -2119,6 +2231,13 @@ update: aSymbol
 
 on: anObject text: getTextSel accept: setTextSel
 	^ self new
+		on: anObject
+		text: getTextSel
+		accept: setTextSel
+!
+
+on: anObject text: getTextSel accept: setTextSel readSelection: rSel menu: menu
+	^ self 
 		on: anObject
 		text: getTextSel
 		accept: setTextSel
