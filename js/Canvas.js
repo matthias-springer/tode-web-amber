@@ -6091,6 +6091,7 @@ category: 'events handlings',
 fn: function (evt){
 var self=this;
 var start,end,len,newPos;
+function $KeyboardEvent(){return smalltalk.KeyboardEvent||(typeof KeyboardEvent=="undefined"?nil:KeyboardEvent)}
 return smalltalk.withContext(function($ctx1) { 
 var $1;
 _st(evt)._preventDefault();
@@ -6110,11 +6111,12 @@ newPos;
 newPos=_st(newPos)._max_((1));
 _st(self)._setSelectionFrom_to_(newPos,_st(newPos).__minus((1)));
 _st(self)._updateCursor();
+_st(self)._keyStroke_(_st($KeyboardEvent())._value_((8)));
 return self}, function($ctx1) {$ctx1.fill(self,"keyBackspace:",{evt:evt,start:start,end:end,len:len,newPos:newPos},smalltalk.TextMorph)})},
 args: ["evt"],
-source: "keyBackspace: evt\x0a\x09|start end len newPos|\x0a\x09evt preventDefault.\x0a\x09start := self selectionStart.\x0a\x09end := self selectionEnd.\x0a\x09len := self selectionLength.\x0a\x09len = 0\x0a\x09\x09ifTrue: [\x0a\x09\x09\x09self text: (self text replaceFrom: start - 1 to: end with: '').\x0a\x09\x09\x09newPos := start - 1]\x0a\x09\x09ifFalse: [\x0a\x09\x09\x09self text: (self text replaceFrom: start to: end with: '').\x0a\x09\x09\x09newPos := start].\x0a\x09newPos := newPos max: 1.\x0a\x09self setSelectionFrom: newPos to: newPos - 1.\x0a\x09self updateCursor.",
-messageSends: ["preventDefault", "selectionStart", "selectionEnd", "selectionLength", "ifTrue:ifFalse:", "text:", "replaceFrom:to:with:", "-", "text", "=", "max:", "setSelectionFrom:to:", "updateCursor"],
-referencedClasses: []
+source: "keyBackspace: evt\x0a\x09|start end len newPos|\x0a\x09evt preventDefault.\x0a\x09start := self selectionStart.\x0a\x09end := self selectionEnd.\x0a\x09len := self selectionLength.\x0a\x09len = 0\x0a\x09\x09ifTrue: [\x0a\x09\x09\x09self text: (self text replaceFrom: start - 1 to: end with: '').\x0a\x09\x09\x09newPos := start - 1]\x0a\x09\x09ifFalse: [\x0a\x09\x09\x09self text: (self text replaceFrom: start to: end with: '').\x0a\x09\x09\x09newPos := start].\x0a\x09newPos := newPos max: 1.\x0a\x09self setSelectionFrom: newPos to: newPos - 1.\x0a\x09self updateCursor.\x0a\x09self keyStroke: (KeyboardEvent value: 8).",
+messageSends: ["preventDefault", "selectionStart", "selectionEnd", "selectionLength", "ifTrue:ifFalse:", "text:", "replaceFrom:to:with:", "-", "text", "=", "max:", "setSelectionFrom:to:", "updateCursor", "keyStroke:", "value:"],
+referencedClasses: ["KeyboardEvent"]
 }),
 smalltalk.TextMorph);
 
@@ -6125,6 +6127,7 @@ category: 'events handlings',
 fn: function (evt){
 var self=this;
 var start,end,len,newPos;
+function $KeyboardEvent(){return smalltalk.KeyboardEvent||(typeof KeyboardEvent=="undefined"?nil:KeyboardEvent)}
 return smalltalk.withContext(function($ctx1) { 
 var $1;
 _st(evt)._preventDefault();
@@ -6140,11 +6143,12 @@ _st(self)._text_(_st(_st(self)._text())._replaceFrom_to_with_(start,end,""));
 newPos=start;
 _st(self)._setSelectionFrom_to_(newPos,_st(newPos).__minus((1)));
 _st(self)._updateCursor();
+_st(self)._keyStroke_(_st($KeyboardEvent())._value_((46)));
 return self}, function($ctx1) {$ctx1.fill(self,"keyDelete:",{evt:evt,start:start,end:end,len:len,newPos:newPos},smalltalk.TextMorph)})},
 args: ["evt"],
-source: "keyDelete: evt\x0a\x09|start end len newPos|\x0a\x09evt preventDefault.\x0a\x09start := self selectionStart.\x0a\x09end := self selectionEnd.\x0a\x09len := self selectionLength.\x0a\x09len = 0\x0a\x09\x09ifTrue: [\x0a\x09\x09\x09self text: (self text replaceFrom: start to: end + 1 with: '')]\x0a\x09\x09ifFalse: [\x0a\x09\x09\x09self text: (self text replaceFrom: start to: end with: '')].\x0a\x09newPos := start.\x0a\x09self setSelectionFrom: newPos to: newPos - 1.\x0a\x09self updateCursor.",
-messageSends: ["preventDefault", "selectionStart", "selectionEnd", "selectionLength", "ifTrue:ifFalse:", "text:", "replaceFrom:to:with:", "+", "text", "=", "setSelectionFrom:to:", "-", "updateCursor"],
-referencedClasses: []
+source: "keyDelete: evt\x0a\x09|start end len newPos|\x0a\x09evt preventDefault.\x0a\x09start := self selectionStart.\x0a\x09end := self selectionEnd.\x0a\x09len := self selectionLength.\x0a\x09len = 0\x0a\x09\x09ifTrue: [\x0a\x09\x09\x09self text: (self text replaceFrom: start to: end + 1 with: '')]\x0a\x09\x09ifFalse: [\x0a\x09\x09\x09self text: (self text replaceFrom: start to: end with: '')].\x0a\x09newPos := start.\x0a\x09self setSelectionFrom: newPos to: newPos - 1.\x0a\x09self updateCursor.\x0a\x09self keyStroke: (KeyboardEvent value: 46).",
+messageSends: ["preventDefault", "selectionStart", "selectionEnd", "selectionLength", "ifTrue:ifFalse:", "text:", "replaceFrom:to:with:", "+", "text", "=", "setSelectionFrom:to:", "-", "updateCursor", "keyStroke:", "value:"],
+referencedClasses: ["KeyboardEvent"]
 }),
 smalltalk.TextMorph);
 
@@ -6156,6 +6160,7 @@ fn: function (evt){
 var self=this;
 var start,end,len,newPos,character;
 function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
+function $KeyboardEvent(){return smalltalk.KeyboardEvent||(typeof KeyboardEvent=="undefined"?nil:KeyboardEvent)}
 return smalltalk.withContext(function($ctx1) { 
 var $1;
 _st(evt)._preventDefault();
@@ -6175,11 +6180,12 @@ newPos;
 };
 _st(self)._setSelectionFrom_to_(newPos,_st(newPos).__minus((1)));
 _st(self)._updateCursor();
+_st(self)._keyStroke_(_st($KeyboardEvent())._value_((13)));
 return self}, function($ctx1) {$ctx1.fill(self,"keyReturn:",{evt:evt,start:start,end:end,len:len,newPos:newPos,character:character},smalltalk.TextMorph)})},
 args: ["evt"],
-source: "keyReturn: evt\x0a\x09|start end len newPos character|\x0a\x09evt preventDefault.\x0a\x09start := self selectionStart.\x0a\x09end := self selectionEnd.\x0a\x09len := self selectionLength.\x0a\x09character := Character cr.\x0a\x09len = 0\x0a\x09\x09ifTrue: [\x0a\x09\x09\x09self text: (self text replaceFrom: start to: end with: character).\x0a\x09\x09\x09newPos := start + 1]\x0a\x09\x09ifFalse: [\x0a\x09\x09\x09self text: (self text replaceFrom: start to: end with: character).\x0a\x09\x09\x09newPos := start + 1].\x0a\x09self setSelectionFrom: newPos to: newPos - 1.\x0a\x09self updateCursor.",
-messageSends: ["preventDefault", "selectionStart", "selectionEnd", "selectionLength", "cr", "ifTrue:ifFalse:", "text:", "replaceFrom:to:with:", "text", "+", "=", "setSelectionFrom:to:", "-", "updateCursor"],
-referencedClasses: ["Character"]
+source: "keyReturn: evt\x0a\x09|start end len newPos character|\x0a\x09evt preventDefault.\x0a\x09start := self selectionStart.\x0a\x09end := self selectionEnd.\x0a\x09len := self selectionLength.\x0a\x09character := Character cr.\x0a\x09len = 0\x0a\x09\x09ifTrue: [\x0a\x09\x09\x09self text: (self text replaceFrom: start to: end with: character).\x0a\x09\x09\x09newPos := start + 1]\x0a\x09\x09ifFalse: [\x0a\x09\x09\x09self text: (self text replaceFrom: start to: end with: character).\x0a\x09\x09\x09newPos := start + 1].\x0a\x09self setSelectionFrom: newPos to: newPos - 1.\x0a\x09self updateCursor.\x0a\x09self keyStroke: (KeyboardEvent value: 13).",
+messageSends: ["preventDefault", "selectionStart", "selectionEnd", "selectionLength", "cr", "ifTrue:ifFalse:", "text:", "replaceFrom:to:with:", "text", "+", "=", "setSelectionFrom:to:", "-", "updateCursor", "keyStroke:", "value:"],
+referencedClasses: ["Character", "KeyboardEvent"]
 }),
 smalltalk.TextMorph);
 
@@ -6222,6 +6228,7 @@ fn: function (anInteger){
 var self=this;
 var newPos,character;
 function $String(){return smalltalk.String||(typeof String=="undefined"?nil:String)}
+function $KeyboardEvent(){return smalltalk.KeyboardEvent||(typeof KeyboardEvent=="undefined"?nil:KeyboardEvent)}
 return smalltalk.withContext(function($ctx1) { 
 newPos=_st(_st(self)._selectionStart()).__plus((1));
 character=_st($String())._fromCharCode_(anInteger);
@@ -6229,11 +6236,12 @@ _st(_st(self)._text())._replaceFrom_to_with_(_st(self)._selectionStart(),_st(sel
 _st(self)._text_(_st(self)._text());
 _st(self)._setSelectionFrom_to_(newPos,_st(newPos).__minus((1)));
 _st(self)._updateCursor();
+_st(self)._keyStroke_(_st($KeyboardEvent())._value_(anInteger));
 return self}, function($ctx1) {$ctx1.fill(self,"performKeyInput:",{anInteger:anInteger,newPos:newPos,character:character},smalltalk.TextMorph)})},
 args: ["anInteger"],
-source: "performKeyInput: anInteger\x0a\x09|newPos character|\x0a\x09newPos := self selectionStart + 1.\x0a\x09character := String fromCharCode: anInteger.\x0a\x09self text replaceFrom: self selectionStart to: self selectionEnd with: character.\x0a\x09self text: self text.\x0a\x09self setSelectionFrom: newPos to: newPos - 1.\x0a\x09self updateCursor.",
-messageSends: ["+", "selectionStart", "fromCharCode:", "replaceFrom:to:with:", "selectionEnd", "text", "text:", "setSelectionFrom:to:", "-", "updateCursor"],
-referencedClasses: ["String"]
+source: "performKeyInput: anInteger\x0a\x09|newPos character|\x0a\x09newPos := self selectionStart + 1.\x0a\x09character := String fromCharCode: anInteger.\x0a\x09self text replaceFrom: self selectionStart to: self selectionEnd with: character.\x0a\x09self text: self text.\x0a\x09self setSelectionFrom: newPos to: newPos - 1.\x0a\x09self updateCursor.\x0a\x09self keyStroke: (KeyboardEvent value: anInteger).",
+messageSends: ["+", "selectionStart", "fromCharCode:", "replaceFrom:to:with:", "selectionEnd", "text", "text:", "setSelectionFrom:to:", "-", "updateCursor", "keyStroke:", "value:"],
+referencedClasses: ["String", "KeyboardEvent"]
 }),
 smalltalk.TextMorph);
 

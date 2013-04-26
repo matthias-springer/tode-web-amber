@@ -1774,6 +1774,7 @@ keyBackspace: evt
 	newPos := newPos max: 1.
 	self setSelectionFrom: newPos to: newPos - 1.
 	self updateCursor.
+	self keyStroke: (KeyboardEvent value: 8).
 !
 
 keyDelete: evt
@@ -1790,6 +1791,7 @@ keyDelete: evt
 	newPos := start.
 	self setSelectionFrom: newPos to: newPos - 1.
 	self updateCursor.
+	self keyStroke: (KeyboardEvent value: 46).
 !
 
 keyReturn: evt
@@ -1808,6 +1810,7 @@ keyReturn: evt
 			newPos := start + 1].
 	self setSelectionFrom: newPos to: newPos - 1.
 	self updateCursor.
+	self keyStroke: (KeyboardEvent value: 13).
 !
 
 keyStroke: evt
@@ -1821,6 +1824,7 @@ performKeyInput: anInteger
 	self text: self text.
 	self setSelectionFrom: newPos to: newPos - 1.
 	self updateCursor.
+	self keyStroke: (KeyboardEvent value: anInteger).
 !
 
 performKeySpecial: anInteger event: evt

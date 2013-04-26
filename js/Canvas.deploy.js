@@ -4447,6 +4447,7 @@ selector: "keyBackspace:",
 fn: function (evt){
 var self=this;
 var start,end,len,newPos;
+function $KeyboardEvent(){return smalltalk.KeyboardEvent||(typeof KeyboardEvent=="undefined"?nil:KeyboardEvent)}
 return smalltalk.withContext(function($ctx1) { 
 var $1;
 _st(evt)._preventDefault();
@@ -4466,8 +4467,9 @@ newPos;
 newPos=_st(newPos)._max_((1));
 _st(self)._setSelectionFrom_to_(newPos,_st(newPos).__minus((1)));
 _st(self)._updateCursor();
+_st(self)._keyStroke_(_st($KeyboardEvent())._value_((8)));
 return self}, function($ctx1) {$ctx1.fill(self,"keyBackspace:",{evt:evt,start:start,end:end,len:len,newPos:newPos},smalltalk.TextMorph)})},
-messageSends: ["preventDefault", "selectionStart", "selectionEnd", "selectionLength", "ifTrue:ifFalse:", "text:", "replaceFrom:to:with:", "-", "text", "=", "max:", "setSelectionFrom:to:", "updateCursor"]}),
+messageSends: ["preventDefault", "selectionStart", "selectionEnd", "selectionLength", "ifTrue:ifFalse:", "text:", "replaceFrom:to:with:", "-", "text", "=", "max:", "setSelectionFrom:to:", "updateCursor", "keyStroke:", "value:"]}),
 smalltalk.TextMorph);
 
 smalltalk.addMethod(
@@ -4476,6 +4478,7 @@ selector: "keyDelete:",
 fn: function (evt){
 var self=this;
 var start,end,len,newPos;
+function $KeyboardEvent(){return smalltalk.KeyboardEvent||(typeof KeyboardEvent=="undefined"?nil:KeyboardEvent)}
 return smalltalk.withContext(function($ctx1) { 
 var $1;
 _st(evt)._preventDefault();
@@ -4491,8 +4494,9 @@ _st(self)._text_(_st(_st(self)._text())._replaceFrom_to_with_(start,end,""));
 newPos=start;
 _st(self)._setSelectionFrom_to_(newPos,_st(newPos).__minus((1)));
 _st(self)._updateCursor();
+_st(self)._keyStroke_(_st($KeyboardEvent())._value_((46)));
 return self}, function($ctx1) {$ctx1.fill(self,"keyDelete:",{evt:evt,start:start,end:end,len:len,newPos:newPos},smalltalk.TextMorph)})},
-messageSends: ["preventDefault", "selectionStart", "selectionEnd", "selectionLength", "ifTrue:ifFalse:", "text:", "replaceFrom:to:with:", "+", "text", "=", "setSelectionFrom:to:", "-", "updateCursor"]}),
+messageSends: ["preventDefault", "selectionStart", "selectionEnd", "selectionLength", "ifTrue:ifFalse:", "text:", "replaceFrom:to:with:", "+", "text", "=", "setSelectionFrom:to:", "-", "updateCursor", "keyStroke:", "value:"]}),
 smalltalk.TextMorph);
 
 smalltalk.addMethod(
@@ -4502,6 +4506,7 @@ fn: function (evt){
 var self=this;
 var start,end,len,newPos,character;
 function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
+function $KeyboardEvent(){return smalltalk.KeyboardEvent||(typeof KeyboardEvent=="undefined"?nil:KeyboardEvent)}
 return smalltalk.withContext(function($ctx1) { 
 var $1;
 _st(evt)._preventDefault();
@@ -4521,8 +4526,9 @@ newPos;
 };
 _st(self)._setSelectionFrom_to_(newPos,_st(newPos).__minus((1)));
 _st(self)._updateCursor();
+_st(self)._keyStroke_(_st($KeyboardEvent())._value_((13)));
 return self}, function($ctx1) {$ctx1.fill(self,"keyReturn:",{evt:evt,start:start,end:end,len:len,newPos:newPos,character:character},smalltalk.TextMorph)})},
-messageSends: ["preventDefault", "selectionStart", "selectionEnd", "selectionLength", "cr", "ifTrue:ifFalse:", "text:", "replaceFrom:to:with:", "text", "+", "=", "setSelectionFrom:to:", "-", "updateCursor"]}),
+messageSends: ["preventDefault", "selectionStart", "selectionEnd", "selectionLength", "cr", "ifTrue:ifFalse:", "text:", "replaceFrom:to:with:", "text", "+", "=", "setSelectionFrom:to:", "-", "updateCursor", "keyStroke:", "value:"]}),
 smalltalk.TextMorph);
 
 smalltalk.addMethod(
@@ -4553,6 +4559,7 @@ fn: function (anInteger){
 var self=this;
 var newPos,character;
 function $String(){return smalltalk.String||(typeof String=="undefined"?nil:String)}
+function $KeyboardEvent(){return smalltalk.KeyboardEvent||(typeof KeyboardEvent=="undefined"?nil:KeyboardEvent)}
 return smalltalk.withContext(function($ctx1) { 
 newPos=_st(_st(self)._selectionStart()).__plus((1));
 character=_st($String())._fromCharCode_(anInteger);
@@ -4560,8 +4567,9 @@ _st(_st(self)._text())._replaceFrom_to_with_(_st(self)._selectionStart(),_st(sel
 _st(self)._text_(_st(self)._text());
 _st(self)._setSelectionFrom_to_(newPos,_st(newPos).__minus((1)));
 _st(self)._updateCursor();
+_st(self)._keyStroke_(_st($KeyboardEvent())._value_(anInteger));
 return self}, function($ctx1) {$ctx1.fill(self,"performKeyInput:",{anInteger:anInteger,newPos:newPos,character:character},smalltalk.TextMorph)})},
-messageSends: ["+", "selectionStart", "fromCharCode:", "replaceFrom:to:with:", "selectionEnd", "text", "text:", "setSelectionFrom:to:", "-", "updateCursor"]}),
+messageSends: ["+", "selectionStart", "fromCharCode:", "replaceFrom:to:with:", "selectionEnd", "text", "text:", "setSelectionFrom:to:", "-", "updateCursor", "keyStroke:", "value:"]}),
 smalltalk.TextMorph);
 
 smalltalk.addMethod(
