@@ -6034,11 +6034,12 @@ fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 smalltalk.RectangleMorph.fn.prototype._initialize.apply(_st(self), []);
+_st(self)._initializeCursor();
 _st(self)._initializeCallbacks();
 return self}, function($ctx1) {$ctx1.fill(self,"initialize",{},smalltalk.TextMorph)})},
 args: [],
-source: "initialize\x0a\x09super initialize.\x0a\x09self initializeCallbacks.",
-messageSends: ["initialize", "initializeCallbacks"],
+source: "initialize\x0a\x09super initialize.\x0a\x09self initializeCursor.\x0a\x09self initializeCallbacks.",
+messageSends: ["initialize", "initializeCursor", "initializeCallbacks"],
 referencedClasses: []
 }),
 smalltalk.TextMorph);
@@ -6068,6 +6069,23 @@ smalltalk.TextMorph);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "initializeCursor",
+category: 'initializing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._setSelectionFrom_to_((1),(1));
+_st(self)._updateCursor();
+return self}, function($ctx1) {$ctx1.fill(self,"initializeCursor",{},smalltalk.TextMorph)})},
+args: [],
+source: "initializeCursor\x0a\x09self setSelectionFrom: 1 to: 1.\x0a\x09self updateCursor.",
+messageSends: ["setSelectionFrom:to:", "updateCursor"],
+referencedClasses: []
+}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "keyBackspace:",
 category: 'events handlings',
 fn: function (evt){
@@ -6089,12 +6107,13 @@ _st(self)._text_(_st(_st(self)._text())._replaceFrom_to_with_(start,end,""));
 newPos=start;
 newPos;
 };
+newPos=_st(newPos)._max_((1));
 _st(self)._setSelectionFrom_to_(newPos,_st(newPos).__minus((1)));
 _st(self)._updateCursor();
 return self}, function($ctx1) {$ctx1.fill(self,"keyBackspace:",{evt:evt,start:start,end:end,len:len,newPos:newPos},smalltalk.TextMorph)})},
 args: ["evt"],
-source: "keyBackspace: evt\x0a\x09|start end len newPos|\x0a\x09evt preventDefault.\x0a\x09start := self selectionStart.\x0a\x09end := self selectionEnd.\x0a\x09len := self selectionLength.\x0a\x09len = 0\x0a\x09\x09ifTrue: [\x0a\x09\x09\x09self text: (self text replaceFrom: start - 1 to: end with: '').\x0a\x09\x09\x09newPos := start - 1]\x0a\x09\x09ifFalse: [\x0a\x09\x09\x09self text: (self text replaceFrom: start to: end with: '').\x0a\x09\x09\x09newPos := start].\x0a\x09self setSelectionFrom: newPos to: newPos - 1.\x0a\x09self updateCursor.",
-messageSends: ["preventDefault", "selectionStart", "selectionEnd", "selectionLength", "ifTrue:ifFalse:", "text:", "replaceFrom:to:with:", "-", "text", "=", "setSelectionFrom:to:", "updateCursor"],
+source: "keyBackspace: evt\x0a\x09|start end len newPos|\x0a\x09evt preventDefault.\x0a\x09start := self selectionStart.\x0a\x09end := self selectionEnd.\x0a\x09len := self selectionLength.\x0a\x09len = 0\x0a\x09\x09ifTrue: [\x0a\x09\x09\x09self text: (self text replaceFrom: start - 1 to: end with: '').\x0a\x09\x09\x09newPos := start - 1]\x0a\x09\x09ifFalse: [\x0a\x09\x09\x09self text: (self text replaceFrom: start to: end with: '').\x0a\x09\x09\x09newPos := start].\x0a\x09newPos := newPos max: 1.\x0a\x09self setSelectionFrom: newPos to: newPos - 1.\x0a\x09self updateCursor.",
+messageSends: ["preventDefault", "selectionStart", "selectionEnd", "selectionLength", "ifTrue:ifFalse:", "text:", "replaceFrom:to:with:", "-", "text", "=", "max:", "setSelectionFrom:to:", "updateCursor"],
 referencedClasses: []
 }),
 smalltalk.TextMorph);
@@ -6105,11 +6124,26 @@ selector: "keyDelete:",
 category: 'events handlings',
 fn: function (evt){
 var self=this;
+var start,end,len,newPos;
 return smalltalk.withContext(function($ctx1) { 
-return self}, function($ctx1) {$ctx1.fill(self,"keyDelete:",{evt:evt},smalltalk.TextMorph)})},
+var $1;
+_st(evt)._preventDefault();
+start=_st(self)._selectionStart();
+end=_st(self)._selectionEnd();
+len=_st(self)._selectionLength();
+$1=_st(len).__eq((0));
+if(smalltalk.assert($1)){
+_st(self)._text_(_st(_st(self)._text())._replaceFrom_to_with_(start,_st(end).__plus((1)),""));
+} else {
+_st(self)._text_(_st(_st(self)._text())._replaceFrom_to_with_(start,end,""));
+};
+newPos=start;
+_st(self)._setSelectionFrom_to_(newPos,_st(newPos).__minus((1)));
+_st(self)._updateCursor();
+return self}, function($ctx1) {$ctx1.fill(self,"keyDelete:",{evt:evt,start:start,end:end,len:len,newPos:newPos},smalltalk.TextMorph)})},
 args: ["evt"],
-source: "keyDelete: evt",
-messageSends: [],
+source: "keyDelete: evt\x0a\x09|start end len newPos|\x0a\x09evt preventDefault.\x0a\x09start := self selectionStart.\x0a\x09end := self selectionEnd.\x0a\x09len := self selectionLength.\x0a\x09len = 0\x0a\x09\x09ifTrue: [\x0a\x09\x09\x09self text: (self text replaceFrom: start to: end + 1 with: '')]\x0a\x09\x09ifFalse: [\x0a\x09\x09\x09self text: (self text replaceFrom: start to: end with: '')].\x0a\x09newPos := start.\x0a\x09self setSelectionFrom: newPos to: newPos - 1.\x0a\x09self updateCursor.",
+messageSends: ["preventDefault", "selectionStart", "selectionEnd", "selectionLength", "ifTrue:ifFalse:", "text:", "replaceFrom:to:with:", "+", "text", "=", "setSelectionFrom:to:", "-", "updateCursor"],
 referencedClasses: []
 }),
 smalltalk.TextMorph);
@@ -6121,30 +6155,31 @@ category: 'events handlings',
 fn: function (evt){
 var self=this;
 var start,end,len,newPos,character;
-function $String(){return smalltalk.String||(typeof String=="undefined"?nil:String)}
+function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
 return smalltalk.withContext(function($ctx1) { 
 var $1;
+_st(evt)._preventDefault();
 start=_st(self)._selectionStart();
 end=_st(self)._selectionEnd();
 len=_st(self)._selectionLength();
-character=_st($String())._fromCharCode_((13));
+character=_st($Character())._cr();
 $1=_st(len).__eq((0));
 if(smalltalk.assert($1)){
-_st(self)._text_(_st(_st(self)._text())._replaceFrom_to_with_(_st(start).__minus((1)),end,character));
+_st(self)._text_(_st(_st(self)._text())._replaceFrom_to_with_(start,end,character));
 newPos=_st(start).__plus((1));
 newPos;
 } else {
 _st(self)._text_(_st(_st(self)._text())._replaceFrom_to_with_(start,end,character));
-newPos=start;
+newPos=_st(start).__plus((1));
 newPos;
 };
 _st(self)._setSelectionFrom_to_(newPos,_st(newPos).__minus((1)));
 _st(self)._updateCursor();
 return self}, function($ctx1) {$ctx1.fill(self,"keyReturn:",{evt:evt,start:start,end:end,len:len,newPos:newPos,character:character},smalltalk.TextMorph)})},
 args: ["evt"],
-source: "keyReturn: evt\x0a\x09|start end len newPos character|\x0a\x09start := self selectionStart.\x0a\x09end := self selectionEnd.\x0a\x09len := self selectionLength.\x0a\x09character := String fromCharCode: 13.\x0a\x09len = 0\x0a\x09\x09ifTrue: [\x0a\x09\x09\x09self text: (self text replaceFrom: start - 1 to: end with: character).\x0a\x09\x09\x09newPos := start + 1]\x0a\x09\x09ifFalse: [\x0a\x09\x09\x09self text: (self text replaceFrom: start to: end with: character).\x0a\x09\x09\x09newPos := start].\x0a\x09self setSelectionFrom: newPos to: newPos - 1.\x0a\x09self updateCursor.",
-messageSends: ["selectionStart", "selectionEnd", "selectionLength", "fromCharCode:", "ifTrue:ifFalse:", "text:", "replaceFrom:to:with:", "-", "text", "+", "=", "setSelectionFrom:to:", "updateCursor"],
-referencedClasses: ["String"]
+source: "keyReturn: evt\x0a\x09|start end len newPos character|\x0a\x09evt preventDefault.\x0a\x09start := self selectionStart.\x0a\x09end := self selectionEnd.\x0a\x09len := self selectionLength.\x0a\x09character := Character cr.\x0a\x09len = 0\x0a\x09\x09ifTrue: [\x0a\x09\x09\x09self text: (self text replaceFrom: start to: end with: character).\x0a\x09\x09\x09newPos := start + 1]\x0a\x09\x09ifFalse: [\x0a\x09\x09\x09self text: (self text replaceFrom: start to: end with: character).\x0a\x09\x09\x09newPos := start + 1].\x0a\x09self setSelectionFrom: newPos to: newPos - 1.\x0a\x09self updateCursor.",
+messageSends: ["preventDefault", "selectionStart", "selectionEnd", "selectionLength", "cr", "ifTrue:ifFalse:", "text:", "replaceFrom:to:with:", "text", "+", "=", "setSelectionFrom:to:", "-", "updateCursor"],
+referencedClasses: ["Character"]
 }),
 smalltalk.TextMorph);
 
@@ -6175,24 +6210,6 @@ return self}, function($ctx1) {$ctx1.fill(self,"newContents:",{stringOrText:stri
 args: ["stringOrText"],
 source: "newContents: stringOrText\x0a\x09self text: stringOrText.",
 messageSends: ["text:"],
-referencedClasses: []
-}),
-smalltalk.TextMorph);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "performKeyDefault:",
-category: 'events handlings',
-fn: function (anInteger){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st(_st(_st(self)._class())._keyDefaultBindings())._includes_(anInteger);
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"performKeyDefault:",{anInteger:anInteger},smalltalk.TextMorph)})},
-args: ["anInteger"],
-source: "performKeyDefault: anInteger\x0a\x09^ self class keyDefaultBindings includes: anInteger",
-messageSends: ["includes:", "keyDefaultBindings", "class"],
 referencedClasses: []
 }),
 smalltalk.TextMorph);
@@ -6330,17 +6347,44 @@ smalltalk.TextMorph);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "renderCharacter:",
+category: 'rendering',
+fn: function (aCharacter){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._textElement())._with_(_st(_st(_st(self)._class())._charSpecialRenderings())._at_ifAbsent_(aCharacter,(function(){
+return smalltalk.withContext(function($ctx2) {
+return aCharacter;
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})})));
+return self}, function($ctx1) {$ctx1.fill(self,"renderCharacter:",{aCharacter:aCharacter},smalltalk.TextMorph)})},
+args: ["aCharacter"],
+source: "renderCharacter: aCharacter\x0a\x09self textElement\x0a\x09\x09with: (self class charSpecialRenderings at: aCharacter ifAbsent: [aCharacter]).",
+messageSends: ["with:", "at:ifAbsent:", "charSpecialRenderings", "class", "textElement"],
+referencedClasses: []
+}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "renderText:",
 category: 'rendering',
 fn: function (aText){
 var self=this;
+var htmlText;
 return smalltalk.withContext(function($ctx1) { 
 _st(_st(_st(self)._textElement())._asJQuery())._empty();
-_st(_st(self)._textElement())._with_(_st(_st(self)._text())._string());
-return self}, function($ctx1) {$ctx1.fill(self,"renderText:",{aText:aText},smalltalk.TextMorph)})},
+htmlText=_st(aText)._string();
+_st(_st(_st(self)._class())._charSpecialRenderings())._keysAndValuesDo_((function(char,escape){
+return smalltalk.withContext(function($ctx2) {
+htmlText=_st(htmlText)._copyReplaceAll_with_(char,escape);
+return htmlText;
+}, function($ctx2) {$ctx2.fillBlock({char:char,escape:escape},$ctx1)})}));
+htmlText=_st(htmlText).__comma("<br/>");
+_st(_st(_st(self)._textElement())._asJQuery())._html_(htmlText);
+return self}, function($ctx1) {$ctx1.fill(self,"renderText:",{aText:aText,htmlText:htmlText},smalltalk.TextMorph)})},
 args: ["aText"],
-source: "renderText: aText\x0a\x09self textElement asJQuery empty.\x0a\x09self textElement\x0a\x09\x09with: self text string.",
-messageSends: ["empty", "asJQuery", "textElement", "with:", "string", "text"],
+source: "renderText: aText\x0a\x09|htmlText|\x0a\x09self textElement asJQuery empty.\x0a\x09htmlText := aText string.\x0a\x09self class charSpecialRenderings keysAndValuesDo: [:char :escape |\x0a\x09\x09htmlText := htmlText copyReplaceAll: char with: escape].\x0a\x09htmlText := htmlText, '<br/>'.\x0a\x09self textElement asJQuery html: htmlText.",
+messageSends: ["empty", "asJQuery", "textElement", "string", "keysAndValuesDo:", "copyReplaceAll:with:", "charSpecialRenderings", "class", ",", "html:"],
 referencedClasses: []
 }),
 smalltalk.TextMorph);
@@ -6406,10 +6450,10 @@ category: 'interactions',
 fn: function (start,end){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
- setSelectionRange(self._textElement()._asJQuery()[0], start - 1, end);	;
+ setSelectionRange(self._textElement()._asJQuery()[0], start - 1, end); ;
 return self}, function($ctx1) {$ctx1.fill(self,"setSelectionFrom:to:",{start:start,end:end},smalltalk.TextMorph)})},
 args: ["start", "end"],
-source: "setSelectionFrom: start to: end\x0a\x09< setSelectionRange(self._textElement()._asJQuery()[0], start - 1, end);\x09>",
+source: "setSelectionFrom: start to: end\x0a\x09< setSelectionRange(self._textElement()._asJQuery()[0], start - 1, end); >",
 messageSends: [],
 referencedClasses: []
 }),
@@ -6515,36 +6559,39 @@ referencedClasses: []
 smalltalk.TextMorph);
 
 
-smalltalk.TextMorph.klass.iVarNames = ['keySpecialBindings','keyDefaultBindings'];
+smalltalk.TextMorph.klass.iVarNames = ['keySpecialBindings','charSpecialRenderings'];
 smalltalk.addMethod(
 smalltalk.method({
-selector: "keyDefaultBindings",
-category: 'interactions',
+selector: "charSpecialRenderings",
+category: 'rendering',
 fn: function (){
 var self=this;
-function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
+function $Dictionary(){return smalltalk.Dictionary||(typeof Dictionary=="undefined"?nil:Dictionary)}
+function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2,$3,$4;
-$1=self["@keyDefaultBindings"];
+$1=self["@charSpecialRenderings"];
 if(($receiver = $1) == nil || $receiver == undefined){
-$2=_st($Array())._new();
-_st($2)._add_((37));
-_st($2)._add_((39));
-_st($2)._add_((38));
-_st($2)._add_((40));
+$2=_st($Dictionary())._new();
+_st($2)._at_put_("&","&amp;");
+_st($2)._at_put_(_st($Character())._space(),"&nbsp;");
+_st($2)._at_put_("<","&lt;");
+_st($2)._at_put_(">","&gt;");
+_st($2)._at_put_(_st($Character())._tab(),"&#09;");
+_st($2)._at_put_(_st($Character())._cr(),"<br/>");
 $3=_st($2)._yourself();
-self["@keyDefaultBindings"]=$3;
-self["@keyDefaultBindings"];
+self["@charSpecialRenderings"]=$3;
+self["@charSpecialRenderings"];
 } else {
 $1;
 };
-$4=self["@keyDefaultBindings"];
+$4=self["@charSpecialRenderings"];
 return $4;
-}, function($ctx1) {$ctx1.fill(self,"keyDefaultBindings",{},smalltalk.TextMorph.klass)})},
+}, function($ctx1) {$ctx1.fill(self,"charSpecialRenderings",{},smalltalk.TextMorph.klass)})},
 args: [],
-source: "keyDefaultBindings\x0a\x09keyDefaultBindings ifNil: [\x0a\x09\x09keyDefaultBindings := Array new\x0a\x09\x09\x09add: 37; \x22left arrow\x22\x0a\x09\x09\x09add: 39; \x22right arrow\x22\x0a\x09\x09\x09add: 38; \x22up arrow\x22\x0a\x09\x09\x09add: 40; \x22down arrow\x22\x0a\x09\x09\x09yourself].\x0a\x09^ keyDefaultBindings",
-messageSends: ["ifNil:", "add:", "new", "yourself"],
-referencedClasses: ["Array"]
+source: "charSpecialRenderings\x0a\x09charSpecialRenderings ifNil: [\x0a\x09\x09charSpecialRenderings := Dictionary new\x0a\x09\x09\x09at: '&' put: '&amp;';\x0a\x09\x09\x09at: Character space put: '&nbsp;';\x0a\x09\x09\x09at: '<' put: '&lt;';\x0a\x09\x09\x09at: '>' put: '&gt;';\x0a\x09\x09\x09at: Character tab put: '&#09;';\x0a\x09\x09\x09at: Character cr put: '<br/>';\x0a\x09\x09\x09yourself].\x0a\x09^ charSpecialRenderings",
+messageSends: ["ifNil:", "at:put:", "new", "space", "tab", "cr", "yourself"],
+referencedClasses: ["Dictionary", "Character"]
 }),
 smalltalk.TextMorph.klass);
 

@@ -4405,9 +4405,10 @@ fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 smalltalk.RectangleMorph.fn.prototype._initialize.apply(_st(self), []);
+_st(self)._initializeCursor();
 _st(self)._initializeCallbacks();
 return self}, function($ctx1) {$ctx1.fill(self,"initialize",{},smalltalk.TextMorph)})},
-messageSends: ["initialize", "initializeCallbacks"]}),
+messageSends: ["initialize", "initializeCursor", "initializeCallbacks"]}),
 smalltalk.TextMorph);
 
 smalltalk.addMethod(
@@ -4426,6 +4427,18 @@ return _st(self)._updateCursor();
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"initializeCallbacks",{},smalltalk.TextMorph)})},
 messageSends: ["onKeyUp:", "updateCursor", "textElement", "onMouseUp:"]}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "initializeCursor",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._setSelectionFrom_to_((1),(1));
+_st(self)._updateCursor();
+return self}, function($ctx1) {$ctx1.fill(self,"initializeCursor",{},smalltalk.TextMorph)})},
+messageSends: ["setSelectionFrom:to:", "updateCursor"]}),
 smalltalk.TextMorph);
 
 smalltalk.addMethod(
@@ -4450,10 +4463,11 @@ _st(self)._text_(_st(_st(self)._text())._replaceFrom_to_with_(start,end,""));
 newPos=start;
 newPos;
 };
+newPos=_st(newPos)._max_((1));
 _st(self)._setSelectionFrom_to_(newPos,_st(newPos).__minus((1)));
 _st(self)._updateCursor();
 return self}, function($ctx1) {$ctx1.fill(self,"keyBackspace:",{evt:evt,start:start,end:end,len:len,newPos:newPos},smalltalk.TextMorph)})},
-messageSends: ["preventDefault", "selectionStart", "selectionEnd", "selectionLength", "ifTrue:ifFalse:", "text:", "replaceFrom:to:with:", "-", "text", "=", "setSelectionFrom:to:", "updateCursor"]}),
+messageSends: ["preventDefault", "selectionStart", "selectionEnd", "selectionLength", "ifTrue:ifFalse:", "text:", "replaceFrom:to:with:", "-", "text", "=", "max:", "setSelectionFrom:to:", "updateCursor"]}),
 smalltalk.TextMorph);
 
 smalltalk.addMethod(
@@ -4461,9 +4475,24 @@ smalltalk.method({
 selector: "keyDelete:",
 fn: function (evt){
 var self=this;
+var start,end,len,newPos;
 return smalltalk.withContext(function($ctx1) { 
-return self}, function($ctx1) {$ctx1.fill(self,"keyDelete:",{evt:evt},smalltalk.TextMorph)})},
-messageSends: []}),
+var $1;
+_st(evt)._preventDefault();
+start=_st(self)._selectionStart();
+end=_st(self)._selectionEnd();
+len=_st(self)._selectionLength();
+$1=_st(len).__eq((0));
+if(smalltalk.assert($1)){
+_st(self)._text_(_st(_st(self)._text())._replaceFrom_to_with_(start,_st(end).__plus((1)),""));
+} else {
+_st(self)._text_(_st(_st(self)._text())._replaceFrom_to_with_(start,end,""));
+};
+newPos=start;
+_st(self)._setSelectionFrom_to_(newPos,_st(newPos).__minus((1)));
+_st(self)._updateCursor();
+return self}, function($ctx1) {$ctx1.fill(self,"keyDelete:",{evt:evt,start:start,end:end,len:len,newPos:newPos},smalltalk.TextMorph)})},
+messageSends: ["preventDefault", "selectionStart", "selectionEnd", "selectionLength", "ifTrue:ifFalse:", "text:", "replaceFrom:to:with:", "+", "text", "=", "setSelectionFrom:to:", "-", "updateCursor"]}),
 smalltalk.TextMorph);
 
 smalltalk.addMethod(
@@ -4472,27 +4501,28 @@ selector: "keyReturn:",
 fn: function (evt){
 var self=this;
 var start,end,len,newPos,character;
-function $String(){return smalltalk.String||(typeof String=="undefined"?nil:String)}
+function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
 return smalltalk.withContext(function($ctx1) { 
 var $1;
+_st(evt)._preventDefault();
 start=_st(self)._selectionStart();
 end=_st(self)._selectionEnd();
 len=_st(self)._selectionLength();
-character=_st($String())._fromCharCode_((13));
+character=_st($Character())._cr();
 $1=_st(len).__eq((0));
 if(smalltalk.assert($1)){
-_st(self)._text_(_st(_st(self)._text())._replaceFrom_to_with_(_st(start).__minus((1)),end,character));
+_st(self)._text_(_st(_st(self)._text())._replaceFrom_to_with_(start,end,character));
 newPos=_st(start).__plus((1));
 newPos;
 } else {
 _st(self)._text_(_st(_st(self)._text())._replaceFrom_to_with_(start,end,character));
-newPos=start;
+newPos=_st(start).__plus((1));
 newPos;
 };
 _st(self)._setSelectionFrom_to_(newPos,_st(newPos).__minus((1)));
 _st(self)._updateCursor();
 return self}, function($ctx1) {$ctx1.fill(self,"keyReturn:",{evt:evt,start:start,end:end,len:len,newPos:newPos,character:character},smalltalk.TextMorph)})},
-messageSends: ["selectionStart", "selectionEnd", "selectionLength", "fromCharCode:", "ifTrue:ifFalse:", "text:", "replaceFrom:to:with:", "-", "text", "+", "=", "setSelectionFrom:to:", "updateCursor"]}),
+messageSends: ["preventDefault", "selectionStart", "selectionEnd", "selectionLength", "cr", "ifTrue:ifFalse:", "text:", "replaceFrom:to:with:", "text", "+", "=", "setSelectionFrom:to:", "-", "updateCursor"]}),
 smalltalk.TextMorph);
 
 smalltalk.addMethod(
@@ -4514,19 +4544,6 @@ return smalltalk.withContext(function($ctx1) {
 _st(self)._text_(stringOrText);
 return self}, function($ctx1) {$ctx1.fill(self,"newContents:",{stringOrText:stringOrText},smalltalk.TextMorph)})},
 messageSends: ["text:"]}),
-smalltalk.TextMorph);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "performKeyDefault:",
-fn: function (anInteger){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st(_st(_st(self)._class())._keyDefaultBindings())._includes_(anInteger);
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"performKeyDefault:",{anInteger:anInteger},smalltalk.TextMorph)})},
-messageSends: ["includes:", "keyDefaultBindings", "class"]}),
 smalltalk.TextMorph);
 
 smalltalk.addMethod(
@@ -4632,14 +4649,36 @@ smalltalk.TextMorph);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "renderCharacter:",
+fn: function (aCharacter){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._textElement())._with_(_st(_st(_st(self)._class())._charSpecialRenderings())._at_ifAbsent_(aCharacter,(function(){
+return smalltalk.withContext(function($ctx2) {
+return aCharacter;
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})})));
+return self}, function($ctx1) {$ctx1.fill(self,"renderCharacter:",{aCharacter:aCharacter},smalltalk.TextMorph)})},
+messageSends: ["with:", "at:ifAbsent:", "charSpecialRenderings", "class", "textElement"]}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "renderText:",
 fn: function (aText){
 var self=this;
+var htmlText;
 return smalltalk.withContext(function($ctx1) { 
 _st(_st(_st(self)._textElement())._asJQuery())._empty();
-_st(_st(self)._textElement())._with_(_st(_st(self)._text())._string());
-return self}, function($ctx1) {$ctx1.fill(self,"renderText:",{aText:aText},smalltalk.TextMorph)})},
-messageSends: ["empty", "asJQuery", "textElement", "with:", "string", "text"]}),
+htmlText=_st(aText)._string();
+_st(_st(_st(self)._class())._charSpecialRenderings())._keysAndValuesDo_((function(char,escape){
+return smalltalk.withContext(function($ctx2) {
+htmlText=_st(htmlText)._copyReplaceAll_with_(char,escape);
+return htmlText;
+}, function($ctx2) {$ctx2.fillBlock({char:char,escape:escape},$ctx1)})}));
+htmlText=_st(htmlText).__comma("<br/>");
+_st(_st(_st(self)._textElement())._asJQuery())._html_(htmlText);
+return self}, function($ctx1) {$ctx1.fill(self,"renderText:",{aText:aText,htmlText:htmlText},smalltalk.TextMorph)})},
+messageSends: ["empty", "asJQuery", "textElement", "string", "keysAndValuesDo:", "copyReplaceAll:with:", "charSpecialRenderings", "class", ",", "html:"]}),
 smalltalk.TextMorph);
 
 smalltalk.addMethod(
@@ -4687,7 +4726,7 @@ selector: "setSelectionFrom:to:",
 fn: function (start,end){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
- setSelectionRange(self._textElement()._asJQuery()[0], start - 1, end);	;
+ setSelectionRange(self._textElement()._asJQuery()[0], start - 1, end); ;
 return self}, function($ctx1) {$ctx1.fill(self,"setSelectionFrom:to:",{start:start,end:end},smalltalk.TextMorph)})},
 messageSends: []}),
 smalltalk.TextMorph);
@@ -4772,32 +4811,35 @@ messageSends: []}),
 smalltalk.TextMorph);
 
 
-smalltalk.TextMorph.klass.iVarNames = ['keySpecialBindings','keyDefaultBindings'];
+smalltalk.TextMorph.klass.iVarNames = ['keySpecialBindings','charSpecialRenderings'];
 smalltalk.addMethod(
 smalltalk.method({
-selector: "keyDefaultBindings",
+selector: "charSpecialRenderings",
 fn: function (){
 var self=this;
-function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
+function $Dictionary(){return smalltalk.Dictionary||(typeof Dictionary=="undefined"?nil:Dictionary)}
+function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2,$3,$4;
-$1=self["@keyDefaultBindings"];
+$1=self["@charSpecialRenderings"];
 if(($receiver = $1) == nil || $receiver == undefined){
-$2=_st($Array())._new();
-_st($2)._add_((37));
-_st($2)._add_((39));
-_st($2)._add_((38));
-_st($2)._add_((40));
+$2=_st($Dictionary())._new();
+_st($2)._at_put_("&","&amp;");
+_st($2)._at_put_(_st($Character())._space(),"&nbsp;");
+_st($2)._at_put_("<","&lt;");
+_st($2)._at_put_(">","&gt;");
+_st($2)._at_put_(_st($Character())._tab(),"&#09;");
+_st($2)._at_put_(_st($Character())._cr(),"<br/>");
 $3=_st($2)._yourself();
-self["@keyDefaultBindings"]=$3;
-self["@keyDefaultBindings"];
+self["@charSpecialRenderings"]=$3;
+self["@charSpecialRenderings"];
 } else {
 $1;
 };
-$4=self["@keyDefaultBindings"];
+$4=self["@charSpecialRenderings"];
 return $4;
-}, function($ctx1) {$ctx1.fill(self,"keyDefaultBindings",{},smalltalk.TextMorph.klass)})},
-messageSends: ["ifNil:", "add:", "new", "yourself"]}),
+}, function($ctx1) {$ctx1.fill(self,"charSpecialRenderings",{},smalltalk.TextMorph.klass)})},
+messageSends: ["ifNil:", "at:put:", "new", "space", "tab", "cr", "yourself"]}),
 smalltalk.TextMorph.klass);
 
 smalltalk.addMethod(

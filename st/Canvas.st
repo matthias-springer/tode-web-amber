@@ -1771,35 +1771,46 @@ keyBackspace: evt
 		ifFalse: [
 			self text: (self text replaceFrom: start to: end with: '').
 			newPos := start].
+	newPos := newPos max: 1.
 	self setSelectionFrom: newPos to: newPos - 1.
 	self updateCursor.
 !
 
 keyDelete: evt
+	|start end len newPos|
+	evt preventDefault.
+	start := self selectionStart.
+	end := self selectionEnd.
+	len := self selectionLength.
+	len = 0
+		ifTrue: [
+			self text: (self text replaceFrom: start to: end + 1 with: '')]
+		ifFalse: [
+			self text: (self text replaceFrom: start to: end with: '')].
+	newPos := start.
+	self setSelectionFrom: newPos to: newPos - 1.
+	self updateCursor.
 !
 
 keyReturn: evt
 	|start end len newPos character|
+	evt preventDefault.
 	start := self selectionStart.
 	end := self selectionEnd.
 	len := self selectionLength.
-	character := String fromCharCode: 13.
+	character := Character cr.
 	len = 0
 		ifTrue: [
-			self text: (self text replaceFrom: start - 1 to: end with: character).
+			self text: (self text replaceFrom: start to: end with: character).
 			newPos := start + 1]
 		ifFalse: [
 			self text: (self text replaceFrom: start to: end with: character).
-			newPos := start].
+			newPos := start + 1].
 	self setSelectionFrom: newPos to: newPos - 1.
 	self updateCursor.
 !
 
 keyStroke: evt
-!
-
-performKeyDefault: anInteger
-	^ self class keyDefaultBindings includes: anInteger
 !
 
 performKeyInput: anInteger
@@ -1822,12 +1833,18 @@ performKeySpecial: anInteger event: evt
 
 initialize
 	super initialize.
+	self initializeCursor.
 	self initializeCallbacks.
 !
 
 initializeCallbacks
 	self textElement onKeyUp: [self updateCursor].
 	self textElement onMouseUp: [self updateCursor].
+!
+
+initializeCursor
+	self setSelectionFrom: 1 to: 1.
+	self updateCursor.
 ! !
 
 !TextMorph methodsFor: 'interactions'!
@@ -1845,7 +1862,7 @@ selectionStart
 !
 
 setSelectionFrom: start to: end
-	< setSelectionRange(self._textElement()._asJQuery()[0], start - 1, end);	>
+	< setSelectionRange(self._textElement()._asJQuery()[0], start - 1, end); >
 !
 
 updateCursor
@@ -1886,13 +1903,22 @@ render: container with: html
 		with: [textElement := html span].
 !
 
-renderText: aText
-	self textElement asJQuery empty.
+renderCharacter: aCharacter
 	self textElement
-		with: self text string.
+		with: (self class charSpecialRenderings at: aCharacter ifAbsent: [aCharacter]).
+!
+
+renderText: aText
+	|htmlText|
+	self textElement asJQuery empty.
+	htmlText := aText string.
+	self class charSpecialRenderings keysAndValuesDo: [:char :escape |
+		htmlText := htmlText copyReplaceAll: char with: escape].
+	htmlText := htmlText, '<br/>'.
+	self textElement asJQuery html: htmlText.
 ! !
 
-TextMorph class instanceVariableNames: 'keySpecialBindings keyDefaultBindings'!
+TextMorph class instanceVariableNames: 'keySpecialBindings charSpecialRenderings'!
 
 !TextMorph class methodsFor: 'instance creation'!
 
@@ -1904,17 +1930,6 @@ new: aString
 
 !TextMorph class methodsFor: 'interactions'!
 
-keyDefaultBindings
-	keyDefaultBindings ifNil: [
-		keyDefaultBindings := Array new
-			add: 37; "left arrow"
-			add: 39; "right arrow"
-			add: 38; "up arrow"
-			add: 40; "down arrow"
-			yourself].
-	^ keyDefaultBindings
-!
-
 keySpecialBindings
 	keySpecialBindings ifNil: [
 		keySpecialBindings := Dictionary new
@@ -1923,6 +1938,21 @@ keySpecialBindings
 			at: 13 put: #keyReturn:;
 			yourself].
 	^ keySpecialBindings
+! !
+
+!TextMorph class methodsFor: 'rendering'!
+
+charSpecialRenderings
+	charSpecialRenderings ifNil: [
+		charSpecialRenderings := Dictionary new
+			at: '&' put: '&amp;';
+			at: Character space put: '&nbsp;';
+			at: '<' put: '&lt;';
+			at: '>' put: '&gt;';
+			at: Character tab put: '&#09;';
+			at: Character cr put: '<br/>';
+			yourself].
+	^ charSpecialRenderings
 ! !
 
 Morph subclass: #GlyphIconMorph
