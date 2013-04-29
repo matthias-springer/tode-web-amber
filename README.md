@@ -9,16 +9,10 @@ How to use
 Here's a short example of how to use our Morphic-like interface. JQuery UI is needed for ```draggable``` windows.
 
 ```smalltalk
-|workspace win btn|
-workspace := WorkspaceMorph current.
+|win|
 win := SystemWindow new.
-btn := SimpleButtonMorph new.
-workspace addMorph: win. 
-win addMorph: btn.
-btn label: 'Demo button'.
-btn appendClass: 'btn-primary'.
-btn onClick: [Transcript show: 'Button clicked!'].
-win top: 25
+win addMorph: PluggableTextMorph new frame: (0@0 extent: 1@1).
+win openInWorld.
 ```
 
 Amber 
