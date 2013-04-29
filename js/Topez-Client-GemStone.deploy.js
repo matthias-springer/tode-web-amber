@@ -969,6 +969,1005 @@ smalltalk.TDShell.klass);
 
 
 smalltalk.addClass('TDTopezClient', smalltalk.Object, ['shell', 'session', 'sessionDescription', 'topezServerProxy', 'evaluateTokenMessage', 'setExceptionMessage', 'resetObjInMessage', 'openDebuggerMessage', 'tabCompletionMessage'], 'Topez-Client-GemStone');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "accumulateTextAndServerDo:",
+fn: function (serverBlockOop){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._shell())._accumulateTextAndServerDo_(serverBlockOop);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"accumulateTextAndServerDo:",{serverBlockOop:serverBlockOop},smalltalk.TDTopezClient)})},
+messageSends: ["accumulateTextAndServerDo:", "shell"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "activeWindowServerModel",
+fn: function (){
+var self=this;
+var model,clientElement;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+model=_st(_st(self)._windowStatus())._activeWindowModel();
+$1=_st(model).__eq_eq(nil);
+if(smalltalk.assert($1)){
+return nil;
+};
+clientElement=_st(_st(model)._activeEditor())._clientElement();
+$2=_st(clientElement).__eq_eq(nil);
+if(smalltalk.assert($2)){
+return nil;
+};
+$3=_st(clientElement)._clientElementOop();
+return $3;
+}, function($ctx1) {$ctx1.fill(self,"activeWindowServerModel",{model:model,clientElement:clientElement},smalltalk.TDTopezClient)})},
+messageSends: ["activeWindowModel", "windowStatus", "ifTrue:", "==", "clientElement", "activeEditor", "clientElementOop"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "adornmentColor",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._shell())._adornmentColor();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"adornmentColor",{},smalltalk.TDTopezClient)})},
+messageSends: ["adornmentColor", "shell"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "autoCommitDisabled",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._shell())._autoCommitDisabled();
+return self}, function($ctx1) {$ctx1.fill(self,"autoCommitDisabled",{},smalltalk.TDTopezClient)})},
+messageSends: ["autoCommitDisabled", "shell"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "bounds",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._class())._bounds();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"bounds",{},smalltalk.TDTopezClient)})},
+messageSends: ["bounds", "class"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "currentWindowId:",
+fn: function (anInteger){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$4,$5,$1;
+$2=_st(_st(self)._windowStatus())._windowAt_(anInteger);
+if(($receiver = $2) == nil || $receiver == undefined){
+$1=$2;
+} else {
+var window;
+window=$receiver;
+$3=_st(window)._isActive();
+if(! smalltalk.assert($3)){
+$4=window;
+_st($4)._expand();
+$5=_st($4)._makeSecondTopmost();
+$5;
+};
+$1=window;
+};
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"currentWindowId:",{anInteger:anInteger},smalltalk.TDTopezClient)})},
+messageSends: ["ifNotNil:", "ifFalse:", "expand", "makeSecondTopmost", "isActive", "windowAt:", "windowStatus"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "dbContinue:",
+fn: function (processOop){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._handleDebugExceptionsDuring_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(self)._session())._continue_(_st(_st(self)._session())._asOopType_(processOop));
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"dbContinue:",{processOop:processOop},smalltalk.TDTopezClient)})},
+messageSends: ["handleDebugExceptionsDuring:", "continue:", "asOopType:", "session"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "dbStep:forProcessOop:",
+fn: function (level,processOop){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._handleDebugExceptionsDuring_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(self)._session())._stepWith_level_(_st(_st(self)._session())._asOopType_(processOop),level);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"dbStep:forProcessOop:",{level:level,processOop:processOop},smalltalk.TDTopezClient)})},
+messageSends: ["handleDebugExceptionsDuring:", "stepWith:level:", "asOopType:", "session"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "editElement:aspect:label:inWindow:at:",
+fn: function (aClientElement,aspectSelector,labelString,windowIdOrNil,windowLocation){
+var self=this;
+var windowId,label,newWindow,win,selectedIndex;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12;
+$1=windowIdOrNil;
+if(($receiver = $1) == nil || $receiver == undefined){
+windowId=_st(self)._nextAvailableWindowId();
+windowId=windowId;
+} else {
+windowId=$1;
+};
+$2=_st(windowId).__eq_eq((0));
+if(smalltalk.assert($2)){
+windowId=_st(self)._nextAvailableWindowId();
+windowId;
+};
+_st(self)._currentWindowId_(windowId);
+label=labelString;
+newWindow=_st(_st(_st(self)._windowStatus())._windowAt_(windowId))._isNil();
+win=_st(self)._editorWindowAt_(windowId);
+$3=_st(win)._model();
+_st($3)._perform_(aspectSelector);
+_st($3)._clientElement_(aClientElement);
+_st($3)._windowId_(windowId);
+$4=_st($3)._label_(label);
+$5=newWindow;
+if(smalltalk.assert($5)){
+var bounds;
+bounds=_st(_st(self)._bounds())._at_ifAbsent_(windowLocation,(function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._error_(_st("Unknown window location: ").__comma(_st(windowLocation)._printString()));
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+bounds;
+$6=win;
+_st($6)._extent_(_st(bounds)._extent());
+$7=_st($6)._position_(_st(bounds)._origin());
+$7;
+};
+selectedIndex=_st(aClientElement)._selectedIndex();
+$8=selectedIndex;
+if(($receiver = $8) == nil || $receiver == undefined){
+selectedIndex=(0);
+selectedIndex;
+} else {
+$8;
+};
+_st(_st(win)._model())._listIndex_(selectedIndex);
+$9=_st(selectedIndex).__eq_eq((0));
+if(smalltalk.assert($9)){
+$10=_st(aClientElement)._highlightedIndex();
+if(($receiver = $10) == nil || $receiver == undefined){
+$10;
+} else {
+var highlightedIndex;
+highlightedIndex=$receiver;
+$11=_st(highlightedIndex).__gt((0));
+if(smalltalk.assert($11)){
+_st(_st(win)._model())._setListIndex_(highlightedIndex);
+};
+};
+};
+_st(aClientElement)._activateElement();
+$12=windowId;
+return $12;
+}, function($ctx1) {$ctx1.fill(self,"editElement:aspect:label:inWindow:at:",{aClientElement:aClientElement,aspectSelector:aspectSelector,labelString:labelString,windowIdOrNil:windowIdOrNil,windowLocation:windowLocation,windowId:windowId,label:label,newWindow:newWindow,win:win,selectedIndex:selectedIndex},smalltalk.TDTopezClient)})},
+messageSends: ["ifNil:", "nextAvailableWindowId", "ifTrue:", "==", "currentWindowId:", "isNil", "windowAt:", "windowStatus", "perform:", "model", "editorWindowAt:", "clientElement:", "windowId:", "label:", "at:ifAbsent:", "error:", ",", "printString", "bounds", "extent:", "extent", "position:", "origin", "selectedIndex", "listIndex:", "ifNotNil:", "setListIndex:", ">", "highlightedIndex", "activateElement"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "editStonElement:",
+fn: function (aStonString){
+var self=this;
+var clientElement,aWindowId;
+function $STON(){return smalltalk.STON||(typeof STON=="undefined"?nil:STON)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+clientElement=_st($STON())._fromString_(aStonString);
+_st(clientElement)._topez_(self);
+aWindowId=_st(clientElement)._editorWindowId();
+$1=_st(_st(aWindowId).__eq_eq(nil))._and_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(clientElement)._editorWindowName()).__tild_tild(nil);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+if(smalltalk.assert($1)){
+aWindowId=_st(self)._windowIdNamed_(_st(clientElement)._editorWindowName());
+aWindowId;
+};
+$2=_st(self)._editElement_aspect_label_inWindow_at_(clientElement,_st(clientElement)._editorAspectSelector(),_st(clientElement)._editorWindowLabel(),aWindowId,_st(clientElement)._editorWindowLocation());
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"editStonElement:",{aStonString:aStonString,clientElement:clientElement,aWindowId:aWindowId},smalltalk.TDTopezClient)})},
+messageSends: ["fromString:", "topez:", "editorWindowId", "ifTrue:", "windowIdNamed:", "editorWindowName", "and:", "~~", "==", "editElement:aspect:label:inWindow:at:", "editorAspectSelector", "editorWindowLabel", "editorWindowLocation"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "editorWindowAt:",
+fn: function (windowId){
+var self=this;
+var editorWindow;
+function $TodeEditor(){return smalltalk.TodeEditor||(typeof TodeEditor=="undefined"?nil:TodeEditor)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4;
+editorWindow=_st(_st(self)._windowStatus())._windowAt_(windowId);
+$1=editorWindow;
+if(($receiver = $1) == nil || $receiver == undefined){
+$2=_st($TodeEditor())._new();
+_st($2)._topez_(self);
+$3=_st($2)._open();
+editorWindow=$3;
+editorWindow;
+_st(_st(self)._windowStatus())._windowAt_put_(windowId,editorWindow);
+} else {
+$1;
+};
+$4=editorWindow;
+return $4;
+}, function($ctx1) {$ctx1.fill(self,"editorWindowAt:",{windowId:windowId,editorWindow:editorWindow},smalltalk.TDTopezClient)})},
+messageSends: ["ifNil:", "topez:", "new", "open", "windowAt:put:", "windowStatus", "windowAt:"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "environmentId",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=(0);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"environmentId",{},smalltalk.TDTopezClient)})},
+messageSends: []}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "evaluateTokenMessage",
+fn: function (){
+var self=this;
+function $TZGsMessageSend(){return smalltalk.TZGsMessageSend||(typeof TZGsMessageSend=="undefined"?nil:TZGsMessageSend)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4;
+$1=self["@evaluateTokenMessage"];
+if(($receiver = $1) == nil || $receiver == undefined){
+$2=_st($TZGsMessageSend())._new();
+_st($2)._topez_(self);
+_st($2)._receiver_(_st(_st(self)._session())._asOopType_(_st(self)._topezServerOop()));
+_st($2)._selector_("evaluateSTONTokens:");
+_st($2)._arguments_([]);
+$3=_st($2)._transform_(_st("native").__minus_gt(nil));
+self["@evaluateTokenMessage"]=$3;
+self["@evaluateTokenMessage"];
+} else {
+$1;
+};
+$4=self["@evaluateTokenMessage"];
+return $4;
+}, function($ctx1) {$ctx1.fill(self,"evaluateTokenMessage",{},smalltalk.TDTopezClient)})},
+messageSends: ["ifNil:", "topez:", "new", "receiver:", "asOopType:", "topezServerOop", "session", "selector:", "arguments:", "transform:", "->"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "evaluateTokens:",
+fn: function (tokens){
+var self=this;
+var stonString;
+function $STON(){return smalltalk.STON||(typeof STON=="undefined"?nil:STON)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+stonString=_st($STON())._toString_(tokens);
+$1=_st(_st(self)._session())._executeStringExpectingStringNB_envId_(_st(_st(_st(_st(_st("(").__comma(_st(self)._todeServerAccessString())).__comma(" for: ")).__comma(_st(_st(_st(self)._shell())._shellId())._asString())).__comma(") evaluateSTONTokens:")).__comma(_st(stonString)._printString()),_st(self)._environmentId());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"evaluateTokens:",{tokens:tokens,stonString:stonString},smalltalk.TDTopezClient)})},
+messageSends: ["toString:", "executeStringExpectingStringNB:envId:", ",", "printString", "asString", "shellId", "shell", "todeServerAccessString", "environmentId", "session"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "evaluator",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"evaluator",{},smalltalk.TDTopezClient)})},
+messageSends: []}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "exception:",
+fn: function (anException){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._exception_context_(anException,nil);
+return self}, function($ctx1) {$ctx1.fill(self,"exception:",{anException:anException},smalltalk.TDTopezClient)})},
+messageSends: ["exception:context:"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "exception:context:",
+fn: function (anException,context){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._setExceptionMessage())._valueWithArguments_([anException,context]);
+return self}, function($ctx1) {$ctx1.fill(self,"exception:context:",{anException:anException,context:context},smalltalk.TDTopezClient)})},
+messageSends: ["valueWithArguments:", "setExceptionMessage"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "handleDebugExceptionsDuring:",
+fn: function (aBlock){
+var self=this;
+var result;
+function $GsErrorNotification(){return smalltalk.GsErrorNotification||(typeof GsErrorNotification=="undefined"?nil:GsErrorNotification)}
+function $GsHaltNotification(){return smalltalk.GsHaltNotification||(typeof GsHaltNotification=="undefined"?nil:GsHaltNotification)}
+function $GsBreakpointNotification(){return smalltalk.GsBreakpointNotification||(typeof GsBreakpointNotification=="undefined"?nil:GsBreakpointNotification)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5,$6;
+var $early={};
+try {
+_st((function(){
+return smalltalk.withContext(function($ctx2) {
+result=_st(aBlock)._value();
+return result;
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}))._on_do_(_st(_st($GsBreakpointNotification()).__comma($GsHaltNotification())).__comma($GsErrorNotification()),(function(ex){
+var errorNumber,gciErrorClass;
+return smalltalk.withContext(function($ctx2) {
+$1=_st(ex)._isKindOf_($GsErrorNotification());
+if(smalltalk.assert($1)){
+throw $early=["error"];
+};
+gciErrorClass=_st(_st(_st(self)._session())._library())._gciErrSTypeClass();
+gciErrorClass;
+errorNumber=_st(ex)._errorNumber();
+errorNumber;
+$2=_st(errorNumber).__eq((6002));
+if(smalltalk.assert($2)){
+throw $early=["singleStep"];
+};
+$3=_st(errorNumber).__eq((6005));
+if(smalltalk.assert($3)){
+throw $early=["breakpoint"];
+};
+$4=_st(errorNumber).__eq(_st(gciErrorClass)._errHalt());
+if(smalltalk.assert($4)){
+throw $early=["halt"];
+};
+$5=_st(errorNumber).__eq((6006));
+if(smalltalk.assert($5)){
+throw $early=["blockOrMethodReturn"];
+};
+return _st(self)._error_("another breakpoint error number?");
+}, function($ctx2) {$ctx2.fillBlock({ex:ex,errorNumber:errorNumber,gciErrorClass:gciErrorClass},$ctx1)})}));
+$6=result;
+return $6;
+}
+catch(e) {if(e===$early)return e[0]; throw e}
+}, function($ctx1) {$ctx1.fill(self,"handleDebugExceptionsDuring:",{aBlock:aBlock,result:result},smalltalk.TDTopezClient)})},
+messageSends: ["on:do:", ",", "ifTrue:", "isKindOf:", "gciErrSTypeClass", "library", "session", "errorNumber", "=", "errHalt", "error:", "value"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "informWarning:",
+fn: function (aDescription){
+var self=this;
+var answer,process;
+function $UIManager(){return smalltalk.UIManager||(typeof UIManager=="undefined"?nil:UIManager)}
+function $Processor(){return smalltalk.Processor||(typeof Processor=="undefined"?nil:Processor)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+answer=_st(_st($UIManager())._default())._confirm_trueChoice_falseChoice_cancelChoice_default_(aDescription,"Proceed","Abort","Debug",false);
+$1=answer;
+if(($receiver = $1) == nil || $receiver == undefined){
+return "debug";
+} else {
+$1;
+};
+$2=answer;
+if(smalltalk.assert($2)){
+return "resume";
+};
+process=_st($Processor())._activeProcess();
+_st(_st($UIManager())._default())._spawnNewProcessIfThisIsUI_(process);
+_st(process)._terminate();
+return self}, function($ctx1) {$ctx1.fill(self,"informWarning:",{aDescription:aDescription,answer:answer,process:process},smalltalk.TDTopezClient)})},
+messageSends: ["confirm:trueChoice:falseChoice:cancelChoice:default:", "default", "ifNil:", "ifTrue:", "activeProcess", "spawnNewProcessIfThisIsUI:", "terminate"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "login",
+fn: function (){
+var self=this;
+var desc,sess;
+function $TZGemStoneProxyBehavior(){return smalltalk.TZGemStoneProxyBehavior||(typeof TZGemStoneProxyBehavior=="undefined"?nil:TZGemStoneProxyBehavior)}
+function $Error(){return smalltalk.Error||(typeof Error=="undefined"?nil:Error)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5;
+_st($TZGemStoneProxyBehavior())._resetAllGlobalNames();
+desc=_st(self)._sessionDescription();
+$1=_st(_st(self)._todeSessionClass())._new();
+_st($1)._topez_(self);
+$2=_st($1)._yourself();
+sess=$2;
+$3=_st(sess)._loginWith_(_st(self)._sessionDescription());
+if(! smalltalk.assert($3)){
+var gciError,messageText;
+gciError=_st(sess)._getAndClearLastError();
+gciError;
+messageText=_st(gciError)._message();
+messageText;
+$4=_st($Error())._signal_(_st(messageText).__comma(" For further information about login failures, check the gem log file"));
+return $4;
+};
+$5=sess;
+return $5;
+}, function($ctx1) {$ctx1.fill(self,"login",{desc:desc,sess:sess},smalltalk.TDTopezClient)})},
+messageSends: ["resetAllGlobalNames", "sessionDescription", "topez:", "new", "todeSessionClass", "yourself", "ifFalse:", "getAndClearLastError", "message", "signal:", ",", "loginWith:"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "logout",
+fn: function (){
+var self=this;
+var sess;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=self["@session"];
+if(($receiver = $1) == nil || $receiver == undefined){
+$2=self;
+return $2;
+} else {
+$1;
+};
+sess=self["@session"];
+self["@session"]=nil;
+_st(sess)._logout();
+return self}, function($ctx1) {$ctx1.fill(self,"logout",{sess:sess},smalltalk.TDTopezClient)})},
+messageSends: ["ifNil:", "logout"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "nextAvailableWindowId",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._windowStatus())._nextAvailableWindowId();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"nextAvailableWindowId",{},smalltalk.TDTopezClient)})},
+messageSends: ["nextAvailableWindowId", "windowStatus"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "openDebugger",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._openDebuggerMessage())._value();
+return self}, function($ctx1) {$ctx1.fill(self,"openDebugger",{},smalltalk.TDTopezClient)})},
+messageSends: ["value", "openDebuggerMessage"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "openDebuggerMessage",
+fn: function (){
+var self=this;
+function $TZGsMessageSend(){return smalltalk.TZGsMessageSend||(typeof TZGsMessageSend=="undefined"?nil:TZGsMessageSend)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4;
+$1=self["@openDebuggerMessage"];
+if(($receiver = $1) == nil || $receiver == undefined){
+$2=_st($TZGsMessageSend())._new();
+_st($2)._topez_(self);
+_st($2)._receiver_(_st(_st(self)._session())._asOopType_(_st(self)._topezServerOop()));
+_st($2)._selector_("openDebugger");
+_st($2)._arguments_([]);
+$3=_st($2)._transform_(_st("raw").__minus_gt(nil));
+self["@openDebuggerMessage"]=$3;
+self["@openDebuggerMessage"];
+} else {
+$1;
+};
+$4=self["@openDebuggerMessage"];
+return $4;
+}, function($ctx1) {$ctx1.fill(self,"openDebuggerMessage",{},smalltalk.TDTopezClient)})},
+messageSends: ["ifNil:", "topez:", "new", "receiver:", "asOopType:", "topezServerOop", "session", "selector:", "arguments:", "transform:", "->"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "postCopy",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@resetObjInMessage"]=nil;
+self["@setExceptionMessage"]=self["@resetObjInMessage"];
+self["@evaluateTokenMessage"]=self["@setExceptionMessage"];
+self["@topezServerProxy"]=self["@evaluateTokenMessage"];
+self["@shell"]=self["@topezServerProxy"];
+return self}, function($ctx1) {$ctx1.fill(self,"postCopy",{},smalltalk.TDTopezClient)})},
+messageSends: []}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "resetAllGlobalNames",
+fn: function (){
+var self=this;
+function $TZGemStoneProxyBehavior(){return smalltalk.TZGemStoneProxyBehavior||(typeof TZGemStoneProxyBehavior=="undefined"?nil:TZGemStoneProxyBehavior)}
+return smalltalk.withContext(function($ctx1) { 
+_st($TZGemStoneProxyBehavior())._resetAllGlobalNames();
+return nil;
+}, function($ctx1) {$ctx1.fill(self,"resetAllGlobalNames",{},smalltalk.TDTopezClient)})},
+messageSends: ["resetAllGlobalNames"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "resetObjIn",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._resetObjInMessage())._value();
+return self}, function($ctx1) {$ctx1.fill(self,"resetObjIn",{},smalltalk.TDTopezClient)})},
+messageSends: ["value", "resetObjInMessage"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "resetObjInMessage",
+fn: function (){
+var self=this;
+function $TZGsMessageSend(){return smalltalk.TZGsMessageSend||(typeof TZGsMessageSend=="undefined"?nil:TZGsMessageSend)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4;
+$1=self["@resetObjInMessage"];
+if(($receiver = $1) == nil || $receiver == undefined){
+$2=_st($TZGsMessageSend())._new();
+_st($2)._topez_(self);
+_st($2)._receiver_(_st(_st(self)._session())._asOopType_(_st(self)._topezServerOop()));
+_st($2)._selector_("resetObjIn");
+_st($2)._arguments_([]);
+$3=_st($2)._transform_(_st("raw").__minus_gt(nil));
+self["@resetObjInMessage"]=$3;
+self["@resetObjInMessage"];
+} else {
+$1;
+};
+$4=self["@resetObjInMessage"];
+return $4;
+}, function($ctx1) {$ctx1.fill(self,"resetObjInMessage",{},smalltalk.TDTopezClient)})},
+messageSends: ["ifNil:", "topez:", "new", "receiver:", "asOopType:", "topezServerOop", "session", "selector:", "arguments:", "transform:", "->"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "session",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=self["@session"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@session"]=_st(self)._login();
+self["@session"];
+_st(self)._topezServerProxy();
+} else {
+$1;
+};
+$2=self["@session"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"session",{},smalltalk.TDTopezClient)})},
+messageSends: ["ifNil:", "login", "topezServerProxy"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "sessionDescription",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=self["@sessionDescription"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@sessionDescription"]=_st(_st(self)._class())._sessionNamed_(_st(_st(self)._shell())._sessionName());
+self["@sessionDescription"];
+} else {
+$1;
+};
+$2=self["@sessionDescription"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"sessionDescription",{},smalltalk.TDTopezClient)})},
+messageSends: ["ifNil:", "sessionNamed:", "sessionName", "shell", "class"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "sessionDescription:",
+fn: function (aSessionDescription){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@sessionDescription"]=aSessionDescription;
+return self}, function($ctx1) {$ctx1.fill(self,"sessionDescription:",{aSessionDescription:aSessionDescription},smalltalk.TDTopezClient)})},
+messageSends: []}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "setExceptionMessage",
+fn: function (){
+var self=this;
+function $TZGsMessageSend(){return smalltalk.TZGsMessageSend||(typeof TZGsMessageSend=="undefined"?nil:TZGsMessageSend)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4;
+$1=self["@setExceptionMessage"];
+if(($receiver = $1) == nil || $receiver == undefined){
+$2=_st($TZGsMessageSend())._new();
+_st($2)._topez_(self);
+_st($2)._receiver_(_st(_st(self)._session())._asOopType_(_st(self)._topezServerOop()));
+_st($2)._selector_("exception:process:");
+_st($2)._arguments_([]);
+$3=_st($2)._transform_(_st("raw").__minus_gt(nil));
+self["@setExceptionMessage"]=$3;
+self["@setExceptionMessage"];
+} else {
+$1;
+};
+$4=self["@setExceptionMessage"];
+return $4;
+}, function($ctx1) {$ctx1.fill(self,"setExceptionMessage",{},smalltalk.TDTopezClient)})},
+messageSends: ["ifNil:", "topez:", "new", "receiver:", "asOopType:", "topezServerOop", "session", "selector:", "arguments:", "transform:", "->"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "setFindText:isRegex:",
+fn: function (aStringOrText,isRegex){
+var self=this;
+var findText,colonPosition,service;
+function $FindReplaceService(){return smalltalk.FindReplaceService||(typeof FindReplaceService=="undefined"?nil:FindReplaceService)}
+function $String(){return smalltalk.String||(typeof String=="undefined"?nil:String)}
+function $WriteStream(){return smalltalk.WriteStream||(typeof WriteStream=="undefined"?nil:WriteStream)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+findText=aStringOrText;
+service=_st($FindReplaceService())._default();
+$1=isRegex;
+if(smalltalk.assert($1)){
+_st(service)._findText_isRegex_(findText,true);
+} else {
+colonPosition=_st(aStringOrText)._indexOf_(":");
+$2=_st(colonPosition).__gt((0));
+if(smalltalk.assert($2)){
+var pattern,specials;
+pattern=_st($WriteStream())._on_(_st($String())._new());
+pattern;
+specials="^$:\x5c+*[]()";
+specials;
+_st(_st(aStringOrText)._keywords())._do_separatedBy_((function(arg){
+var convertedArg;
+return smalltalk.withContext(function($ctx2) {
+convertedArg=_st($String())._streamContents_((function(s){
+return smalltalk.withContext(function($ctx3) {
+return _st(arg)._do_((function(c){
+return smalltalk.withContext(function($ctx4) {
+$3=_st(specials)._includes_(c);
+if(smalltalk.assert($3)){
+_st(s)._nextPut_("\x5c");
+};
+return _st(s)._nextPut_(c);
+}, function($ctx4) {$ctx4.fillBlock({c:c},$ctx1)})}));
+}, function($ctx3) {$ctx3.fillBlock({s:s},$ctx1)})}));
+convertedArg;
+return _st(pattern)._nextPutAll_(convertedArg);
+}, function($ctx2) {$ctx2.fillBlock({arg:arg,convertedArg:convertedArg},$ctx1)})}),(function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(pattern)._nextPutAll_("[^:]+");
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+_st(service)._findText_isRegex_(_st(pattern)._contents(),true);
+} else {
+_st(service)._findText_isRegex_(findText,false);
+};
+};
+_st(service)._changed_("newFinding");
+return self}, function($ctx1) {$ctx1.fill(self,"setFindText:isRegex:",{aStringOrText:aStringOrText,isRegex:isRegex,findText:findText,colonPosition:colonPosition,service:service},smalltalk.TDTopezClient)})},
+messageSends: ["default", "ifTrue:ifFalse:", "findText:isRegex:", "on:", "new", "do:separatedBy:", "streamContents:", "do:", "ifTrue:", "nextPut:", "includes:", "nextPutAll:", "keywords", "contents", ">", "indexOf:", "changed:"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "shell",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@shell"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"shell",{},smalltalk.TDTopezClient)})},
+messageSends: []}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "shell:",
+fn: function (aShell){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@shell"]=aShell;
+return self}, function($ctx1) {$ctx1.fill(self,"shell:",{aShell:aShell},smalltalk.TDTopezClient)})},
+messageSends: []}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "shellHistory",
+fn: function (){
+var self=this;
+function $STON(){return smalltalk.STON||(typeof STON=="undefined"?nil:STON)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($STON())._toString_(_st(_st(_st(self)._shell())._history())._asArray());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"shellHistory",{},smalltalk.TDTopezClient)})},
+messageSends: ["toString:", "asArray", "history", "shell"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "spawnDebugger:",
+fn: function (aDebuggerLabel){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._shell())._spawnDebugger_(aDebuggerLabel);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"spawnDebugger:",{aDebuggerLabel:aDebuggerLabel},smalltalk.TDTopezClient)})},
+messageSends: ["spawnDebugger:", "shell"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "spawnWindow",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._shell())._spawnWindow();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"spawnWindow",{},smalltalk.TDTopezClient)})},
+messageSends: ["spawnWindow", "shell"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "status",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._windowStatus();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"status",{},smalltalk.TDTopezClient)})},
+messageSends: ["windowStatus"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stylerClass",
+fn: function (){
+var self=this;
+function $TZTextStylerST80(){return smalltalk.TZTextStylerST80||(typeof TZTextStylerST80=="undefined"?nil:TZTextStylerST80)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=$TZTextStylerST80();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"stylerClass",{},smalltalk.TDTopezClient)})},
+messageSends: []}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "tabCompletion:",
+fn: function (commandLine){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._tabCompletionMessage())._value_(commandLine);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"tabCompletion:",{commandLine:commandLine},smalltalk.TDTopezClient)})},
+messageSends: ["value:", "tabCompletionMessage"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "tabCompletionMessage",
+fn: function (){
+var self=this;
+function $TZGsMessageSend(){return smalltalk.TZGsMessageSend||(typeof TZGsMessageSend=="undefined"?nil:TZGsMessageSend)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4;
+$1=self["@evaluateTokenMessage"];
+if(($receiver = $1) == nil || $receiver == undefined){
+$2=_st($TZGsMessageSend())._new();
+_st($2)._topez_(self);
+_st($2)._receiver_(_st(_st(self)._session())._asOopType_(_st(self)._topezServerOop()));
+_st($2)._selector_("tabCompletion:");
+_st($2)._arguments_([]);
+$3=_st($2)._transform_(_st("native").__minus_gt(nil));
+self["@tabCompletionMessage"]=$3;
+self["@tabCompletionMessage"];
+} else {
+$1;
+};
+$4=self["@tabCompletionMessage"];
+return $4;
+}, function($ctx1) {$ctx1.fill(self,"tabCompletionMessage",{},smalltalk.TDTopezClient)})},
+messageSends: ["ifNil:", "topez:", "new", "receiver:", "asOopType:", "topezServerOop", "session", "selector:", "arguments:", "transform:", "->"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "todeServerAccessString",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return "TDTopezServer";
+}, function($ctx1) {$ctx1.fill(self,"todeServerAccessString",{},smalltalk.TDTopezClient)})},
+messageSends: []}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "todeServerCreationString",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(self)._todeServerAccessString()).__comma(" createFor: ")).__comma(_st(_st(_st(self)._shell())._shellId())._asString());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"todeServerCreationString",{},smalltalk.TDTopezClient)})},
+messageSends: [",", "asString", "shellId", "shell", "todeServerAccessString"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "todeSessionClass",
+fn: function (){
+var self=this;
+function $TodeSession(){return smalltalk.TodeSession||(typeof TodeSession=="undefined"?nil:TodeSession)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=$TodeSession();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"todeSessionClass",{},smalltalk.TDTopezClient)})},
+messageSends: []}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "topezServerOop",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._topezServerProxy())._asInteger();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"topezServerOop",{},smalltalk.TDTopezClient)})},
+messageSends: ["asInteger", "topezServerProxy"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "topezServerProxy",
+fn: function (){
+var self=this;
+function $GsErrorNotification(){return smalltalk.GsErrorNotification||(typeof GsErrorNotification=="undefined"?nil:GsErrorNotification)}
+function $STON(){return smalltalk.STON||(typeof STON=="undefined"?nil:STON)}
+function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
+function $Author(){return smalltalk.Author||(typeof Author=="undefined"?nil:Author)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=self["@topezServerProxy"];
+if(($receiver = $1) == nil || $receiver == undefined){
+var stonString,transcriptOopType,topezOop,resultArray,topezServerOop,topezClientOopType;
+_st((function(){
+return smalltalk.withContext(function($ctx2) {
+stonString=_st(_st(self)._session())._executeStringExpectingStringNB_envId_(_st(self)._todeServerCreationString(),_st(self)._environmentId());
+return stonString;
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}))._on_do_($GsErrorNotification(),(function(ex){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._error_(_st("Unable to log into server:").__comma(_st(ex)._description()));
+}, function($ctx2) {$ctx2.fillBlock({ex:ex},$ctx1)})}));
+resultArray=_st($STON())._fromString_(stonString);
+resultArray;
+topezServerOop=_st(resultArray)._at_((1));
+topezServerOop;
+transcriptOopType=_st(_st(self)._session())._asOopType_(_st(resultArray)._at_((2)));
+transcriptOopType;
+topezClientOopType=_st(_st(self)._session())._asOopType_(_st(resultArray)._at_((3)));
+topezClientOopType;
+self["@topezServerProxy"]=_st(_st(self)._session())._asOopType_(topezServerOop);
+self["@topezServerProxy"];
+_st(_st(_st(self)._session())._clientForwarderCache())._at_put_(transcriptOopType,$Transcript());
+_st(_st(_st(self)._session())._clientForwarderCache())._at_put_(topezClientOopType,self);
+_st(_st(self)._session())._rawReceiverNB_perform_withArgs_(self["@topezServerProxy"],"authorInitials:",[_st($Author())._fullNamePerSe()]);
+} else {
+$1;
+};
+$2=self["@topezServerProxy"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"topezServerProxy",{},smalltalk.TDTopezClient)})},
+messageSends: ["ifNil:", "on:do:", "error:", ",", "description", "executeStringExpectingStringNB:envId:", "todeServerCreationString", "environmentId", "session", "fromString:", "at:", "asOopType:", "at:put:", "clientForwarderCache", "rawReceiverNB:perform:withArgs:", "fullNamePerSe"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "windowActive:",
+fn: function (aSystemWindow){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._windowStatus())._windowActive_(aSystemWindow);
+return self}, function($ctx1) {$ctx1.fill(self,"windowActive:",{aSystemWindow:aSystemWindow},smalltalk.TDTopezClient)})},
+messageSends: ["windowActive:", "windowStatus"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "windowIdNamed:",
+fn: function (aSymbol){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._windowStatus())._windowIdNamed_(aSymbol);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"windowIdNamed:",{aSymbol:aSymbol},smalltalk.TDTopezClient)})},
+messageSends: ["windowIdNamed:", "windowStatus"]}),
+smalltalk.TDTopezClient);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "windowStatus",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._shell())._windowStatus();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"windowStatus",{},smalltalk.TDTopezClient)})},
+messageSends: ["windowStatus", "shell"]}),
+smalltalk.TDTopezClient);
+
 
 smalltalk.TDTopezClient.klass.iVarNames = ['bounds','sessionMap','windowOffset','codeWindowHeight','codeWindowWidth','listWindowWidth','windowOrigin'];
 smalltalk.addMethod(
@@ -1728,6 +2727,914 @@ return $2;
 }, function($ctx1) {$ctx1.fill(self,"windowNamesAndIds",{namesAndIds:namesAndIds},smalltalk.TDWindowStatus)})},
 messageSends: ["new", "to:do:", "size", "ifNotNil:", ",", "keyAtValue:ifAbsent:", "namedWindows", "printString", "add:", "->", "label", "at:", "sort:", "<=", "value"]}),
 smalltalk.TDWindowStatus);
+
+
+
+smalltalk.addClass('TZGemStoneProxyBehavior', smalltalk.Object, ['behaviorOop', 'topez', 'allInstVarNames', 'allClassVarNames', 'allSharedPoolNames'], 'Topez-Client-GemStone');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "allClassVarNames",
+fn: function (){
+var self=this;
+function $TZGsMessageSend(){return smalltalk.TZGsMessageSend||(typeof TZGsMessageSend=="undefined"?nil:TZGsMessageSend)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4;
+$1=self["@allClassVarNames"];
+if(($receiver = $1) == nil || $receiver == undefined){
+var message,list;
+$2=_st($TZGsMessageSend())._new();
+_st($2)._topez_(_st(self)._topez());
+_st($2)._receiver_(_st(_st(self)._session())._asOopType_(_st(self)._behaviorOop()));
+_st($2)._selector_("allClassVarNames");
+_st($2)._arguments_([]);
+$3=_st($2)._transform_(_st("ston").__minus_gt((1)));
+message=$3;
+message;
+_st(self)._critical_((function(){
+return smalltalk.withContext(function($ctx2) {
+list=_st(message)._value();
+list;
+self["@allClassVarNames"]=_st(list)._collect_((function(each){
+return smalltalk.withContext(function($ctx3) {
+return _st(each)._asString();
+}, function($ctx3) {$ctx3.fillBlock({each:each},$ctx1)})}));
+return self["@allClassVarNames"];
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+} else {
+$1;
+};
+$4=self["@allClassVarNames"];
+return $4;
+}, function($ctx1) {$ctx1.fill(self,"allClassVarNames",{},smalltalk.TZGemStoneProxyBehavior)})},
+messageSends: ["ifNil:", "topez:", "topez", "new", "receiver:", "asOopType:", "behaviorOop", "session", "selector:", "arguments:", "transform:", "->", "critical:", "value", "collect:", "asString"]}),
+smalltalk.TZGemStoneProxyBehavior);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "allClassVarNames:",
+fn: function (aCollection){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@allClassVarNames"]=aCollection;
+return self}, function($ctx1) {$ctx1.fill(self,"allClassVarNames:",{aCollection:aCollection},smalltalk.TZGemStoneProxyBehavior)})},
+messageSends: []}),
+smalltalk.TZGemStoneProxyBehavior);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "allGlobalNames",
+fn: function (){
+var self=this;
+function $TZGsBlockSend(){return smalltalk.TZGsBlockSend||(typeof TZGsBlockSend=="undefined"?nil:TZGsBlockSend)}
+function $AllGlobalNames(){return smalltalk.AllGlobalNames||(typeof AllGlobalNames=="undefined"?nil:AllGlobalNames)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4;
+$1=$AllGlobalNames();
+if(($receiver = $1) == nil || $receiver == undefined){
+var block;
+$2=_st($TZGsBlockSend())._new();
+_st($2)._topez_(_st(self)._topez());
+_st($2)._blockSource_("[| globalNames |\x0aglobalNames := IdentitySet new.\x0aSystem myUserProfile symbolList do: [:symbolDict |\x0a\x09globalNames addAll: symbolDict keys].\x0aglobalNames asArray]");
+$3=_st($2)._transform_(_st("ston").__minus_gt((1)));
+block=$3;
+block;
+_st(self)._critical_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._allGlobalNames_(_st(block)._value());
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+} else {
+$1;
+};
+$4=$AllGlobalNames();
+return $4;
+}, function($ctx1) {$ctx1.fill(self,"allGlobalNames",{},smalltalk.TZGemStoneProxyBehavior)})},
+messageSends: ["ifNil:", "topez:", "topez", "new", "blockSource:", "transform:", "->", "critical:", "allGlobalNames:", "value"]}),
+smalltalk.TZGemStoneProxyBehavior);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "allInstVarNames",
+fn: function (){
+var self=this;
+function $TZGsMessageSend(){return smalltalk.TZGsMessageSend||(typeof TZGsMessageSend=="undefined"?nil:TZGsMessageSend)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4;
+$1=self["@allInstVarNames"];
+if(($receiver = $1) == nil || $receiver == undefined){
+var message,list;
+$2=_st($TZGsMessageSend())._new();
+_st($2)._topez_(_st(self)._topez());
+_st($2)._receiver_(_st(_st(self)._session())._asOopType_(_st(self)._behaviorOop()));
+_st($2)._selector_("allInstVarNames");
+_st($2)._arguments_([]);
+$3=_st($2)._transform_(_st("ston").__minus_gt((1)));
+message=$3;
+message;
+_st(self)._critical_((function(){
+return smalltalk.withContext(function($ctx2) {
+list=_st(message)._value();
+list;
+self["@allInstVarNames"]=_st(list)._collect_((function(each){
+return smalltalk.withContext(function($ctx3) {
+return _st(each)._asString();
+}, function($ctx3) {$ctx3.fillBlock({each:each},$ctx1)})}));
+return self["@allInstVarNames"];
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+} else {
+$1;
+};
+$4=self["@allInstVarNames"];
+return $4;
+}, function($ctx1) {$ctx1.fill(self,"allInstVarNames",{},smalltalk.TZGemStoneProxyBehavior)})},
+messageSends: ["ifNil:", "topez:", "topez", "new", "receiver:", "asOopType:", "behaviorOop", "session", "selector:", "arguments:", "transform:", "->", "critical:", "value", "collect:", "asString"]}),
+smalltalk.TZGemStoneProxyBehavior);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "allInstVarNames:",
+fn: function (aCollection){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@allInstVarNames"]=aCollection;
+return self}, function($ctx1) {$ctx1.fill(self,"allInstVarNames:",{aCollection:aCollection},smalltalk.TZGemStoneProxyBehavior)})},
+messageSends: []}),
+smalltalk.TZGemStoneProxyBehavior);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "allSharedPoolNames",
+fn: function (){
+var self=this;
+function $TZGsMessageSend(){return smalltalk.TZGsMessageSend||(typeof TZGsMessageSend=="undefined"?nil:TZGsMessageSend)}
+function $TZGsBlockSend(){return smalltalk.TZGsBlockSend||(typeof TZGsBlockSend=="undefined"?nil:TZGsBlockSend)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5,$6;
+$1=self["@allSharedPoolNames"];
+if(($receiver = $1) == nil || $receiver == undefined){
+var message,allSharedPoolsOop,block,list;
+$2=_st($TZGsMessageSend())._new();
+_st($2)._topez_(_st(self)._topez());
+_st($2)._receiver_(_st(_st(self)._session())._asOopType_(_st(self)._behaviorOop()));
+_st($2)._selector_("allSharedPools");
+_st($2)._arguments_([]);
+$3=_st($2)._transform_(_st("raw").__minus_gt(nil));
+message=$3;
+message;
+allSharedPoolsOop=_st(self)._critical_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(message)._value();
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+allSharedPoolsOop;
+$4=_st($TZGsBlockSend())._new();
+_st($4)._topez_(_st(self)._topez());
+_st($4)._blockSource_("[:allSharedPools | | sharedPoolNames |\x0a\x09\x09\x09\x09\x09\x09sharedPoolNames := IdentitySet new.\x0a\x09\x09\x09\x09\x09\x09allSharedPools do: [:poolDict |\x0a                         \x09\x09sharedPoolNames addAll: poolDict keys].\x0a\x09\x09\x09\x09\x09\x09allSharedPools asArray]");
+$5=_st($4)._transform_(_st("ston").__minus_gt((1)));
+block=$5;
+block;
+_st(self)._critical_((function(){
+return smalltalk.withContext(function($ctx2) {
+list=_st(block)._value_(_st(_st(self)._session())._asOopType_(allSharedPoolsOop));
+list;
+self["@allSharedPoolNames"]=_st(list)._collect_((function(each){
+return smalltalk.withContext(function($ctx3) {
+return each;
+}, function($ctx3) {$ctx3.fillBlock({each:each},$ctx1)})}));
+return self["@allSharedPoolNames"];
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+} else {
+$1;
+};
+$6=self["@allSharedPoolNames"];
+return $6;
+}, function($ctx1) {$ctx1.fill(self,"allSharedPoolNames",{},smalltalk.TZGemStoneProxyBehavior)})},
+messageSends: ["ifNil:", "topez:", "topez", "new", "receiver:", "asOopType:", "behaviorOop", "session", "selector:", "arguments:", "transform:", "->", "critical:", "value", "blockSource:", "value:", "collect:"]}),
+smalltalk.TZGemStoneProxyBehavior);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "allSharedPoolNames:",
+fn: function (aCollection){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@allSharedPoolNames"]=aCollection;
+return self}, function($ctx1) {$ctx1.fill(self,"allSharedPoolNames:",{aCollection:aCollection},smalltalk.TZGemStoneProxyBehavior)})},
+messageSends: []}),
+smalltalk.TZGemStoneProxyBehavior);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "behaviorOop",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@behaviorOop"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"behaviorOop",{},smalltalk.TZGemStoneProxyBehavior)})},
+messageSends: []}),
+smalltalk.TZGemStoneProxyBehavior);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "behaviorOop:",
+fn: function (anInteger){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@behaviorOop"]=anInteger;
+return self}, function($ctx1) {$ctx1.fill(self,"behaviorOop:",{anInteger:anInteger},smalltalk.TZGemStoneProxyBehavior)})},
+messageSends: []}),
+smalltalk.TZGemStoneProxyBehavior);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "bindingOfClassPool:",
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._allClassVarNames())._includes_(aString);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"bindingOfClassPool:",{aString:aString},smalltalk.TZGemStoneProxyBehavior)})},
+messageSends: ["includes:", "allClassVarNames"]}),
+smalltalk.TZGemStoneProxyBehavior);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "bindingOfGlobal:",
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._allGlobalNames())._includes_(_st(aString)._asSymbol());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"bindingOfGlobal:",{aString:aString},smalltalk.TZGemStoneProxyBehavior)})},
+messageSends: ["includes:", "asSymbol", "allGlobalNames"]}),
+smalltalk.TZGemStoneProxyBehavior);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "bindingOfSharedPool:",
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._allSharedPoolNames())._includes_(_st(aString)._asSymbol());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"bindingOfSharedPool:",{aString:aString},smalltalk.TZGemStoneProxyBehavior)})},
+messageSends: ["includes:", "asSymbol", "allSharedPoolNames"]}),
+smalltalk.TZGemStoneProxyBehavior);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "critical:",
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._class())._critical_(aBlock);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"critical:",{aBlock:aBlock},smalltalk.TZGemStoneProxyBehavior)})},
+messageSends: ["critical:", "class"]}),
+smalltalk.TZGemStoneProxyBehavior);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "session",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._topez())._session();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"session",{},smalltalk.TZGemStoneProxyBehavior)})},
+messageSends: ["session", "topez"]}),
+smalltalk.TZGemStoneProxyBehavior);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "topez",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@topez"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"topez",{},smalltalk.TZGemStoneProxyBehavior)})},
+messageSends: []}),
+smalltalk.TZGemStoneProxyBehavior);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "topez:",
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@topez"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"topez:",{anObject:anObject},smalltalk.TZGemStoneProxyBehavior)})},
+messageSends: []}),
+smalltalk.TZGemStoneProxyBehavior);
+
+
+smalltalk.TZGemStoneProxyBehavior.klass.iVarNames = ['allGlobalNames','gciSemaphore'];
+smalltalk.addMethod(
+smalltalk.method({
+selector: "allGlobalNames:",
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@allGlobalNames"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"allGlobalNames:",{anObject:anObject},smalltalk.TZGemStoneProxyBehavior.klass)})},
+messageSends: []}),
+smalltalk.TZGemStoneProxyBehavior.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "critical:",
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._semaphore())._critical_(aBlock);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"critical:",{aBlock:aBlock},smalltalk.TZGemStoneProxyBehavior.klass)})},
+messageSends: ["critical:", "semaphore"]}),
+smalltalk.TZGemStoneProxyBehavior.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "resetAllGlobalNames",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@allGlobalNames"]=nil;
+return self}, function($ctx1) {$ctx1.fill(self,"resetAllGlobalNames",{},smalltalk.TZGemStoneProxyBehavior.klass)})},
+messageSends: []}),
+smalltalk.TZGemStoneProxyBehavior.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "semaphore",
+fn: function (){
+var self=this;
+function $Semaphore(){return smalltalk.Semaphore||(typeof Semaphore=="undefined"?nil:Semaphore)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=self["@gciSemaphore"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@gciSemaphore"]=_st($Semaphore())._forMutualExclusion();
+self["@gciSemaphore"];
+} else {
+$1;
+};
+$2=self["@gciSemaphore"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"semaphore",{},smalltalk.TZGemStoneProxyBehavior.klass)})},
+messageSends: ["ifNil:", "forMutualExclusion"]}),
+smalltalk.TZGemStoneProxyBehavior.klass);
+
+
+smalltalk.addClass('TZGsExecutable', smalltalk.Object, ['topez', 'transform'], 'Topez-Client-GemStone');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "environmentId",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._topez())._environmentId();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"environmentId",{},smalltalk.TZGsExecutable)})},
+messageSends: ["environmentId", "topez"]}),
+smalltalk.TZGsExecutable);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "evaluator",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._topez())._evaluator();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"evaluator",{},smalltalk.TZGsExecutable)})},
+messageSends: ["evaluator", "topez"]}),
+smalltalk.TZGsExecutable);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "perform:",
+fn: function (actionBlock){
+var self=this;
+var rawOopType;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+rawOopType=_st(actionBlock)._value();
+$1=_st(self)._performTransformOn_(rawOopType);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"perform:",{actionBlock:actionBlock,rawOopType:rawOopType},smalltalk.TZGsExecutable)})},
+messageSends: ["value", "performTransformOn:"]}),
+smalltalk.TZGsExecutable);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "performTransformOn:",
+fn: function (anOoptype){
+var self=this;
+function $STONReader(){return smalltalk.STONReader||(typeof STONReader=="undefined"?nil:STONReader)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5;
+$1=_st(_st(_st(self)._transform())._key()).__eq_eq("ston");
+if(smalltalk.assert($1)){
+var stonString;
+stonString=_st(_st(self)._session())._receiverNB_perform_withArgs_envId_(_st(_st(self)._topez())._topezServerProxy(),"toString:",[anOoptype],_st(self)._environmentId());
+stonString;
+$2=_st(_st($STONReader())._on_(_st(stonString)._readStream()))._next();
+return $2;
+};
+$3=_st(_st(_st(self)._transform())._key()).__eq_eq("native");
+if(smalltalk.assert($3)){
+$4=_st(_st(_st(self)._session())._library())._localFor_(anOoptype);
+return $4;
+};
+$5=anOoptype;
+return $5;
+}, function($ctx1) {$ctx1.fill(self,"performTransformOn:",{anOoptype:anOoptype},smalltalk.TZGsExecutable)})},
+messageSends: ["ifTrue:", "receiverNB:perform:withArgs:envId:", "topezServerProxy", "topez", "environmentId", "session", "next", "on:", "readStream", "==", "key", "transform", "localFor:", "library"]}),
+smalltalk.TZGsExecutable);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "session",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._topez())._session();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"session",{},smalltalk.TZGsExecutable)})},
+messageSends: ["session", "topez"]}),
+smalltalk.TZGsExecutable);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "topez",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@topez"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"topez",{},smalltalk.TZGsExecutable)})},
+messageSends: []}),
+smalltalk.TZGsExecutable);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "topez:",
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@topez"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"topez:",{anObject:anObject},smalltalk.TZGsExecutable)})},
+messageSends: []}),
+smalltalk.TZGsExecutable);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "transform",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=self["@transform"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@transform"]=_st("ston").__minus_gt((1));
+self["@transform"];
+} else {
+$1;
+};
+$2=self["@transform"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"transform",{},smalltalk.TZGsExecutable)})},
+messageSends: ["ifNil:", "->"]}),
+smalltalk.TZGsExecutable);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "transform:",
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@transform"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"transform:",{anObject:anObject},smalltalk.TZGsExecutable)})},
+messageSends: []}),
+smalltalk.TZGsExecutable);
+
+
+
+smalltalk.addClass('TZGsBlockSend', smalltalk.TZGsExecutable, ['blockOopType', 'numArgs', 'blockSource'], 'Topez-Client-GemStone');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "blockOopType",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=self["@blockOopType"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@blockOopType"]=_st(_st(self)._session())._rawExecuteStringNB_envId_(_st(self)._blockSource(),_st(self)._environmentId());
+self["@blockOopType"];
+} else {
+$1;
+};
+$2=self["@blockOopType"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"blockOopType",{},smalltalk.TZGsBlockSend)})},
+messageSends: ["ifNil:", "rawExecuteStringNB:envId:", "blockSource", "environmentId", "session"]}),
+smalltalk.TZGsBlockSend);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "blockSource",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@blockSource"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"blockSource",{},smalltalk.TZGsBlockSend)})},
+messageSends: []}),
+smalltalk.TZGsBlockSend);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "blockSource:",
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@numArgs"]=nil;
+self["@blockOopType"]=self["@numArgs"];
+self["@blockSource"]=aString;
+return self}, function($ctx1) {$ctx1.fill(self,"blockSource:",{aString:aString},smalltalk.TZGsBlockSend)})},
+messageSends: []}),
+smalltalk.TZGsBlockSend);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "cull:",
+fn: function (arg){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._perform_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(self)._session())._rawReceiverNB_perform_withArgs_(_st(self)._blockOopType(),"cull:",[arg]);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"cull:",{arg:arg},smalltalk.TZGsBlockSend)})},
+messageSends: ["perform:", "rawReceiverNB:perform:withArgs:", "blockOopType", "session"]}),
+smalltalk.TZGsBlockSend);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "cull:cull:",
+fn: function (arg1,arg2){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._perform_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(self)._session())._rawReceiverNB_perform_withArgs_(_st(self)._blockOopType(),"cull:cull:",[arg1,arg2]);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"cull:cull:",{arg1:arg1,arg2:arg2},smalltalk.TZGsBlockSend)})},
+messageSends: ["perform:", "rawReceiverNB:perform:withArgs:", "blockOopType", "session"]}),
+smalltalk.TZGsBlockSend);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "cull:cull:cull:",
+fn: function (arg1,arg2,arg3){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._perform_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(self)._session())._rawReceiverNB_perform_withArgs_(_st(self)._blockOopType(),"cull:cull:cull:",[arg1,arg2,arg3]);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"cull:cull:cull:",{arg1:arg1,arg2:arg2,arg3:arg3},smalltalk.TZGsBlockSend)})},
+messageSends: ["perform:", "rawReceiverNB:perform:withArgs:", "blockOopType", "session"]}),
+smalltalk.TZGsBlockSend);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "cull:cull:cull:cull:",
+fn: function (arg1,arg2,arg3,arg4){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._perform_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(self)._session())._rawReceiverNB_perform_withArgs_(_st(self)._blockOopType(),"cull:cull:cull:cull:",[arg1,arg2,arg3,arg4]);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"cull:cull:cull:cull:",{arg1:arg1,arg2:arg2,arg3:arg3,arg4:arg4},smalltalk.TZGsBlockSend)})},
+messageSends: ["perform:", "rawReceiverNB:perform:withArgs:", "blockOopType", "session"]}),
+smalltalk.TZGsBlockSend);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "numArgs",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=self["@numArgs"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@numArgs"]=_st(_st(self)._session())._receiverNB_perform_withArgs_envId_(_st(self)._blockOopType(),"numArgs",[],_st(self)._environmentId());
+self["@numArgs"];
+} else {
+$1;
+};
+$2=self["@numArgs"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"numArgs",{},smalltalk.TZGsBlockSend)})},
+messageSends: ["ifNil:", "receiverNB:perform:withArgs:envId:", "blockOopType", "environmentId", "session"]}),
+smalltalk.TZGsBlockSend);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "value",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+var $early={};
+try {
+$1=_st(self)._perform_((function(){
+return smalltalk.withContext(function($ctx2) {
+$2=_st(_st(self)._numArgs()).__tild_eq((0));
+if(smalltalk.assert($2)){
+$3=_st(self)._error_("incorrect block args");
+throw $early=[$3];
+};
+return _st(_st(self)._session())._rawReceiverNB_perform_withArgs_(_st(self)._blockOopType(),"value",[]);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $1;
+}
+catch(e) {if(e===$early)return e[0]; throw e}
+}, function($ctx1) {$ctx1.fill(self,"value",{},smalltalk.TZGsBlockSend)})},
+messageSends: ["perform:", "ifTrue:", "error:", "~=", "numArgs", "rawReceiverNB:perform:withArgs:", "blockOopType", "session"]}),
+smalltalk.TZGsBlockSend);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "value:",
+fn: function (arg){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+var $early={};
+try {
+$1=_st(self)._perform_((function(){
+return smalltalk.withContext(function($ctx2) {
+$2=_st(_st(self)._numArgs()).__tild_eq((1));
+if(smalltalk.assert($2)){
+$3=_st(self)._error_("incorrect block args");
+throw $early=[$3];
+};
+return _st(_st(self)._session())._rawReceiverNB_perform_withArgs_(_st(self)._blockOopType(),"value:",[arg]);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $1;
+}
+catch(e) {if(e===$early)return e[0]; throw e}
+}, function($ctx1) {$ctx1.fill(self,"value:",{arg:arg},smalltalk.TZGsBlockSend)})},
+messageSends: ["perform:", "ifTrue:", "error:", "~=", "numArgs", "rawReceiverNB:perform:withArgs:", "blockOopType", "session"]}),
+smalltalk.TZGsBlockSend);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "value:value:",
+fn: function (arg1,arg2){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+var $early={};
+try {
+$1=_st(self)._perform_((function(){
+return smalltalk.withContext(function($ctx2) {
+$2=_st(_st(self)._numArgs()).__tild_eq((2));
+if(smalltalk.assert($2)){
+$3=_st(self)._error_("incorrect block args");
+throw $early=[$3];
+};
+return _st(_st(self)._session())._rawReceiverNB_perform_withArgs_(_st(self)._blockOopType(),"value:value:",[arg1,arg2]);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $1;
+}
+catch(e) {if(e===$early)return e[0]; throw e}
+}, function($ctx1) {$ctx1.fill(self,"value:value:",{arg1:arg1,arg2:arg2},smalltalk.TZGsBlockSend)})},
+messageSends: ["perform:", "ifTrue:", "error:", "~=", "numArgs", "rawReceiverNB:perform:withArgs:", "blockOopType", "session"]}),
+smalltalk.TZGsBlockSend);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "value:value:value:",
+fn: function (arg1,arg2,arg3){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+var $early={};
+try {
+$1=_st(self)._perform_((function(){
+return smalltalk.withContext(function($ctx2) {
+$2=_st(_st(self)._numArgs()).__tild_eq((3));
+if(smalltalk.assert($2)){
+$3=_st(self)._error_("incorrect block args");
+throw $early=[$3];
+};
+return _st(_st(self)._session())._rawReceiverNB_perform_withArgs_(_st(self)._blockOopType(),"value:value:value:",[arg1,arg2,arg3]);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $1;
+}
+catch(e) {if(e===$early)return e[0]; throw e}
+}, function($ctx1) {$ctx1.fill(self,"value:value:value:",{arg1:arg1,arg2:arg2,arg3:arg3},smalltalk.TZGsBlockSend)})},
+messageSends: ["perform:", "ifTrue:", "error:", "~=", "numArgs", "rawReceiverNB:perform:withArgs:", "blockOopType", "session"]}),
+smalltalk.TZGsBlockSend);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "value:value:value:value:",
+fn: function (arg1,arg2,arg3,arg4){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+var $early={};
+try {
+$1=_st(self)._perform_((function(){
+return smalltalk.withContext(function($ctx2) {
+$2=_st(_st(self)._numArgs()).__tild_eq((4));
+if(smalltalk.assert($2)){
+$3=_st(self)._error_("incorrect block args");
+throw $early=[$3];
+};
+return _st(_st(self)._session())._rawReceiverNB_perform_withArgs_(_st(self)._blockOopType(),"value:value:value:value:",[arg1,arg2,arg3,arg4]);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $1;
+}
+catch(e) {if(e===$early)return e[0]; throw e}
+}, function($ctx1) {$ctx1.fill(self,"value:value:value:value:",{arg1:arg1,arg2:arg2,arg3:arg3,arg4:arg4},smalltalk.TZGsBlockSend)})},
+messageSends: ["perform:", "ifTrue:", "error:", "~=", "numArgs", "rawReceiverNB:perform:withArgs:", "blockOopType", "session"]}),
+smalltalk.TZGsBlockSend);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "valueWithArguments:",
+fn: function (args){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+var $early={};
+try {
+$1=_st(self)._perform_((function(){
+return smalltalk.withContext(function($ctx2) {
+$2=_st(_st(self)._numArgs()).__tild_eq(_st(args)._size());
+if(smalltalk.assert($2)){
+$3=_st(self)._error_("incorrect block args");
+throw $early=[$3];
+};
+return _st(_st(self)._session())._rawReceiverNB_perform_withArgs_(_st(self)._blockOopType(),"valueWithArguments:",args);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $1;
+}
+catch(e) {if(e===$early)return e[0]; throw e}
+}, function($ctx1) {$ctx1.fill(self,"valueWithArguments:",{args:args},smalltalk.TZGsBlockSend)})},
+messageSends: ["perform:", "ifTrue:", "error:", "~=", "size", "numArgs", "rawReceiverNB:perform:withArgs:", "blockOopType", "session"]}),
+smalltalk.TZGsBlockSend);
+
+
+
+smalltalk.addClass('TZGsMessageSend', smalltalk.TZGsExecutable, ['receiver', 'selector', 'arguments'], 'Topez-Client-GemStone');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "arguments",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@arguments"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"arguments",{},smalltalk.TZGsMessageSend)})},
+messageSends: []}),
+smalltalk.TZGsMessageSend);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "arguments:",
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@arguments"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"arguments:",{anObject:anObject},smalltalk.TZGsMessageSend)})},
+messageSends: []}),
+smalltalk.TZGsMessageSend);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "receiver",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@receiver"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"receiver",{},smalltalk.TZGsMessageSend)})},
+messageSends: []}),
+smalltalk.TZGsMessageSend);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "receiver:",
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@receiver"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"receiver:",{anObject:anObject},smalltalk.TZGsMessageSend)})},
+messageSends: []}),
+smalltalk.TZGsMessageSend);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "selector",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@selector"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"selector",{},smalltalk.TZGsMessageSend)})},
+messageSends: []}),
+smalltalk.TZGsMessageSend);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "selector:",
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@selector"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"selector:",{anObject:anObject},smalltalk.TZGsMessageSend)})},
+messageSends: []}),
+smalltalk.TZGsMessageSend);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "value",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._perform_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(self)._session())._rawReceiverNB_perform_withArgs_(_st(self)._receiver(),_st(self)._selector(),[]);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"value",{},smalltalk.TZGsMessageSend)})},
+messageSends: ["perform:", "rawReceiverNB:perform:withArgs:", "receiver", "selector", "session"]}),
+smalltalk.TZGsMessageSend);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "value:",
+fn: function (arg){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._perform_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(self)._session())._rawReceiverNB_perform_withArgs_(_st(self)._receiver(),_st(self)._selector(),[arg]);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"value:",{arg:arg},smalltalk.TZGsMessageSend)})},
+messageSends: ["perform:", "rawReceiverNB:perform:withArgs:", "receiver", "selector", "session"]}),
+smalltalk.TZGsMessageSend);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "valueWithArguments:",
+fn: function (args){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._perform_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(self)._session())._rawReceiverNB_perform_withArgs_(_st(self)._receiver(),_st(self)._selector(),_st(args)._asArray());
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"valueWithArguments:",{args:args},smalltalk.TZGsMessageSend)})},
+messageSends: ["perform:", "rawReceiverNB:perform:withArgs:", "receiver", "selector", "asArray", "session"]}),
+smalltalk.TZGsMessageSend);
 
 
 

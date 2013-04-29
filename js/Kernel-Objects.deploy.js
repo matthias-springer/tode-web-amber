@@ -211,16 +211,17 @@ smalltalk.method({
 selector: "changed:",
 fn: function (aParameter){
 var self=this;
+function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
 function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
 return smalltalk.withContext(function($ctx1) { 
-_st($Transcript())._show_(_st("Object>>changed:").__comma(aParameter));
+_st($Transcript())._show_(_st(_st("Object>>changed:").__comma(_st(aParameter)._asString())).__comma(_st($Character())._cr()));
 _st(_st(self)._dependents())._do_((function(aDependent){
 return smalltalk.withContext(function($ctx2) {
-_st($Transcript())._show_(_st("sending to ").__comma(aDependent));
+_st($Transcript())._show_(_st(_st("   --> sending to ").__comma(_st(aDependent)._asString())).__comma(_st($Character())._cr()));
 return _st(aDependent)._update_(aParameter);
 }, function($ctx2) {$ctx2.fillBlock({aDependent:aDependent},$ctx1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"changed:",{aParameter:aParameter},smalltalk.Object)})},
-messageSends: ["show:", ",", "do:", "update:", "dependents"]}),
+messageSends: ["show:", ",", "cr", "asString", "do:", "update:", "dependents"]}),
 smalltalk.Object);
 
 smalltalk.addMethod(

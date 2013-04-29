@@ -3177,6 +3177,17 @@ next: anInteger
 		self atEnd ifFalse: [
 		tempCollection := tempCollection, self next]].
 	^tempCollection
+!
+
+nextLine
+	|line nextChar|
+	self atEnd ifTrue: [^ nil].
+	line := ''.
+	[nextChar := self next.
+		nextChar ~~ Character cr] whileTrue: [
+			line := line, nextChar.
+			self atEnd ifTrue: [^ line]].
+	^ line
 ! !
 
 !StringStream methodsFor: 'writing'!
@@ -3223,6 +3234,12 @@ tab
 StringStream subclass: #TextStream
 	instanceVariableNames: ''
 	package: 'Kernel-Collections'!
+
+!TextStream methodsFor: 'not yet classified'!
+
+reset
+	self collection setString: '' setRuns: Array new.
+! !
 
 !TextStream class methodsFor: 'instance creation'!
 

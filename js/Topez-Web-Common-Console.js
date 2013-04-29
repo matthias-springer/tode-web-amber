@@ -302,16 +302,17 @@ selector: "endEntry",
 category: 'stream extensions',
 fn: function (){
 var self=this;
+function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
 function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
 return smalltalk.withContext(function($ctx1) { 
-_st($Transcript())._show_("TodeConsole>>endEntry called.");
+_st($Transcript())._show_(_st("TodeConsole>>endEntry called.").__comma(_st($Character())._cr()));
 _st(self)._changed_("appendEntry");
 _st(self)._reset();
 return self}, function($ctx1) {$ctx1.fill(self,"endEntry",{},smalltalk.TodeConsole)})},
 args: [],
-source: "endEntry\x0a  \x22Display all the characters since the last endEntry, and reset the stream\x22\x0a\x09Transcript show: 'TodeConsole>>endEntry called.'.\x0a  self changed: #'appendEntry'.\x0a  self reset",
-messageSends: ["show:", "changed:", "reset"],
-referencedClasses: ["Transcript"]
+source: "endEntry\x0a  \x22Display all the characters since the last endEntry, and reset the stream\x22\x0a\x09Transcript show: 'TodeConsole>>endEntry called.', Character cr.\x0a  self changed: #'appendEntry'.\x0a  self reset",
+messageSends: ["show:", ",", "cr", "changed:", "reset"],
+referencedClasses: ["Character", "Transcript"]
 }),
 smalltalk.TodeConsole);
 
@@ -1320,7 +1321,7 @@ function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefin
 function $Text(){return smalltalk.Text||(typeof Text=="undefined"?nil:Text)}
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2;
-_st($Transcript())._show_(_st(_st($Character())._cr()).__comma("TodeConsoleWindowMorph>>appendEntry"));
+_st($Transcript())._show_(_st(_st(_st($Character())._cr()).__comma("TodeConsoleWindowMorph>>appendEntry")).__comma(_st($Character())._cr()));
 $1=_st(_st(_st(self["@textMorph"])._asText())._size()).__gt(_st(self["@model"])._characterLimit());
 if(smalltalk.assert($1)){
 _st(self)._selectInvisiblyFrom_to_((1),_st(_st(_st(self["@textMorph"])._asText())._size()).__slash_slash((2)));
@@ -1334,11 +1335,12 @@ if(smalltalk.assert($2)){
 _st(self)._replaceSelectionWith_(txt);
 _st(self)._selectInvisiblyFrom_to_(_st(_st(_st(self["@textMorph"])._asText())._size()).__plus((1)),_st(_st(self["@textMorph"])._asText())._size());
 _st(self["@model"])._reset();
+_st($Transcript())._show_(_st(_st("after model reset: contents: ").__comma(_st(_st(self["@model"])._contents())._string())).__comma(_st($Character())._cr()));
 };
 return self}, function($ctx1) {$ctx1.fill(self,"appendEntry",{txt:txt},smalltalk.TodeConsoleWindowMorph)})},
 args: [],
-source: "appendEntry\x0a  | txt |\x0a  Transcript show: Character cr, 'TodeConsoleWindowMorph>>appendEntry'.\x0a  \x22Append the text in the model's writeStream to the editable text. \x22\x0a  textMorph asText size > model characterLimit\x0a    ifTrue: [ \x0a      \x22Knock off first half of text\x22\x0a      self selectInvisiblyFrom: 1 to: textMorph asText size // 2.\x0a      self replaceSelectionWith: Text new ].\x0a  self selectInvisiblyFrom: textMorph asText size + 1 to: textMorph asText size.\x0a  txt := model contents.\x0a  Transcript show: Character cr, 'model contents: ', txt asString.\x0a  txt size > 0\x0a    ifTrue: [ \x0a      self replaceSelectionWith: txt.\x0a      self\x0a        selectInvisiblyFrom: textMorph asText size + 1\x0a        to: textMorph asText size.\x0a      model reset ]",
-messageSends: ["show:", ",", "cr", "ifTrue:", "selectInvisiblyFrom:to:", "//", "size", "asText", "replaceSelectionWith:", "new", ">", "characterLimit", "+", "contents", "asString", "reset"],
+source: "appendEntry\x0a  | txt |\x0a  Transcript show: Character cr, 'TodeConsoleWindowMorph>>appendEntry', Character cr.\x0a  \x22Append the text in the model's writeStream to the editable text. \x22\x0a  textMorph asText size > model characterLimit\x0a    ifTrue: [ \x0a      \x22Knock off first half of text\x22\x0a      self selectInvisiblyFrom: 1 to: textMorph asText size // 2.\x0a      self replaceSelectionWith: Text new ].\x0a  self selectInvisiblyFrom: textMorph asText size + 1 to: textMorph asText size.\x0a  txt := model contents.\x0a  Transcript show: Character cr, 'model contents: ', txt asString.\x0a  txt size > 0\x0a    ifTrue: [ \x0a      self replaceSelectionWith: txt.\x0a      self\x0a        selectInvisiblyFrom: textMorph asText size + 1\x0a        to: textMorph asText size.\x0a      model reset.\x0a\x09Transcript show: 'after model reset: contents: ' , model contents string,  Character cr.]",
+messageSends: ["show:", ",", "cr", "ifTrue:", "selectInvisiblyFrom:to:", "//", "size", "asText", "replaceSelectionWith:", "new", ">", "characterLimit", "+", "contents", "asString", "reset", "string"],
 referencedClasses: ["Character", "Transcript", "Text"]
 }),
 smalltalk.TodeConsoleWindowMorph);
@@ -1541,10 +1543,11 @@ selector: "update:",
 category: 'updating',
 fn: function (something){
 var self=this;
+function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
 function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2,$3,$4,$5,$7,$8,$6,$9;
-_st($Transcript())._show_(_st("TodeConsoleWindowMorph>>update:").__comma(something));
+_st($Transcript())._show_(_st(_st("TodeConsoleWindowMorph>>update:").__comma(_st(something)._asString())).__comma(_st($Character())._cr()));
 $1=_st(something).__eq_eq("markInput");
 if(smalltalk.assert($1)){
 $2=_st(self)._markInput();
@@ -1567,9 +1570,9 @@ $9=smalltalk.PluggableTextMorph.fn.prototype._update_.apply(_st(self), [somethin
 return $9;
 }, function($ctx1) {$ctx1.fill(self,"update:",{something:something},smalltalk.TodeConsoleWindowMorph)})},
 args: ["something"],
-source: "update: something\x0a\x09Transcript show: 'TodeConsoleWindowMorph>>update:', something.\x0a\x09\x0a  something == #'markInput'\x0a    ifTrue: [ ^ self markInput ].\x0a  something == #'doCommand'\x0a    ifTrue: [ ^ self accept ].\x0a  something == #'exit'\x0a    ifTrue: [ \x0a      ^ self owner\x0a        release;\x0a        delete ].\x0a  ^ super update: something",
-messageSends: ["show:", ",", "ifTrue:", "markInput", "==", "accept", "release", "owner", "delete", "update:"],
-referencedClasses: ["Transcript"]
+source: "update: something\x0a\x09Transcript show: 'TodeConsoleWindowMorph>>update:', something asString, Character cr.\x0a\x09\x0a  something == #'markInput'\x0a    ifTrue: [ ^ self markInput ].\x0a  something == #'doCommand'\x0a    ifTrue: [ ^ self accept ].\x0a  something == #'exit'\x0a    ifTrue: [ \x0a      ^ self owner\x0a        release;\x0a        delete ].\x0a  ^ super update: something",
+messageSends: ["show:", ",", "cr", "asString", "ifTrue:", "markInput", "==", "accept", "release", "owner", "delete", "update:"],
+referencedClasses: ["Character", "Transcript"]
 }),
 smalltalk.TodeConsoleWindowMorph);
 

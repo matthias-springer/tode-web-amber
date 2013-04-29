@@ -226,13 +226,14 @@ smalltalk.method({
 selector: "endEntry",
 fn: function (){
 var self=this;
+function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
 function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
 return smalltalk.withContext(function($ctx1) { 
-_st($Transcript())._show_("TodeConsole>>endEntry called.");
+_st($Transcript())._show_(_st("TodeConsole>>endEntry called.").__comma(_st($Character())._cr()));
 _st(self)._changed_("appendEntry");
 _st(self)._reset();
 return self}, function($ctx1) {$ctx1.fill(self,"endEntry",{},smalltalk.TodeConsole)})},
-messageSends: ["show:", "changed:", "reset"]}),
+messageSends: ["show:", ",", "cr", "changed:", "reset"]}),
 smalltalk.TodeConsole);
 
 smalltalk.addMethod(
@@ -1014,7 +1015,7 @@ function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefin
 function $Text(){return smalltalk.Text||(typeof Text=="undefined"?nil:Text)}
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2;
-_st($Transcript())._show_(_st(_st($Character())._cr()).__comma("TodeConsoleWindowMorph>>appendEntry"));
+_st($Transcript())._show_(_st(_st(_st($Character())._cr()).__comma("TodeConsoleWindowMorph>>appendEntry")).__comma(_st($Character())._cr()));
 $1=_st(_st(_st(self["@textMorph"])._asText())._size()).__gt(_st(self["@model"])._characterLimit());
 if(smalltalk.assert($1)){
 _st(self)._selectInvisiblyFrom_to_((1),_st(_st(_st(self["@textMorph"])._asText())._size()).__slash_slash((2)));
@@ -1028,9 +1029,10 @@ if(smalltalk.assert($2)){
 _st(self)._replaceSelectionWith_(txt);
 _st(self)._selectInvisiblyFrom_to_(_st(_st(_st(self["@textMorph"])._asText())._size()).__plus((1)),_st(_st(self["@textMorph"])._asText())._size());
 _st(self["@model"])._reset();
+_st($Transcript())._show_(_st(_st("after model reset: contents: ").__comma(_st(_st(self["@model"])._contents())._string())).__comma(_st($Character())._cr()));
 };
 return self}, function($ctx1) {$ctx1.fill(self,"appendEntry",{txt:txt},smalltalk.TodeConsoleWindowMorph)})},
-messageSends: ["show:", ",", "cr", "ifTrue:", "selectInvisiblyFrom:to:", "//", "size", "asText", "replaceSelectionWith:", "new", ">", "characterLimit", "+", "contents", "asString", "reset"]}),
+messageSends: ["show:", ",", "cr", "ifTrue:", "selectInvisiblyFrom:to:", "//", "size", "asText", "replaceSelectionWith:", "new", ">", "characterLimit", "+", "contents", "asString", "reset", "string"]}),
 smalltalk.TodeConsoleWindowMorph);
 
 smalltalk.addMethod(
@@ -1190,10 +1192,11 @@ smalltalk.method({
 selector: "update:",
 fn: function (something){
 var self=this;
+function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
 function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2,$3,$4,$5,$7,$8,$6,$9;
-_st($Transcript())._show_(_st("TodeConsoleWindowMorph>>update:").__comma(something));
+_st($Transcript())._show_(_st(_st("TodeConsoleWindowMorph>>update:").__comma(_st(something)._asString())).__comma(_st($Character())._cr()));
 $1=_st(something).__eq_eq("markInput");
 if(smalltalk.assert($1)){
 $2=_st(self)._markInput();
@@ -1215,7 +1218,7 @@ return $6;
 $9=smalltalk.PluggableTextMorph.fn.prototype._update_.apply(_st(self), [something]);
 return $9;
 }, function($ctx1) {$ctx1.fill(self,"update:",{something:something},smalltalk.TodeConsoleWindowMorph)})},
-messageSends: ["show:", ",", "ifTrue:", "markInput", "==", "accept", "release", "owner", "delete", "update:"]}),
+messageSends: ["show:", ",", "cr", "asString", "ifTrue:", "markInput", "==", "accept", "release", "owner", "delete", "update:"]}),
 smalltalk.TodeConsoleWindowMorph);
 
 smalltalk.addMethod(

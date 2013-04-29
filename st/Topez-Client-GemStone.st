@@ -411,6 +411,438 @@ Object subclass: #TDTopezClient
 	instanceVariableNames: 'shell session sessionDescription topezServerProxy evaluateTokenMessage setExceptionMessage resetObjInMessage openDebuggerMessage tabCompletionMessage'
 	package: 'Topez-Client-GemStone'!
 
+!TDTopezClient methodsFor: 'not yet classified'!
+
+accumulateTextAndServerDo: serverBlockOop
+  ^ self shell accumulateTextAndServerDo: serverBlockOop
+!
+
+activeWindowServerModel
+  | model clientElement |
+  model := self windowStatus activeWindowModel.
+  model == nil
+    ifTrue: [ ^ nil ].
+  clientElement := model activeEditor clientElement.
+  clientElement == nil
+    ifTrue: [ ^ nil ].
+  ^ clientElement clientElementOop
+!
+
+adornmentColor
+    ^ self shell adornmentColor
+!
+
+autoCommitDisabled
+  self shell autoCommitDisabled
+!
+
+bounds
+  ^ self class bounds
+!
+
+currentWindowId: anInteger
+  ^ (self windowStatus windowAt: anInteger)
+    ifNotNil: [ :window | 
+      window isActive
+        ifFalse: [ 
+          window
+            expand;
+            makeSecondTopmost ].
+      window ]
+!
+
+dbContinue: processOop
+  ^ self
+    handleDebugExceptionsDuring: [ self session continue: (self session asOopType: processOop) ]
+!
+
+dbStep: level forProcessOop: processOop
+  ^ self
+    handleDebugExceptionsDuring: [ self session stepWith: (self session asOopType: processOop) level: level ]
+!
+
+editElement: aClientElement aspect: aspectSelector label: labelString inWindow: windowIdOrNil at: windowLocation
+  | windowId label newWindow win selectedIndex |
+  windowId := windowIdOrNil ifNil: [ windowId := self nextAvailableWindowId ].
+  windowId == 0
+    ifTrue: [ windowId := self nextAvailableWindowId ].
+  self currentWindowId: windowId.
+  label := labelString.
+  newWindow := (self windowStatus windowAt: windowId) isNil.
+  (win := self editorWindowAt: windowId) model
+    perform: aspectSelector;
+    clientElement: aClientElement;
+    windowId: windowId;
+    label: label.
+  newWindow
+    ifTrue: [ 
+      | bounds |
+      bounds := self bounds
+        at: windowLocation
+        ifAbsent: [ self error: 'Unknown window location: ' , windowLocation printString ].
+      win
+        extent: bounds extent;
+        position: bounds origin ].
+  selectedIndex := aClientElement selectedIndex.
+  selectedIndex ifNil: [ selectedIndex := 0 ].
+  win model listIndex: selectedIndex.
+  selectedIndex == 0
+    ifTrue: [ 
+      aClientElement highlightedIndex
+        ifNotNil: [ :highlightedIndex | 
+          highlightedIndex > 0
+            ifTrue: [ win model setListIndex: highlightedIndex ] ] ].
+  aClientElement activateElement.
+  ^ windowId
+!
+
+editStonElement: aStonString
+  | clientElement aWindowId |
+  clientElement := STON fromString: aStonString.
+  clientElement topez: self.
+  aWindowId := clientElement editorWindowId.
+  (aWindowId == nil and: [ clientElement editorWindowName ~~ nil ])
+    ifTrue: [ aWindowId := self windowIdNamed: clientElement editorWindowName ].
+  ^ self
+    editElement: clientElement
+    aspect: clientElement editorAspectSelector
+    label: clientElement editorWindowLabel
+    inWindow: aWindowId
+    at: clientElement editorWindowLocation
+!
+
+editorWindowAt: windowId
+  | editorWindow |
+  (editorWindow := self windowStatus windowAt: windowId)
+    ifNil: [ 
+      editorWindow := TodeEditor new
+        topez: self;
+        open.
+      self windowStatus windowAt: windowId put: editorWindow ].
+  ^ editorWindow
+!
+
+environmentId
+  ^ 0
+!
+
+evaluateTokenMessage
+  evaluateTokenMessage
+    ifNil: [ 
+      evaluateTokenMessage := TZGsMessageSend new
+        topez: self;
+        receiver: (self session asOopType: self topezServerOop);
+        selector: 'evaluateSTONTokens:';
+        arguments: #();
+        transform: #'native' -> nil ].
+  ^ evaluateTokenMessage
+!
+
+evaluateTokens: tokens
+  | stonString |
+  stonString := STON toString: tokens.
+  ^ self session
+    executeStringExpectingStringNB:
+      '(' , self todeServerAccessString , ' for: ' , self shell shellId asString
+        , ') evaluateSTONTokens:' , stonString printString
+    envId: self environmentId
+!
+
+evaluator
+    ^ self
+!
+
+exception: anException
+  self exception: anException context: nil
+!
+
+exception: anException context: context
+  self setExceptionMessage
+    valueWithArguments:
+      {anException.
+      context}
+!
+
+handleDebugExceptionsDuring: aBlock
+  "if you make changes here (like adding new return values), see TDDebugTool>>debugExceptionSymbols"
+
+  | result |
+  [ result := aBlock value ]
+    on: GsBreakpointNotification , GsHaltNotification , GsErrorNotification
+    do: [ :ex | 
+      | errorNumber gciErrorClass |
+      (ex isKindOf: GsErrorNotification)
+        ifTrue: [ 
+          "error occurred during execution"
+          ^ #'error' ].
+      gciErrorClass := self session library gciErrSTypeClass.
+      errorNumber := ex errorNumber.
+      errorNumber = 6002
+        ifTrue: [ 
+          "single step breakpoint ... as expected"
+          ^ #'singleStep' ].
+      errorNumber = 6005
+        ifTrue: [ 
+          "method breakpoint"
+          ^ #'breakpoint' ].
+      errorNumber = gciErrorClass errHalt
+        ifTrue: [ 
+          "halt occurred during execution"
+          ^ #'halt' ].
+      errorNumber = 6006
+        ifTrue: [ 
+          "return from method or block breakpoint ... as expected"
+          ^ #'blockOrMethodReturn' ].
+      self error: 'another breakpoint error number?' ].
+  ^ result
+!
+
+informWarning: aDescription
+  | answer process |
+  answer := UIManager default
+    confirm: aDescription
+    trueChoice: 'Proceed'
+    falseChoice: 'Abort'
+    cancelChoice: 'Debug'
+    default: false.
+  answer ifNil: [ ^ #'debug' ].
+  answer
+    ifTrue: [ ^ #'resume' ].
+  process := Processor activeProcess.
+  UIManager default spawnNewProcessIfThisIsUI: process.
+  process terminate
+!
+
+login
+  | desc sess |
+  TZGemStoneProxyBehavior resetAllGlobalNames.	"reset the cache on login"
+  desc := self sessionDescription.
+  sess := self todeSessionClass new
+    topez: self;
+    yourself.
+  (sess loginWith: self sessionDescription)
+    ifFalse: [ 
+      | gciError messageText |
+      gciError := sess getAndClearLastError.
+      messageText := gciError message.
+      ^ Error
+        signal:
+          messageText
+            ,
+              ' For further information about login failures, check the gem log file' ].
+  ^ sess
+!
+
+logout
+    | sess |
+    session ifNil: [ ^ self ].
+    sess := session.
+    session := nil.
+    sess logout
+!
+
+nextAvailableWindowId
+    ^ self windowStatus nextAvailableWindowId
+!
+
+openDebugger
+  self openDebuggerMessage value
+!
+
+openDebuggerMessage
+  openDebuggerMessage
+    ifNil: [ 
+      openDebuggerMessage := TZGsMessageSend new
+        topez: self;
+        receiver: (self session asOopType: self topezServerOop);
+        selector: 'openDebugger';
+        arguments: #();
+        transform: #'raw' -> nil ].
+  ^ openDebuggerMessage
+!
+
+postCopy
+  "only the session is shared on copy"
+
+  shell := topezServerProxy := evaluateTokenMessage := setExceptionMessage := resetObjInMessage := nil
+!
+
+resetAllGlobalNames
+  TZGemStoneProxyBehavior resetAllGlobalNames.
+  ^ nil
+!
+
+resetObjIn
+    self resetObjInMessage value
+!
+
+resetObjInMessage
+  resetObjInMessage
+    ifNil: [ 
+      resetObjInMessage := TZGsMessageSend new
+        topez: self;
+        receiver: (self session asOopType: self topezServerOop);
+        selector: 'resetObjIn';
+        arguments: #();
+        transform: #'raw' -> nil ].
+  ^ resetObjInMessage
+!
+
+session
+  session
+    ifNil: [ 
+      session := self login.
+      self topezServerProxy ].
+  ^ session
+!
+
+sessionDescription
+  sessionDescription
+    ifNil: [ sessionDescription := self class sessionNamed: self shell sessionName ].
+  ^ sessionDescription
+!
+
+sessionDescription: aSessionDescription
+    sessionDescription := aSessionDescription
+!
+
+setExceptionMessage
+  setExceptionMessage
+    ifNil: [ 
+      setExceptionMessage := TZGsMessageSend new
+        topez: self;
+        receiver: (self session asOopType: self topezServerOop);
+        selector: 'exception:process:';
+        arguments: #();
+        transform: #'raw' -> nil ].
+  ^ setExceptionMessage
+!
+
+setFindText: aStringOrText isRegex: isRegex
+  | findText colonPosition service |
+  findText := aStringOrText.
+  service := FindReplaceService default.
+  isRegex
+    ifTrue: [ service findText: findText isRegex: true ]
+    ifFalse: [ 
+      (colonPosition := aStringOrText indexOf: ':') > 0
+        ifTrue: [ 
+          | pattern specials |
+          pattern := WriteStream on: String new.
+          specials := '^$:\+*[]()'.
+          aStringOrText keywords
+            do: [ :arg | 
+              | convertedArg |
+              convertedArg := String
+                streamContents: [ :s | 
+                  arg
+                    do: [ :c | 
+                      (specials includes: c)
+                        ifTrue: [ s nextPut: '\' ].
+                      s nextPut: c ] ].
+              pattern nextPutAll: convertedArg ]
+            separatedBy: [ pattern nextPutAll: '[^:]+' ].
+          service findText: pattern contents isRegex: true ]
+        ifFalse: [ service findText: findText isRegex: false ] ].
+  service changed: #'newFinding'
+!
+
+shell
+    ^ shell
+!
+
+shell: aShell
+    shell := aShell
+!
+
+shellHistory
+  ^ STON toString: self shell history asArray
+!
+
+spawnDebugger: aDebuggerLabel
+  ^ self shell spawnDebugger: aDebuggerLabel
+!
+
+spawnWindow
+  ^ self shell spawnWindow
+!
+
+status
+    ^ self windowStatus
+!
+
+stylerClass
+    ^ TZTextStylerST80
+!
+
+tabCompletion: commandLine
+  ^self tabCompletionMessage value: commandLine
+!
+
+tabCompletionMessage
+  evaluateTokenMessage
+    ifNil: [ 
+      tabCompletionMessage := TZGsMessageSend new
+        topez: self;
+        receiver: (self session asOopType: self topezServerOop);
+        selector: 'tabCompletion:';
+        arguments: #();
+        transform: #'native' -> nil ].
+  ^ tabCompletionMessage
+!
+
+todeServerAccessString
+  ^ 'TDTopezServer'
+!
+
+todeServerCreationString
+  ^ self todeServerAccessString , ' createFor: ' , self shell shellId asString
+!
+
+todeSessionClass
+  ^ TodeSession
+!
+
+topezServerOop
+    ^ self topezServerProxy asInteger
+!
+
+topezServerProxy
+  topezServerProxy
+    ifNil: [ 
+      | stonString transcriptOopType topezOop resultArray topezServerOop topezClientOopType |
+      [ 
+      stonString := self session
+        executeStringExpectingStringNB: self todeServerCreationString
+        envId: self environmentId ]
+        on: GsErrorNotification
+        do: [ :ex | self error: 'Unable to log into server:' , ex description ].
+      resultArray := STON fromString: stonString.
+      topezServerOop := resultArray at: 1.
+      transcriptOopType := self session asOopType: (resultArray at: 2).
+      topezClientOopType := self session asOopType: (resultArray at: 3).
+      topezServerProxy := self session asOopType: topezServerOop.
+      self session clientForwarderCache at: transcriptOopType put: Transcript.
+      self session clientForwarderCache at: topezClientOopType put: self.
+      self session
+        rawReceiverNB: topezServerProxy
+        perform: #'authorInitials:'
+        withArgs: {(Author fullNamePerSe)} ].
+  ^ topezServerProxy
+!
+
+windowActive: aSystemWindow
+    self windowStatus windowActive: aSystemWindow
+!
+
+windowIdNamed: aSymbol
+    ^ self windowStatus windowIdNamed: aSymbol
+!
+
+windowStatus
+    ^ self shell windowStatus
+! !
+
 TDTopezClient class instanceVariableNames: 'bounds sessionMap windowOffset codeWindowHeight codeWindowWidth listWindowWidth windowOrigin'!
 
 !TDTopezClient class methodsFor: 'accessing'!
@@ -759,6 +1191,400 @@ initialize
 	"windows := WeakArray new: 100 withAll: nil."
     windows := Array new: 100 withAll: nil.
     activeWindowIndex := 0
+! !
+
+Object subclass: #TZGemStoneProxyBehavior
+	instanceVariableNames: 'behaviorOop topez allInstVarNames allClassVarNames allSharedPoolNames'
+	package: 'Topez-Client-GemStone'!
+
+!TZGemStoneProxyBehavior methodsFor: 'not yet classified'!
+
+allClassVarNames
+  allClassVarNames
+    ifNil: [ 
+      | message list |
+      message := TZGsMessageSend new
+        topez: self topez;
+        receiver: (self session asOopType: self behaviorOop);
+        selector: 'allClassVarNames';
+        arguments: #();
+        transform: #'ston' -> 1.
+      self
+        critical: [ 
+          list := message value.
+          allClassVarNames := list collect: [ :each | each asString ] ] ].
+  ^ allClassVarNames
+!
+
+allClassVarNames: aCollection
+  allClassVarNames := aCollection
+!
+
+allGlobalNames
+  AllGlobalNames
+    ifNil: [ 
+      | block |
+      block := TZGsBlockSend new
+        topez: self topez;
+        blockSource:
+            '[| globalNames |
+globalNames := IdentitySet new.
+System myUserProfile symbolList do: [:symbolDict |
+	globalNames addAll: symbolDict keys].
+globalNames asArray]';
+        transform: #'ston' -> 1.
+      self critical: [ self allGlobalNames: block value ] ].
+  ^ AllGlobalNames
+!
+
+allInstVarNames
+  allInstVarNames
+    ifNil: [ 
+      | message list |
+      message := TZGsMessageSend new
+        topez: self topez;
+        receiver: (self session asOopType: self behaviorOop);
+        selector: 'allInstVarNames';
+        arguments: #();
+        transform: #'ston' -> 1.
+      self
+        critical: [ 
+          list := message value.
+          allInstVarNames := list collect: [ :each | each asString ] ] ].
+  ^ allInstVarNames
+!
+
+allInstVarNames: aCollection
+  allInstVarNames := aCollection
+!
+
+allSharedPoolNames
+  allSharedPoolNames
+    ifNil: [ 
+      | message allSharedPoolsOop block list |
+      message := TZGsMessageSend new
+        topez: self topez;
+        receiver: (self session asOopType: self behaviorOop);
+        selector: 'allSharedPools';
+        arguments: #();
+        transform: #'raw' -> nil.
+      allSharedPoolsOop := self critical: [ message value ].
+      block := TZGsBlockSend new
+        topez: self topez;
+        blockSource:
+            '[:allSharedPools | | sharedPoolNames |
+						sharedPoolNames := IdentitySet new.
+						allSharedPools do: [:poolDict |
+                         		sharedPoolNames addAll: poolDict keys].
+						allSharedPools asArray]';
+        transform: #'ston' -> 1.
+      self
+        critical: [ 
+          list := block value: (self session asOopType: allSharedPoolsOop).
+          allSharedPoolNames := list collect: [ :each | each ] ] ].
+  ^ allSharedPoolNames
+!
+
+allSharedPoolNames: aCollection
+  allSharedPoolNames := aCollection
+!
+
+behaviorOop
+    ^ behaviorOop
+!
+
+behaviorOop: anInteger
+    behaviorOop := anInteger
+!
+
+bindingOfClassPool: aString
+    ^ self allClassVarNames includes: aString
+!
+
+bindingOfGlobal: aString
+    ^ self allGlobalNames includes: aString asSymbol
+!
+
+bindingOfSharedPool: aString
+    ^ self allSharedPoolNames includes: aString asSymbol
+!
+
+critical: aBlock
+  ^ self class critical: aBlock
+!
+
+session
+  ^ self topez session
+!
+
+topez
+    ^ topez
+!
+
+topez: anObject
+    topez := anObject
+! !
+
+TZGemStoneProxyBehavior class instanceVariableNames: 'allGlobalNames gciSemaphore'!
+
+!TZGemStoneProxyBehavior class methodsFor: 'not yet classified'!
+
+allGlobalNames: anObject
+	allGlobalNames := anObject.
+!
+
+critical: aBlock
+  ^ self semaphore critical: aBlock
+!
+
+resetAllGlobalNames
+    "self resetAllGlobalNames"
+
+    allGlobalNames := nil
+!
+
+semaphore
+  gciSemaphore ifNil: [ gciSemaphore := Semaphore forMutualExclusion ].
+  ^ gciSemaphore
+! !
+
+Object subclass: #TZGsExecutable
+	instanceVariableNames: 'topez transform'
+	package: 'Topez-Client-GemStone'!
+
+!TZGsExecutable methodsFor: 'not yet classified'!
+
+environmentId
+  ^ self topez environmentId
+!
+
+evaluator
+    ^ self topez evaluator
+!
+
+perform: actionBlock
+  | rawOopType |
+  rawOopType := actionBlock value.
+  ^ self performTransformOn: rawOopType
+!
+
+performTransformOn: anOoptype
+  self transform key == #'ston'
+    ifTrue: [ 
+      | stonString |
+      stonString := self session
+        receiverNB: self topez topezServerProxy
+        perform: #'toString:'
+        withArgs: {anOoptype}
+        envId: self environmentId.
+      ^ (STONReader on: stonString readStream) next ].
+  self transform key == #'native'
+    ifTrue: [ ^ self session library localFor: anOoptype ].
+  ^ anOoptype	"self transform key == #'raw'"
+!
+
+session
+    ^ self topez session
+!
+
+topez
+    ^ topez
+!
+
+topez: anObject
+    topez := anObject
+!
+
+transform
+    transform ifNil: [ transform := #'ston' -> 1 ].
+    ^ transform
+!
+
+transform: anObject
+	transform := anObject
+! !
+
+TZGsExecutable subclass: #TZGsBlockSend
+	instanceVariableNames: 'blockOopType numArgs blockSource'
+	package: 'Topez-Client-GemStone'!
+
+!TZGsBlockSend methodsFor: 'not yet classified'!
+
+blockOopType
+  blockOopType
+    ifNil: [ 
+      blockOopType := self session
+        rawExecuteStringNB: self blockSource
+        envId: self environmentId ].
+  ^ blockOopType
+!
+
+blockSource
+    ^ blockSource
+!
+
+blockSource: aString
+    blockOopType := numArgs := nil.
+    blockSource := aString
+!
+
+cull: arg
+  ^ self perform: [ self session rawReceiverNB: self blockOopType perform: #'cull:' withArgs: {arg} ]
+!
+
+cull: arg1 cull: arg2
+  ^ self
+    perform: [ 
+      self session
+        rawReceiverNB: self blockOopType
+        perform: #'cull:cull:'
+        withArgs:
+          {arg1.
+          arg2} ]
+!
+
+cull: arg1 cull: arg2 cull: arg3
+  ^ self
+    perform: [ 
+      self session
+        rawReceiverNB: self blockOopType
+        perform: #'cull:cull:cull:'
+        withArgs:
+          {arg1.
+          arg2.
+          arg3} ]
+!
+
+cull: arg1 cull: arg2 cull: arg3 cull: arg4
+  ^ self
+    perform: [ 
+      self session
+        rawReceiverNB: self blockOopType
+        perform: #'cull:cull:cull:cull:'
+        withArgs:
+          {arg1.
+          arg2.
+          arg3.
+          arg4} ]
+!
+
+numArgs
+  numArgs
+    ifNil: [ 
+      numArgs := self session
+        receiverNB: self blockOopType
+        perform: #'numArgs'
+        withArgs: #()
+        envId: self environmentId ].
+  ^ numArgs
+!
+
+value
+  ^ self
+    perform: [ 
+      self numArgs ~= 0
+        ifTrue: [ ^ self error: 'incorrect block args' ].
+      self session rawReceiverNB: self blockOopType perform: #'value' withArgs: #() ]
+!
+
+value: arg
+  ^ self
+    perform: [ 
+      self numArgs ~= 1
+        ifTrue: [ ^ self error: 'incorrect block args' ].
+      self session rawReceiverNB: self blockOopType perform: #'value:' withArgs: {arg} ]
+!
+
+value: arg1 value: arg2
+  ^ self
+    perform: [ 
+      self numArgs ~= 2
+        ifTrue: [ ^ self error: 'incorrect block args' ].
+      self session
+        rawReceiverNB: self blockOopType
+        perform: #'value:value:'
+        withArgs:
+          {arg1.
+          arg2} ]
+!
+
+value: arg1 value: arg2 value: arg3
+  ^ self
+    perform: [ 
+      self numArgs ~= 3
+        ifTrue: [ ^ self error: 'incorrect block args' ].
+      self session
+        rawReceiverNB: self blockOopType
+        perform: #'value:value:value:'
+        withArgs:
+          {arg1.
+          arg2.
+          arg3} ]
+!
+
+value: arg1 value: arg2 value: arg3 value: arg4
+  ^ self
+    perform: [ 
+      self numArgs ~= 4
+        ifTrue: [ ^ self error: 'incorrect block args' ].
+      self session
+        rawReceiverNB: self blockOopType
+        perform: #'value:value:value:value:'
+        withArgs:
+          {arg1.
+          arg2.
+          arg3.
+          arg4} ]
+!
+
+valueWithArguments: args
+  ^ self
+    perform: [ 
+      self numArgs ~= args size
+        ifTrue: [ ^ self error: 'incorrect block args' ].
+      self session rawReceiverNB: self blockOopType perform: #'valueWithArguments:' withArgs: args ]
+! !
+
+TZGsExecutable subclass: #TZGsMessageSend
+	instanceVariableNames: 'receiver selector arguments'
+	package: 'Topez-Client-GemStone'!
+
+!TZGsMessageSend methodsFor: 'not yet classified'!
+
+arguments
+	^ arguments
+!
+
+arguments: anObject
+	arguments := anObject
+!
+
+receiver
+	^ receiver
+!
+
+receiver: anObject
+	receiver := anObject
+!
+
+selector
+	^ selector
+!
+
+selector: anObject
+	selector := anObject
+!
+
+value
+  ^ self perform: [ self session rawReceiverNB: self receiver perform: self selector withArgs: {} ]
+!
+
+value: arg
+  ^ self perform: [ self session rawReceiverNB: self receiver perform: self selector withArgs: {arg} ]
+!
+
+valueWithArguments: args
+  ^ self perform: [ self session rawReceiverNB: self receiver perform: self selector withArgs: args asArray ]
 ! !
 
 nil subclass: #TodeSession

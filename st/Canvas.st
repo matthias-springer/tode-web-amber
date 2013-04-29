@@ -692,9 +692,47 @@ value: anInteger
 		yourself
 ! !
 
-nil subclass: #SmalltalkEditor
-	instanceVariableNames: ''
+Object subclass: #SmalltalkEditor
+	instanceVariableNames: 'morph'
 	package: 'Canvas'!
+
+!SmalltalkEditor methodsFor: 'accessing'!
+
+morph
+	^ morph
+!
+
+morph: aMorph
+	morph := aMorph
+! !
+
+!SmalltalkEditor methodsFor: 'events'!
+
+accept
+	self morph owner accept.
+!
+
+keyStroke: evt
+	evt keyValue = 13 ifTrue: [self accept].
+! !
+
+!SmalltalkEditor methodsFor: 'interactions'!
+
+selectFrom: start to: end
+	self morph setSelectionFrom: start to: end.
+!
+
+selectionInterval
+	^ Interval from: self morph selectionStart to: self morph selectionEnd
+! !
+
+!SmalltalkEditor class methodsFor: 'instance creation'!
+
+forMorph: aTextMorph
+	^ self new
+		morph: aTextMorph;
+		yourself
+! !
 
 Object subclass: #TagBrush
 	instanceVariableNames: 'canvas element'
@@ -1814,6 +1852,8 @@ keyReturn: evt
 !
 
 keyStroke: evt
+	self changed: #keyInput with: evt.
+	self editor keyStroke: evt.
 !
 
 performKeyInput: anInteger
@@ -2146,13 +2186,7 @@ textMorph
 
 !PluggableTextMorph methodsFor: 'events handling'!
 
-bindEvents
-	super bindEvents.
-	self textMorph morphElement onKeyPress: [:evt | self keyStroke: (KeyboardEvent value: evt charCode)].
-!
-
 keyStroke: evt
-	Transcript show: evt keyValue.
 ! !
 
 !PluggableTextMorph methodsFor: 'geometry'!
@@ -2219,6 +2253,7 @@ drawTextMorph
 	textMorph := TextMorph new.
 	textMorph overflowY: 'scroll'.
 	textMorph readOnly: false.
+	textMorph addDependent: self.
 	self addMorph: textMorph.
 !
 
@@ -2259,6 +2294,11 @@ update: aSymbol
 			[self handleEdit: [self changeText: Text new].
 			^self ].
 	^ self
+!
+
+update: aSymbol with: aParameter
+	aSymbol = #keyInput 
+		ifTrue: [self keyStroke: aParameter].
 ! !
 
 !PluggableTextMorph class methodsFor: 'instance creation'!

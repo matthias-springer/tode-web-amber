@@ -362,7 +362,7 @@ clear
 
 endEntry
   "Display all the characters since the last endEntry, and reset the stream"
-	Transcript show: 'TodeConsole>>endEntry called.'.
+	Transcript show: 'TodeConsole>>endEntry called.', Character cr.
   self changed: #'appendEntry'.
   self reset
 !
@@ -589,7 +589,7 @@ setText: aText
 
 appendEntry
   | txt |
-  Transcript show: Character cr, 'TodeConsoleWindowMorph>>appendEntry'.
+  Transcript show: Character cr, 'TodeConsoleWindowMorph>>appendEntry', Character cr.
   "Append the text in the model's writeStream to the editable text. "
   textMorph asText size > model characterLimit
     ifTrue: [ 
@@ -605,11 +605,12 @@ appendEntry
       self
         selectInvisiblyFrom: textMorph asText size + 1
         to: textMorph asText size.
-      model reset ]
+      model reset.
+	Transcript show: 'after model reset: contents: ' , model contents string,  Character cr.]
 !
 
 update: something
-	Transcript show: 'TodeConsoleWindowMorph>>update:', something.
+	Transcript show: 'TodeConsoleWindowMorph>>update:', something asString, Character cr.
 	
   something == #'markInput'
     ifTrue: [ ^ self markInput ].

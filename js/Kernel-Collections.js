@@ -9145,6 +9145,50 @@ smalltalk.StringStream);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "nextLine",
+category: 'reading',
+fn: function (){
+var self=this;
+var line,nextChar;
+function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4;
+var $early={};
+try {
+$1=_st(self)._atEnd();
+if(smalltalk.assert($1)){
+return nil;
+};
+line="";
+_st((function(){
+return smalltalk.withContext(function($ctx2) {
+nextChar=_st(self)._next();
+nextChar;
+return _st(nextChar).__tild_tild(_st($Character())._cr());
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}))._whileTrue_((function(){
+return smalltalk.withContext(function($ctx2) {
+line=_st(line).__comma(nextChar);
+line;
+$2=_st(self)._atEnd();
+if(smalltalk.assert($2)){
+$3=line;
+throw $early=[$3];
+};
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+$4=line;
+return $4;
+}
+catch(e) {if(e===$early)return e[0]; throw e}
+}, function($ctx1) {$ctx1.fill(self,"nextLine",{line:line,nextChar:nextChar},smalltalk.StringStream)})},
+args: [],
+source: "nextLine\x0a\x09|line nextChar|\x0a\x09self atEnd ifTrue: [^ nil].\x0a\x09line := ''.\x0a\x09[nextChar := self next.\x0a\x09\x09nextChar ~~ Character cr] whileTrue: [\x0a\x09\x09\x09line := line, nextChar.\x0a\x09\x09\x09self atEnd ifTrue: [^ line]].\x0a\x09^ line",
+messageSends: ["ifTrue:", "atEnd", "whileTrue:", ",", "next", "~~", "cr"],
+referencedClasses: ["Character"]
+}),
+smalltalk.StringStream);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "nextPut:",
 category: 'writing',
 fn: function (aString){
@@ -9242,6 +9286,23 @@ smalltalk.StringStream);
 
 
 smalltalk.addClass('TextStream', smalltalk.StringStream, [], 'Kernel-Collections');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "reset",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self)._collection())._setString_setRuns_("",_st($Array())._new());
+return self}, function($ctx1) {$ctx1.fill(self,"reset",{},smalltalk.TextStream)})},
+args: [],
+source: "reset\x0a\x09self collection setString: '' setRuns: Array new.",
+messageSends: ["setString:setRuns:", "new", "collection"],
+referencedClasses: ["Array"]
+}),
+smalltalk.TextStream);
+
 
 smalltalk.addMethod(
 smalltalk.method({

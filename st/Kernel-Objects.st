@@ -428,9 +428,9 @@ addDependent: anObject
 !
 
 changed: aParameter 
-	Transcript show: 'Object>>changed:', aParameter.
+	Transcript show: 'Object>>changed:', aParameter asString, Character cr.
 	self dependents do: [:aDependent | 
-		Transcript show: 'sending to ', aDependent.
+		Transcript show: '   --> sending to ', aDependent asString, Character cr.
 		aDependent update: aParameter]
 !
 
