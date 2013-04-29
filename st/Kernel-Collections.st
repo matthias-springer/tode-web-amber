@@ -1221,6 +1221,17 @@ printOn: aStream
 		do: [ :each | each printOn: aStream ]
 		separatedBy: [ aStream nextPutAll: ' ' ].
 	aStream nextPutAll: ')'
+!
+
+storeOn: aStream 
+	"Use the literal form if possible."
+
+			[aStream nextPut: '#'; nextPut: '('.
+			self do: 
+				[:element | 
+				element storeOn: aStream.
+				aStream space].
+			aStream nextPut: ')']
 ! !
 
 !Array class methodsFor: 'instance creation'!
@@ -2575,8 +2586,7 @@ replaceFrom: start to: stop with: aText
 	| txt |
 	txt := aText asText.	"might be a string"
 	string := string copyReplaceFrom: start to: stop with: txt string.
-	"TODO: RunArrays"
-	"runs := runs copyReplaceFrom: start to: stop with: txt runs"
+	runs := runs copyReplaceFrom: start to: stop with: txt runs
 !
 
 runs: anArray

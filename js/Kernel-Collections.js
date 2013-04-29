@@ -3509,6 +3509,35 @@ referencedClasses: []
 }),
 smalltalk.Array);
 
+smalltalk.addMethod(
+smalltalk.method({
+selector: "storeOn:",
+category: 'printing',
+fn: function (aStream){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+(function(){
+return smalltalk.withContext(function($ctx2) {
+$1=aStream;
+_st($1)._nextPut_("#");
+$2=_st($1)._nextPut_("(");
+$2;
+_st(self)._do_((function(element){
+return smalltalk.withContext(function($ctx3) {
+_st(element)._storeOn_(aStream);
+return _st(aStream)._space();
+}, function($ctx3) {$ctx3.fillBlock({element:element},$ctx1)})}));
+return _st(aStream)._nextPut_(")");
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})});
+return self}, function($ctx1) {$ctx1.fill(self,"storeOn:",{aStream:aStream},smalltalk.Array)})},
+args: ["aStream"],
+source: "storeOn: aStream \x0a\x09\x22Use the literal form if possible.\x22\x0a\x0a\x09\x09\x09[aStream nextPut: '#'; nextPut: '('.\x0a\x09\x09\x09self do: \x0a\x09\x09\x09\x09[:element | \x0a\x09\x09\x09\x09element storeOn: aStream.\x0a\x09\x09\x09\x09aStream space].\x0a\x09\x09\x09aStream nextPut: ')']",
+messageSends: ["nextPut:", "do:", "storeOn:", "space"],
+referencedClasses: []
+}),
+smalltalk.Array);
+
 
 smalltalk.addMethod(
 smalltalk.method({
@@ -7691,10 +7720,11 @@ var txt;
 return smalltalk.withContext(function($ctx1) { 
 txt=_st(aText)._asText();
 self["@string"]=_st(self["@string"])._copyReplaceFrom_to_with_(start,stop,_st(txt)._string());
+self["@runs"]=_st(self["@runs"])._copyReplaceFrom_to_with_(start,stop,_st(txt)._runs());
 return self}, function($ctx1) {$ctx1.fill(self,"replaceFrom:to:with:",{start:start,stop:stop,aText:aText,txt:txt},smalltalk.Text)})},
 args: ["start", "stop", "aText"],
-source: "replaceFrom: start to: stop with: aText\x0a\x0a\x09| txt |\x0a\x09txt := aText asText.\x09\x22might be a string\x22\x0a\x09string := string copyReplaceFrom: start to: stop with: txt string.\x0a\x09\x22TODO: RunArrays\x22\x0a\x09\x22runs := runs copyReplaceFrom: start to: stop with: txt runs\x22",
-messageSends: ["asText", "copyReplaceFrom:to:with:", "string"],
+source: "replaceFrom: start to: stop with: aText\x0a\x0a\x09| txt |\x0a\x09txt := aText asText.\x09\x22might be a string\x22\x0a\x09string := string copyReplaceFrom: start to: stop with: txt string.\x0a\x09runs := runs copyReplaceFrom: start to: stop with: txt runs",
+messageSends: ["asText", "copyReplaceFrom:to:with:", "string", "runs"],
 referencedClasses: []
 }),
 smalltalk.Text);
