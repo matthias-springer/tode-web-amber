@@ -1350,6 +1350,11 @@ min: aNumber
 	<return Math.min(self, aNumber);>
 !
 
+min: aMin max: aMax 
+
+	^ (self min: aMin) max: aMax
+!
+
 negated
 	^0 - self
 !
@@ -2245,7 +2250,33 @@ current
 
 Object subclass: #TextAttribute
 	instanceVariableNames: ''
-	package: 'Kernel-Objects'!
+	package: 'Kernel-Collections'!
+
+!TextAttribute methodsFor: 'not yet classified'!
+
+dominates: another
+	"Subclasses may override condense multiple attributes"
+	^ false
+!
+
+emphasisCode
+	"Subclasses may override to add bold, italic, etc"
+	^ 0
+!
+
+emphasizeScanner: scanner
+	"Subclasses may override to set, eg, font, color, etc"
+!
+
+reset
+	"Allow subclasses to prepare themselves for merging attributes"
+!
+
+set
+	"Respond true to include this attribute (as opposed to, eg, a bold
+	emphasizer that is clearing the property"
+	^ true
+! !
 
 TextAttribute subclass: #TextColor
 	instanceVariableNames: 'color'
@@ -2359,9 +2390,15 @@ scanFrom: strm
 
 TextAttribute subclass: #TextEmphasis
 	instanceVariableNames: 'emphasisCode setMode'
-	package: 'Kernel-Objects'!
+	package: 'Kernel-Collections'!
 
 !TextEmphasis methodsFor: 'accessing'!
+
+dominates: other
+	(emphasisCode = 0 and: [other dominatedByCmd0]) ifTrue: [^ true].
+	^ (other class == self class)
+		and: [emphasisCode = other emphasisCode]
+!
 
 emphasisCode
 	^ emphasisCode
@@ -2370,6 +2407,56 @@ emphasisCode
 emphasisCode: int
 	emphasisCode := int.
 	setMode := true
+!
+
+set
+	^ setMode and: [emphasisCode ~= 0]
+!
+
+turnOff
+	setMode := false
+! !
+
+!TextEmphasis methodsFor: 'comparing'!
+
+= other 
+	^ (other class == self class) 
+		and: [other emphasisCode = emphasisCode]
+!
+
+hash
+	"#hash is re-implemented because #= is re-implemented"
+	^emphasisCode hash
+! !
+
+!TextEmphasis methodsFor: 'printing'!
+
+printOn: strm
+	super printOn: strm.
+	strm nextPutAll: ' code: '; print: emphasisCode
+! !
+
+!TextEmphasis methodsFor: 'styling'!
+
+emphasizeScanner: scanner
+	"Set the emphasist for text scanning"
+	scanner addEmphasis: emphasisCode
+!
+
+writeScanOn: strm
+
+	emphasisCode = 1 ifTrue: [strm nextPut: 'b'].
+	emphasisCode = 2 ifTrue: [strm nextPut: 'i'].
+	emphasisCode = 0 ifTrue: [strm nextPut: 'n'].
+	emphasisCode = 16 ifTrue: [strm nextPut: '='].
+	emphasisCode = 4 ifTrue: [strm nextPut: 'u'].
+! !
+
+!TextEmphasis methodsFor: 'testing'!
+
+dominatedByCmd0
+	"Cmd-0 should turn off emphasis"
+	^ true
 ! !
 
 !TextEmphasis class methodsFor: 'not yet classified'!
@@ -2383,7 +2470,7 @@ italic
 !
 
 narrow
-	^ TextKern kern: -1
+	"^ TextKern kern: -1" "TextKern is not yet implemented"
 !
 
 normal

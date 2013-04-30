@@ -4576,6 +4576,24 @@ smalltalk.Number);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "min:max:",
+category: 'arithmetic',
+fn: function (aMin,aMax){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._min_(aMin))._max_(aMax);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"min:max:",{aMin:aMin,aMax:aMax},smalltalk.Number)})},
+args: ["aMin", "aMax"],
+source: "min: aMin max: aMax \x0a\x0a\x09^ (self min: aMin) max: aMax",
+messageSends: ["max:", "min:"],
+referencedClasses: []
+}),
+smalltalk.Number);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "negated",
 category: 'arithmetic',
 fn: function (){
@@ -6650,7 +6668,87 @@ referencedClasses: []
 smalltalk.Smalltalk.klass);
 
 
-smalltalk.addClass('TextAttribute', smalltalk.Object, [], 'Kernel-Objects');
+smalltalk.addClass('TextAttribute', smalltalk.Object, [], 'Kernel-Collections');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "dominates:",
+category: 'not yet classified',
+fn: function (another){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return false;
+}, function($ctx1) {$ctx1.fill(self,"dominates:",{another:another},smalltalk.TextAttribute)})},
+args: ["another"],
+source: "dominates: another\x0a\x09\x22Subclasses may override condense multiple attributes\x22\x0a\x09^ false",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TextAttribute);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "emphasisCode",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=(0);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"emphasisCode",{},smalltalk.TextAttribute)})},
+args: [],
+source: "emphasisCode\x0a\x09\x22Subclasses may override to add bold, italic, etc\x22\x0a\x09^ 0",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TextAttribute);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "emphasizeScanner:",
+category: 'not yet classified',
+fn: function (scanner){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"emphasizeScanner:",{scanner:scanner},smalltalk.TextAttribute)})},
+args: ["scanner"],
+source: "emphasizeScanner: scanner\x0a\x09\x22Subclasses may override to set, eg, font, color, etc\x22",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TextAttribute);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "reset",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"reset",{},smalltalk.TextAttribute)})},
+args: [],
+source: "reset\x0a\x09\x22Allow subclasses to prepare themselves for merging attributes\x22",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TextAttribute);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "set",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return true;
+}, function($ctx1) {$ctx1.fill(self,"set",{},smalltalk.TextAttribute)})},
+args: [],
+source: "set\x0a\x09\x22Respond true to include this attribute (as opposed to, eg, a bold\x0a\x09emphasizer that is clearing the property\x22\x0a\x09^ true",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TextAttribute);
+
 
 
 smalltalk.addClass('TextColor', smalltalk.TextAttribute, ['color'], 'Kernel-Objects');
@@ -7025,7 +7123,72 @@ referencedClasses: ["Color"]
 smalltalk.TextColor.klass);
 
 
-smalltalk.addClass('TextEmphasis', smalltalk.TextAttribute, ['emphasisCode', 'setMode'], 'Kernel-Objects');
+smalltalk.addClass('TextEmphasis', smalltalk.TextAttribute, ['emphasisCode', 'setMode'], 'Kernel-Collections');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "=",
+category: 'comparing',
+fn: function (other){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(other)._class()).__eq_eq(_st(self)._class()))._and_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(other)._emphasisCode()).__eq(self["@emphasisCode"]);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"=",{other:other},smalltalk.TextEmphasis)})},
+args: ["other"],
+source: "= other \x0a\x09^ (other class == self class) \x0a\x09\x09and: [other emphasisCode = emphasisCode]",
+messageSends: ["and:", "=", "emphasisCode", "==", "class"],
+referencedClasses: []
+}),
+smalltalk.TextEmphasis);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "dominatedByCmd0",
+category: 'testing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return true;
+}, function($ctx1) {$ctx1.fill(self,"dominatedByCmd0",{},smalltalk.TextEmphasis)})},
+args: [],
+source: "dominatedByCmd0\x0a\x09\x22Cmd-0 should turn off emphasis\x22\x0a\x09^ true",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TextEmphasis);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "dominates:",
+category: 'accessing',
+fn: function (other){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(_st(self["@emphasisCode"]).__eq((0)))._and_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(other)._dominatedByCmd0();
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+if(smalltalk.assert($1)){
+return true;
+};
+$2=_st(_st(_st(other)._class()).__eq_eq(_st(self)._class()))._and_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(self["@emphasisCode"]).__eq(_st(other)._emphasisCode());
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"dominates:",{other:other},smalltalk.TextEmphasis)})},
+args: ["other"],
+source: "dominates: other\x0a\x09(emphasisCode = 0 and: [other dominatedByCmd0]) ifTrue: [^ true].\x0a\x09^ (other class == self class)\x0a\x09\x09and: [emphasisCode = other emphasisCode]",
+messageSends: ["ifTrue:", "and:", "dominatedByCmd0", "=", "emphasisCode", "==", "class"],
+referencedClasses: []
+}),
+smalltalk.TextEmphasis);
+
 smalltalk.addMethod(
 smalltalk.method({
 selector: "emphasisCode",
@@ -7057,6 +7220,133 @@ return self}, function($ctx1) {$ctx1.fill(self,"emphasisCode:",{int:int},smallta
 args: ["int"],
 source: "emphasisCode: int\x0a\x09emphasisCode := int.\x0a\x09setMode := true",
 messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TextEmphasis);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "emphasizeScanner:",
+category: 'styling',
+fn: function (scanner){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(scanner)._addEmphasis_(self["@emphasisCode"]);
+return self}, function($ctx1) {$ctx1.fill(self,"emphasizeScanner:",{scanner:scanner},smalltalk.TextEmphasis)})},
+args: ["scanner"],
+source: "emphasizeScanner: scanner\x0a\x09\x22Set the emphasist for text scanning\x22\x0a\x09scanner addEmphasis: emphasisCode",
+messageSends: ["addEmphasis:"],
+referencedClasses: []
+}),
+smalltalk.TextEmphasis);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "hash",
+category: 'comparing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@emphasisCode"])._hash();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"hash",{},smalltalk.TextEmphasis)})},
+args: [],
+source: "hash\x0a\x09\x22#hash is re-implemented because #= is re-implemented\x22\x0a\x09^emphasisCode hash",
+messageSends: ["hash"],
+referencedClasses: []
+}),
+smalltalk.TextEmphasis);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "printOn:",
+category: 'printing',
+fn: function (strm){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+smalltalk.TextAttribute.fn.prototype._printOn_.apply(_st(self), [strm]);
+$1=strm;
+_st($1)._nextPutAll_(" code: ");
+$2=_st($1)._print_(self["@emphasisCode"]);
+return self}, function($ctx1) {$ctx1.fill(self,"printOn:",{strm:strm},smalltalk.TextEmphasis)})},
+args: ["strm"],
+source: "printOn: strm\x0a\x09super printOn: strm.\x0a\x09strm nextPutAll: ' code: '; print: emphasisCode",
+messageSends: ["printOn:", "nextPutAll:", "print:"],
+referencedClasses: []
+}),
+smalltalk.TextEmphasis);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "set",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@setMode"])._and_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(self["@emphasisCode"]).__tild_eq((0));
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"set",{},smalltalk.TextEmphasis)})},
+args: [],
+source: "set\x0a\x09^ setMode and: [emphasisCode ~= 0]",
+messageSends: ["and:", "~="],
+referencedClasses: []
+}),
+smalltalk.TextEmphasis);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "turnOff",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@setMode"]=false;
+return self}, function($ctx1) {$ctx1.fill(self,"turnOff",{},smalltalk.TextEmphasis)})},
+args: [],
+source: "turnOff\x0a\x09setMode := false",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TextEmphasis);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "writeScanOn:",
+category: 'styling',
+fn: function (strm){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5;
+$1=_st(self["@emphasisCode"]).__eq((1));
+if(smalltalk.assert($1)){
+_st(strm)._nextPut_("b");
+};
+$2=_st(self["@emphasisCode"]).__eq((2));
+if(smalltalk.assert($2)){
+_st(strm)._nextPut_("i");
+};
+$3=_st(self["@emphasisCode"]).__eq((0));
+if(smalltalk.assert($3)){
+_st(strm)._nextPut_("n");
+};
+$4=_st(self["@emphasisCode"]).__eq((16));
+if(smalltalk.assert($4)){
+_st(strm)._nextPut_("=");
+};
+$5=_st(self["@emphasisCode"]).__eq((4));
+if(smalltalk.assert($5)){
+_st(strm)._nextPut_("u");
+};
+return self}, function($ctx1) {$ctx1.fill(self,"writeScanOn:",{strm:strm},smalltalk.TextEmphasis)})},
+args: ["strm"],
+source: "writeScanOn: strm\x0a\x0a\x09emphasisCode = 1 ifTrue: [strm nextPut: 'b'].\x0a\x09emphasisCode = 2 ifTrue: [strm nextPut: 'i'].\x0a\x09emphasisCode = 0 ifTrue: [strm nextPut: 'n'].\x0a\x09emphasisCode = 16 ifTrue: [strm nextPut: '='].\x0a\x09emphasisCode = 4 ifTrue: [strm nextPut: 'u'].",
+messageSends: ["ifTrue:", "nextPut:", "="],
 referencedClasses: []
 }),
 smalltalk.TextEmphasis);
@@ -7104,16 +7394,12 @@ selector: "narrow",
 category: 'not yet classified',
 fn: function (){
 var self=this;
-function $TextKern(){return smalltalk.TextKern||(typeof TextKern=="undefined"?nil:TextKern)}
 return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st($TextKern())._kern_((-1));
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"narrow",{},smalltalk.TextEmphasis.klass)})},
+return self}, function($ctx1) {$ctx1.fill(self,"narrow",{},smalltalk.TextEmphasis.klass)})},
 args: [],
-source: "narrow\x0a\x09^ TextKern kern: -1",
-messageSends: ["kern:"],
-referencedClasses: ["TextKern"]
+source: "narrow\x0a\x09\x22^ TextKern kern: -1\x22 \x22TextKern is not yet implemented\x22",
+messageSends: [],
+referencedClasses: []
 }),
 smalltalk.TextEmphasis.klass);
 

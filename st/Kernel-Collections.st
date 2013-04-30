@@ -1221,6 +1221,17 @@ printOn: aStream
 		do: [ :each | each printOn: aStream ]
 		separatedBy: [ aStream nextPutAll: ' ' ].
 	aStream nextPutAll: ')'
+!
+
+storeOn: aStream 
+	"Use the literal form if possible."
+
+			[aStream nextPut: '#'; nextPut: '('.
+			self do: 
+				[:element | 
+				element storeOn: aStream.
+				aStream space].
+			aStream nextPut: ')']
 ! !
 
 !Array class methodsFor: 'instance creation'!
@@ -2035,7 +2046,7 @@ repeatLastIfEmpty: defaultBlock
 	| new newRuns |
 	(aRunArray isMemberOf: RunArray)
 		ifFalse: 
-			[new := self copy.
+			[ new := self copy.
 			"attempt to be sociable"
 			aRunArray do: [:each | new addLast: each].
 			^new].
@@ -2059,9 +2070,16 @@ repeatLastIfEmpty: defaultBlock
 				with: aRunArray values)
 !
 
+copy
+	^self class
+		runs: runs
+		values: values
+!
+
 copyFrom: start to: stop
 	| newRuns run1 run2 offset1 offset2 | 
-	stop < start ifTrue: [^RunArray new].
+
+	stop < start ifTrue: [ ^RunArray new].
 	self at: start setRunOffsetAndValue: [:r :o :value1 | run1 := r. offset1 := o. value1].
 	self at: stop setRunOffsetAndValue: [:r :o :value2 | run2 := r. offset2 := o. value2].
 	run1 = run2
@@ -2286,11 +2304,11 @@ storeOn: aStream
 
 writeOn: aStream
 
-	aStream nextWordPut: runs size.
+	aStream nextPut: runs size.
 	1 to: runs size do:
 		[:x |
-		aStream nextWordPut: (runs at: x).
-		aStream nextWordPut: (values at: x)]
+		aStream nextPut: (runs at: x).
+		aStream nextPut: (values at: x)]
 !
 
 writeScanOn: strm
@@ -2587,8 +2605,7 @@ replaceFrom: start to: stop with: aText
 	| txt |
 	txt := aText asText.	"might be a string"
 	string := string copyReplaceFrom: start to: stop with: txt string.
-	"TODO: RunArrays"
-	"runs := runs copyReplaceFrom: start to: stop with: txt runs"
+	runs := runs copyReplaceFrom: start to: stop with: txt runs
 !
 
 runs: anArray
@@ -3260,5 +3277,132 @@ on: aCollection
 		setCollection: aCollection;
 		setStreamSize: aCollection size;
 		yourself
+! !
+
+Object subclass: #TextAttribute
+	instanceVariableNames: ''
+	package: 'Kernel-Collections'!
+
+!TextAttribute methodsFor: 'not yet classified'!
+
+dominates: another
+	"Subclasses may override condense multiple attributes"
+	^ false
+!
+
+emphasisCode
+	"Subclasses may override to add bold, italic, etc"
+	^ 0
+!
+
+emphasizeScanner: scanner
+	"Subclasses may override to set, eg, font, color, etc"
+!
+
+reset
+	"Allow subclasses to prepare themselves for merging attributes"
+!
+
+set
+	"Respond true to include this attribute (as opposed to, eg, a bold
+	emphasizer that is clearing the property"
+	^ true
+! !
+
+TextAttribute subclass: #TextEmphasis
+	instanceVariableNames: 'emphasisCode setMode'
+	package: 'Kernel-Collections'!
+
+!TextEmphasis methodsFor: 'accessing'!
+
+dominates: other
+	(emphasisCode = 0 and: [other dominatedByCmd0]) ifTrue: [^ true].
+	^ (other class == self class)
+		and: [emphasisCode = other emphasisCode]
+!
+
+emphasisCode
+	^ emphasisCode
+!
+
+emphasisCode: int
+	emphasisCode := int.
+	setMode := true
+!
+
+set
+	^ setMode and: [emphasisCode ~= 0]
+!
+
+turnOff
+	setMode := false
+! !
+
+!TextEmphasis methodsFor: 'comparing'!
+
+= other 
+	^ (other class == self class) 
+		and: [other emphasisCode = emphasisCode]
+!
+
+hash
+	"#hash is re-implemented because #= is re-implemented"
+	^emphasisCode hash
+! !
+
+!TextEmphasis methodsFor: 'printing'!
+
+printOn: strm
+	super printOn: strm.
+	strm nextPutAll: ' code: '; print: emphasisCode
+! !
+
+!TextEmphasis methodsFor: 'styling'!
+
+emphasizeScanner: scanner
+	"Set the emphasist for text scanning"
+	scanner addEmphasis: emphasisCode
+!
+
+writeScanOn: strm
+
+	emphasisCode = 1 ifTrue: [strm nextPut: 'b'].
+	emphasisCode = 2 ifTrue: [strm nextPut: 'i'].
+	emphasisCode = 0 ifTrue: [strm nextPut: 'n'].
+	emphasisCode = 16 ifTrue: [strm nextPut: '='].
+	emphasisCode = 4 ifTrue: [strm nextPut: 'u'].
+! !
+
+!TextEmphasis methodsFor: 'testing'!
+
+dominatedByCmd0
+	"Cmd-0 should turn off emphasis"
+	^ true
+! !
+
+!TextEmphasis class methodsFor: 'not yet classified'!
+
+bold
+	^ self new emphasisCode: 1
+!
+
+italic
+	^ self new emphasisCode: 2
+!
+
+narrow
+	"^ TextKern kern: -1" "TextKern is not yet implemented"
+!
+
+normal
+	^ self new emphasisCode: 0
+!
+
+struckOut
+	^ self new emphasisCode: 16
+!
+
+underlined
+	^ self new emphasisCode: 4
 ! !
 
