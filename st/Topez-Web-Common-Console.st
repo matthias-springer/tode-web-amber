@@ -554,6 +554,7 @@ initialize
 !TodeConsoleWindowMorph methodsFor: 'menu commands'!
 
 accept
+	Transcript show: 'TodeConsoleWindowMorph>>accept  ', self commandLineInput asString,  Character cr.
   self model
     cr;
     flush;

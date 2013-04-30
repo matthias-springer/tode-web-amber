@@ -120,8 +120,8 @@ amber = (function() {
         'STON-Core',
         'Topez-Client-Common',
         'Topez-Client-GCI',
-        'Topez-Client-GemStone',
         'Topez-Client-Session',
+        'Topez-Client-GemStone',
         'Topez-Web-Common-Console'
 			]);
 		}

@@ -981,14 +981,17 @@ smalltalk.method({
 selector: "accept",
 fn: function (){
 var self=this;
+function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
+function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2;
+_st($Transcript())._show_(_st(_st("TodeConsoleWindowMorph>>accept  ").__comma(_st(_st(self)._commandLineInput())._asString())).__comma(_st($Character())._cr()));
 $1=_st(self)._model();
 _st($1)._cr();
 _st($1)._flush();
 $2=_st($1)._processCommand_(_st(_st(self)._commandLineInput())._asString());
 return self}, function($ctx1) {$ctx1.fill(self,"accept",{},smalltalk.TodeConsoleWindowMorph)})},
-messageSends: ["cr", "model", "flush", "processCommand:", "asString", "commandLineInput"]}),
+messageSends: ["show:", ",", "cr", "asString", "commandLineInput", "model", "flush", "processCommand:"]}),
 smalltalk.TodeConsoleWindowMorph);
 
 smalltalk.addMethod(

@@ -19,6 +19,24 @@ smalltalk.GciSession);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "asOopType:",
+category: 'private gci calls',
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(anObject)._asOopTypeWith_(_st(_st(self)._library())._oopTypeClass());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"asOopType:",{anObject:anObject},smalltalk.GciSession)})},
+args: ["anObject"],
+source: "asOopType: anObject\x0a    ^ anObject asOopTypeWith: self library oopTypeClass",
+messageSends: ["asOopTypeWith:", "oopTypeClass", "library"],
+referencedClasses: []
+}),
+smalltalk.GciSession);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "clientForwarderCache",
 category: 'finalization',
 fn: function (){
@@ -75,6 +93,28 @@ args: ["aString", "envId"],
 source: "executeStringExpectingString: aString envId: envId\x0a\x09\x22TODO: make non-blocking to support abort from JavaScript\x22\x0a\x09^ self library apiGciExecuteStrExpectingStr: aString a: self library oopNil a: envId",
 messageSends: ["apiGciExecuteStrExpectingStr:a:a:", "oopNil", "library"],
 referencedClasses: []
+}),
+smalltalk.GciSession);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "executeStringExpectingStringNB:envId:",
+category: 'public gci calls',
+fn: function (aString,envId){
+var self=this;
+function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
+function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+_st($Transcript())._show_(_st(_st("executeStringExpectingStringNB: ").__comma(aString)).__comma(_st(_st($Character())._cr())._asString()));
+_st(_st(self)._library())._apiGciNbExecuteStr_a_a_(aString,_st(_st(self)._library())._oopNil(),envId);
+$1=_st(self)._getNbResultAsString();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"executeStringExpectingStringNB:envId:",{aString:aString,envId:envId},smalltalk.GciSession)})},
+args: ["aString", "envId"],
+source: "executeStringExpectingStringNB: aString envId: envId\x0a\x09Transcript show: 'executeStringExpectingStringNB: ', aString , Character cr asString.\x0a\x09\x22self library apiGciSetSessionId: self getSessionNumber.\x22\x0a\x09self library apiGciNbExecuteStr: aString a: self library oopNil a: envId.\x0a\x09^ self getNbResultAsString",
+messageSends: ["show:", ",", "asString", "cr", "apiGciNbExecuteStr:a:a:", "oopNil", "library", "getNbResultAsString"],
+referencedClasses: ["Character", "Transcript"]
 }),
 smalltalk.GciSession);
 
@@ -158,6 +198,128 @@ smalltalk.GciSession);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "getAndClearLastError",
+category: 'private gci calls',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._library())._getAndClearLastError();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"getAndClearLastError",{},smalltalk.GciSession)})},
+args: [],
+source: "getAndClearLastError\x0a\x0a\x09^self library getAndClearLastError.",
+messageSends: ["getAndClearLastError", "library"],
+referencedClasses: []
+}),
+smalltalk.GciSession);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "getNbResult",
+category: 'private gci calls',
+fn: function (){
+var self=this;
+var result,error,actionArgs,continueWith;
+function $GsClientForwarderSendNotification(){return smalltalk.GsClientForwarderSendNotification||(typeof GsClientForwarderSendNotification=="undefined"?nil:GsClientForwarderSendNotification)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16;
+result=_st(self)._nbPollForResult();
+$1=_st(_st(_st(self)._getAndClearLastError())._error())._isNil();
+if(smalltalk.assert($1)){
+$2=result;
+return $2;
+};
+$3=_st(_st(error)._number()).__eq_eq((2336));
+if(smalltalk.assert($3)){
+$4=_st($GsClientForwarderSendNotification())._new();
+_st($4)._session_(self);
+_st($4)._tag_(error);
+$5=_st($4)._signal();
+actionArgs=$5;
+} else {
+$6=_st(_st(error)._number()).__eq_eq((4100));
+if(smalltalk.assert($6)){
+_st(self)._release();
+};
+actionArgs=_st(self)._signalServerError_(error);
+};
+$7=_st(actionArgs)._isArray();
+if(smalltalk.assert($7)){
+$8=_st(_st(actionArgs)._at_((1))).__eq_eq("debug");
+if(smalltalk.assert($8)){
+$9=_st(self)._debuggerRequested_(_st(actionArgs)._at_((2)));
+return $9;
+};
+$10=_st(_st(actionArgs)._at_((1))).__eq_eq("abort");
+if(smalltalk.assert($10)){
+$11=_st(actionArgs)._at_((2));
+return $11;
+};
+$12=_st(_st(actionArgs)._at_((1))).__eq_eq("resume");
+if(smalltalk.assert($12)){
+continueWith=_st(_st(self)._library())._oopFor_(_st(actionArgs)._at_((2)));
+continueWith;
+} else {
+$13=_st(actionArgs)._halt_("incorrect return value from GsRuntimeError handler");
+return $13;
+};
+} else {
+$14=_st(actionArgs).__eq("resume");
+if(smalltalk.assert($14)){
+continueWith=_st(_st(_st(self)._library())._oopIllegal())._asOop();
+continueWith;
+} else {
+$15=_st(actionArgs)._halt_("incorrect return value from GsRuntimeError handler");
+return $15;
+};
+};
+_st(_st(self)._library())._critical_((function(lib){
+return smalltalk.withContext(function($ctx2) {
+return _st(lib)._apiGciNbContinueWith_a_a_(_st(error)._context(),_st(_st(_st(self)._library())._oopTypeClass())._fromInteger_(continueWith),(1));
+}, function($ctx2) {$ctx2.fillBlock({lib:lib},$ctx1)})}));
+$16=_st(self)._getNbResult();
+return $16;
+}, function($ctx1) {$ctx1.fill(self,"getNbResult",{result:result,error:error,actionArgs:actionArgs,continueWith:continueWith},smalltalk.GciSession)})},
+args: [],
+source: "getNbResult\x0a  \x22The call that initiated the non-blocking call will be one of three types:\x0a\x09\x091. expecting nothing--e.g., GciNbAbort();\x0a\x09\x092. expecting a Boolean--e.g., GciNbCommit();\x0a\x09\x093. expecting an OopType--e.g., GciNbExecuteStr().\x0a\x09Because we don't know how the answer should be interpreted, we simply\x0a\x09return it as an Integer.\x22\x0a\x0a  | result error actionArgs continueWith |\x0a   \x0a  result := self nbPollForResult.\x0a  error := self getAndClearLastError \x0a   \x22 ifCurtailed: [ self terminateCurrentNbCall ].\x22\x0a  error isNil\x0a    ifTrue: [ ^ result ].\x0a  actionArgs := error number == 2336\x0a    ifTrue: [ \x0a      GsClientForwarderSendNotification new\x0a        session: self;\x0a        tag: error;\x0a        signal ]\x0a    ifFalse: [ \x0a      error number == 4100\x0a        ifTrue: [ \x0a          \x22Session is invalid ... session died out from under us, so clean up session and throw the error\x22\x0a          self release ].\x0a      self signalServerError: error ].\x0a  actionArgs isArray\x0a    ifTrue: [ \x0a      (actionArgs at: 1) == #'debug'\x0a        ifTrue: [ ^ self debuggerRequested: (actionArgs at: 2) ].\x0a      (actionArgs at: 1) == #'abort'\x0a        ifTrue: [ ^ actionArgs at: 2 ].\x0a      (actionArgs at: 1) == #'resume'\x0a        ifTrue: [ continueWith := self library oopFor: (actionArgs at: 2) ]\x0a        ifFalse: [ ^ actionArgs halt: 'incorrect return value from GsRuntimeError handler' ] ]\x0a    ifFalse: [ \x0a      actionArgs = #'resume'\x0a        ifTrue: [ continueWith := self library oopIllegal asOop ]\x0a        ifFalse: [ ^ actionArgs halt: 'incorrect return value from GsRuntimeError handler' ] ].\x0a  self library\x0a    critical: [ :lib | \x0a      lib\x0a        apiGciNbContinueWith: error context\x0a        a: (self library oopTypeClass fromInteger: continueWith)\x0a        a: 1 ].\x0a  ^ self getNbResult",
+messageSends: ["nbPollForResult", "ifTrue:", "isNil", "error", "getAndClearLastError", "ifTrue:ifFalse:", "session:", "new", "tag:", "signal", "release", "==", "number", "signalServerError:", "debuggerRequested:", "at:", "oopFor:", "library", "halt:", "asOop", "oopIllegal", "=", "isArray", "critical:", "apiGciNbContinueWith:a:a:", "context", "fromInteger:", "oopTypeClass", "getNbResult"],
+referencedClasses: ["GsClientForwarderSendNotification"]
+}),
+smalltalk.GciSession);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "getNbResultAsString",
+category: 'private gci calls',
+fn: function (){
+var self=this;
+var result,oopType,x;
+function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
+function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+result=_st(self)._getNbResult();
+$1=_st(result)._isInteger();
+if(! smalltalk.assert($1)){
+$2=result;
+return $2;
+};
+oopType=_st(_st(self)._library())._oopTypeFromInteger_(result);
+x=_st(_st(self)._library())._fetchChars_(oopType);
+_st($Transcript())._show_(_st(_st("getNbResultAsString returns:    ").__comma(x)).__comma(_st(_st($Character())._cr())._asString()));
+$3=x;
+return $3;
+}, function($ctx1) {$ctx1.fill(self,"getNbResultAsString",{result:result,oopType:oopType,x:x},smalltalk.GciSession)})},
+args: [],
+source: "getNbResultAsString\x0a  | result oopType x |\x0a  result := self getNbResult.\x0a  result isInteger\x0a    ifFalse: [ ^ result ].\x0a  oopType := self library oopTypeFromInteger: result.\x0a   x := self library fetchChars: oopType.\x0aTranscript show: 'getNbResultAsString returns:    ', x, Character cr asString .\x0a^x",
+messageSends: ["getNbResult", "ifFalse:", "isInteger", "oopTypeFromInteger:", "library", "fetchChars:", "show:", ",", "asString", "cr"],
+referencedClasses: ["Character", "Transcript"]
+}),
+smalltalk.GciSession);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "getSessionNumber",
 category: 'private gci calls',
 fn: function (){
@@ -188,12 +350,11 @@ var self=this;
 function $Dictionary(){return smalltalk.Dictionary||(typeof Dictionary=="undefined"?nil:Dictionary)}
 return smalltalk.withContext(function($ctx1) { 
 self["@number"]=(0);
-_st(_st(self)._finalizationRegistry())._add_(self);
 self["@clientForwarderCache"]=_st($Dictionary())._new();
 return self}, function($ctx1) {$ctx1.fill(self,"initialize",{},smalltalk.GciSession)})},
 args: [],
-source: "initialize\x0a\x09number := 0.\x0a\x09self finalizationRegistry add: self.\x0a\x09\x22TODO: why WeakValueDictionary?\x22\x0a\x09clientForwarderCache := Dictionary new",
-messageSends: ["add:", "finalizationRegistry", "new"],
+source: "initialize\x0a\x09number := 0.\x0a\x09\x22TODO: think about finalizationRegistry\x22\x0a\x09\x22self finalizationRegistry add: self.\x22\x0a\x09\x22TODO: why WeakValueDictionary?\x22\x0a\x09clientForwarderCache := Dictionary new",
+messageSends: ["new"],
 referencedClasses: ["Dictionary"]
 }),
 smalltalk.GciSession);
@@ -287,6 +448,24 @@ smalltalk.GciSession);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "nbPollForResult",
+category: 'private gci calls',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._library())._pollForResult();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"nbPollForResult",{},smalltalk.GciSession)})},
+args: [],
+source: "nbPollForResult\x0a\x09\x22TODO: abort code\x22\x0a\x09^ self library pollForResult",
+messageSends: ["pollForResult", "library"],
+referencedClasses: []
+}),
+smalltalk.GciSession);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "number",
 category: 'accessing',
 fn: function (){
@@ -321,6 +500,42 @@ return self}, function($ctx1) {$ctx1.fill(self,"printOn:",{aStream:aStream},smal
 args: ["aStream"],
 source: "printOn: aStream\x0a\x09super printOn: aStream.\x0a\x09aStream space; nextPut: '['; nextPutAll: number printString; nextPut: ']'",
 messageSends: ["printOn:", "space", "nextPut:", "nextPutAll:", "printString"],
+referencedClasses: []
+}),
+smalltalk.GciSession);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "rawReceiver:perform:withArgs:",
+category: 'public gci calls',
+fn: function (receiver,aSymbol,argsArray){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._library())._apiGciPerform_a_a_(_st(self)._asOopType_(_st(_st(self)._library())._oopFor_(receiver)),_st(aSymbol)._asString(),argsArray);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"rawReceiver:perform:withArgs:",{receiver:receiver,aSymbol:aSymbol,argsArray:argsArray},smalltalk.GciSession)})},
+args: ["receiver", "aSymbol", "argsArray"],
+source: "rawReceiver: receiver perform: aSymbol withArgs: argsArray\x0a\x09^ self library\x0a\x09\x09apiGciPerform: (self asOopType: (self library oopFor: receiver))\x0a\x09\x09a: aSymbol asString\x0a\x09\x09a: argsArray",
+messageSends: ["apiGciPerform:a:a:", "asOopType:", "oopFor:", "library", "asString"],
+referencedClasses: []
+}),
+smalltalk.GciSession);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "rawReceiverNB:perform:withArgs:",
+category: 'public gci calls',
+fn: function (receiver,aSymbol,argsArray){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._rawReceiver_perform_withArgs_(receiver,aSymbol,argsArray);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"rawReceiverNB:perform:withArgs:",{receiver:receiver,aSymbol:aSymbol,argsArray:argsArray},smalltalk.GciSession)})},
+args: ["receiver", "aSymbol", "argsArray"],
+source: "rawReceiverNB: receiver perform: aSymbol withArgs: argsArray\x0a\x09\x22TODO: make non-blocking\x22\x0a\x09^ self rawReceiver: receiver perform: aSymbol withArgs: argsArray",
+messageSends: ["rawReceiver:perform:withArgs:"],
 referencedClasses: []
 }),
 smalltalk.GciSession);
@@ -942,13 +1157,15 @@ fn: function (){
 var self=this;
 function $GciLibrary(){return smalltalk.GciLibrary||(typeof GciLibrary=="undefined"?nil:GciLibrary)}
 return smalltalk.withContext(function($ctx1) { 
-var $1,$2;
-$1=_st($GciLibrary())._new();
-_st($1)._apiGciInit();
-$2=_st($1)._yourself();
-return self}, function($ctx1) {$ctx1.fill(self,"gciLibrary",{},smalltalk.OGCustomSessionDescription)})},
+var $2,$3,$1;
+$2=_st($GciLibrary())._new();
+_st($2)._apiGciInit();
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"gciLibrary",{},smalltalk.OGCustomSessionDescription)})},
 args: [],
-source: "gciLibrary\x0a\x09\x22TODO: think about support for more libraries\x22\x0a\x09GciLibrary new\x0a\x09\x09apiGciInit;\x0a\x09\x09yourself.",
+source: "gciLibrary\x0a\x09\x22TODO: think about support for more libraries\x22\x0a\x09^ GciLibrary new\x0a\x09\x09apiGciInit;\x0a\x09\x09yourself.",
 messageSends: ["apiGciInit", "new", "yourself"],
 referencedClasses: ["GciLibrary"]
 }),

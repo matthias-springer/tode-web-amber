@@ -63,6 +63,10 @@ currySelf
 
 !BlockClosure methodsFor: 'error handling'!
 
+ifCurtailed: aBlock
+	self on: Error do: [:x | aBlock value].
+!
+
 on: anErrorClass do: aBlock
 	"All exceptions thrown in the Smalltalk stack are cought.
 	Convert all JS exceptions to JavaScriptException instances."

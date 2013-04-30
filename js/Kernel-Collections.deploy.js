@@ -3175,6 +3175,20 @@ smalltalk.String);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "convertTDEvaluateTokenResponseToText",
+fn: function (){
+var self=this;
+function $STON(){return smalltalk.STON||(typeof STON=="undefined"?nil:STON)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($STON())._fromString_(self);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"convertTDEvaluateTokenResponseToText",{},smalltalk.String)})},
+messageSends: ["fromString:"]}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "copyFrom:to:",
 fn: function (anIndex,anotherIndex){
 var self=this;
@@ -3692,14 +3706,22 @@ smalltalk.method({
 selector: "printOn:",
 fn: function (aStream){
 var self=this;
+var x;
 return smalltalk.withContext(function($ctx1) { 
-var $1,$2;
-$1=aStream;
-_st($1)._nextPutAll_("'");
-_st($1)._nextPutAll_(self);
-$2=_st($1)._nextPutAll_("'");
-return self}, function($ctx1) {$ctx1.fill(self,"printOn:",{aStream:aStream},smalltalk.String)})},
-messageSends: ["nextPutAll:"]}),
+var $1;
+_st(aStream)._nextPutAll_("'");
+_st((1))._to_do_(_st(self)._size(),(function(i){
+return smalltalk.withContext(function($ctx2) {
+x=_st(self)._at_(i);
+_st(aStream)._nextPutAll_(x);
+$1=_st(x).__eq("'");
+if(smalltalk.assert($1)){
+return _st(aStream)._nextPutAll_(x);
+};
+}, function($ctx2) {$ctx2.fillBlock({i:i},$ctx1)})}));
+_st(aStream)._nextPutAll_("'");
+return self}, function($ctx1) {$ctx1.fill(self,"printOn:",{aStream:aStream,x:x},smalltalk.String)})},
+messageSends: ["nextPutAll:", "to:do:", "size", "at:", "ifTrue:", "="]}),
 smalltalk.String);
 
 smalltalk.addMethod(

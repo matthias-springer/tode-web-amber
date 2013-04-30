@@ -358,6 +358,10 @@ isImmutable
 	^ false
 !
 
+isInteger
+	^ false
+!
+
 isKindOf: aClass
 	^(self isMemberOf: aClass)
 		ifTrue: [true]
@@ -1552,6 +1556,10 @@ even
 	^ 0 = (self \\ 2)
 !
 
+isInteger
+	< return self % 1 === 0; >
+!
+
 isNumber
 	^true
 !
@@ -1574,6 +1582,12 @@ positive
 	"Answer whether the receiver is positive or equal to 0. (ST-80 protocol)."
 
 	^ self >= 0
+! !
+
+!Number methodsFor: 'topez-common-core'!
+
+asOopTypeWith: anOopTypeClass
+    ^ anOopTypeClass fromInteger: self
 ! !
 
 !Number class methodsFor: 'instance creation'!

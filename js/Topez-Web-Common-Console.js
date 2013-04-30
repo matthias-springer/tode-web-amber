@@ -1277,17 +1277,20 @@ selector: "accept",
 category: 'menu commands',
 fn: function (){
 var self=this;
+function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
+function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2;
+_st($Transcript())._show_(_st(_st("TodeConsoleWindowMorph>>accept  ").__comma(_st(_st(self)._commandLineInput())._asString())).__comma(_st($Character())._cr()));
 $1=_st(self)._model();
 _st($1)._cr();
 _st($1)._flush();
 $2=_st($1)._processCommand_(_st(_st(self)._commandLineInput())._asString());
 return self}, function($ctx1) {$ctx1.fill(self,"accept",{},smalltalk.TodeConsoleWindowMorph)})},
 args: [],
-source: "accept\x0a  self model\x0a    cr;\x0a    flush;\x0a    processCommand: self commandLineInput asString",
-messageSends: ["cr", "model", "flush", "processCommand:", "asString", "commandLineInput"],
-referencedClasses: []
+source: "accept\x0a\x09Transcript show: 'TodeConsoleWindowMorph>>accept  ', self commandLineInput asString,  Character cr.\x0a  self model\x0a    cr;\x0a    flush;\x0a    processCommand: self commandLineInput asString",
+messageSends: ["show:", ",", "cr", "asString", "commandLineInput", "model", "flush", "processCommand:"],
+referencedClasses: ["Character", "Transcript"]
 }),
 smalltalk.TodeConsoleWindowMorph);
 

@@ -739,6 +739,22 @@ smalltalk.Object);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "isInteger",
+category: 'testing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return false;
+}, function($ctx1) {$ctx1.fill(self,"isInteger",{},smalltalk.Object)})},
+args: [],
+source: "isInteger\x0a\x09^ false",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "isKindOf:",
 category: 'testing',
 fn: function (aClass){
@@ -4284,6 +4300,24 @@ smalltalk.Number);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "asOopTypeWith:",
+category: 'topez-common-core',
+fn: function (anOopTypeClass){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(anOopTypeClass)._fromInteger_(self);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"asOopTypeWith:",{anOopTypeClass:anOopTypeClass},smalltalk.Number)})},
+args: ["anOopTypeClass"],
+source: "asOopTypeWith: anOopTypeClass\x0a    ^ anOopTypeClass fromInteger: self",
+messageSends: ["fromInteger:"],
+referencedClasses: []
+}),
+smalltalk.Number);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "asPoint",
 category: 'converting',
 fn: function (){
@@ -4422,6 +4456,22 @@ return $1;
 args: [],
 source: "identityHash\x0a\x09^self asString, 'n'",
 messageSends: [",", "asString"],
+referencedClasses: []
+}),
+smalltalk.Number);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "isInteger",
+category: 'testing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+ return self % 1 === 0; ;
+return self}, function($ctx1) {$ctx1.fill(self,"isInteger",{},smalltalk.Number)})},
+args: [],
+source: "isInteger\x0a\x09< return self % 1 === 0; >",
+messageSends: [],
 referencedClasses: []
 }),
 smalltalk.Number);

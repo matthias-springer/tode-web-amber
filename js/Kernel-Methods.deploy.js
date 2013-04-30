@@ -129,6 +129,21 @@ smalltalk.BlockClosure);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "ifCurtailed:",
+fn: function (aBlock){
+var self=this;
+function $Error(){return smalltalk.Error||(typeof Error=="undefined"?nil:Error)}
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._on_do_($Error(),(function(x){
+return smalltalk.withContext(function($ctx2) {
+return _st(aBlock)._value();
+}, function($ctx2) {$ctx2.fillBlock({x:x},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"ifCurtailed:",{aBlock:aBlock},smalltalk.BlockClosure)})},
+messageSends: ["on:do:", "value"]}),
+smalltalk.BlockClosure);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "new",
 fn: function (){
 var self=this;

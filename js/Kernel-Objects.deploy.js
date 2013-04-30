@@ -538,6 +538,17 @@ smalltalk.Object);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "isInteger",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return false;
+}, function($ctx1) {$ctx1.fill(self,"isInteger",{},smalltalk.Object)})},
+messageSends: []}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "isKindOf:",
 fn: function (aClass){
 var self=this;
@@ -3113,6 +3124,19 @@ smalltalk.Number);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "asOopTypeWith:",
+fn: function (anOopTypeClass){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(anOopTypeClass)._fromInteger_(self);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"asOopTypeWith:",{anOopTypeClass:anOopTypeClass},smalltalk.Number)})},
+messageSends: ["fromInteger:"]}),
+smalltalk.Number);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "asPoint",
 fn: function (){
 var self=this;
@@ -3213,6 +3237,17 @@ $1=_st(_st(self)._asString()).__comma("n");
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"identityHash",{},smalltalk.Number)})},
 messageSends: [",", "asString"]}),
+smalltalk.Number);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "isInteger",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+ return self % 1 === 0; ;
+return self}, function($ctx1) {$ctx1.fill(self,"isInteger",{},smalltalk.Number)})},
+messageSends: []}),
 smalltalk.Number);
 
 smalltalk.addMethod(

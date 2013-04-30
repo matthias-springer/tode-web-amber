@@ -175,6 +175,26 @@ smalltalk.BlockClosure);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "ifCurtailed:",
+category: 'error handling',
+fn: function (aBlock){
+var self=this;
+function $Error(){return smalltalk.Error||(typeof Error=="undefined"?nil:Error)}
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._on_do_($Error(),(function(x){
+return smalltalk.withContext(function($ctx2) {
+return _st(aBlock)._value();
+}, function($ctx2) {$ctx2.fillBlock({x:x},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"ifCurtailed:",{aBlock:aBlock},smalltalk.BlockClosure)})},
+args: ["aBlock"],
+source: "ifCurtailed: aBlock\x0a\x09self on: Error do: [:x | aBlock value].",
+messageSends: ["on:do:", "value"],
+referencedClasses: ["Error"]
+}),
+smalltalk.BlockClosure);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "new",
 category: 'evaluating',
 fn: function (){

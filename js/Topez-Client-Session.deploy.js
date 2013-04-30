@@ -14,6 +14,19 @@ smalltalk.GciSession);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "asOopType:",
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(anObject)._asOopTypeWith_(_st(_st(self)._library())._oopTypeClass());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"asOopType:",{anObject:anObject},smalltalk.GciSession)})},
+messageSends: ["asOopTypeWith:", "oopTypeClass", "library"]}),
+smalltalk.GciSession);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "clientForwarderCache",
 fn: function (){
 var self=this;
@@ -56,6 +69,23 @@ $1=_st(_st(self)._library())._apiGciExecuteStrExpectingStr_a_a_(aString,_st(_st(
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"executeStringExpectingString:envId:",{aString:aString,envId:envId},smalltalk.GciSession)})},
 messageSends: ["apiGciExecuteStrExpectingStr:a:a:", "oopNil", "library"]}),
+smalltalk.GciSession);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "executeStringExpectingStringNB:envId:",
+fn: function (aString,envId){
+var self=this;
+function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
+function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+_st($Transcript())._show_(_st(_st("executeStringExpectingStringNB: ").__comma(aString)).__comma(_st(_st($Character())._cr())._asString()));
+_st(_st(self)._library())._apiGciNbExecuteStr_a_a_(aString,_st(_st(self)._library())._oopNil(),envId);
+$1=_st(self)._getNbResultAsString();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"executeStringExpectingStringNB:envId:",{aString:aString,envId:envId},smalltalk.GciSession)})},
+messageSends: ["show:", ",", "asString", "cr", "apiGciNbExecuteStr:a:a:", "oopNil", "library", "getNbResultAsString"]}),
 smalltalk.GciSession);
 
 smalltalk.addMethod(
@@ -118,6 +148,113 @@ smalltalk.GciSession);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "getAndClearLastError",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._library())._getAndClearLastError();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"getAndClearLastError",{},smalltalk.GciSession)})},
+messageSends: ["getAndClearLastError", "library"]}),
+smalltalk.GciSession);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "getNbResult",
+fn: function (){
+var self=this;
+var result,error,actionArgs,continueWith;
+function $GsClientForwarderSendNotification(){return smalltalk.GsClientForwarderSendNotification||(typeof GsClientForwarderSendNotification=="undefined"?nil:GsClientForwarderSendNotification)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16;
+result=_st(self)._nbPollForResult();
+$1=_st(_st(_st(self)._getAndClearLastError())._error())._isNil();
+if(smalltalk.assert($1)){
+$2=result;
+return $2;
+};
+$3=_st(_st(error)._number()).__eq_eq((2336));
+if(smalltalk.assert($3)){
+$4=_st($GsClientForwarderSendNotification())._new();
+_st($4)._session_(self);
+_st($4)._tag_(error);
+$5=_st($4)._signal();
+actionArgs=$5;
+} else {
+$6=_st(_st(error)._number()).__eq_eq((4100));
+if(smalltalk.assert($6)){
+_st(self)._release();
+};
+actionArgs=_st(self)._signalServerError_(error);
+};
+$7=_st(actionArgs)._isArray();
+if(smalltalk.assert($7)){
+$8=_st(_st(actionArgs)._at_((1))).__eq_eq("debug");
+if(smalltalk.assert($8)){
+$9=_st(self)._debuggerRequested_(_st(actionArgs)._at_((2)));
+return $9;
+};
+$10=_st(_st(actionArgs)._at_((1))).__eq_eq("abort");
+if(smalltalk.assert($10)){
+$11=_st(actionArgs)._at_((2));
+return $11;
+};
+$12=_st(_st(actionArgs)._at_((1))).__eq_eq("resume");
+if(smalltalk.assert($12)){
+continueWith=_st(_st(self)._library())._oopFor_(_st(actionArgs)._at_((2)));
+continueWith;
+} else {
+$13=_st(actionArgs)._halt_("incorrect return value from GsRuntimeError handler");
+return $13;
+};
+} else {
+$14=_st(actionArgs).__eq("resume");
+if(smalltalk.assert($14)){
+continueWith=_st(_st(_st(self)._library())._oopIllegal())._asOop();
+continueWith;
+} else {
+$15=_st(actionArgs)._halt_("incorrect return value from GsRuntimeError handler");
+return $15;
+};
+};
+_st(_st(self)._library())._critical_((function(lib){
+return smalltalk.withContext(function($ctx2) {
+return _st(lib)._apiGciNbContinueWith_a_a_(_st(error)._context(),_st(_st(_st(self)._library())._oopTypeClass())._fromInteger_(continueWith),(1));
+}, function($ctx2) {$ctx2.fillBlock({lib:lib},$ctx1)})}));
+$16=_st(self)._getNbResult();
+return $16;
+}, function($ctx1) {$ctx1.fill(self,"getNbResult",{result:result,error:error,actionArgs:actionArgs,continueWith:continueWith},smalltalk.GciSession)})},
+messageSends: ["nbPollForResult", "ifTrue:", "isNil", "error", "getAndClearLastError", "ifTrue:ifFalse:", "session:", "new", "tag:", "signal", "release", "==", "number", "signalServerError:", "debuggerRequested:", "at:", "oopFor:", "library", "halt:", "asOop", "oopIllegal", "=", "isArray", "critical:", "apiGciNbContinueWith:a:a:", "context", "fromInteger:", "oopTypeClass", "getNbResult"]}),
+smalltalk.GciSession);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "getNbResultAsString",
+fn: function (){
+var self=this;
+var result,oopType,x;
+function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
+function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+result=_st(self)._getNbResult();
+$1=_st(result)._isInteger();
+if(! smalltalk.assert($1)){
+$2=result;
+return $2;
+};
+oopType=_st(_st(self)._library())._oopTypeFromInteger_(result);
+x=_st(_st(self)._library())._fetchChars_(oopType);
+_st($Transcript())._show_(_st(_st("getNbResultAsString returns:    ").__comma(x)).__comma(_st(_st($Character())._cr())._asString()));
+$3=x;
+return $3;
+}, function($ctx1) {$ctx1.fill(self,"getNbResultAsString",{result:result,oopType:oopType,x:x},smalltalk.GciSession)})},
+messageSends: ["getNbResult", "ifFalse:", "isInteger", "oopTypeFromInteger:", "library", "fetchChars:", "show:", ",", "asString", "cr"]}),
+smalltalk.GciSession);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "getSessionNumber",
 fn: function (){
 var self=this;
@@ -142,10 +279,9 @@ var self=this;
 function $Dictionary(){return smalltalk.Dictionary||(typeof Dictionary=="undefined"?nil:Dictionary)}
 return smalltalk.withContext(function($ctx1) { 
 self["@number"]=(0);
-_st(_st(self)._finalizationRegistry())._add_(self);
 self["@clientForwarderCache"]=_st($Dictionary())._new();
 return self}, function($ctx1) {$ctx1.fill(self,"initialize",{},smalltalk.GciSession)})},
-messageSends: ["add:", "finalizationRegistry", "new"]}),
+messageSends: ["new"]}),
 smalltalk.GciSession);
 
 smalltalk.addMethod(
@@ -217,6 +353,19 @@ smalltalk.GciSession);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "nbPollForResult",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._library())._pollForResult();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"nbPollForResult",{},smalltalk.GciSession)})},
+messageSends: ["pollForResult", "library"]}),
+smalltalk.GciSession);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "number",
 fn: function (){
 var self=this;
@@ -243,6 +392,32 @@ _st($1)._nextPutAll_(_st(self["@number"])._printString());
 $2=_st($1)._nextPut_("]");
 return self}, function($ctx1) {$ctx1.fill(self,"printOn:",{aStream:aStream},smalltalk.GciSession)})},
 messageSends: ["printOn:", "space", "nextPut:", "nextPutAll:", "printString"]}),
+smalltalk.GciSession);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "rawReceiver:perform:withArgs:",
+fn: function (receiver,aSymbol,argsArray){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._library())._apiGciPerform_a_a_(_st(self)._asOopType_(_st(_st(self)._library())._oopFor_(receiver)),_st(aSymbol)._asString(),argsArray);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"rawReceiver:perform:withArgs:",{receiver:receiver,aSymbol:aSymbol,argsArray:argsArray},smalltalk.GciSession)})},
+messageSends: ["apiGciPerform:a:a:", "asOopType:", "oopFor:", "library", "asString"]}),
+smalltalk.GciSession);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "rawReceiverNB:perform:withArgs:",
+fn: function (receiver,aSymbol,argsArray){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._rawReceiver_perform_withArgs_(receiver,aSymbol,argsArray);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"rawReceiverNB:perform:withArgs:",{receiver:receiver,aSymbol:aSymbol,argsArray:argsArray},smalltalk.GciSession)})},
+messageSends: ["rawReceiver:perform:withArgs:"]}),
 smalltalk.GciSession);
 
 smalltalk.addMethod(
@@ -721,11 +896,13 @@ fn: function (){
 var self=this;
 function $GciLibrary(){return smalltalk.GciLibrary||(typeof GciLibrary=="undefined"?nil:GciLibrary)}
 return smalltalk.withContext(function($ctx1) { 
-var $1,$2;
-$1=_st($GciLibrary())._new();
-_st($1)._apiGciInit();
-$2=_st($1)._yourself();
-return self}, function($ctx1) {$ctx1.fill(self,"gciLibrary",{},smalltalk.OGCustomSessionDescription)})},
+var $2,$3,$1;
+$2=_st($GciLibrary())._new();
+_st($2)._apiGciInit();
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"gciLibrary",{},smalltalk.OGCustomSessionDescription)})},
 messageSends: ["apiGciInit", "new", "yourself"]}),
 smalltalk.OGCustomSessionDescription);
 

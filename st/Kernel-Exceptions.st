@@ -16,6 +16,10 @@ context
 	<return self.context>
 !
 
+description
+	^ self class name asString, ': ', self messageText
+!
+
 jsStack
 	<return self.stack>
 !

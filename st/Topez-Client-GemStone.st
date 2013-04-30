@@ -122,8 +122,11 @@ builtIns
 !
 
 evaluate: aString
-  [| line stream result |
+	  "TODO: error handling"
+  "["
+	  | line stream result |
   stream := aString readStream.
+ 
   [ 
   line := stream nextLine.
   line ~~ nil ]
@@ -140,7 +143,8 @@ evaluate: aString
               pipedCommands := isolatedCommand findTokens: '|'.
               pipedCommands
                 do: [ :pipedCommand | result := self evaluateCommand: pipedCommand ] ] ] ].
-  ^ result ]
+  ^ result 
+"]
     on: Error
     do: [ :ex | 
       | errorMessage |
@@ -154,7 +158,7 @@ evaluate: aString
       self class debugMode
         ifTrue: [ self halt: errorMessage asString ].
       self resetStack.
-      ^ errorMessage ]
+      ^ errorMessage ]"
 !
 
 evaluateCommand: line
@@ -824,10 +828,11 @@ topezServerProxy
       topezServerProxy := self session asOopType: topezServerOop.
       self session clientForwarderCache at: transcriptOopType put: Transcript.
       self session clientForwarderCache at: topezClientOopType put: self.
+	  "TODO: ask for initials"
       self session
         rawReceiverNB: topezServerProxy
         perform: #'authorInitials:'
-        withArgs: {(Author fullNamePerSe)} ].
+        withArgs: {('MatSpr')} ].
   ^ topezServerProxy
 !
 
@@ -1587,7 +1592,7 @@ valueWithArguments: args
   ^ self perform: [ self session rawReceiverNB: self receiver perform: self selector withArgs: args asArray ]
 ! !
 
-nil subclass: #TodeSession
+GciSession subclass: #TodeSession
 	instanceVariableNames: 'topez sessionDescription gciLibrary'
 	package: 'Topez-Client-GemStone'!
 

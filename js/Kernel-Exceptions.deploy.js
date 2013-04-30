@@ -13,6 +13,19 @@ smalltalk.Error);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "description",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(_st(_st(self)._class())._name())._asString()).__comma(": ")).__comma(_st(self)._messageText());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"description",{},smalltalk.Error)})},
+messageSends: [",", "messageText", "asString", "name", "class"]}),
+smalltalk.Error);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "initialize",
 fn: function (){
 var self=this;

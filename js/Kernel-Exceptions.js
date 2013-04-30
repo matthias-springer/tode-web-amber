@@ -19,6 +19,24 @@ smalltalk.Error);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "description",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(_st(_st(self)._class())._name())._asString()).__comma(": ")).__comma(_st(self)._messageText());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"description",{},smalltalk.Error)})},
+args: [],
+source: "description\x0a\x09^ self class name asString, ': ', self messageText",
+messageSends: [",", "messageText", "asString", "name", "class"],
+referencedClasses: []
+}),
+smalltalk.Error);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "initialize",
 category: 'initialization',
 fn: function (){

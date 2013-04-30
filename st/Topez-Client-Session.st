@@ -93,7 +93,8 @@ unregisterClientObjectForwarder: aClientObject
 
 initialize
 	number := 0.
-	self finalizationRegistry add: self.
+	"TODO: think about finalizationRegistry"
+	"self finalizationRegistry add: self."
 	"TODO: why WeakValueDictionary?"
 	clientForwarderCache := Dictionary new
 !
@@ -142,10 +143,84 @@ release
 
 !GciSession methodsFor: 'private gci calls'!
 
+asOopType: anObject
+    ^ anObject asOopTypeWith: self library oopTypeClass
+!
+
+getAndClearLastError
+
+	^self library getAndClearLastError.
+!
+
+getNbResult
+  "The call that initiated the non-blocking call will be one of three types:
+		1. expecting nothing--e.g., GciNbAbort();
+		2. expecting a Boolean--e.g., GciNbCommit();
+		3. expecting an OopType--e.g., GciNbExecuteStr().
+	Because we don't know how the answer should be interpreted, we simply
+	return it as an Integer."
+
+  | result error actionArgs continueWith |
+   
+  result := self nbPollForResult.
+  error := self getAndClearLastError 
+   " ifCurtailed: [ self terminateCurrentNbCall ]."
+  error isNil
+    ifTrue: [ ^ result ].
+  actionArgs := error number == 2336
+    ifTrue: [ 
+      GsClientForwarderSendNotification new
+        session: self;
+        tag: error;
+        signal ]
+    ifFalse: [ 
+      error number == 4100
+        ifTrue: [ 
+          "Session is invalid ... session died out from under us, so clean up session and throw the error"
+          self release ].
+      self signalServerError: error ].
+  actionArgs isArray
+    ifTrue: [ 
+      (actionArgs at: 1) == #'debug'
+        ifTrue: [ ^ self debuggerRequested: (actionArgs at: 2) ].
+      (actionArgs at: 1) == #'abort'
+        ifTrue: [ ^ actionArgs at: 2 ].
+      (actionArgs at: 1) == #'resume'
+        ifTrue: [ continueWith := self library oopFor: (actionArgs at: 2) ]
+        ifFalse: [ ^ actionArgs halt: 'incorrect return value from GsRuntimeError handler' ] ]
+    ifFalse: [ 
+      actionArgs = #'resume'
+        ifTrue: [ continueWith := self library oopIllegal asOop ]
+        ifFalse: [ ^ actionArgs halt: 'incorrect return value from GsRuntimeError handler' ] ].
+  self library
+    critical: [ :lib | 
+      lib
+        apiGciNbContinueWith: error context
+        a: (self library oopTypeClass fromInteger: continueWith)
+        a: 1 ].
+  ^ self getNbResult
+!
+
+getNbResultAsString
+  | result oopType x |
+  result := self getNbResult.
+  result isInteger
+    ifFalse: [ ^ result ].
+  oopType := self library oopTypeFromInteger: result.
+   x := self library fetchChars: oopType.
+Transcript show: 'getNbResultAsString returns:    ', x, Character cr asString .
+^x
+!
+
 getSessionNumber
 	number == nil
     	ifTrue: [ ^ self error: 'Session no longer logged in.' ].
 	^ number
+!
+
+nbPollForResult
+	"TODO: abort code"
+	^ self library pollForResult
 ! !
 
 !GciSession methodsFor: 'public gci calls'!
@@ -153,6 +228,25 @@ getSessionNumber
 executeStringExpectingString: aString envId: envId
 	"TODO: make non-blocking to support abort from JavaScript"
 	^ self library apiGciExecuteStrExpectingStr: aString a: self library oopNil a: envId
+!
+
+executeStringExpectingStringNB: aString envId: envId
+	Transcript show: 'executeStringExpectingStringNB: ', aString , Character cr asString.
+	"self library apiGciSetSessionId: self getSessionNumber."
+	self library apiGciNbExecuteStr: aString a: self library oopNil a: envId.
+	^ self getNbResultAsString
+!
+
+rawReceiver: receiver perform: aSymbol withArgs: argsArray
+	^ self library
+		apiGciPerform: (self asOopType: (self library oopFor: receiver))
+		a: aSymbol asString
+		a: argsArray
+!
+
+rawReceiverNB: receiver perform: aSymbol withArgs: argsArray
+	"TODO: make non-blocking"
+	^ self rawReceiver: receiver perform: aSymbol withArgs: argsArray
 ! !
 
 !GciSession methodsFor: 'testing'!
@@ -247,7 +341,7 @@ dataDirectory: aString
 
 gciLibrary
 	"TODO: think about support for more libraries"
-	GciLibrary new
+	^ GciLibrary new
 		apiGciInit;
 		yourself.
 !

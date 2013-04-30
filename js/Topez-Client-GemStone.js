@@ -278,26 +278,17 @@ selector: "evaluate:",
 category: 'evaluator engine',
 fn: function (aString){
 var self=this;
-function $Error(){return smalltalk.Error||(typeof Error=="undefined"?nil:Error)}
-function $TextColor(){return smalltalk.TextColor||(typeof TextColor=="undefined"?nil:TextColor)}
-function $TextEmphasis(){return smalltalk.TextEmphasis||(typeof TextEmphasis=="undefined"?nil:TextEmphasis)}
-function $Text(){return smalltalk.Text||(typeof Text=="undefined"?nil:Text)}
-return smalltalk.withContext(function($ctx1) { 
-var $1,$2,$3,$4;
-var $early={};
-try {
-_st((function(){
 var line,stream,result;
-return smalltalk.withContext(function($ctx2) {
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
 stream=_st(aString)._readStream();
-stream;
 _st((function(){
-return smalltalk.withContext(function($ctx3) {
+return smalltalk.withContext(function($ctx2) {
 line=_st(stream)._nextLine();
 line;
 return _st(line).__tild_tild(nil);
-}, function($ctx3) {$ctx3.fillBlock({},$ctx1)})}))._whileTrue_((function(){
-return smalltalk.withContext(function($ctx3) {
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}))._whileTrue_((function(){
+return smalltalk.withContext(function($ctx2) {
 $1=_st(_st(self)._actionStack())._notEmpty();
 if(smalltalk.assert($1)){
 result=_st(self)._accumulateText_(line);
@@ -309,39 +300,24 @@ isolatedCommands=_st(line)._findTokens_(";");
 isolatedCommands;
 return _st(isolatedCommands)._do_((function(isolatedCommand){
 var pipedCommands;
-return smalltalk.withContext(function($ctx4) {
+return smalltalk.withContext(function($ctx3) {
 pipedCommands=_st(isolatedCommand)._findTokens_("|");
 pipedCommands;
 return _st(pipedCommands)._do_((function(pipedCommand){
-return smalltalk.withContext(function($ctx5) {
+return smalltalk.withContext(function($ctx4) {
 result=_st(self)._evaluateCommand_(pipedCommand);
 return result;
-}, function($ctx5) {$ctx5.fillBlock({pipedCommand:pipedCommand},$ctx1)})}));
-}, function($ctx4) {$ctx4.fillBlock({isolatedCommand:isolatedCommand,pipedCommands:pipedCommands},$ctx1)})}));
+}, function($ctx4) {$ctx4.fillBlock({pipedCommand:pipedCommand},$ctx1)})}));
+}, function($ctx3) {$ctx3.fillBlock({isolatedCommand:isolatedCommand,pipedCommands:pipedCommands},$ctx1)})}));
 };
-}, function($ctx3) {$ctx3.fillBlock({},$ctx1)})}));
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 $2=result;
-throw $early=[$2];
-}, function($ctx2) {$ctx2.fillBlock({line:line,stream:stream,result:result},$ctx1)})}))._on_do_($Error(),(function(ex){
-var errorMessage;
-return smalltalk.withContext(function($ctx2) {
-errorMessage=_st(_st("Topez ERROR: ")._asText()).__comma(_st($Text())._string_attributes_(_st(ex)._description(),[_st($TextColor())._red(),_st($TextEmphasis())._bold()]));
-errorMessage;
-$3=_st(_st(self)._class())._debugMode();
-if(smalltalk.assert($3)){
-_st(self)._halt_(_st(errorMessage)._asString());
-};
-_st(self)._resetStack();
-$4=errorMessage;
-throw $early=[$4];
-}, function($ctx2) {$ctx2.fillBlock({ex:ex,errorMessage:errorMessage},$ctx1)})}));
-return self}
-catch(e) {if(e===$early)return e[0]; throw e}
-}, function($ctx1) {$ctx1.fill(self,"evaluate:",{aString:aString},smalltalk.TDShell)})},
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"evaluate:",{aString:aString,line:line,stream:stream,result:result},smalltalk.TDShell)})},
 args: ["aString"],
-source: "evaluate: aString\x0a  [| line stream result |\x0a  stream := aString readStream.\x0a  [ \x0a  line := stream nextLine.\x0a  line ~~ nil ]\x0a    whileTrue: [ \x0a      self actionStack notEmpty\x0a        ifTrue: [ result := self accumulateText: line ]\x0a        ifFalse: [ \x0a          | isolatedCommands |\x0a          self addToHistory: line.\x0a          isolatedCommands := line findTokens: ';'.\x0a          isolatedCommands\x0a            do: [ :isolatedCommand | \x0a              | pipedCommands |\x0a              pipedCommands := isolatedCommand findTokens: '|'.\x0a              pipedCommands\x0a                do: [ :pipedCommand | result := self evaluateCommand: pipedCommand ] ] ] ].\x0a  ^ result ]\x0a    on: Error\x0a    do: [ :ex | \x0a      | errorMessage |\x0a      errorMessage := 'Topez ERROR: ' asText\x0a        ,\x0a          (Text\x0a            string: ex description\x0a            attributes:\x0a              {(TextColor red).\x0a              (TextEmphasis bold)}).\x0a      self class debugMode\x0a        ifTrue: [ self halt: errorMessage asString ].\x0a      self resetStack.\x0a      ^ errorMessage ]",
-messageSends: ["on:do:", ",", "string:attributes:", "description", "red", "bold", "asText", "ifTrue:", "halt:", "asString", "debugMode", "class", "resetStack", "readStream", "whileTrue:", "ifTrue:ifFalse:", "accumulateText:", "addToHistory:", "findTokens:", "do:", "evaluateCommand:", "notEmpty", "actionStack", "nextLine", "~~"],
-referencedClasses: ["Error", "TextColor", "TextEmphasis", "Text"]
+source: "evaluate: aString\x0a\x09  \x22TODO: error handling\x22\x0a  \x22[\x22\x0a\x09  | line stream result |\x0a  stream := aString readStream.\x0a \x0a  [ \x0a  line := stream nextLine.\x0a  line ~~ nil ]\x0a    whileTrue: [ \x0a      self actionStack notEmpty\x0a        ifTrue: [ result := self accumulateText: line ]\x0a        ifFalse: [ \x0a          | isolatedCommands |\x0a          self addToHistory: line.\x0a          isolatedCommands := line findTokens: ';'.\x0a          isolatedCommands\x0a            do: [ :isolatedCommand | \x0a              | pipedCommands |\x0a              pipedCommands := isolatedCommand findTokens: '|'.\x0a              pipedCommands\x0a                do: [ :pipedCommand | result := self evaluateCommand: pipedCommand ] ] ] ].\x0a  ^ result \x0a\x22]\x0a    on: Error\x0a    do: [ :ex | \x0a      | errorMessage |\x0a      errorMessage := 'Topez ERROR: ' asText\x0a        ,\x0a          (Text\x0a            string: ex description\x0a            attributes:\x0a              {(TextColor red).\x0a              (TextEmphasis bold)}).\x0a      self class debugMode\x0a        ifTrue: [ self halt: errorMessage asString ].\x0a      self resetStack.\x0a      ^ errorMessage ]\x22",
+messageSends: ["readStream", "whileTrue:", "ifTrue:ifFalse:", "accumulateText:", "addToHistory:", "findTokens:", "do:", "evaluateCommand:", "notEmpty", "actionStack", "nextLine", "~~"],
+referencedClasses: []
 }),
 smalltalk.TDShell);
 
@@ -2386,7 +2362,6 @@ var self=this;
 function $GsErrorNotification(){return smalltalk.GsErrorNotification||(typeof GsErrorNotification=="undefined"?nil:GsErrorNotification)}
 function $STON(){return smalltalk.STON||(typeof STON=="undefined"?nil:STON)}
 function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
-function $Author(){return smalltalk.Author||(typeof Author=="undefined"?nil:Author)}
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2;
 $1=self["@topezServerProxy"];
@@ -2412,7 +2387,7 @@ self["@topezServerProxy"]=_st(_st(self)._session())._asOopType_(topezServerOop);
 self["@topezServerProxy"];
 _st(_st(_st(self)._session())._clientForwarderCache())._at_put_(transcriptOopType,$Transcript());
 _st(_st(_st(self)._session())._clientForwarderCache())._at_put_(topezClientOopType,self);
-_st(_st(self)._session())._rawReceiverNB_perform_withArgs_(self["@topezServerProxy"],"authorInitials:",[_st($Author())._fullNamePerSe()]);
+_st(_st(self)._session())._rawReceiverNB_perform_withArgs_(self["@topezServerProxy"],"authorInitials:",["MatSpr"]);
 } else {
 $1;
 };
@@ -2420,9 +2395,9 @@ $2=self["@topezServerProxy"];
 return $2;
 }, function($ctx1) {$ctx1.fill(self,"topezServerProxy",{},smalltalk.TDTopezClient)})},
 args: [],
-source: "topezServerProxy\x0a  topezServerProxy\x0a    ifNil: [ \x0a      | stonString transcriptOopType topezOop resultArray topezServerOop topezClientOopType |\x0a      [ \x0a      stonString := self session\x0a        executeStringExpectingStringNB: self todeServerCreationString\x0a        envId: self environmentId ]\x0a        on: GsErrorNotification\x0a        do: [ :ex | self error: 'Unable to log into server:' , ex description ].\x0a      resultArray := STON fromString: stonString.\x0a      topezServerOop := resultArray at: 1.\x0a      transcriptOopType := self session asOopType: (resultArray at: 2).\x0a      topezClientOopType := self session asOopType: (resultArray at: 3).\x0a      topezServerProxy := self session asOopType: topezServerOop.\x0a      self session clientForwarderCache at: transcriptOopType put: Transcript.\x0a      self session clientForwarderCache at: topezClientOopType put: self.\x0a      self session\x0a        rawReceiverNB: topezServerProxy\x0a        perform: #'authorInitials:'\x0a        withArgs: {(Author fullNamePerSe)} ].\x0a  ^ topezServerProxy",
-messageSends: ["ifNil:", "on:do:", "error:", ",", "description", "executeStringExpectingStringNB:envId:", "todeServerCreationString", "environmentId", "session", "fromString:", "at:", "asOopType:", "at:put:", "clientForwarderCache", "rawReceiverNB:perform:withArgs:", "fullNamePerSe"],
-referencedClasses: ["GsErrorNotification", "STON", "Transcript", "Author"]
+source: "topezServerProxy\x0a  topezServerProxy\x0a    ifNil: [ \x0a      | stonString transcriptOopType topezOop resultArray topezServerOop topezClientOopType |\x0a      [ \x0a      stonString := self session\x0a        executeStringExpectingStringNB: self todeServerCreationString\x0a        envId: self environmentId ]\x0a        on: GsErrorNotification\x0a        do: [ :ex | self error: 'Unable to log into server:' , ex description ].\x0a      resultArray := STON fromString: stonString.\x0a      topezServerOop := resultArray at: 1.\x0a      transcriptOopType := self session asOopType: (resultArray at: 2).\x0a      topezClientOopType := self session asOopType: (resultArray at: 3).\x0a      topezServerProxy := self session asOopType: topezServerOop.\x0a      self session clientForwarderCache at: transcriptOopType put: Transcript.\x0a      self session clientForwarderCache at: topezClientOopType put: self.\x0a\x09  \x22TODO: ask for initials\x22\x0a      self session\x0a        rawReceiverNB: topezServerProxy\x0a        perform: #'authorInitials:'\x0a        withArgs: {('MatSpr')} ].\x0a  ^ topezServerProxy",
+messageSends: ["ifNil:", "on:do:", "error:", ",", "description", "executeStringExpectingStringNB:envId:", "todeServerCreationString", "environmentId", "session", "fromString:", "at:", "asOopType:", "at:put:", "clientForwarderCache", "rawReceiverNB:perform:withArgs:"],
+referencedClasses: ["GsErrorNotification", "STON", "Transcript"]
 }),
 smalltalk.TDTopezClient);
 
@@ -4603,7 +4578,7 @@ smalltalk.TZGsMessageSend);
 
 
 
-smalltalk.addClass('TodeSession', smalltalk.nil, ['topez', 'sessionDescription', 'gciLibrary'], 'Topez-Client-GemStone');
+smalltalk.addClass('TodeSession', smalltalk.GciSession, ['topez', 'sessionDescription', 'gciLibrary'], 'Topez-Client-GemStone');
 smalltalk.addMethod(
 smalltalk.method({
 selector: "debuggerRequested:",
