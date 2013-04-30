@@ -3309,6 +3309,116 @@ set
 	^ true
 ! !
 
+TextAttribute subclass: #TextColor
+	instanceVariableNames: 'color'
+	package: 'Kernel-Collections'!
+
+!TextColor methodsFor: 'accessing'!
+
+color
+	^ color
+!
+
+color: aColor
+	color := aColor
+! !
+
+!TextColor methodsFor: 'comparing'!
+
+= other 
+	^ (other class == self class) 
+		and: [other color = color]
+! !
+
+!TextColor methodsFor: 'printing'!
+
+printOn: aStream
+	super printOn: aStream.
+	aStream nextPutAll: ' code: '; print: color
+! !
+
+!TextColor methodsFor: 'scanning'!
+
+dominates: other
+	^ other class == self class
+!
+
+emphasizeScanner: scanner
+	"Set the emphasis for text display"
+	scanner textColor: color
+!
+
+writeScanOn: strm
+	"Two formats.  c125000255 or cblue;"
+
+	| nn |
+	strm nextPut: 'c'.
+	(nn := color name) ifNotNil: [
+		(self class respondsTo: nn) ifTrue: [
+			^ strm nextPutAll: nn; nextPut: ';']].
+	(Array with: color red with: color green with: color blue) do: [:float | | str |
+		str := '000', (float * 255) asInteger printString.
+		strm nextPutAll: (str copyFrom: str size-2 to: str size)]
+! !
+
+!TextColor class methodsFor: 'constants'!
+
+black
+	^ self new color: Color black
+!
+
+blue
+	^ self new color: Color blue
+!
+
+cyan
+	^ self new color: Color cyan
+!
+
+gray
+	^ self new color: Color gray
+!
+
+green
+	^ self new color: Color green
+!
+
+magenta
+	^ self new color: Color magenta
+!
+
+red
+	^ self new color: Color red
+!
+
+white 
+	^ self new color: Color white
+!
+
+yellow
+	^ self new color: Color yellow
+! !
+
+!TextColor class methodsFor: 'instance creation'!
+
+color: aColor
+	^ self new color: aColor
+!
+
+scanFrom: strm
+	"read a color in the funny format used by Text styles on files. c125000255 or cblue;"
+
+	| r g b |
+	strm peek isDigit
+		ifTrue:
+			[r := (strm next: 3) asNumber.
+			g := (strm next: 3) asNumber.
+			b := (strm next: 3) asNumber.
+			^ self color: (Color r: r g: g b: b range: 255)].
+	"A name of a color"
+	^ self color: (Color perform: (strm upTo: ';') asSymbol)
+! !
+
 TextAttribute subclass: #TextEmphasis
 	instanceVariableNames: 'emphasisCode setMode'
 	package: 'Kernel-Collections'!

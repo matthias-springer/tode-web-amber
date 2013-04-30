@@ -2234,6 +2234,17 @@ smalltalk.TagBrush);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "css:value:",
+fn: function (aProperty,aValue){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(_st(self)._element())._asJQuery())._css_a_(aProperty,aValue);
+return self}, function($ctx1) {$ctx1.fill(self,"css:value:",{aProperty:aProperty,aValue:aValue},smalltalk.TagBrush)})},
+messageSends: ["css:a:", "asJQuery", "element"]}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "draggable",
 fn: function (){
 var self=this;
@@ -4407,7 +4418,7 @@ smalltalk.NavbarMorph);
 
 
 
-smalltalk.addClass('TextMorph', smalltalk.RectangleMorph, ['morphElement', 'editor', 'readOnly', 'selectionStart', 'selectionEnd', 'selectionText', 'textElement', 'text'], 'Canvas');
+smalltalk.addClass('TextMorph', smalltalk.RectangleMorph, ['morphElement', 'editor', 'readOnly', 'selectionStart', 'selectionEnd', 'selectionText', 'textElement', 'text', 'myHtml'], 'Canvas');
 smalltalk.addMethod(
 smalltalk.method({
 selector: "asText",
@@ -4487,6 +4498,70 @@ $1=$SmalltalkEditor();
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"editorClass",{},smalltalk.TextMorph)})},
 messageSends: []}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "escape:",
+fn: function (aString){
+var self=this;
+var str;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+str=aString;
+_st(_st(_st(self)._class())._charSpecialRenderings())._keysAndValuesDo_((function(char,escape){
+return smalltalk.withContext(function($ctx2) {
+str=_st(str)._copyReplaceAll_with_(char,escape);
+return str;
+}, function($ctx2) {$ctx2.fillBlock({char:char,escape:escape},$ctx1)})}));
+$1=str;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"escape:",{aString:aString,str:str},smalltalk.TextMorph)})},
+messageSends: ["keysAndValuesDo:", "copyReplaceAll:with:", "charSpecialRenderings", "class"]}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "getColorStringFor:",
+fn: function (aColor){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st("#").__comma(_st(aColor)._forHtml());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"getColorStringFor:",{aColor:aColor},smalltalk.TextMorph)})},
+messageSends: [",", "forHtml"]}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "getCssClassFor:",
+fn: function (aCode){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5;
+$1=_st(aCode).__eq((1));
+if(smalltalk.assert($1)){
+return "bold";
+};
+$2=_st(aCode).__eq((2));
+if(smalltalk.assert($2)){
+return "italic";
+};
+$3=_st(aCode).__eq((0));
+if(smalltalk.assert($3)){
+return "";
+};
+$4=_st(aCode).__eq((16));
+if(smalltalk.assert($4)){
+return "stroke";
+};
+$5=_st(aCode).__eq((4));
+if(smalltalk.assert($5)){
+return "underline";
+};
+return self}, function($ctx1) {$ctx1.fill(self,"getCssClassFor:",{aCode:aCode},smalltalk.TextMorph)})},
+messageSends: ["ifTrue:", "="]}),
 smalltalk.TextMorph);
 
 smalltalk.addMethod(
@@ -4739,6 +4814,7 @@ selector: "render:with:",
 fn: function (container,html){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
+self["@myHtml"]=html;
 _st(container)._with_((function(){
 return smalltalk.withContext(function($ctx2) {
 self["@textElement"]=_st(html)._span();
@@ -4767,19 +4843,45 @@ smalltalk.method({
 selector: "renderText:",
 fn: function (aText){
 var self=this;
-var htmlText;
+var runArr,string,htmlString,offset,spans;
+function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
+function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
 return smalltalk.withContext(function($ctx1) { 
+var $1;
 _st(_st(_st(self)._textElement())._asJQuery())._empty();
-htmlText=_st(aText)._string();
-_st(_st(_st(self)._class())._charSpecialRenderings())._keysAndValuesDo_((function(char,escape){
+string=_st(aText)._string();
+runArr=_st(aText)._runs();
+offset=(1);
+spans=_st($Array())._new();
+_st($Transcript())._show_(_st(runArr)._size());
+_st((1))._to_do_(_st(_st(runArr)._runs())._size(),(function(x){
+var endOffs,span,str;
 return smalltalk.withContext(function($ctx2) {
-htmlText=_st(htmlText)._copyReplaceAll_with_(char,escape);
-return htmlText;
-}, function($ctx2) {$ctx2.fillBlock({char:char,escape:escape},$ctx1)})}));
-htmlText=_st(htmlText).__comma("<br/>");
-_st(_st(_st(self)._textElement())._asJQuery())._html_(htmlText);
-return self}, function($ctx1) {$ctx1.fill(self,"renderText:",{aText:aText,htmlText:htmlText},smalltalk.TextMorph)})},
-messageSends: ["empty", "asJQuery", "textElement", "string", "keysAndValuesDo:", "copyReplaceAll:with:", "charSpecialRenderings", "class", ",", "html:"]}),
+endOffs=_st(offset).__plus(_st(_st(runArr)._runs())._at_(x));
+endOffs;
+str=_st(string)._copyFrom_to_(offset,_st(_st(offset).__plus(endOffs)).__minus((1)));
+str;
+span=_st(self["@myHtml"])._span_(str);
+span;
+_st(_st(_st(runArr)._values())._at_(x))._do_((function(value){
+return smalltalk.withContext(function($ctx3) {
+$1=_st(_st(value)._class())._canUnderstand_("color");
+if(smalltalk.assert($1)){
+return _st(span)._css_value_("color",_st(self)._getColorStringFor_(_st(value)._color()));
+} else {
+return _st(span)._addClass_(_st(self)._getCssClassFor_(_st(value)._emphasisCode()));
+};
+}, function($ctx3) {$ctx3.fillBlock({value:value},$ctx1)})}));
+_st(spans)._addLast_(span);
+offset=_st(offset).__plus(endOffs);
+return offset;
+}, function($ctx2) {$ctx2.fillBlock({x:x,endOffs:endOffs,span:span,str:str},$ctx1)})}));
+_st(spans)._do_((function(span){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(self)._textElement())._with_(span);
+}, function($ctx2) {$ctx2.fillBlock({span:span},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"renderText:",{aText:aText,runArr:runArr,string:string,htmlString:htmlString,offset:offset,spans:spans},smalltalk.TextMorph)})},
+messageSends: ["empty", "asJQuery", "textElement", "string", "runs", "new", "show:", "size", "to:do:", "+", "at:", "copyFrom:to:", "-", "span:", "do:", "ifTrue:ifFalse:", "css:value:", "getColorStringFor:", "color", "addClass:", "getCssClassFor:", "emphasisCode", "canUnderstand:", "class", "values", "addLast:", "with:"]}),
 smalltalk.TextMorph);
 
 smalltalk.addMethod(

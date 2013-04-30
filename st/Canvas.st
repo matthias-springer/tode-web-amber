@@ -841,6 +841,10 @@ contextmenu: aString
 	self at: 'contextmenu' put: aString
 !
 
+css:aProperty value:aValue
+	self element asJQuery css: aProperty a: aValue
+!
+
 draggable
 	< $(self._element()).draggable({cancel: '.drag-stop'}); >
 !
@@ -1732,7 +1736,7 @@ render: container with: html
 ! !
 
 RectangleMorph subclass: #TextMorph
-	instanceVariableNames: 'morphElement editor readOnly selectionStart selectionEnd selectionText textElement text'
+	instanceVariableNames: 'morphElement editor readOnly selectionStart selectionEnd selectionText textElement text myHtml'
 	package: 'Canvas'!
 
 !TextMorph methodsFor: 'accessing'!
@@ -1942,7 +1946,28 @@ editorClass
 
 !TextMorph methodsFor: 'rendering'!
 
+escape: aString
+	|str|
+	str := aString.
+	self class charSpecialRenderings keysAndValuesDo: [:char :escape |
+		str := str copyReplaceAll: char with: escape].
+	^str
+!
+
+getColorStringFor: aColor
+	^'#', aColor forHtml
+!
+
+getCssClassFor: aCode
+	aCode = 1 ifTrue: [^'bold'].
+	aCode = 2 ifTrue: [^'italic'].
+	aCode = 0 ifTrue: [^''].
+	aCode = 16 ifTrue: [^'stroke'].
+	aCode = 4 ifTrue: [^'underline']
+!
+
 render: container with: html
+	myHtml := html.
 	container 
 		with: [textElement := html span].
 !
@@ -1953,13 +1978,28 @@ renderCharacter: aCharacter
 !
 
 renderText: aText
-	|htmlText|
+	|runArr string htmlString offset spans|
 	self textElement asJQuery empty.
-	htmlText := aText string.
-	self class charSpecialRenderings keysAndValuesDo: [:char :escape |
-		htmlText := htmlText copyReplaceAll: char with: escape].
-	htmlText := htmlText, '<br/>'.
-	self textElement asJQuery html: htmlText.
+	string := aText string.
+	runArr := aText runs.
+	offset := 1.
+	spans := Array new.
+	Transcript show: runArr size.
+	1 to: runArr runs size do: [:x| |endOffs span str|
+		endOffs := offset + (runArr runs at: x).
+		str := string copyFrom: offset to: (offset + endOffs -1).
+		span := myHtml span: str.
+		(runArr values at: x) do:[:value| 
+			(value class canUnderstand: #color) ifTrue:[
+				span css:'color' value: (self getColorStringFor: value color).] 
+			ifFalse:[
+				span addClass: (self getCssClassFor: value emphasisCode)].
+		].
+		spans addLast: span.
+		offset := offset + endOffs.
+	].	
+		
+	spans do: [:span| self textElement with: span]
 ! !
 
 TextMorph class instanceVariableNames: 'keySpecialBindings charSpecialRenderings'!
