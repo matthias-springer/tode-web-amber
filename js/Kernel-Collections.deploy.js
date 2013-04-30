@@ -4490,6 +4490,7 @@ function $RunArray(){return smalltalk.RunArray||(typeof RunArray=="undefined"?ni
 function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2,$3,$4;
+_st(self)._halt();
 $1=_st(stop).__lt(start);
 if(smalltalk.assert($1)){
 $2=_st($RunArray())._new();
@@ -4524,7 +4525,7 @@ _st(newRuns)._at_put_(_st(newRuns)._size(),_st(offset2).__plus((1)));
 $4=_st($RunArray())._runs_values_(newRuns,_st(self["@values"])._copyFrom_to_(run1,run2));
 return $4;
 }, function($ctx1) {$ctx1.fill(self,"copyFrom:to:",{start:start,stop:stop,newRuns:newRuns,run1:run1,run2:run2,offset1:offset1,offset2:offset2},smalltalk.RunArray)})},
-messageSends: ["ifTrue:", "new", "<", "at:setRunOffsetAndValue:", "ifTrue:ifFalse:", "with:", "+", "-", "copyFrom:to:", "at:put:", "at:", "size", "=", "runs:values:"]}),
+messageSends: ["halt", "ifTrue:", "new", "<", "at:setRunOffsetAndValue:", "ifTrue:ifFalse:", "with:", "+", "-", "copyFrom:to:", "at:put:", "at:", "size", "=", "runs:values:"]}),
 smalltalk.RunArray);
 
 smalltalk.addMethod(

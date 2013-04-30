@@ -5915,6 +5915,7 @@ function $RunArray(){return smalltalk.RunArray||(typeof RunArray=="undefined"?ni
 function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2,$3,$4;
+_st(self)._halt();
 $1=_st(stop).__lt(start);
 if(smalltalk.assert($1)){
 $2=_st($RunArray())._new();
@@ -5950,8 +5951,8 @@ $4=_st($RunArray())._runs_values_(newRuns,_st(self["@values"])._copyFrom_to_(run
 return $4;
 }, function($ctx1) {$ctx1.fill(self,"copyFrom:to:",{start:start,stop:stop,newRuns:newRuns,run1:run1,run2:run2,offset1:offset1,offset2:offset2},smalltalk.RunArray)})},
 args: ["start", "stop"],
-source: "copyFrom: start to: stop\x0a\x09| newRuns run1 run2 offset1 offset2 | \x0a\x09stop < start ifTrue: [^RunArray new].\x0a\x09self at: start setRunOffsetAndValue: [:r :o :value1 | run1 := r. offset1 := o. value1].\x0a\x09self at: stop setRunOffsetAndValue: [:r :o :value2 | run2 := r. offset2 := o. value2].\x0a\x09run1 = run2\x0a\x09\x09ifTrue: \x0a\x09\x09\x09[newRuns := Array with: offset2 - offset1 + 1]\x0a\x09\x09ifFalse: \x0a\x09\x09\x09[newRuns := runs copyFrom: run1 to: run2.\x0a\x09\x09\x09newRuns at: 1 put: (newRuns at: 1) - offset1.\x0a\x09\x09\x09newRuns at: newRuns size put: offset2 + 1].\x0a\x09^RunArray runs: newRuns values: (values copyFrom: run1 to: run2)",
-messageSends: ["ifTrue:", "new", "<", "at:setRunOffsetAndValue:", "ifTrue:ifFalse:", "with:", "+", "-", "copyFrom:to:", "at:put:", "at:", "size", "=", "runs:values:"],
+source: "copyFrom: start to: stop\x0a\x09| newRuns run1 run2 offset1 offset2 | \x0a\x09self halt.\x0a\x09stop < start ifTrue: [^RunArray new].\x0a\x09self at: start setRunOffsetAndValue: [:r :o :value1 | run1 := r. offset1 := o. value1].\x0a\x09self at: stop setRunOffsetAndValue: [:r :o :value2 | run2 := r. offset2 := o. value2].\x0a\x09run1 = run2\x0a\x09\x09ifTrue: \x0a\x09\x09\x09[newRuns := Array with: offset2 - offset1 + 1]\x0a\x09\x09ifFalse: \x0a\x09\x09\x09[newRuns := runs copyFrom: run1 to: run2.\x0a\x09\x09\x09newRuns at: 1 put: (newRuns at: 1) - offset1.\x0a\x09\x09\x09newRuns at: newRuns size put: offset2 + 1].\x0a\x09^RunArray runs: newRuns values: (values copyFrom: run1 to: run2)",
+messageSends: ["halt", "ifTrue:", "new", "<", "at:setRunOffsetAndValue:", "ifTrue:ifFalse:", "with:", "+", "-", "copyFrom:to:", "at:put:", "at:", "size", "=", "runs:values:"],
 referencedClasses: ["RunArray", "Array"]
 }),
 smalltalk.RunArray);
