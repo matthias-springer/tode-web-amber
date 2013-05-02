@@ -449,6 +449,12 @@ printOn: aStream
 		nextPutAll: ' class'
 ! !
 
+!Metaclass methodsFor: 'ston-core'!
+
+stonName
+	^ self name
+! !
+
 !Metaclass methodsFor: 'testing'!
 
 isMetaclass

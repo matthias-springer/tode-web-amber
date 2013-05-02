@@ -224,8 +224,17 @@ var result,error,actionArgs,continueWith;
 function $GsClientForwarderSendNotification(){return smalltalk.GsClientForwarderSendNotification||(typeof GsClientForwarderSendNotification=="undefined"?nil:GsClientForwarderSendNotification)}
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16;
+_st((function(){
+return smalltalk.withContext(function($ctx2) {
 result=_st(self)._nbPollForResult();
-$1=_st(_st(_st(self)._getAndClearLastError())._error())._isNil();
+result;
+error=_st(self)._getAndClearLastError();
+return error;
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}))._ifCurtailed_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._terminateCurrentNbCall();
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+$1=_st(error)._isNil();
 if(smalltalk.assert($1)){
 $2=result;
 return $2;
@@ -282,8 +291,8 @@ $16=_st(self)._getNbResult();
 return $16;
 }, function($ctx1) {$ctx1.fill(self,"getNbResult",{result:result,error:error,actionArgs:actionArgs,continueWith:continueWith},smalltalk.GciSession)})},
 args: [],
-source: "getNbResult\x0a  \x22The call that initiated the non-blocking call will be one of three types:\x0a\x09\x091. expecting nothing--e.g., GciNbAbort();\x0a\x09\x092. expecting a Boolean--e.g., GciNbCommit();\x0a\x09\x093. expecting an OopType--e.g., GciNbExecuteStr().\x0a\x09Because we don't know how the answer should be interpreted, we simply\x0a\x09return it as an Integer.\x22\x0a\x0a  | result error actionArgs continueWith |\x0a   \x0a  result := self nbPollForResult.\x0a  error := self getAndClearLastError \x0a   \x22 ifCurtailed: [ self terminateCurrentNbCall ].\x22\x0a  error isNil\x0a    ifTrue: [ ^ result ].\x0a  actionArgs := error number == 2336\x0a    ifTrue: [ \x0a      GsClientForwarderSendNotification new\x0a        session: self;\x0a        tag: error;\x0a        signal ]\x0a    ifFalse: [ \x0a      error number == 4100\x0a        ifTrue: [ \x0a          \x22Session is invalid ... session died out from under us, so clean up session and throw the error\x22\x0a          self release ].\x0a      self signalServerError: error ].\x0a  actionArgs isArray\x0a    ifTrue: [ \x0a      (actionArgs at: 1) == #'debug'\x0a        ifTrue: [ ^ self debuggerRequested: (actionArgs at: 2) ].\x0a      (actionArgs at: 1) == #'abort'\x0a        ifTrue: [ ^ actionArgs at: 2 ].\x0a      (actionArgs at: 1) == #'resume'\x0a        ifTrue: [ continueWith := self library oopFor: (actionArgs at: 2) ]\x0a        ifFalse: [ ^ actionArgs halt: 'incorrect return value from GsRuntimeError handler' ] ]\x0a    ifFalse: [ \x0a      actionArgs = #'resume'\x0a        ifTrue: [ continueWith := self library oopIllegal asOop ]\x0a        ifFalse: [ ^ actionArgs halt: 'incorrect return value from GsRuntimeError handler' ] ].\x0a  self library\x0a    critical: [ :lib | \x0a      lib\x0a        apiGciNbContinueWith: error context\x0a        a: (self library oopTypeClass fromInteger: continueWith)\x0a        a: 1 ].\x0a  ^ self getNbResult",
-messageSends: ["nbPollForResult", "ifTrue:", "isNil", "error", "getAndClearLastError", "ifTrue:ifFalse:", "session:", "new", "tag:", "signal", "release", "==", "number", "signalServerError:", "debuggerRequested:", "at:", "oopFor:", "library", "halt:", "asOop", "oopIllegal", "=", "isArray", "critical:", "apiGciNbContinueWith:a:a:", "context", "fromInteger:", "oopTypeClass", "getNbResult"],
+source: "getNbResult\x0a  \x22The call that initiated the non-blocking call will be one of three types:\x0a\x09\x091. expecting nothing--e.g., GciNbAbort();\x0a\x09\x092. expecting a Boolean--e.g., GciNbCommit();\x0a\x09\x093. expecting an OopType--e.g., GciNbExecuteStr().\x0a\x09Because we don't know how the answer should be interpreted, we simply\x0a\x09return it as an Integer.\x22\x0a\x0a  | result error actionArgs continueWith |\x0a  \x0a  [result := self nbPollForResult.\x0a  error := self getAndClearLastError] \x0a    ifCurtailed: [ self terminateCurrentNbCall ].\x0a  error isNil\x0a    ifTrue: [ ^ result ].\x0a  actionArgs := error number == 2336\x0a    ifTrue: [ \x0a      GsClientForwarderSendNotification new\x0a        session: self;\x0a        tag: error;\x0a        signal ]\x0a    ifFalse: [ \x0a      error number == 4100\x0a        ifTrue: [ \x0a          \x22Session is invalid ... session died out from under us, so clean up session and throw the error\x22\x0a          self release ].\x0a      self signalServerError: error ].\x0a  actionArgs isArray\x0a    ifTrue: [ \x0a      (actionArgs at: 1) == #'debug'\x0a        ifTrue: [ ^ self debuggerRequested: (actionArgs at: 2) ].\x0a      (actionArgs at: 1) == #'abort'\x0a        ifTrue: [ ^ actionArgs at: 2 ].\x0a      (actionArgs at: 1) == #'resume'\x0a        ifTrue: [ continueWith := self library oopFor: (actionArgs at: 2) ]\x0a        ifFalse: [ ^ actionArgs halt: 'incorrect return value from GsRuntimeError handler' ] ]\x0a    ifFalse: [ \x0a      actionArgs = #'resume'\x0a        ifTrue: [ continueWith := self library oopIllegal asOop ]\x0a        ifFalse: [ ^ actionArgs halt: 'incorrect return value from GsRuntimeError handler' ] ].\x0a  self library\x0a    critical: [ :lib | \x0a      lib\x0a        apiGciNbContinueWith: error context\x0a        a: (self library oopTypeClass fromInteger: continueWith)\x0a        a: 1 ].\x0a  ^ self getNbResult",
+messageSends: ["ifCurtailed:", "terminateCurrentNbCall", "nbPollForResult", "getAndClearLastError", "ifTrue:", "isNil", "ifTrue:ifFalse:", "session:", "new", "tag:", "signal", "release", "==", "number", "signalServerError:", "debuggerRequested:", "at:", "oopFor:", "library", "halt:", "asOop", "oopIllegal", "=", "isArray", "critical:", "apiGciNbContinueWith:a:a:", "context", "fromInteger:", "oopTypeClass", "getNbResult"],
 referencedClasses: ["GsClientForwarderSendNotification"]
 }),
 smalltalk.GciSession);

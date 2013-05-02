@@ -1,50 +1,92 @@
 Smalltalk current createPackage: 'Topez-Client-GCI'!
 Object subclass: #GciErrSType
-	instanceVariableNames: 'library args argsCount category context exceptionObj fatal message number reason address exceptionObjClassName'
+	instanceVariableNames: 'library args argsSize category context exceptionObj fatal message number reason address exceptionObjClassName'
 	package: 'Topez-Client-GCI'!
 
 !GciErrSType methodsFor: 'accessing'!
-
-argCount
-	^ args size
-!
 
 args
 	^ args
 !
 
+args: anArray
+	args := Array new: self argsSize.
+	(1 to: self argsSize) do: [:i |
+		args at: i put: (OopType fromInteger: (anArray at: i))].
+!
+
 argsSize
-	10 < argsCount
-		ifTrue: [self error: 'Argument count too high: ' , argsCount printString].
-	^ argsCount
+	10 < argsSize
+		ifTrue: [self error: 'Argument count too high: ' , argsSize printString].
+	^ argsSize
+!
+
+argsSize: anInteger
+	argsSize := anInteger.
 !
 
 category
 	^ category
 !
 
+category: anInteger
+	category := OopType fromInteger: anInteger.
+!
+
 context
 	^ context
+!
+
+context: anInteger
+	context := OopType fromInteger: anInteger.
 !
 
 exceptionObj
 	^ exceptionObj
 !
 
+exceptionObj: anInteger
+	exceptionObj := OopType fromInteger: anInteger.
+!
+
 exceptionObjClassName
 	^ exceptionObjClassName
+!
+
+exceptionObjClassName: anObject
+	exceptionObjClassName := anObject.
 !
 
 fatal
 	^ fatal
 !
 
+fatal: aChar
+	fatal := aChar.
+!
+
 message
 	^ message
 !
 
+message: aString
+	message := aString.
+!
+
 number
 	^ number
+!
+
+number: anInteger
+	number := anInteger.
+!
+
+reason
+	^ reason
+!
+
+reason: aString
+	reason := aString.
 ! !
 
 !GciErrSType methodsFor: 'printing'!
@@ -71,13 +113,6 @@ oopTypeAt: anInteger
 !
 
 readArguments
-  | argsSize ofs |
-  argsSize := self argsSize.
-  args := Array new: argsSize.
-  ofs := self argsOffset.
-  1 to: argsSize do: [ :i | 
-    args at: i put: (library localFor: (self oopTypeAt: ofs)).
-    ofs := ofs + 8 ]
 !
 
 readMessage
@@ -134,20 +169,18 @@ initializeUsingSton: aGciLibrary session: aTodeSession
 !
 
 readArgumentsAndExceptionClassUsingStonIn: aTodeSession
-  | argsSize ofs expressionStream stonString answerArray objectArray classNameArray Name is exceptionObjInClassNameArray |
-  argsSize := self argsSize.
-  args := Array new: argsSize.
-  expressionStream := WriteStream on: String new.
+  | pArgsSize ofs expressionStream stonString answerArray objectArray classNameArray Name is exceptionObjInClassNameArray |
+  pArgsSize := self argsSize.
+  args := Array new: pArgsSize.
+  expressionStream := StringStream on: String new.
   expressionStream
     nextPutAll: '(' , aTodeSession todeServerAccessString , ' for: ';
     nextPutAll: aTodeSession shell shellId printString;
     nextPutAll: ') reifyExceptionArgsForOopList: {'.
-  ofs := self argsOffset.
-  1 to: argsSize do: [ :i | 
+  1 to: pArgsSize do: [ :i | 
     expressionStream
-      nextPutAll: (self oopTypeAt: ofs) asOop printString;
-      nextPutAll: '. '.
-    ofs := ofs + 8 ].
+      nextPutAll: (self args at: i) printString;
+      nextPutAll: '. '].
   exceptionObjInClassNameArray := false.
   self exceptionObj
     ifNil: [ 
@@ -168,9 +201,8 @@ readArgumentsAndExceptionClassUsingStonIn: aTodeSession
     do: [ :ex | self halt ].
   answerArray := STON fromString: stonString.
   objectArray := answerArray at: 1.
-  1 to: argsSize do: [ :i | 
-    args at: i put: (objectArray at: i).
-    ofs := ofs + 8 ].
+  1 to: pArgsSize do: [ :i | 
+    args at: i put: (objectArray at: i)].
   classNameArray := answerArray at: 2.
   exceptionObjInClassNameArray
     ifTrue: [ 
@@ -251,12 +283,28 @@ Object subclass: #GciLibrary
 
 !GciLibrary methodsFor: 'API'!
 
+apiGciErr: anErrObj
+	|result|
+	result := self apiGci: 'err'.
+	result result ifTrue: [
+		anErrObj category: result category.
+		anErrObj context: result context.
+		anErrObj exceptionObj: result exceptionObj.
+		anErrObj argsSize: result argCount.
+		anErrObj args: result args.
+		anErrObj number: result number.
+		anErrObj fatal: result fatal.
+		anErrObj message: result message.
+		anErrObj reason: result reason].
+	^ result result
+!
+
 apiGciExecuteStr: aString a: anOop
-	^ self apiGci: 'execute_str' data: {'string'->aString. 'oop'->anOop} asDictionary
+	^ self apiGci: 'execute_str' data: {'string'->aString. 'oop'->anOop asInteger} asDictionary
 !
 
 apiGciExecuteStr: aString a: anOop a: envId
-	^ self apiGci: 'execute_str' data: {'string'->aString. 'oop'->anOop. 'envId'->envId} asDictionary
+	^ self apiGci: 'execute_str' data: {'string'->aString. 'oop'->anOop asInteger. 'envId'->envId} asDictionary
 !
 
 apiGciGetSessionId
@@ -275,11 +323,11 @@ apiGciLogin: userName a: password
 !
 
 apiGciLongToOop: anInteger
-	^ self apiGci: 'long_to_oop' data: {'integer'->anInteger} asDictionary
+	^ OopType fromInteger: (self apiGci: 'long_to_oop' data: {'integer'->anInteger} asDictionary)
 !
 
 apiGciNbExecuteStr: aString a: anOop a: envId
-	^ self apiGci: 'nb_execute_str' data: {'string'->aString. 'oop'->anOop. 'envId'->envId} asDictionary
+	^ self apiGci: 'nb_execute_str' data: {'string'->aString. 'oop'->anOop asInteger. 'envId'->envId} asDictionary
 !
 
 apiGciNewString: aString
@@ -287,7 +335,7 @@ apiGciNewString: aString
 !
 
 apiGciPerform: aReceiver a: aSelector a: aListOfArgs
-	^ self apiGci: 'perform' data: {'receiver'->aReceiver getHandle. 'selector'->aSelector. 'args'->(self prepareListOfArgs: aListOfArgs)} asDictionary
+	^ self apiGci: 'perform' data: {'receiver'->aReceiver asInteger. 'selector'->aSelector. 'args'->(self prepareListOfArgs: aListOfArgs)} asDictionary
 !
 
 apiGciSetNet: stoneName a: hostUserID a: hostPassword a: gemService
@@ -308,11 +356,11 @@ apiGciVersion
 !GciLibrary methodsFor: 'API convenience'!
 
 apiGciExecuteStrExpectingStr: aString a: anOop
-	^ self apiGci: 'execute_str_expecting_str' data: {'string'->aString. 'oop'->anOop} asDictionary
+	^ self apiGci: 'execute_str_expecting_str' data: {'string'->aString. 'oop'->anOop asInteger} asDictionary
 !
 
 apiGciExecuteStrExpectingStr: aString a: anOop a: envId
-	^ self apiGci: 'execute_str_expecting_str' data: {'string'->aString. 'oop'->anOop. 'envId'->envId} asDictionary
+	^ self apiGci: 'execute_str_expecting_str' data: {'string'->aString. 'oop'->anOop asInteger. 'envId'->envId} asDictionary
 ! !
 
 !GciLibrary methodsFor: 'constants'!
@@ -435,6 +483,10 @@ getAndClearLastErrorUsingSton: aTodeSession
 
 floatToSmallDouble: aFloat
 	self error: 'not implemented yet'.
+!
+
+oopTypeFromInteger: anInteger
+	^ OopType fromInteger: anInteger
 ! !
 
 !GciLibrary methodsFor: 'proxy'!
@@ -449,24 +501,23 @@ apiGci: command data: aDictionary
 	"TODO: think about session handling"
 	"params at: '!!session_id' put: sessionId."
 	
-	Transcript show: 'GciLibrary>>apiGci: ', command asString, ' data: ', params asString.
-	
-	Transcript show: 'result: ',  (Ajax ajaxSync: '/gci/', command data: params asJSON) responseText asString.
-	
+	Transcript show: 'GciLibrary>>apiGci: ', command asString, ' data: ', params asString, Character cr.
+
 	result := (Ajax ajaxSync: '/gci/', command data: params asJSON) responseText parseJSON.
+	Transcript show: 'result: ', result asString, Character cr.
 	result success ifFalse: [Error signal: command, ' GCI API call failed. ', result exception].
 	^ result result
 !
 
 apiNoSessionGci: command data: aDictionary
-	Transcript show: 'GciLibrary>>apiNoSessionGci: ', command asString, ' data: ', aDictionary asString.
+	Transcript show: 'GciLibrary>>apiNoSessionGci: ', command asString, ' data: ', aDictionary asString, Character cr.
 	^ Ajax ajaxSync: '/gci/', command data: aDictionary asJSON
 ! !
 
 !GciLibrary methodsFor: 'wrapper'!
 
 fetchChars: oop
-	^ self apiGci: 'fetch_str' data: {'oop'->oop} asDictionary
+	^ self apiGci: 'fetch_str' data: {'oop'->oop asInteger} asDictionary
 !
 
 gciErrSTypeClass
@@ -475,9 +526,7 @@ gciErrSTypeClass
 
 getAndClearLastError
 	Transcript show: 'called getAndClearLastError', Character cr.
-	"TODO: implement"
-	
-	^ false
+	^ GciErrSType library: self
 !
 
 oopFor: anObject

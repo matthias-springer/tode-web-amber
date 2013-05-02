@@ -463,7 +463,7 @@ stringStreamContents: block
 		stringStream := (String new: 32) writeStream ].
 	stringStream reset.
 	block value: stringStream.
-	^ stringStream contents
+	^ stringStream contentsToPos
 ! !
 
 !STONReader methodsFor: 'public'!

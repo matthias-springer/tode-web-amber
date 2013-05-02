@@ -153,6 +153,10 @@ object: anObject
 	object := anObject
 ! !
 
+Error subclass: #Notification
+	instanceVariableNames: ''
+	package: 'Kernel-Exceptions'!
+
 Object subclass: #ErrorHandler
 	instanceVariableNames: ''
 	package: 'Kernel-Exceptions'!

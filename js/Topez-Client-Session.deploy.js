@@ -168,8 +168,17 @@ var result,error,actionArgs,continueWith;
 function $GsClientForwarderSendNotification(){return smalltalk.GsClientForwarderSendNotification||(typeof GsClientForwarderSendNotification=="undefined"?nil:GsClientForwarderSendNotification)}
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16;
+_st((function(){
+return smalltalk.withContext(function($ctx2) {
 result=_st(self)._nbPollForResult();
-$1=_st(_st(_st(self)._getAndClearLastError())._error())._isNil();
+result;
+error=_st(self)._getAndClearLastError();
+return error;
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}))._ifCurtailed_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._terminateCurrentNbCall();
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+$1=_st(error)._isNil();
 if(smalltalk.assert($1)){
 $2=result;
 return $2;
@@ -225,7 +234,7 @@ return _st(lib)._apiGciNbContinueWith_a_a_(_st(error)._context(),_st(_st(_st(sel
 $16=_st(self)._getNbResult();
 return $16;
 }, function($ctx1) {$ctx1.fill(self,"getNbResult",{result:result,error:error,actionArgs:actionArgs,continueWith:continueWith},smalltalk.GciSession)})},
-messageSends: ["nbPollForResult", "ifTrue:", "isNil", "error", "getAndClearLastError", "ifTrue:ifFalse:", "session:", "new", "tag:", "signal", "release", "==", "number", "signalServerError:", "debuggerRequested:", "at:", "oopFor:", "library", "halt:", "asOop", "oopIllegal", "=", "isArray", "critical:", "apiGciNbContinueWith:a:a:", "context", "fromInteger:", "oopTypeClass", "getNbResult"]}),
+messageSends: ["ifCurtailed:", "terminateCurrentNbCall", "nbPollForResult", "getAndClearLastError", "ifTrue:", "isNil", "ifTrue:ifFalse:", "session:", "new", "tag:", "signal", "release", "==", "number", "signalServerError:", "debuggerRequested:", "at:", "oopFor:", "library", "halt:", "asOop", "oopIllegal", "=", "isArray", "critical:", "apiGciNbContinueWith:a:a:", "context", "fromInteger:", "oopTypeClass", "getNbResult"]}),
 smalltalk.GciSession);
 
 smalltalk.addMethod(
