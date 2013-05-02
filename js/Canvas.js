@@ -6233,15 +6233,15 @@ return "";
 };
 $4=_st(aCode).__eq((16));
 if(smalltalk.assert($4)){
-return "stroke";
+return "struck";
 };
 $5=_st(aCode).__eq((4));
 if(smalltalk.assert($5)){
-return "underline";
+return "underlined";
 };
 return self}, function($ctx1) {$ctx1.fill(self,"getCssClassFor:",{aCode:aCode},smalltalk.TextMorph)})},
 args: ["aCode"],
-source: "getCssClassFor: aCode\x0a\x09aCode = 1 ifTrue: [^'bold'].\x0a\x09aCode = 2 ifTrue: [^'italic'].\x0a\x09aCode = 0 ifTrue: [^''].\x0a\x09aCode = 16 ifTrue: [^'stroke'].\x0a\x09aCode = 4 ifTrue: [^'underline']",
+source: "getCssClassFor: aCode\x0a\x09aCode = 1 ifTrue: [^'bold'].\x0a\x09aCode = 2 ifTrue: [^'italic'].\x0a\x09aCode = 0 ifTrue: [^''].\x0a\x09aCode = 16 ifTrue: [^'struck'].\x0a\x09aCode = 4 ifTrue: [^'underlined']",
 messageSends: ["ifTrue:", "="],
 referencedClasses: []
 }),

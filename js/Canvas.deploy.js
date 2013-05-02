@@ -4554,11 +4554,11 @@ return "";
 };
 $4=_st(aCode).__eq((16));
 if(smalltalk.assert($4)){
-return "stroke";
+return "struck";
 };
 $5=_st(aCode).__eq((4));
 if(smalltalk.assert($5)){
-return "underline";
+return "underlined";
 };
 return self}, function($ctx1) {$ctx1.fill(self,"getCssClassFor:",{aCode:aCode},smalltalk.TextMorph)})},
 messageSends: ["ifTrue:", "="]}),

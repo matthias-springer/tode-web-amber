@@ -1962,8 +1962,8 @@ getCssClassFor: aCode
 	aCode = 1 ifTrue: [^'bold'].
 	aCode = 2 ifTrue: [^'italic'].
 	aCode = 0 ifTrue: [^''].
-	aCode = 16 ifTrue: [^'stroke'].
-	aCode = 4 ifTrue: [^'underline']
+	aCode = 16 ifTrue: [^'struck'].
+	aCode = 4 ifTrue: [^'underlined']
 !
 
 render: container with: html
