@@ -5579,10 +5579,10 @@ if(! smalltalk.assert($1)){
 aText=_st(anObject)._asText();
 aText;
 };
-$2=_st($Text())._string_runs_(_st(self["@string"]).__comma(aText),_st(self["@runs"]).__comma(_st(aText)._runs()));
+$2=_st($Text())._string_runs_(_st(self["@string"]).__comma(_st(aText)._string()),_st(self["@runs"]).__comma(_st(aText)._runs()));
 return $2;
 }, function($ctx1) {$ctx1.fill(self,",",{anObject:anObject,aText:aText},smalltalk.Text)})},
-messageSends: ["ifFalse:", "asText", "isText", "string:runs:", ",", "runs"]}),
+messageSends: ["ifFalse:", "asText", "isText", "string:runs:", ",", "string", "runs"]}),
 smalltalk.Text);
 
 smalltalk.addMethod(

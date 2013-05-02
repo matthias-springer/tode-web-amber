@@ -6230,6 +6230,300 @@ messageSends: ["setLabel:", "new", "yourself"]}),
 smalltalk.SystemWindow.klass);
 
 
+smalltalk.addClass('UIManager', smalltalk.Morph, ['question', 'yesAnswer', 'noAnswer', 'cancelAnswer', 'yesButton', 'noButton', 'cancelButton'], 'Canvas');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "cancelAnswer",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@cancelAnswer"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"cancelAnswer",{},smalltalk.UIManager)})},
+messageSends: []}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "cancelAnswer:",
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@cancelAnswer"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"cancelAnswer:",{anObject:anObject},smalltalk.UIManager)})},
+messageSends: []}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "cancelButton",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@cancelButton"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"cancelButton",{},smalltalk.UIManager)})},
+messageSends: []}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "cancelButton:",
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@cancelButton"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"cancelButton:",{anObject:anObject},smalltalk.UIManager)})},
+messageSends: []}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "confirm:trueChoice:falseChoice:cancelChoice:default:",
+fn: function (queryString,trueChoice,falseChoice,cancelChoice,defaultOption){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=self;
+_st($1)._question_(queryString);
+_st($1)._yesAnswer_(_st(true)._Choice());
+_st($1)._noAnswer_(_st(false)._Choice());
+_st($1)._cancelAnswer_(cancelChoice);
+$2=_st($1)._update();
+return self}, function($ctx1) {$ctx1.fill(self,"confirm:trueChoice:falseChoice:cancelChoice:default:",{queryString:queryString,trueChoice:trueChoice,falseChoice:falseChoice,cancelChoice:cancelChoice,defaultOption:defaultOption},smalltalk.UIManager)})},
+messageSends: ["question:", "yesAnswer:", "Choice", "noAnswer:", "cancelAnswer:", "update"]}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "drawButtons",
+fn: function (){
+var self=this;
+function $SimpleButtonMorph(){return smalltalk.SimpleButtonMorph||(typeof SimpleButtonMorph=="undefined"?nil:SimpleButtonMorph)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5,$7,$8,$6,$9,$10;
+$1=self;
+$2=_st($SimpleButtonMorph())._new();
+_st($2)._label_(_st(self)._yesAnswer());
+$3=_st($2)._onClick_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._answer_(true);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+_st($1)._yesButton_($3);
+$4=_st($SimpleButtonMorph())._new();
+_st($4)._label_(_st(self)._noAnswer());
+$5=_st($4)._onClick_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._answer_(false);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+_st($1)._noButton_($5);
+$7=_st($SimpleButtonMorph())._new();
+_st($7)._label_(_st(self)._cancelAnswer());
+$8=_st($7)._onClick_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._answer_(nil);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+$6=_st($1)._cancelButton_($8);
+$9=self;
+_st($9)._addMorph_(_st(self)._yesButton());
+_st($9)._addMorph_(_st(self)._noButton());
+$10=_st($9)._addMorph_(_st(self)._cancelButton());
+return self}, function($ctx1) {$ctx1.fill(self,"drawButtons",{},smalltalk.UIManager)})},
+messageSends: ["yesButton:", "label:", "yesAnswer", "new", "onClick:", "answer:", "noButton:", "noAnswer", "cancelButton:", "cancelAnswer", "addMorph:", "yesButton", "noButton", "cancelButton"]}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "initialize",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._answer_("nil");
+return self}, function($ctx1) {$ctx1.fill(self,"initialize",{},smalltalk.UIManager)})},
+messageSends: ["answer:"]}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "noAnswer",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@noAnswer"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"noAnswer",{},smalltalk.UIManager)})},
+messageSends: []}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "noAnswer:",
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@noAnswer"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"noAnswer:",{anObject:anObject},smalltalk.UIManager)})},
+messageSends: []}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "noButton",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@noButton"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"noButton",{},smalltalk.UIManager)})},
+messageSends: []}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "noButton:",
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@noButton"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"noButton:",{anObject:anObject},smalltalk.UIManager)})},
+messageSends: []}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "openInWorld",
+fn: function (){
+var self=this;
+var win;
+function $SystemWindow(){return smalltalk.SystemWindow||(typeof SystemWindow=="undefined"?nil:SystemWindow)}
+function $WorkspaceMorph(){return smalltalk.WorkspaceMorph||(typeof WorkspaceMorph=="undefined"?nil:WorkspaceMorph)}
+return smalltalk.withContext(function($ctx1) { 
+win=_st($SystemWindow())._new();
+_st(_st($WorkspaceMorph())._current())._addMorph_(win);
+_st(win)._addMorph_frame_(self,_st(_st((0)).__at((0)))._extent_(_st((1)).__at((1))));
+return self}, function($ctx1) {$ctx1.fill(self,"openInWorld",{win:win},smalltalk.UIManager)})},
+messageSends: ["new", "addMorph:", "current", "addMorph:frame:", "extent:", "@"]}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "question",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@question"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"question",{},smalltalk.UIManager)})},
+messageSends: []}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "question:",
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@question"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"question:",{anObject:anObject},smalltalk.UIManager)})},
+messageSends: []}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "render:with:",
+fn: function (container,html){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(container)._with_div_(html,_st(self)._question());
+_st(self)._drawButtons();
+return self}, function($ctx1) {$ctx1.fill(self,"render:with:",{container:container,html:html},smalltalk.UIManager)})},
+messageSends: ["with:div:", "question", "drawButtons"]}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "yesAnswer",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@yesAnswer"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"yesAnswer",{},smalltalk.UIManager)})},
+messageSends: []}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "yesAnswer:",
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@yesAnswer"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"yesAnswer:",{anObject:anObject},smalltalk.UIManager)})},
+messageSends: []}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "yesButton",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@yesButton"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"yesButton",{},smalltalk.UIManager)})},
+messageSends: []}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "yesButton:",
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@yesButton"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"yesButton:",{anObject:anObject},smalltalk.UIManager)})},
+messageSends: []}),
+smalltalk.UIManager);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "default",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._new();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"default",{},smalltalk.UIManager.klass)})},
+messageSends: ["new"]}),
+smalltalk.UIManager.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "new",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=_st(self)._basicNew();
+_st($2)._initialize();
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"new",{},smalltalk.UIManager.klass)})},
+messageSends: ["initialize", "basicNew", "yourself"]}),
+smalltalk.UIManager.klass);
+
+
 smalltalk.addClass('WorkspaceMorph', smalltalk.Morph, ['morphElement'], 'Canvas');
 smalltalk.addMethod(
 smalltalk.method({

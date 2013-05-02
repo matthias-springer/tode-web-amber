@@ -7264,12 +7264,12 @@ if(! smalltalk.assert($1)){
 aText=_st(anObject)._asText();
 aText;
 };
-$2=_st($Text())._string_runs_(_st(self["@string"]).__comma(aText),_st(self["@runs"]).__comma(_st(aText)._runs()));
+$2=_st($Text())._string_runs_(_st(self["@string"]).__comma(_st(aText)._string()),_st(self["@runs"]).__comma(_st(aText)._runs()));
 return $2;
 }, function($ctx1) {$ctx1.fill(self,",",{anObject:anObject,aText:aText},smalltalk.Text)})},
 args: ["anObject"],
-source: ", anObject\x0a\x09|aText|\x0a\x09aText := anObject.\x0a\x09anObject isText \x0a\x09\x09ifFalse: [aText := anObject asText].\x0a\x09^ Text string: string, aText runs: runs, aText runs",
-messageSends: ["ifFalse:", "asText", "isText", "string:runs:", ",", "runs"],
+source: ", anObject\x0a\x09|aText|\x0a\x09aText := anObject.\x0a\x09anObject isText \x0a\x09\x09ifFalse: [aText := anObject asText].\x0a\x09^ Text string: string, aText string runs: runs, aText runs",
+messageSends: ["ifFalse:", "asText", "isText", "string:runs:", ",", "string", "runs"],
 referencedClasses: ["Text"]
 }),
 smalltalk.Text);
