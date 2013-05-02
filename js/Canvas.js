@@ -3075,6 +3075,22 @@ smalltalk.TagBrush);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "css:value:",
+category: 'attributes',
+fn: function (aProperty,aValue){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(_st(self)._element())._asJQuery())._css_a_(aProperty,aValue);
+return self}, function($ctx1) {$ctx1.fill(self,"css:value:",{aProperty:aProperty,aValue:aValue},smalltalk.TagBrush)})},
+args: ["aProperty", "aValue"],
+source: "css:aProperty value:aValue\x0a\x09self element asJQuery css: aProperty a: aValue",
+messageSends: ["css:a:", "asJQuery", "element"],
+referencedClasses: []
+}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "draggable",
 category: 'attributes',
 fn: function (){
@@ -6045,7 +6061,7 @@ smalltalk.NavbarMorph);
 
 
 
-smalltalk.addClass('TextMorph', smalltalk.RectangleMorph, ['morphElement', 'editor', 'readOnly', 'selectionStart', 'selectionEnd', 'selectionText', 'textElement', 'text'], 'Canvas');
+smalltalk.addClass('TextMorph', smalltalk.RectangleMorph, ['morphElement', 'editor', 'readOnly', 'selectionStart', 'selectionEnd', 'selectionText', 'textElement', 'text', 'myHtml'], 'Canvas');
 smalltalk.addMethod(
 smalltalk.method({
 selector: "asText",
@@ -6149,6 +6165,85 @@ args: [],
 source: "editorClass\x0a\x09^ SmalltalkEditor",
 messageSends: [],
 referencedClasses: ["SmalltalkEditor"]
+}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "escape:",
+category: 'rendering',
+fn: function (aString){
+var self=this;
+var str;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+str=aString;
+_st(_st(_st(self)._class())._charSpecialRenderings())._keysAndValuesDo_((function(char,escape){
+return smalltalk.withContext(function($ctx2) {
+str=_st(str)._copyReplaceAll_with_(char,escape);
+return str;
+}, function($ctx2) {$ctx2.fillBlock({char:char,escape:escape},$ctx1)})}));
+$1=str;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"escape:",{aString:aString,str:str},smalltalk.TextMorph)})},
+args: ["aString"],
+source: "escape: aString\x0a\x09|str|\x0a\x09str := aString.\x0a\x09self class charSpecialRenderings keysAndValuesDo: [:char :escape |\x0a\x09\x09str := str copyReplaceAll: char with: escape].\x0a\x09^str",
+messageSends: ["keysAndValuesDo:", "copyReplaceAll:with:", "charSpecialRenderings", "class"],
+referencedClasses: []
+}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "getColorStringFor:",
+category: 'rendering',
+fn: function (aColor){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st("#").__comma(_st(aColor)._forHtml());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"getColorStringFor:",{aColor:aColor},smalltalk.TextMorph)})},
+args: ["aColor"],
+source: "getColorStringFor: aColor\x0a\x09^'#', aColor forHtml",
+messageSends: [",", "forHtml"],
+referencedClasses: []
+}),
+smalltalk.TextMorph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "getCssClassFor:",
+category: 'rendering',
+fn: function (aCode){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5;
+$1=_st(aCode).__eq((1));
+if(smalltalk.assert($1)){
+return "bold";
+};
+$2=_st(aCode).__eq((2));
+if(smalltalk.assert($2)){
+return "italic";
+};
+$3=_st(aCode).__eq((0));
+if(smalltalk.assert($3)){
+return "";
+};
+$4=_st(aCode).__eq((16));
+if(smalltalk.assert($4)){
+return "struck";
+};
+$5=_st(aCode).__eq((4));
+if(smalltalk.assert($5)){
+return "underlined";
+};
+return self}, function($ctx1) {$ctx1.fill(self,"getCssClassFor:",{aCode:aCode},smalltalk.TextMorph)})},
+args: ["aCode"],
+source: "getCssClassFor: aCode\x0a\x09aCode = 1 ifTrue: [^'bold'].\x0a\x09aCode = 2 ifTrue: [^'italic'].\x0a\x09aCode = 0 ifTrue: [^''].\x0a\x09aCode = 16 ifTrue: [^'struck'].\x0a\x09aCode = 4 ifTrue: [^'underlined']",
+messageSends: ["ifTrue:", "="],
+referencedClasses: []
 }),
 smalltalk.TextMorph);
 
@@ -6468,6 +6563,7 @@ category: 'rendering',
 fn: function (container,html){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
+self["@myHtml"]=html;
 _st(container)._with_((function(){
 return smalltalk.withContext(function($ctx2) {
 self["@textElement"]=_st(html)._span();
@@ -6475,7 +6571,7 @@ return self["@textElement"];
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"render:with:",{container:container,html:html},smalltalk.TextMorph)})},
 args: ["container", "html"],
-source: "render: container with: html\x0a\x09container \x0a\x09\x09with: [textElement := html span].",
+source: "render: container with: html\x0a\x09myHtml := html.\x0a\x09container \x0a\x09\x09with: [textElement := html span].",
 messageSends: ["with:", "span"],
 referencedClasses: []
 }),
@@ -6506,22 +6602,48 @@ selector: "renderText:",
 category: 'rendering',
 fn: function (aText){
 var self=this;
-var htmlText;
+var runArr,string,htmlString,offset,spans;
+function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
+function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
 return smalltalk.withContext(function($ctx1) { 
+var $1;
 _st(_st(_st(self)._textElement())._asJQuery())._empty();
-htmlText=_st(aText)._string();
-_st(_st(_st(self)._class())._charSpecialRenderings())._keysAndValuesDo_((function(char,escape){
+string=_st(aText)._string();
+runArr=_st(aText)._runs();
+offset=(1);
+spans=_st($Array())._new();
+_st($Transcript())._show_(_st(runArr)._size());
+_st((1))._to_do_(_st(_st(runArr)._runs())._size(),(function(x){
+var endOffs,span,str;
 return smalltalk.withContext(function($ctx2) {
-htmlText=_st(htmlText)._copyReplaceAll_with_(char,escape);
-return htmlText;
-}, function($ctx2) {$ctx2.fillBlock({char:char,escape:escape},$ctx1)})}));
-htmlText=_st(htmlText).__comma("<br/>");
-_st(_st(_st(self)._textElement())._asJQuery())._html_(htmlText);
-return self}, function($ctx1) {$ctx1.fill(self,"renderText:",{aText:aText,htmlText:htmlText},smalltalk.TextMorph)})},
+endOffs=_st(offset).__plus(_st(_st(runArr)._runs())._at_(x));
+endOffs;
+str=_st(string)._copyFrom_to_(offset,_st(endOffs).__minus((1)));
+str;
+span=_st(self["@myHtml"])._span_(str);
+span;
+_st(_st(_st(runArr)._values())._at_(x))._do_((function(value){
+return smalltalk.withContext(function($ctx3) {
+$1=_st(_st(value)._class())._canUnderstand_("color");
+if(smalltalk.assert($1)){
+return _st(span)._css_value_("color",_st(self)._getColorStringFor_(_st(value)._color()));
+} else {
+return _st(span)._addClass_(_st(self)._getCssClassFor_(_st(value)._emphasisCode()));
+};
+}, function($ctx3) {$ctx3.fillBlock({value:value},$ctx1)})}));
+_st(spans)._addLast_(span);
+offset=endOffs;
+return offset;
+}, function($ctx2) {$ctx2.fillBlock({x:x,endOffs:endOffs,span:span,str:str},$ctx1)})}));
+_st(spans)._do_((function(span){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(self)._textElement())._with_(span);
+}, function($ctx2) {$ctx2.fillBlock({span:span},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"renderText:",{aText:aText,runArr:runArr,string:string,htmlString:htmlString,offset:offset,spans:spans},smalltalk.TextMorph)})},
 args: ["aText"],
-source: "renderText: aText\x0a\x09|htmlText|\x0a\x09self textElement asJQuery empty.\x0a\x09htmlText := aText string.\x0a\x09self class charSpecialRenderings keysAndValuesDo: [:char :escape |\x0a\x09\x09htmlText := htmlText copyReplaceAll: char with: escape].\x0a\x09htmlText := htmlText, '<br/>'.\x0a\x09self textElement asJQuery html: htmlText.",
-messageSends: ["empty", "asJQuery", "textElement", "string", "keysAndValuesDo:", "copyReplaceAll:with:", "charSpecialRenderings", "class", ",", "html:"],
-referencedClasses: []
+source: "renderText: aText\x0a\x09|runArr string htmlString offset spans|\x0a\x09self textElement asJQuery empty.\x0a\x09string := aText string.\x0a\x09runArr := aText runs.\x0a\x09offset := 1.\x0a\x09spans := Array new.\x0a\x09Transcript show: runArr size.\x0a\x091 to: runArr runs size do: [:x| |endOffs span str|\x0a\x09\x09endOffs := offset + (runArr runs at: x).\x0a\x09\x09str := string copyFrom: offset to: (endOffs -1).\x0a\x09\x09span := myHtml span: str.\x0a\x09\x09(runArr values at: x) do:[:value| \x0a\x09\x09\x09(value class canUnderstand: #color) ifTrue:[\x0a\x09\x09\x09\x09span css:'color' value: (self getColorStringFor: value color).] \x0a\x09\x09\x09ifFalse:[\x0a\x09\x09\x09\x09span addClass: (self getCssClassFor: value emphasisCode)].\x0a\x09\x09].\x0a\x09\x09spans addLast: span.\x0a\x09\x09offset := endOffs.\x0a\x09].\x09\x0a\x09\x09\x0a\x09spans do: [:span| self textElement with: span]",
+messageSends: ["empty", "asJQuery", "textElement", "string", "runs", "new", "show:", "size", "to:do:", "+", "at:", "copyFrom:to:", "-", "span:", "do:", "ifTrue:ifFalse:", "css:value:", "getColorStringFor:", "color", "addClass:", "getCssClassFor:", "emphasisCode", "canUnderstand:", "class", "values", "addLast:", "with:"],
+referencedClasses: ["Array", "Transcript"]
 }),
 smalltalk.TextMorph);
 

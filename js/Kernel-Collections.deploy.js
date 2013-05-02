@@ -3199,20 +3199,6 @@ smalltalk.String);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "convertTDEvaluateTokenResponseToText",
-fn: function (){
-var self=this;
-function $STON(){return smalltalk.STON||(typeof STON=="undefined"?nil:STON)}
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st($STON())._fromString_(self);
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"convertTDEvaluateTokenResponseToText",{},smalltalk.String)})},
-messageSends: ["fromString:"]}),
-smalltalk.String);
-
-smalltalk.addMethod(
-smalltalk.method({
 selector: "copyFrom:to:",
 fn: function (anIndex,anotherIndex){
 var self=this;
@@ -3730,22 +3716,14 @@ smalltalk.method({
 selector: "printOn:",
 fn: function (aStream){
 var self=this;
-var x;
 return smalltalk.withContext(function($ctx1) { 
-var $1;
-_st(aStream)._nextPutAll_("'");
-_st((1))._to_do_(_st(self)._size(),(function(i){
-return smalltalk.withContext(function($ctx2) {
-x=_st(self)._at_(i);
-_st(aStream)._nextPutAll_(x);
-$1=_st(x).__eq("'");
-if(smalltalk.assert($1)){
-return _st(aStream)._nextPutAll_(x);
-};
-}, function($ctx2) {$ctx2.fillBlock({i:i},$ctx1)})}));
-_st(aStream)._nextPutAll_("'");
-return self}, function($ctx1) {$ctx1.fill(self,"printOn:",{aStream:aStream,x:x},smalltalk.String)})},
-messageSends: ["nextPutAll:", "to:do:", "size", "at:", "ifTrue:", "="]}),
+var $1,$2;
+$1=aStream;
+_st($1)._nextPutAll_("'");
+_st($1)._nextPutAll_(self);
+$2=_st($1)._nextPutAll_("'");
+return self}, function($ctx1) {$ctx1.fill(self,"printOn:",{aStream:aStream},smalltalk.String)})},
+messageSends: ["nextPutAll:"]}),
 smalltalk.String);
 
 smalltalk.addMethod(
@@ -5591,22 +5569,20 @@ smalltalk.method({
 selector: ",",
 fn: function (anObject){
 var self=this;
-var aString;
+var aText;
 function $Text(){return smalltalk.Text||(typeof Text=="undefined"?nil:Text)}
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2;
+aText=anObject;
 $1=_st(anObject)._isText();
-if(smalltalk.assert($1)){
-aString=_st(anObject)._string();
-aString;
-} else {
-aString=_st(anObject)._asString();
-aString;
+if(! smalltalk.assert($1)){
+aText=_st(anObject)._asText();
+aText;
 };
-$2=_st($Text())._string_runs_(_st(self["@string"]).__comma(aString),self["@runs"]);
+$2=_st($Text())._string_runs_(_st(self["@string"]).__comma(aText),_st(self["@runs"]).__comma(_st(aText)._runs()));
 return $2;
-}, function($ctx1) {$ctx1.fill(self,",",{anObject:anObject,aString:aString},smalltalk.Text)})},
-messageSends: ["ifTrue:ifFalse:", "string", "asString", "isText", "string:runs:", ","]}),
+}, function($ctx1) {$ctx1.fill(self,",",{anObject:anObject,aText:aText},smalltalk.Text)})},
+messageSends: ["ifFalse:", "asText", "isText", "string:runs:", ",", "runs"]}),
 smalltalk.Text);
 
 smalltalk.addMethod(
@@ -7251,6 +7227,288 @@ return true;
 messageSends: []}),
 smalltalk.TextAttribute);
 
+
+
+smalltalk.addClass('TextColor', smalltalk.TextAttribute, ['color'], 'Kernel-Collections');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "=",
+fn: function (other){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(other)._class()).__eq_eq(_st(self)._class()))._and_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(other)._color()).__eq(self["@color"]);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"=",{other:other},smalltalk.TextColor)})},
+messageSends: ["and:", "=", "color", "==", "class"]}),
+smalltalk.TextColor);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "color",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@color"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"color",{},smalltalk.TextColor)})},
+messageSends: []}),
+smalltalk.TextColor);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "color:",
+fn: function (aColor){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@color"]=aColor;
+return self}, function($ctx1) {$ctx1.fill(self,"color:",{aColor:aColor},smalltalk.TextColor)})},
+messageSends: []}),
+smalltalk.TextColor);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "dominates:",
+fn: function (other){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(other)._class()).__eq_eq(_st(self)._class());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"dominates:",{other:other},smalltalk.TextColor)})},
+messageSends: ["==", "class"]}),
+smalltalk.TextColor);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "emphasizeScanner:",
+fn: function (scanner){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(scanner)._textColor_(self["@color"]);
+return self}, function($ctx1) {$ctx1.fill(self,"emphasizeScanner:",{scanner:scanner},smalltalk.TextColor)})},
+messageSends: ["textColor:"]}),
+smalltalk.TextColor);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "printOn:",
+fn: function (aStream){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+smalltalk.TextAttribute.fn.prototype._printOn_.apply(_st(self), [aStream]);
+$1=aStream;
+_st($1)._nextPutAll_(" code: ");
+$2=_st($1)._print_(self["@color"]);
+return self}, function($ctx1) {$ctx1.fill(self,"printOn:",{aStream:aStream},smalltalk.TextColor)})},
+messageSends: ["printOn:", "nextPutAll:", "print:"]}),
+smalltalk.TextColor);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "writeScanOn:",
+fn: function (strm){
+var self=this;
+var nn;
+function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$4,$5,$3;
+_st(strm)._nextPut_("c");
+nn=_st(self["@color"])._name();
+$1=nn;
+if(($receiver = $1) == nil || $receiver == undefined){
+$1;
+} else {
+$2=_st(_st(self)._class())._respondsTo_(nn);
+if(smalltalk.assert($2)){
+$4=strm;
+_st($4)._nextPutAll_(nn);
+$5=_st($4)._nextPut_(";");
+$3=$5;
+return $3;
+};
+};
+_st(_st($Array())._with_with_with_(_st(self["@color"])._red(),_st(self["@color"])._green(),_st(self["@color"])._blue()))._do_((function(float){
+var str;
+return smalltalk.withContext(function($ctx2) {
+str=_st("000").__comma(_st(_st(_st(float).__star((255)))._asInteger())._printString());
+str;
+return _st(strm)._nextPutAll_(_st(str)._copyFrom_to_(_st(_st(str)._size()).__minus((2)),_st(str)._size()));
+}, function($ctx2) {$ctx2.fillBlock({float:float,str:str},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"writeScanOn:",{strm:strm,nn:nn},smalltalk.TextColor)})},
+messageSends: ["nextPut:", "ifNotNil:", "ifTrue:", "nextPutAll:", "respondsTo:", "class", "name", "do:", ",", "printString", "asInteger", "*", "copyFrom:to:", "-", "size", "with:with:with:", "red", "green", "blue"]}),
+smalltalk.TextColor);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "black",
+fn: function (){
+var self=this;
+function $Color(){return smalltalk.Color||(typeof Color=="undefined"?nil:Color)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._new())._color_(_st($Color())._black());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"black",{},smalltalk.TextColor.klass)})},
+messageSends: ["color:", "black", "new"]}),
+smalltalk.TextColor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "blue",
+fn: function (){
+var self=this;
+function $Color(){return smalltalk.Color||(typeof Color=="undefined"?nil:Color)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._new())._color_(_st($Color())._blue());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"blue",{},smalltalk.TextColor.klass)})},
+messageSends: ["color:", "blue", "new"]}),
+smalltalk.TextColor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "color:",
+fn: function (aColor){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._new())._color_(aColor);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"color:",{aColor:aColor},smalltalk.TextColor.klass)})},
+messageSends: ["color:", "new"]}),
+smalltalk.TextColor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "cyan",
+fn: function (){
+var self=this;
+function $Color(){return smalltalk.Color||(typeof Color=="undefined"?nil:Color)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._new())._color_(_st($Color())._cyan());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"cyan",{},smalltalk.TextColor.klass)})},
+messageSends: ["color:", "cyan", "new"]}),
+smalltalk.TextColor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "gray",
+fn: function (){
+var self=this;
+function $Color(){return smalltalk.Color||(typeof Color=="undefined"?nil:Color)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._new())._color_(_st($Color())._gray());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"gray",{},smalltalk.TextColor.klass)})},
+messageSends: ["color:", "gray", "new"]}),
+smalltalk.TextColor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "green",
+fn: function (){
+var self=this;
+function $Color(){return smalltalk.Color||(typeof Color=="undefined"?nil:Color)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._new())._color_(_st($Color())._green());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"green",{},smalltalk.TextColor.klass)})},
+messageSends: ["color:", "green", "new"]}),
+smalltalk.TextColor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "magenta",
+fn: function (){
+var self=this;
+function $Color(){return smalltalk.Color||(typeof Color=="undefined"?nil:Color)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._new())._color_(_st($Color())._magenta());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"magenta",{},smalltalk.TextColor.klass)})},
+messageSends: ["color:", "magenta", "new"]}),
+smalltalk.TextColor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "red",
+fn: function (){
+var self=this;
+function $Color(){return smalltalk.Color||(typeof Color=="undefined"?nil:Color)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._new())._color_(_st($Color())._red());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"red",{},smalltalk.TextColor.klass)})},
+messageSends: ["color:", "red", "new"]}),
+smalltalk.TextColor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "scanFrom:",
+fn: function (strm){
+var self=this;
+var r,g,b;
+function $Color(){return smalltalk.Color||(typeof Color=="undefined"?nil:Color)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+$1=_st(_st(strm)._peek())._isDigit();
+if(smalltalk.assert($1)){
+r=_st(_st(strm)._next_((3)))._asNumber();
+r;
+g=_st(_st(strm)._next_((3)))._asNumber();
+g;
+b=_st(_st(strm)._next_((3)))._asNumber();
+b;
+$2=_st(self)._color_(_st($Color())._r_g_b_range_(r,g,b,(255)));
+return $2;
+};
+$3=_st(self)._color_(_st($Color())._perform_(_st(_st(strm)._upTo_(";"))._asSymbol()));
+return $3;
+}, function($ctx1) {$ctx1.fill(self,"scanFrom:",{strm:strm,r:r,g:g,b:b},smalltalk.TextColor.klass)})},
+messageSends: ["ifTrue:", "asNumber", "next:", "color:", "r:g:b:range:", "isDigit", "peek", "perform:", "asSymbol", "upTo:"]}),
+smalltalk.TextColor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "white",
+fn: function (){
+var self=this;
+function $Color(){return smalltalk.Color||(typeof Color=="undefined"?nil:Color)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._new())._color_(_st($Color())._white());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"white",{},smalltalk.TextColor.klass)})},
+messageSends: ["color:", "white", "new"]}),
+smalltalk.TextColor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "yellow",
+fn: function (){
+var self=this;
+function $Color(){return smalltalk.Color||(typeof Color=="undefined"?nil:Color)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._new())._color_(_st($Color())._yellow());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"yellow",{},smalltalk.TextColor.klass)})},
+messageSends: ["color:", "yellow", "new"]}),
+smalltalk.TextColor.klass);
 
 
 smalltalk.addClass('TextEmphasis', smalltalk.TextAttribute, ['emphasisCode', 'setMode'], 'Kernel-Collections');

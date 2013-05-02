@@ -1467,6 +1467,26 @@ smalltalk.Character.klass);
 smalltalk.addClass('Color', smalltalk.Object, ['r', 'g', 'b'], 'Kernel-Objects');
 smalltalk.addMethod(
 smalltalk.method({
+selector: "asHexadecimal:",
+fn: function (aNumber){
+var self=this;
+var string;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+string=_st(_st(aNumber).__star((255)))._asHexadecimal();
+$1=_st(_st(string)._size()).__eq((1));
+if(smalltalk.assert($1)){
+string=_st(string)._copyReplaceFrom_to_with_((0),(0),"0");
+string;
+};
+$2=string;
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"asHexadecimal:",{aNumber:aNumber,string:string},smalltalk.Color)})},
+messageSends: ["asHexadecimal", "*", "ifTrue:", "copyReplaceFrom:to:with:", "=", "size"]}),
+smalltalk.Color);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "blue",
 fn: function (){
 var self=this;
@@ -1476,6 +1496,19 @@ $1=self["@b"];
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"blue",{},smalltalk.Color)})},
 messageSends: []}),
+smalltalk.Color);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "forHtml",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(self)._asHexadecimal_(self["@r"])).__comma(_st(self)._asHexadecimal_(self["@g"]))).__comma(_st(self)._asHexadecimal_(self["@b"]));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"forHtml",{},smalltalk.Color)})},
+messageSends: [",", "asHexadecimal:"]}),
 smalltalk.Color);
 
 smalltalk.addMethod(
@@ -3081,6 +3114,17 @@ $1=_st($Character())._codePoint_(self);
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"asCharacter",{},smalltalk.Number)})},
 messageSends: ["codePoint:"]}),
+smalltalk.Number);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "asHexadecimal",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self.toString(16);
+return self}, function($ctx1) {$ctx1.fill(self,"asHexadecimal",{},smalltalk.Number)})},
+messageSends: []}),
 smalltalk.Number);
 
 smalltalk.addMethod(
@@ -4898,65 +4942,279 @@ messageSends: []}),
 smalltalk.Smalltalk.klass);
 
 
-smalltalk.addClass('TextAttribute', smalltalk.Object, [], 'Kernel-Collections');
+smalltalk.addClass('Timeout', smalltalk.Object, ['rawTimeout'], 'Kernel-Objects');
 smalltalk.addMethod(
 smalltalk.method({
-selector: "dominates:",
-fn: function (another){
+selector: "clearInterval",
+fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-return false;
-}, function($ctx1) {$ctx1.fill(self,"dominates:",{another:another},smalltalk.TextAttribute)})},
+
+		var interval = self["@rawTimeout"];
+		clearInterval(interval);
+	;
+return self}, function($ctx1) {$ctx1.fill(self,"clearInterval",{},smalltalk.Timeout)})},
 messageSends: []}),
-smalltalk.TextAttribute);
+smalltalk.Timeout);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "emphasisCode",
+selector: "clearTimeout",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+
+		var timeout = self["@rawTimeout"];
+		clearTimeout(timeout);
+	;
+return self}, function($ctx1) {$ctx1.fill(self,"clearTimeout",{},smalltalk.Timeout)})},
+messageSends: []}),
+smalltalk.Timeout);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "rawTimeout:",
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@rawTimeout"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"rawTimeout:",{anObject:anObject},smalltalk.Timeout)})},
+messageSends: []}),
+smalltalk.Timeout);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "on:",
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=_st(self)._new();
+_st($2)._rawTimeout_(anObject);
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"on:",{anObject:anObject},smalltalk.Timeout.klass)})},
+messageSends: ["rawTimeout:", "new", "yourself"]}),
+smalltalk.Timeout.klass);
+
+
+smalltalk.addClass('UndefinedObject', smalltalk.Object, [], 'Kernel-Objects');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "asJSON",
 fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=(0);
+$1=null;
 return $1;
-}, function($ctx1) {$ctx1.fill(self,"emphasisCode",{},smalltalk.TextAttribute)})},
+}, function($ctx1) {$ctx1.fill(self,"asJSON",{},smalltalk.UndefinedObject)})},
 messageSends: []}),
-smalltalk.TextAttribute);
+smalltalk.UndefinedObject);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "emphasizeScanner:",
-fn: function (scanner){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-return self}, function($ctx1) {$ctx1.fill(self,"emphasizeScanner:",{scanner:scanner},smalltalk.TextAttribute)})},
-messageSends: []}),
-smalltalk.TextAttribute);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "reset",
+selector: "deepCopy",
 fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-return self}, function($ctx1) {$ctx1.fill(self,"reset",{},smalltalk.TextAttribute)})},
+var $1;
+$1=self;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"deepCopy",{},smalltalk.UndefinedObject)})},
 messageSends: []}),
-smalltalk.TextAttribute);
+smalltalk.UndefinedObject);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "set",
+selector: "ifNil:",
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$1;
+$2=self;
+$1=_st($2)._ifNil_ifNotNil_(aBlock,(function(){
+return smalltalk.withContext(function($ctx2) {
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"ifNil:",{aBlock:aBlock},smalltalk.UndefinedObject)})},
+messageSends: ["ifNil:ifNotNil:"]}),
+smalltalk.UndefinedObject);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "ifNil:ifNotNil:",
+fn: function (aBlock,anotherBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(aBlock)._value();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"ifNil:ifNotNil:",{aBlock:aBlock,anotherBlock:anotherBlock},smalltalk.UndefinedObject)})},
+messageSends: ["value"]}),
+smalltalk.UndefinedObject);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "ifNotNil:",
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"ifNotNil:",{aBlock:aBlock},smalltalk.UndefinedObject)})},
+messageSends: []}),
+smalltalk.UndefinedObject);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "ifNotNil:ifNil:",
+fn: function (aBlock,anotherBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(anotherBlock)._value();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"ifNotNil:ifNil:",{aBlock:aBlock,anotherBlock:anotherBlock},smalltalk.UndefinedObject)})},
+messageSends: ["value"]}),
+smalltalk.UndefinedObject);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "isImmutable",
 fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 return true;
-}, function($ctx1) {$ctx1.fill(self,"set",{},smalltalk.TextAttribute)})},
+}, function($ctx1) {$ctx1.fill(self,"isImmutable",{},smalltalk.UndefinedObject)})},
 messageSends: []}),
-smalltalk.TextAttribute);
+smalltalk.UndefinedObject);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "isNil",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return true;
+}, function($ctx1) {$ctx1.fill(self,"isNil",{},smalltalk.UndefinedObject)})},
+messageSends: []}),
+smalltalk.UndefinedObject);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "notNil",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return false;
+}, function($ctx1) {$ctx1.fill(self,"notNil",{},smalltalk.UndefinedObject)})},
+messageSends: []}),
+smalltalk.UndefinedObject);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "printOn:",
+fn: function (aStream){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(aStream)._nextPutAll_("nil");
+return self}, function($ctx1) {$ctx1.fill(self,"printOn:",{aStream:aStream},smalltalk.UndefinedObject)})},
+messageSends: ["nextPutAll:"]}),
+smalltalk.UndefinedObject);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "shallowCopy",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"shallowCopy",{},smalltalk.UndefinedObject)})},
+messageSends: []}),
+smalltalk.UndefinedObject);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonOn:",
+fn: function (stonWriter){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(stonWriter)._writeNull();
+return self}, function($ctx1) {$ctx1.fill(self,"stonOn:",{stonWriter:stonWriter},smalltalk.UndefinedObject)})},
+messageSends: ["writeNull"]}),
+smalltalk.UndefinedObject);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "stonProcessSubObjects:",
+fn: function (block){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"stonProcessSubObjects:",{block:block},smalltalk.UndefinedObject)})},
+messageSends: []}),
+smalltalk.UndefinedObject);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "subclass:instanceVariableNames:",
+fn: function (aString,anotherString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._subclass_instanceVariableNames_package_(aString,anotherString,nil);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"subclass:instanceVariableNames:",{aString:aString,anotherString:anotherString},smalltalk.UndefinedObject)})},
+messageSends: ["subclass:instanceVariableNames:package:"]}),
+smalltalk.UndefinedObject);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "subclass:instanceVariableNames:category:",
+fn: function (aString,aString2,aString3){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+_st(self)._deprecatedAPI();
+$1=_st(self)._subclass_instanceVariableNames_package_(aString,aString2,aString3);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"subclass:instanceVariableNames:category:",{aString:aString,aString2:aString2,aString3:aString3},smalltalk.UndefinedObject)})},
+messageSends: ["deprecatedAPI", "subclass:instanceVariableNames:package:"]}),
+smalltalk.UndefinedObject);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "subclass:instanceVariableNames:package:",
+fn: function (aString,aString2,aString3){
+var self=this;
+function $ClassBuilder(){return smalltalk.ClassBuilder||(typeof ClassBuilder=="undefined"?nil:ClassBuilder)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st($ClassBuilder())._new())._superclass_subclass_instanceVariableNames_package_(self,_st(aString)._asString(),aString2,aString3);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"subclass:instanceVariableNames:package:",{aString:aString,aString2:aString2,aString3:aString3},smalltalk.UndefinedObject)})},
+messageSends: ["superclass:subclass:instanceVariableNames:package:", "asString", "new"]}),
+smalltalk.UndefinedObject);
 
 
+smalltalk.addMethod(
+smalltalk.method({
+selector: "new",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self)._error_("You cannot create new instances of UndefinedObject. Use nil");
+return self}, function($ctx1) {$ctx1.fill(self,"new",{},smalltalk.UndefinedObject.klass)})},
+messageSends: ["error:"]}),
+smalltalk.UndefinedObject.klass);
 
-smalltalk.addClass('TextColor', smalltalk.TextAttribute, ['color'], 'Kernel-Objects');
+
+smalltalk.addClass('TextColor', smalltalk.TextAttribute, ['color'], 'Kernel-Collections');
 smalltalk.addMethod(
 smalltalk.method({
 selector: "=",
@@ -5236,528 +5494,6 @@ return $1;
 }, function($ctx1) {$ctx1.fill(self,"yellow",{},smalltalk.TextColor.klass)})},
 messageSends: ["color:", "yellow", "new"]}),
 smalltalk.TextColor.klass);
-
-
-smalltalk.addClass('TextEmphasis', smalltalk.TextAttribute, ['emphasisCode', 'setMode'], 'Kernel-Collections');
-smalltalk.addMethod(
-smalltalk.method({
-selector: "=",
-fn: function (other){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st(_st(_st(other)._class()).__eq_eq(_st(self)._class()))._and_((function(){
-return smalltalk.withContext(function($ctx2) {
-return _st(_st(other)._emphasisCode()).__eq(self["@emphasisCode"]);
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"=",{other:other},smalltalk.TextEmphasis)})},
-messageSends: ["and:", "=", "emphasisCode", "==", "class"]}),
-smalltalk.TextEmphasis);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "dominatedByCmd0",
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-return true;
-}, function($ctx1) {$ctx1.fill(self,"dominatedByCmd0",{},smalltalk.TextEmphasis)})},
-messageSends: []}),
-smalltalk.TextEmphasis);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "dominates:",
-fn: function (other){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1,$2;
-$1=_st(_st(self["@emphasisCode"]).__eq((0)))._and_((function(){
-return smalltalk.withContext(function($ctx2) {
-return _st(other)._dominatedByCmd0();
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
-if(smalltalk.assert($1)){
-return true;
-};
-$2=_st(_st(_st(other)._class()).__eq_eq(_st(self)._class()))._and_((function(){
-return smalltalk.withContext(function($ctx2) {
-return _st(self["@emphasisCode"]).__eq(_st(other)._emphasisCode());
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
-return $2;
-}, function($ctx1) {$ctx1.fill(self,"dominates:",{other:other},smalltalk.TextEmphasis)})},
-messageSends: ["ifTrue:", "and:", "dominatedByCmd0", "=", "emphasisCode", "==", "class"]}),
-smalltalk.TextEmphasis);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "emphasisCode",
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=self["@emphasisCode"];
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"emphasisCode",{},smalltalk.TextEmphasis)})},
-messageSends: []}),
-smalltalk.TextEmphasis);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "emphasisCode:",
-fn: function (int){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-self["@emphasisCode"]=int;
-self["@setMode"]=true;
-return self}, function($ctx1) {$ctx1.fill(self,"emphasisCode:",{int:int},smalltalk.TextEmphasis)})},
-messageSends: []}),
-smalltalk.TextEmphasis);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "emphasizeScanner:",
-fn: function (scanner){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-_st(scanner)._addEmphasis_(self["@emphasisCode"]);
-return self}, function($ctx1) {$ctx1.fill(self,"emphasizeScanner:",{scanner:scanner},smalltalk.TextEmphasis)})},
-messageSends: ["addEmphasis:"]}),
-smalltalk.TextEmphasis);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "hash",
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st(self["@emphasisCode"])._hash();
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"hash",{},smalltalk.TextEmphasis)})},
-messageSends: ["hash"]}),
-smalltalk.TextEmphasis);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "printOn:",
-fn: function (strm){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1,$2;
-smalltalk.TextAttribute.fn.prototype._printOn_.apply(_st(self), [strm]);
-$1=strm;
-_st($1)._nextPutAll_(" code: ");
-$2=_st($1)._print_(self["@emphasisCode"]);
-return self}, function($ctx1) {$ctx1.fill(self,"printOn:",{strm:strm},smalltalk.TextEmphasis)})},
-messageSends: ["printOn:", "nextPutAll:", "print:"]}),
-smalltalk.TextEmphasis);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "set",
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st(self["@setMode"])._and_((function(){
-return smalltalk.withContext(function($ctx2) {
-return _st(self["@emphasisCode"]).__tild_eq((0));
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"set",{},smalltalk.TextEmphasis)})},
-messageSends: ["and:", "~="]}),
-smalltalk.TextEmphasis);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "turnOff",
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-self["@setMode"]=false;
-return self}, function($ctx1) {$ctx1.fill(self,"turnOff",{},smalltalk.TextEmphasis)})},
-messageSends: []}),
-smalltalk.TextEmphasis);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "writeScanOn:",
-fn: function (strm){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1,$2,$3,$4,$5;
-$1=_st(self["@emphasisCode"]).__eq((1));
-if(smalltalk.assert($1)){
-_st(strm)._nextPut_("b");
-};
-$2=_st(self["@emphasisCode"]).__eq((2));
-if(smalltalk.assert($2)){
-_st(strm)._nextPut_("i");
-};
-$3=_st(self["@emphasisCode"]).__eq((0));
-if(smalltalk.assert($3)){
-_st(strm)._nextPut_("n");
-};
-$4=_st(self["@emphasisCode"]).__eq((16));
-if(smalltalk.assert($4)){
-_st(strm)._nextPut_("=");
-};
-$5=_st(self["@emphasisCode"]).__eq((4));
-if(smalltalk.assert($5)){
-_st(strm)._nextPut_("u");
-};
-return self}, function($ctx1) {$ctx1.fill(self,"writeScanOn:",{strm:strm},smalltalk.TextEmphasis)})},
-messageSends: ["ifTrue:", "nextPut:", "="]}),
-smalltalk.TextEmphasis);
-
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "bold",
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st(_st(self)._new())._emphasisCode_((1));
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"bold",{},smalltalk.TextEmphasis.klass)})},
-messageSends: ["emphasisCode:", "new"]}),
-smalltalk.TextEmphasis.klass);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "italic",
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st(_st(self)._new())._emphasisCode_((2));
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"italic",{},smalltalk.TextEmphasis.klass)})},
-messageSends: ["emphasisCode:", "new"]}),
-smalltalk.TextEmphasis.klass);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "narrow",
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-return self}, function($ctx1) {$ctx1.fill(self,"narrow",{},smalltalk.TextEmphasis.klass)})},
-messageSends: []}),
-smalltalk.TextEmphasis.klass);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "normal",
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st(_st(self)._new())._emphasisCode_((0));
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"normal",{},smalltalk.TextEmphasis.klass)})},
-messageSends: ["emphasisCode:", "new"]}),
-smalltalk.TextEmphasis.klass);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "struckOut",
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st(_st(self)._new())._emphasisCode_((16));
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"struckOut",{},smalltalk.TextEmphasis.klass)})},
-messageSends: ["emphasisCode:", "new"]}),
-smalltalk.TextEmphasis.klass);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "underlined",
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st(_st(self)._new())._emphasisCode_((4));
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"underlined",{},smalltalk.TextEmphasis.klass)})},
-messageSends: ["emphasisCode:", "new"]}),
-smalltalk.TextEmphasis.klass);
-
-
-smalltalk.addClass('Timeout', smalltalk.Object, ['rawTimeout'], 'Kernel-Objects');
-smalltalk.addMethod(
-smalltalk.method({
-selector: "clearInterval",
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-
-		var interval = self["@rawTimeout"];
-		clearInterval(interval);
-	;
-return self}, function($ctx1) {$ctx1.fill(self,"clearInterval",{},smalltalk.Timeout)})},
-messageSends: []}),
-smalltalk.Timeout);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "clearTimeout",
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-
-		var timeout = self["@rawTimeout"];
-		clearTimeout(timeout);
-	;
-return self}, function($ctx1) {$ctx1.fill(self,"clearTimeout",{},smalltalk.Timeout)})},
-messageSends: []}),
-smalltalk.Timeout);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "rawTimeout:",
-fn: function (anObject){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-self["@rawTimeout"]=anObject;
-return self}, function($ctx1) {$ctx1.fill(self,"rawTimeout:",{anObject:anObject},smalltalk.Timeout)})},
-messageSends: []}),
-smalltalk.Timeout);
-
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "on:",
-fn: function (anObject){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $2,$3,$1;
-$2=_st(self)._new();
-_st($2)._rawTimeout_(anObject);
-$3=_st($2)._yourself();
-$1=$3;
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"on:",{anObject:anObject},smalltalk.Timeout.klass)})},
-messageSends: ["rawTimeout:", "new", "yourself"]}),
-smalltalk.Timeout.klass);
-
-
-smalltalk.addClass('UndefinedObject', smalltalk.Object, [], 'Kernel-Objects');
-smalltalk.addMethod(
-smalltalk.method({
-selector: "asJSON",
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=null;
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"asJSON",{},smalltalk.UndefinedObject)})},
-messageSends: []}),
-smalltalk.UndefinedObject);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "deepCopy",
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=self;
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"deepCopy",{},smalltalk.UndefinedObject)})},
-messageSends: []}),
-smalltalk.UndefinedObject);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "ifNil:",
-fn: function (aBlock){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $2,$1;
-$2=self;
-$1=_st($2)._ifNil_ifNotNil_(aBlock,(function(){
-return smalltalk.withContext(function($ctx2) {
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"ifNil:",{aBlock:aBlock},smalltalk.UndefinedObject)})},
-messageSends: ["ifNil:ifNotNil:"]}),
-smalltalk.UndefinedObject);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "ifNil:ifNotNil:",
-fn: function (aBlock,anotherBlock){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st(aBlock)._value();
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"ifNil:ifNotNil:",{aBlock:aBlock,anotherBlock:anotherBlock},smalltalk.UndefinedObject)})},
-messageSends: ["value"]}),
-smalltalk.UndefinedObject);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "ifNotNil:",
-fn: function (aBlock){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=self;
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"ifNotNil:",{aBlock:aBlock},smalltalk.UndefinedObject)})},
-messageSends: []}),
-smalltalk.UndefinedObject);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "ifNotNil:ifNil:",
-fn: function (aBlock,anotherBlock){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st(anotherBlock)._value();
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"ifNotNil:ifNil:",{aBlock:aBlock,anotherBlock:anotherBlock},smalltalk.UndefinedObject)})},
-messageSends: ["value"]}),
-smalltalk.UndefinedObject);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "isImmutable",
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-return true;
-}, function($ctx1) {$ctx1.fill(self,"isImmutable",{},smalltalk.UndefinedObject)})},
-messageSends: []}),
-smalltalk.UndefinedObject);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "isNil",
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-return true;
-}, function($ctx1) {$ctx1.fill(self,"isNil",{},smalltalk.UndefinedObject)})},
-messageSends: []}),
-smalltalk.UndefinedObject);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "notNil",
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-return false;
-}, function($ctx1) {$ctx1.fill(self,"notNil",{},smalltalk.UndefinedObject)})},
-messageSends: []}),
-smalltalk.UndefinedObject);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "printOn:",
-fn: function (aStream){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-_st(aStream)._nextPutAll_("nil");
-return self}, function($ctx1) {$ctx1.fill(self,"printOn:",{aStream:aStream},smalltalk.UndefinedObject)})},
-messageSends: ["nextPutAll:"]}),
-smalltalk.UndefinedObject);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "shallowCopy",
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=self;
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"shallowCopy",{},smalltalk.UndefinedObject)})},
-messageSends: []}),
-smalltalk.UndefinedObject);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "stonOn:",
-fn: function (stonWriter){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-_st(stonWriter)._writeNull();
-return self}, function($ctx1) {$ctx1.fill(self,"stonOn:",{stonWriter:stonWriter},smalltalk.UndefinedObject)})},
-messageSends: ["writeNull"]}),
-smalltalk.UndefinedObject);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "stonProcessSubObjects:",
-fn: function (block){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-return self}, function($ctx1) {$ctx1.fill(self,"stonProcessSubObjects:",{block:block},smalltalk.UndefinedObject)})},
-messageSends: []}),
-smalltalk.UndefinedObject);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "subclass:instanceVariableNames:",
-fn: function (aString,anotherString){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st(self)._subclass_instanceVariableNames_package_(aString,anotherString,nil);
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"subclass:instanceVariableNames:",{aString:aString,anotherString:anotherString},smalltalk.UndefinedObject)})},
-messageSends: ["subclass:instanceVariableNames:package:"]}),
-smalltalk.UndefinedObject);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "subclass:instanceVariableNames:category:",
-fn: function (aString,aString2,aString3){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-_st(self)._deprecatedAPI();
-$1=_st(self)._subclass_instanceVariableNames_package_(aString,aString2,aString3);
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"subclass:instanceVariableNames:category:",{aString:aString,aString2:aString2,aString3:aString3},smalltalk.UndefinedObject)})},
-messageSends: ["deprecatedAPI", "subclass:instanceVariableNames:package:"]}),
-smalltalk.UndefinedObject);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "subclass:instanceVariableNames:package:",
-fn: function (aString,aString2,aString3){
-var self=this;
-function $ClassBuilder(){return smalltalk.ClassBuilder||(typeof ClassBuilder=="undefined"?nil:ClassBuilder)}
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st(_st($ClassBuilder())._new())._superclass_subclass_instanceVariableNames_package_(self,_st(aString)._asString(),aString2,aString3);
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"subclass:instanceVariableNames:package:",{aString:aString,aString2:aString2,aString3:aString3},smalltalk.UndefinedObject)})},
-messageSends: ["superclass:subclass:instanceVariableNames:package:", "asString", "new"]}),
-smalltalk.UndefinedObject);
-
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "new",
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-_st(self)._error_("You cannot create new instances of UndefinedObject. Use nil");
-return self}, function($ctx1) {$ctx1.fill(self,"new",{},smalltalk.UndefinedObject.klass)})},
-messageSends: ["error:"]}),
-smalltalk.UndefinedObject.klass);
 
 
 smalltalk.addMethod(
