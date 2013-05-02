@@ -1981,6 +1981,7 @@ renderText: aText
 	|runArr string htmlString offset spans|
 	self textElement asJQuery empty.
 	string := aText string.
+	Transcript show: 'rendering ', string, Character cr.
 	runArr := aText runs.
 	offset := 1.
 	spans := Array new.
@@ -1988,7 +1989,8 @@ renderText: aText
 	1 to: runArr runs size do: [:x| |endOffs span str|
 		endOffs := offset + (runArr runs at: x).
 		str := string copyFrom: offset to: (endOffs -1).
-		span := myHtml span: str.
+		span := myHtml span.
+		span asJQuery html: (self escape: str).
 		(runArr values at: x) do:[:value| 
 			(value class canUnderstand: #color) ifTrue:[
 				span css:'color' value: (self getColorStringFor: value color).] 
@@ -1999,7 +2001,8 @@ renderText: aText
 		offset := endOffs.
 	].	
 		
-	spans do: [:span| self textElement with: span]
+	spans do: [:span| self textElement with: span].
+	self textElement with: [myHtml br].
 ! !
 
 TextMorph class instanceVariableNames: 'keySpecialBindings charSpecialRenderings'!
@@ -2306,7 +2309,7 @@ render: container with: html
 replaceSelectionWith: aText
 	"TODO: implement"
 	Transcript show: Character cr, 'adding text:', aText.
-	self textMorph text: self textMorph text, aText asString
+	self textMorph text: self textMorph text, aText
 !
 
 selectInvisiblyFrom: start to: stop

@@ -1564,10 +1564,14 @@ printNl
 !
 
 printOn: aStream
-	aStream 
-		nextPutAll: '''';
-		nextPutAll: self;
-		nextPutAll: ''''
+	"Print inside string quotes, doubling inbedded quotes."
+	|x|
+	aStream nextPutAll: ''''.
+	1 to: self size do:
+		[:i |
+		aStream nextPutAll: (x := self at: i).
+		x = '''' ifTrue: [aStream nextPutAll: x]].
+	aStream nextPutAll: ''''.
 ! !
 
 !String methodsFor: 'regular expressions'!
@@ -1772,6 +1776,14 @@ isVowel
 	"Answer true if the receiver is a one character string containing a voyel"
 	
 	^ self size = 1 and: [ 'aeiou' includes: self asLowercase ]
+! !
+
+!String methodsFor: 'topez-common-core'!
+
+convertTDEvaluateTokenResponseToText
+    "expected response is a String, but could be a TZProxyNotification"
+
+    ^ STON fromString: self
 ! !
 
 !String class methodsFor: 'accessing'!
@@ -2675,7 +2687,7 @@ replaceFrom: start to: stop with: replacement startingAt: repStart
 	aText := anObject.
 	anObject isText 
 		ifFalse: [aText := anObject asText].
-	^ Text string: string, aText runs: runs, aText runs
+	^ Text string: string, aText string runs: runs, aText runs
 !
 
 copyFrom: start to: stop 
@@ -2690,7 +2702,7 @@ copyFrom: start to: stop
 		ifFalse: [realStart := start].
 	^self class 
 		string: (string copyFrom: realStart to: realStop)
-		runs: nil "(runs copyFrom: realStart to: realStop)"
+		runs: (runs copyFrom: realStart to: realStop)
 !
 
 copyReplaceAll: aString with: anotherString
@@ -2781,9 +2793,9 @@ isText
 fromString: aString 
   "Answer an instance of me whose characters are those of the argument, aString."
   "TODO: font style"
-  ^ self
-    string: aString
-    attributes:{}
+	aString isString 
+		ifTrue: [^ self string: aString attributes:{}]
+		ifFalse: [^ self fromString: aString asString].
 !
 
 new
