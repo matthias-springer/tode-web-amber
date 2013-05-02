@@ -2534,10 +2534,18 @@ labelled: labelString
 ! !
 
 Morph subclass: #UIManager
-	instanceVariableNames: 'question yesAnswer noAnswer cancelAnswer yesButton noButton cancelButton'
+	instanceVariableNames: 'question yesAnswer noAnswer cancelAnswer yesButton noButton cancelButton answer questionDiv'
 	package: 'Canvas'!
 
 !UIManager methodsFor: 'accessing'!
+
+answer
+	^answer
+!
+
+answer: anObject
+	answer := anObject
+!
 
 cancelAnswer
 	^cancelAnswer
@@ -2597,14 +2605,37 @@ yesButton: anObject
 
 !UIManager methodsFor: 'not yet classified'!
 
-confirm: queryString trueChoice: trueChoice falseChoice: falseChoice cancelChoice: cancelChoice default: defaultOption
-	self 
+confirm: queryString trueChoice: yes falseChoice: no cancelChoice: cancelChoice default: defaultOption
+	^self 
 		question: queryString;
-		yesAnswer: trueChoice;
-		noAnswer: falseChoice;
+		yesAnswer: yes;
+		noAnswer: no;
 		cancelAnswer: cancelChoice;
-		update
+		update;
+		answer
 !
+
+initialize
+	self 
+		yesAnswer: 'Yes';
+		noAnswer: 'No';
+		cancelAnswer: 'Cancel'.
+	super initialize
+!
+
+update
+
+	questionDiv empty;
+			with: self question.	 
+	self yesButton button empty.
+	self yesButton label: self yesAnswer.
+	self noButton button empty.
+	self noButton label: self noAnswer.
+	self cancelButton button empty.
+	self cancelButton label: self cancelAnswer.
+! !
+
+!UIManager methodsFor: 'rendering'!
 
 drawButtons
 	self 
@@ -2623,10 +2654,6 @@ drawButtons
 		addMorph: self cancelButton.
 !
 
-initialize
-	self answer: 'nil'.
-!
-
 openInWorld
 	|win|
 	win := SystemWindow new.
@@ -2636,7 +2663,7 @@ openInWorld
 
 render: container with: html
 	container with:
-		html div: self question.
+		[questionDiv := html div: self question].
 	self drawButtons
 ! !
 
@@ -2644,12 +2671,6 @@ render: container with: html
 
 default
 	^self new
-!
-
-new
-	^self basicNew
-		initialize;
-		yourself
 ! !
 
 Morph subclass: #WorkspaceMorph

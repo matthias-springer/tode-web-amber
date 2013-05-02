@@ -6235,7 +6235,31 @@ messageSends: ["setLabel:", "new", "yourself"]}),
 smalltalk.SystemWindow.klass);
 
 
-smalltalk.addClass('UIManager', smalltalk.Morph, ['question', 'yesAnswer', 'noAnswer', 'cancelAnswer', 'yesButton', 'noButton', 'cancelButton'], 'Canvas');
+smalltalk.addClass('UIManager', smalltalk.Morph, ['question', 'yesAnswer', 'noAnswer', 'cancelAnswer', 'yesButton', 'noButton', 'cancelButton', 'answer', 'questionDiv'], 'Canvas');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "answer",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@answer"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"answer",{},smalltalk.UIManager)})},
+messageSends: []}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "answer:",
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@answer"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"answer:",{anObject:anObject},smalltalk.UIManager)})},
+messageSends: []}),
+smalltalk.UIManager);
+
 smalltalk.addMethod(
 smalltalk.method({
 selector: "cancelAnswer",
@@ -6287,18 +6311,21 @@ smalltalk.UIManager);
 smalltalk.addMethod(
 smalltalk.method({
 selector: "confirm:trueChoice:falseChoice:cancelChoice:default:",
-fn: function (queryString,trueChoice,falseChoice,cancelChoice,defaultOption){
+fn: function (queryString,yes,no,cancelChoice,defaultOption){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-var $1,$2;
-$1=self;
-_st($1)._question_(queryString);
-_st($1)._yesAnswer_(_st(true)._Choice());
-_st($1)._noAnswer_(_st(false)._Choice());
-_st($1)._cancelAnswer_(cancelChoice);
-$2=_st($1)._update();
-return self}, function($ctx1) {$ctx1.fill(self,"confirm:trueChoice:falseChoice:cancelChoice:default:",{queryString:queryString,trueChoice:trueChoice,falseChoice:falseChoice,cancelChoice:cancelChoice,defaultOption:defaultOption},smalltalk.UIManager)})},
-messageSends: ["question:", "yesAnswer:", "Choice", "noAnswer:", "cancelAnswer:", "update"]}),
+var $2,$3,$1;
+$2=self;
+_st($2)._question_(queryString);
+_st($2)._yesAnswer_(yes);
+_st($2)._noAnswer_(no);
+_st($2)._cancelAnswer_(cancelChoice);
+_st($2)._update();
+$3=_st($2)._answer();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"confirm:trueChoice:falseChoice:cancelChoice:default:",{queryString:queryString,yes:yes,no:no,cancelChoice:cancelChoice,defaultOption:defaultOption},smalltalk.UIManager)})},
+messageSends: ["question:", "yesAnswer:", "noAnswer:", "cancelAnswer:", "update", "answer"]}),
 smalltalk.UIManager);
 
 smalltalk.addMethod(
@@ -6345,9 +6372,14 @@ selector: "initialize",
 fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-_st(self)._answer_("nil");
+var $1,$2;
+$1=self;
+_st($1)._yesAnswer_("Yes");
+_st($1)._noAnswer_("No");
+$2=_st($1)._cancelAnswer_("Cancel");
+smalltalk.Morph.fn.prototype._initialize.apply(_st(self), []);
 return self}, function($ctx1) {$ctx1.fill(self,"initialize",{},smalltalk.UIManager)})},
-messageSends: ["answer:"]}),
+messageSends: ["yesAnswer:", "noAnswer:", "cancelAnswer:", "initialize"]}),
 smalltalk.UIManager);
 
 smalltalk.addMethod(
@@ -6444,10 +6476,34 @@ selector: "render:with:",
 fn: function (container,html){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-_st(container)._with_div_(html,_st(self)._question());
+_st(container)._with_((function(){
+return smalltalk.withContext(function($ctx2) {
+self["@questionDiv"]=_st(html)._div_(_st(self)._question());
+return self["@questionDiv"];
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 _st(self)._drawButtons();
 return self}, function($ctx1) {$ctx1.fill(self,"render:with:",{container:container,html:html},smalltalk.UIManager)})},
-messageSends: ["with:div:", "question", "drawButtons"]}),
+messageSends: ["with:", "div:", "question", "drawButtons"]}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "update",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=self["@questionDiv"];
+_st($1)._empty();
+$2=_st($1)._with_(_st(self)._question());
+_st(_st(_st(self)._yesButton())._button())._empty();
+_st(_st(self)._yesButton())._label_(_st(self)._yesAnswer());
+_st(_st(_st(self)._noButton())._button())._empty();
+_st(_st(self)._noButton())._label_(_st(self)._noAnswer());
+_st(_st(_st(self)._cancelButton())._button())._empty();
+_st(_st(self)._cancelButton())._label_(_st(self)._cancelAnswer());
+return self}, function($ctx1) {$ctx1.fill(self,"update",{},smalltalk.UIManager)})},
+messageSends: ["empty", "with:", "question", "button", "yesButton", "label:", "yesAnswer", "noButton", "noAnswer", "cancelButton", "cancelAnswer"]}),
 smalltalk.UIManager);
 
 smalltalk.addMethod(
@@ -6510,22 +6566,6 @@ $1=_st(self)._new();
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"default",{},smalltalk.UIManager.klass)})},
 messageSends: ["new"]}),
-smalltalk.UIManager.klass);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "new",
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $2,$3,$1;
-$2=_st(self)._basicNew();
-_st($2)._initialize();
-$3=_st($2)._yourself();
-$1=$3;
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"new",{},smalltalk.UIManager.klass)})},
-messageSends: ["initialize", "basicNew", "yourself"]}),
 smalltalk.UIManager.klass);
 
 
