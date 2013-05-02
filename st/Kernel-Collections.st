@@ -1564,14 +1564,10 @@ printNl
 !
 
 printOn: aStream
-	"Print inside string quotes, doubling inbedded quotes."
-	|x|
-	aStream nextPutAll: ''''.
-	1 to: self size do:
-		[:i |
-		aStream nextPutAll: (x := self at: i).
-		x = '''' ifTrue: [aStream nextPutAll: x]].
-	aStream nextPutAll: ''''.
+	aStream 
+		nextPutAll: '''';
+		nextPutAll: self;
+		nextPutAll: ''''
 ! !
 
 !String methodsFor: 'regular expressions'!
@@ -1776,14 +1772,6 @@ isVowel
 	"Answer true if the receiver is a one character string containing a voyel"
 	
 	^ self size = 1 and: [ 'aeiou' includes: self asLowercase ]
-! !
-
-!String methodsFor: 'topez-common-core'!
-
-convertTDEvaluateTokenResponseToText
-    "expected response is a String, but could be a TZProxyNotification"
-
-    ^ STON fromString: self
 ! !
 
 !String class methodsFor: 'accessing'!
@@ -2683,12 +2671,11 @@ replaceFrom: start to: stop with: replacement startingAt: repStart
 !Text methodsFor: 'copying'!
 
 , anObject
-	|aString|
-	"TODO: concatenate runs array."
+	|aText|
+	aText := anObject.
 	anObject isText 
-		ifTrue: [aString := anObject string]
-		ifFalse: [aString := anObject asString].
-	^ Text string: string, aString runs: runs
+		ifFalse: [aText := Text fromString: anObject].
+	^ Text string: string, aText runs: runs, aText runs
 !
 
 copyFrom: start to: stop 

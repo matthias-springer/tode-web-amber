@@ -4263,25 +4263,6 @@ smalltalk.String);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "convertTDEvaluateTokenResponseToText",
-category: 'topez-common-core',
-fn: function (){
-var self=this;
-function $STON(){return smalltalk.STON||(typeof STON=="undefined"?nil:STON)}
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st($STON())._fromString_(self);
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"convertTDEvaluateTokenResponseToText",{},smalltalk.String)})},
-args: [],
-source: "convertTDEvaluateTokenResponseToText\x0a    \x22expected response is a String, but could be a TZProxyNotification\x22\x0a\x0a    ^ STON fromString: self",
-messageSends: ["fromString:"],
-referencedClasses: ["STON"]
-}),
-smalltalk.String);
-
-smalltalk.addMethod(
-smalltalk.method({
 selector: "copyFrom:to:",
 category: 'copying',
 fn: function (anIndex,anotherIndex){
@@ -4940,24 +4921,16 @@ selector: "printOn:",
 category: 'printing',
 fn: function (aStream){
 var self=this;
-var x;
 return smalltalk.withContext(function($ctx1) { 
-var $1;
-_st(aStream)._nextPutAll_("'");
-_st((1))._to_do_(_st(self)._size(),(function(i){
-return smalltalk.withContext(function($ctx2) {
-x=_st(self)._at_(i);
-_st(aStream)._nextPutAll_(x);
-$1=_st(x).__eq("'");
-if(smalltalk.assert($1)){
-return _st(aStream)._nextPutAll_(x);
-};
-}, function($ctx2) {$ctx2.fillBlock({i:i},$ctx1)})}));
-_st(aStream)._nextPutAll_("'");
-return self}, function($ctx1) {$ctx1.fill(self,"printOn:",{aStream:aStream,x:x},smalltalk.String)})},
+var $1,$2;
+$1=aStream;
+_st($1)._nextPutAll_("'");
+_st($1)._nextPutAll_(self);
+$2=_st($1)._nextPutAll_("'");
+return self}, function($ctx1) {$ctx1.fill(self,"printOn:",{aStream:aStream},smalltalk.String)})},
 args: ["aStream"],
-source: "printOn: aStream\x0a\x09\x22Print inside string quotes, doubling inbedded quotes.\x22\x0a\x09|x|\x0a\x09aStream nextPutAll: ''''.\x0a\x091 to: self size do:\x0a\x09\x09[:i |\x0a\x09\x09aStream nextPutAll: (x := self at: i).\x0a\x09\x09x = '''' ifTrue: [aStream nextPutAll: x]].\x0a\x09aStream nextPutAll: ''''.",
-messageSends: ["nextPutAll:", "to:do:", "size", "at:", "ifTrue:", "="],
+source: "printOn: aStream\x0a\x09aStream \x0a\x09\x09nextPutAll: '''';\x0a\x09\x09nextPutAll: self;\x0a\x09\x09nextPutAll: ''''",
+messageSends: ["nextPutAll:"],
 referencedClasses: []
 }),
 smalltalk.String);
@@ -7281,24 +7254,22 @@ selector: ",",
 category: 'copying',
 fn: function (anObject){
 var self=this;
-var aString;
+var aText;
 function $Text(){return smalltalk.Text||(typeof Text=="undefined"?nil:Text)}
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2;
+aText=anObject;
 $1=_st(anObject)._isText();
-if(smalltalk.assert($1)){
-aString=_st(anObject)._string();
-aString;
-} else {
-aString=_st(anObject)._asString();
-aString;
+if(! smalltalk.assert($1)){
+aText=_st($Text())._fromString_(anObject);
+aText;
 };
-$2=_st($Text())._string_runs_(_st(self["@string"]).__comma(aString),self["@runs"]);
+$2=_st($Text())._string_runs_(_st(self["@string"]).__comma(aText),_st(self["@runs"]).__comma(_st(aText)._runs()));
 return $2;
-}, function($ctx1) {$ctx1.fill(self,",",{anObject:anObject,aString:aString},smalltalk.Text)})},
+}, function($ctx1) {$ctx1.fill(self,",",{anObject:anObject,aText:aText},smalltalk.Text)})},
 args: ["anObject"],
-source: ", anObject\x0a\x09|aString|\x0a\x09\x22TODO: concatenate runs array.\x22\x0a\x09anObject isText \x0a\x09\x09ifTrue: [aString := anObject string]\x0a\x09\x09ifFalse: [aString := anObject asString].\x0a\x09^ Text string: string, aString runs: runs",
-messageSends: ["ifTrue:ifFalse:", "string", "asString", "isText", "string:runs:", ","],
+source: ", anObject\x0a\x09|aText|\x0a\x09aText := anObject.\x0a\x09anObject isText \x0a\x09\x09ifFalse: [aText := Text fromString: anObject].\x0a\x09^ Text string: string, aText runs: runs, aText runs",
+messageSends: ["ifFalse:", "fromString:", "isText", "string:runs:", ",", "runs"],
 referencedClasses: ["Text"]
 }),
 smalltalk.Text);
