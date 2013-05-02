@@ -1987,7 +1987,7 @@ renderText: aText
 	Transcript show: runArr size.
 	1 to: runArr runs size do: [:x| |endOffs span str|
 		endOffs := offset + (runArr runs at: x).
-		str := string copyFrom: offset to: (offset + endOffs -1).
+		str := string copyFrom: offset to: (endOffs -1).
 		span := myHtml span: str.
 		(runArr values at: x) do:[:value| 
 			(value class canUnderstand: #color) ifTrue:[
@@ -1996,7 +1996,7 @@ renderText: aText
 				span addClass: (self getCssClassFor: value emphasisCode)].
 		].
 		spans addLast: span.
-		offset := offset + endOffs.
+		offset := endOffs.
 	].	
 		
 	spans do: [:span| self textElement with: span]

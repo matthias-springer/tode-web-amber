@@ -4859,7 +4859,7 @@ var endOffs,span,str;
 return smalltalk.withContext(function($ctx2) {
 endOffs=_st(offset).__plus(_st(_st(runArr)._runs())._at_(x));
 endOffs;
-str=_st(string)._copyFrom_to_(offset,_st(_st(offset).__plus(endOffs)).__minus((1)));
+str=_st(string)._copyFrom_to_(offset,_st(endOffs).__minus((1)));
 str;
 span=_st(self["@myHtml"])._span_(str);
 span;
@@ -4873,7 +4873,7 @@ return _st(span)._addClass_(_st(self)._getCssClassFor_(_st(value)._emphasisCode(
 };
 }, function($ctx3) {$ctx3.fillBlock({value:value},$ctx1)})}));
 _st(spans)._addLast_(span);
-offset=_st(offset).__plus(endOffs);
+offset=endOffs;
 return offset;
 }, function($ctx2) {$ctx2.fillBlock({x:x,endOffs:endOffs,span:span,str:str},$ctx1)})}));
 _st(spans)._do_((function(span){

@@ -5576,13 +5576,13 @@ var $1,$2;
 aText=anObject;
 $1=_st(anObject)._isText();
 if(! smalltalk.assert($1)){
-aText=_st($Text())._fromString_(anObject);
+aText=_st(anObject)._asText();
 aText;
 };
 $2=_st($Text())._string_runs_(_st(self["@string"]).__comma(aText),_st(self["@runs"]).__comma(_st(aText)._runs()));
 return $2;
 }, function($ctx1) {$ctx1.fill(self,",",{anObject:anObject,aText:aText},smalltalk.Text)})},
-messageSends: ["ifFalse:", "fromString:", "isText", "string:runs:", ",", "runs"]}),
+messageSends: ["ifFalse:", "asText", "isText", "string:runs:", ",", "runs"]}),
 smalltalk.Text);
 
 smalltalk.addMethod(

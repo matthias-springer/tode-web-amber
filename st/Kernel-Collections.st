@@ -2674,7 +2674,7 @@ replaceFrom: start to: stop with: replacement startingAt: repStart
 	|aText|
 	aText := anObject.
 	anObject isText 
-		ifFalse: [aText := Text fromString: anObject].
+		ifFalse: [aText := anObject asText].
 	^ Text string: string, aText runs: runs, aText runs
 !
 
