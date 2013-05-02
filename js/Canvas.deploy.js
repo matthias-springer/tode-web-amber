@@ -4844,14 +4844,12 @@ selector: "renderText:",
 fn: function (aText){
 var self=this;
 var runArr,string,htmlString,offset,spans;
-function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
-function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
 function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
+function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
 return smalltalk.withContext(function($ctx1) { 
 var $1;
 _st(_st(_st(self)._textElement())._asJQuery())._empty();
 string=_st(aText)._string();
-_st($Transcript())._show_(_st(_st("rendering ").__comma(string)).__comma(_st($Character())._cr()));
 runArr=_st(aText)._runs();
 offset=(1);
 spans=_st($Array())._new();
@@ -4888,7 +4886,7 @@ return smalltalk.withContext(function($ctx2) {
 return _st(self["@myHtml"])._br();
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"renderText:",{aText:aText,runArr:runArr,string:string,htmlString:htmlString,offset:offset,spans:spans},smalltalk.TextMorph)})},
-messageSends: ["empty", "asJQuery", "textElement", "string", "show:", ",", "cr", "runs", "new", "size", "to:do:", "+", "at:", "copyFrom:to:", "-", "span", "html:", "escape:", "do:", "ifTrue:ifFalse:", "css:value:", "getColorStringFor:", "color", "addClass:", "getCssClassFor:", "emphasisCode", "canUnderstand:", "class", "values", "addLast:", "with:", "br"]}),
+messageSends: ["empty", "asJQuery", "textElement", "string", "runs", "new", "show:", "size", "to:do:", "+", "at:", "copyFrom:to:", "-", "span", "html:", "escape:", "do:", "ifTrue:ifFalse:", "css:value:", "getColorStringFor:", "color", "addClass:", "getCssClassFor:", "emphasisCode", "canUnderstand:", "class", "values", "addLast:", "with:", "br"]}),
 smalltalk.TextMorph);
 
 smalltalk.addMethod(

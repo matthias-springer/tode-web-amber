@@ -1981,7 +1981,6 @@ renderText: aText
 	|runArr string htmlString offset spans|
 	self textElement asJQuery empty.
 	string := aText string.
-	Transcript show: 'rendering ', string, Character cr.
 	runArr := aText runs.
 	offset := 1.
 	spans := Array new.
@@ -1993,14 +1992,11 @@ renderText: aText
 		span asJQuery html: (self escape: str).
 		(runArr values at: x) do:[:value| 
 			(value class canUnderstand: #color) ifTrue:[
-				span css:'color' value: (self getColorStringFor: value color).] 
+				span css: 'color' value: (self getColorStringFor: value color).] 
 			ifFalse:[
-				span addClass: (self getCssClassFor: value emphasisCode)].
-		].
+				span addClass: (self getCssClassFor: value emphasisCode)]].
 		spans addLast: span.
-		offset := endOffs.
-	].	
-		
+		offset := endOffs].	
 	spans do: [:span| self textElement with: span].
 	self textElement with: [myHtml br].
 ! !
