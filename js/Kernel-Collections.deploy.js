@@ -5953,8 +5953,9 @@ var txt;
 return smalltalk.withContext(function($ctx1) { 
 txt=_st(aText)._asText();
 self["@string"]=_st(self["@string"])._copyReplaceFrom_to_with_(start,stop,_st(txt)._string());
+self["@runs"]=_st(self["@runs"])._copyReplaceFrom_to_with_(start,stop,_st(txt)._runs());
 return self}, function($ctx1) {$ctx1.fill(self,"replaceFrom:to:with:",{start:start,stop:stop,aText:aText,txt:txt},smalltalk.Text)})},
-messageSends: ["asText", "copyReplaceFrom:to:with:", "string"]}),
+messageSends: ["asText", "copyReplaceFrom:to:with:", "string", "runs"]}),
 smalltalk.Text);
 
 smalltalk.addMethod(
