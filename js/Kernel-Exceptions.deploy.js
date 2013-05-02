@@ -305,6 +305,9 @@ smalltalk.NonBooleanReceiver);
 
 
 
+smalltalk.addClass('Notification', smalltalk.Error, [], 'Kernel-Exceptions');
+
+
 smalltalk.addClass('ErrorHandler', smalltalk.Object, [], 'Kernel-Exceptions');
 smalltalk.addMethod(
 smalltalk.method({

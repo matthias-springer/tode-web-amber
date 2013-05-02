@@ -1235,10 +1235,10 @@ $1;
 };
 _st(self["@stringStream"])._reset();
 _st(block)._value_(self["@stringStream"]);
-$2=_st(self["@stringStream"])._contents();
+$2=_st(self["@stringStream"])._contentsToPos();
 return $2;
 }, function($ctx1) {$ctx1.fill(self,"stringStreamContents:",{block:block},smalltalk.STONReader)})},
-messageSends: ["ifNil:", "writeStream", "new:", "reset", "value:", "contents"]}),
+messageSends: ["ifNil:", "writeStream", "new:", "reset", "value:", "contentsToPos"]}),
 smalltalk.STONReader);
 
 

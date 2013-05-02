@@ -1511,12 +1511,12 @@ $1;
 };
 _st(self["@stringStream"])._reset();
 _st(block)._value_(self["@stringStream"]);
-$2=_st(self["@stringStream"])._contents();
+$2=_st(self["@stringStream"])._contentsToPos();
 return $2;
 }, function($ctx1) {$ctx1.fill(self,"stringStreamContents:",{block:block},smalltalk.STONReader)})},
 args: ["block"],
-source: "stringStreamContents: block\x0a\x09stringStream ifNil: [ \x0a\x09\x09stringStream := (String new: 32) writeStream ].\x0a\x09stringStream reset.\x0a\x09block value: stringStream.\x0a\x09^ stringStream contents",
-messageSends: ["ifNil:", "writeStream", "new:", "reset", "value:", "contents"],
+source: "stringStreamContents: block\x0a\x09stringStream ifNil: [ \x0a\x09\x09stringStream := (String new: 32) writeStream ].\x0a\x09stringStream reset.\x0a\x09block value: stringStream.\x0a\x09^ stringStream contentsToPos",
+messageSends: ["ifNil:", "writeStream", "new:", "reset", "value:", "contentsToPos"],
 referencedClasses: ["String"]
 }),
 smalltalk.STONReader);

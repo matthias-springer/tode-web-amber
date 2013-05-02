@@ -4857,10 +4857,10 @@ var self=this;
 return smalltalk.withContext(function($ctx1) { 
 _st(stonReader)._parseMapDo_((function(instVarName,value){
 return smalltalk.withContext(function($ctx2) {
-return _st(self)._instVarNamed_put_(instVarName,value);
+return _st(self)._instVarAt_put_(instVarName,value);
 }, function($ctx2) {$ctx2.fillBlock({instVarName:instVarName,value:value},$ctx1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"fromSton:",{stonReader:stonReader},smalltalk.RunArray)})},
-messageSends: ["parseMapDo:", "instVarNamed:put:"]}),
+messageSends: ["parseMapDo:", "instVarAt:put:"]}),
 smalltalk.RunArray);
 
 smalltalk.addMethod(
@@ -5955,9 +5955,8 @@ var txt;
 return smalltalk.withContext(function($ctx1) { 
 txt=_st(aText)._asText();
 self["@string"]=_st(self["@string"])._copyReplaceFrom_to_with_(start,stop,_st(txt)._string());
-self["@runs"]=_st(self["@runs"])._copyReplaceFrom_to_with_(start,stop,_st(txt)._runs());
 return self}, function($ctx1) {$ctx1.fill(self,"replaceFrom:to:with:",{start:start,stop:stop,aText:aText,txt:txt},smalltalk.Text)})},
-messageSends: ["asText", "copyReplaceFrom:to:with:", "string", "runs"]}),
+messageSends: ["asText", "copyReplaceFrom:to:with:", "string"]}),
 smalltalk.Text);
 
 smalltalk.addMethod(
@@ -6661,6 +6660,19 @@ $1=_st(_st(self)._collection())._copyFrom_to_((1),_st(self)._streamSize());
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"contents",{},smalltalk.Stream)})},
 messageSends: ["copyFrom:to:", "streamSize", "collection"]}),
+smalltalk.Stream);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "contentsToPos",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._collection())._copyFrom_to_((1),_st(self)._position());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"contentsToPos",{},smalltalk.Stream)})},
+messageSends: ["copyFrom:to:", "position", "collection"]}),
 smalltalk.Stream);
 
 smalltalk.addMethod(

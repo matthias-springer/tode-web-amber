@@ -161,10 +161,10 @@ getNbResult
 	return it as an Integer."
 
   | result error actionArgs continueWith |
-   
-  result := self nbPollForResult.
-  error := self getAndClearLastError 
-   " ifCurtailed: [ self terminateCurrentNbCall ]."
+  
+  [result := self nbPollForResult.
+  error := self getAndClearLastError] 
+    ifCurtailed: [ self terminateCurrentNbCall ].
   error isNil
     ifTrue: [ ^ result ].
   actionArgs := error number == 2336

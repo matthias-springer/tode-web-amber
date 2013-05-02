@@ -2449,7 +2449,7 @@ isSortedBy: aBlock
 !RunArray methodsFor: 'topez-common-core'!
 
 fromSton: stonReader
-    stonReader parseMapDo: [ :instVarName :value | self instVarNamed: instVarName put: value ]
+    stonReader parseMapDo: [ :instVarName :value | self instVarAt: instVarName put: value ]
 !
 
 stonOn: stonWriter
@@ -2605,7 +2605,7 @@ replaceFrom: start to: stop with: aText
 	| txt |
 	txt := aText asText.	"might be a string"
 	string := string copyReplaceFrom: start to: stop with: txt string.
-	runs := runs copyReplaceFrom: start to: stop with: txt runs
+	"runs := runs copyReplaceFrom: start to: stop with: txt runs"
 !
 
 runs: anArray
@@ -3051,6 +3051,12 @@ contents
 	^self collection
 		copyFrom: 1
 		to: self streamSize
+!
+
+contentsToPos
+	^self collection
+		copyFrom: 1
+		to: self position
 !
 
 position

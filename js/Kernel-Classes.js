@@ -1294,6 +1294,24 @@ smalltalk.Metaclass);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "stonName",
+category: 'ston-core',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._name();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"stonName",{},smalltalk.Metaclass)})},
+args: [],
+source: "stonName\x0a\x09^ self name",
+messageSends: ["name"],
+referencedClasses: []
+}),
+smalltalk.Metaclass);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "theMetaClass",
 category: 'accessing',
 fn: function (){

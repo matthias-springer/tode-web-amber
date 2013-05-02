@@ -1,23 +1,5 @@
 smalltalk.addPackage('Topez-Client-GCI');
-smalltalk.addClass('GciErrSType', smalltalk.Object, ['library', 'args', 'argsCount', 'category', 'context', 'exceptionObj', 'fatal', 'message', 'number', 'reason', 'address', 'exceptionObjClassName'], 'Topez-Client-GCI');
-smalltalk.addMethod(
-smalltalk.method({
-selector: "argCount",
-category: 'accessing',
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st(self["@args"])._size();
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"argCount",{},smalltalk.GciErrSType)})},
-args: [],
-source: "argCount\x0a\x09^ args size\x0a\x09",
-messageSends: ["size"],
-referencedClasses: []
-}),
-smalltalk.GciErrSType);
-
+smalltalk.addClass('GciErrSType', smalltalk.Object, ['library', 'args', 'argsSize', 'category', 'context', 'exceptionObj', 'fatal', 'message', 'number', 'reason', 'address', 'exceptionObjClassName'], 'Topez-Client-GCI');
 smalltalk.addMethod(
 smalltalk.method({
 selector: "args",
@@ -38,22 +20,60 @@ smalltalk.GciErrSType);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "args:",
+category: 'accessing',
+fn: function (anArray){
+var self=this;
+function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
+function $OopType(){return smalltalk.OopType||(typeof OopType=="undefined"?nil:OopType)}
+return smalltalk.withContext(function($ctx1) { 
+self["@args"]=_st($Array())._new_(_st(self)._argsSize());
+_st(_st((1))._to_(_st(self)._argsSize()))._do_((function(i){
+return smalltalk.withContext(function($ctx2) {
+return _st(self["@args"])._at_put_(i,_st($OopType())._fromInteger_(_st(anArray)._at_(i)));
+}, function($ctx2) {$ctx2.fillBlock({i:i},$ctx1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"args:",{anArray:anArray},smalltalk.GciErrSType)})},
+args: ["anArray"],
+source: "args: anArray\x0a\x09args := Array new: self argsSize.\x0a\x09(1 to: self argsSize) do: [:i |\x0a\x09\x09args at: i put: (OopType fromInteger: (anArray at: i))].",
+messageSends: ["new:", "argsSize", "do:", "at:put:", "fromInteger:", "at:", "to:"],
+referencedClasses: ["Array", "OopType"]
+}),
+smalltalk.GciErrSType);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "argsSize",
 category: 'accessing',
 fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2;
-$1=_st((10)).__lt(self["@argsCount"]);
+$1=_st((10)).__lt(self["@argsSize"]);
 if(smalltalk.assert($1)){
-_st(self)._error_(_st("Argument count too high: ").__comma(_st(self["@argsCount"])._printString()));
+_st(self)._error_(_st("Argument count too high: ").__comma(_st(self["@argsSize"])._printString()));
 };
-$2=self["@argsCount"];
+$2=self["@argsSize"];
 return $2;
 }, function($ctx1) {$ctx1.fill(self,"argsSize",{},smalltalk.GciErrSType)})},
 args: [],
-source: "argsSize\x0a\x0910 < argsCount\x0a\x09\x09ifTrue: [self error: 'Argument count too high: ' , argsCount printString].\x0a\x09^ argsCount",
+source: "argsSize\x0a\x0910 < argsSize\x0a\x09\x09ifTrue: [self error: 'Argument count too high: ' , argsSize printString].\x0a\x09^ argsSize",
 messageSends: ["ifTrue:", "error:", ",", "printString", "<"],
+referencedClasses: []
+}),
+smalltalk.GciErrSType);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "argsSize:",
+category: 'accessing',
+fn: function (anInteger){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@argsSize"]=anInteger;
+return self}, function($ctx1) {$ctx1.fill(self,"argsSize:",{anInteger:anInteger},smalltalk.GciErrSType)})},
+args: ["anInteger"],
+source: "argsSize: anInteger\x0a\x09argsSize := anInteger.",
+messageSends: [],
 referencedClasses: []
 }),
 smalltalk.GciErrSType);
@@ -127,6 +147,23 @@ smalltalk.GciErrSType);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "category:",
+category: 'accessing',
+fn: function (anInteger){
+var self=this;
+function $OopType(){return smalltalk.OopType||(typeof OopType=="undefined"?nil:OopType)}
+return smalltalk.withContext(function($ctx1) { 
+self["@category"]=_st($OopType())._fromInteger_(anInteger);
+return self}, function($ctx1) {$ctx1.fill(self,"category:",{anInteger:anInteger},smalltalk.GciErrSType)})},
+args: ["anInteger"],
+source: "category: anInteger\x0a\x09category := OopType fromInteger: anInteger.",
+messageSends: ["fromInteger:"],
+referencedClasses: ["OopType"]
+}),
+smalltalk.GciErrSType);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "context",
 category: 'accessing',
 fn: function (){
@@ -140,6 +177,23 @@ args: [],
 source: "context\x0a\x09^ context",
 messageSends: [],
 referencedClasses: []
+}),
+smalltalk.GciErrSType);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "context:",
+category: 'accessing',
+fn: function (anInteger){
+var self=this;
+function $OopType(){return smalltalk.OopType||(typeof OopType=="undefined"?nil:OopType)}
+return smalltalk.withContext(function($ctx1) { 
+self["@context"]=_st($OopType())._fromInteger_(anInteger);
+return self}, function($ctx1) {$ctx1.fill(self,"context:",{anInteger:anInteger},smalltalk.GciErrSType)})},
+args: ["anInteger"],
+source: "context: anInteger\x0a\x09context := OopType fromInteger: anInteger.",
+messageSends: ["fromInteger:"],
+referencedClasses: ["OopType"]
 }),
 smalltalk.GciErrSType);
 
@@ -163,6 +217,23 @@ smalltalk.GciErrSType);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "exceptionObj:",
+category: 'accessing',
+fn: function (anInteger){
+var self=this;
+function $OopType(){return smalltalk.OopType||(typeof OopType=="undefined"?nil:OopType)}
+return smalltalk.withContext(function($ctx1) { 
+self["@exceptionObj"]=_st($OopType())._fromInteger_(anInteger);
+return self}, function($ctx1) {$ctx1.fill(self,"exceptionObj:",{anInteger:anInteger},smalltalk.GciErrSType)})},
+args: ["anInteger"],
+source: "exceptionObj: anInteger\x0a\x09exceptionObj := OopType fromInteger: anInteger.",
+messageSends: ["fromInteger:"],
+referencedClasses: ["OopType"]
+}),
+smalltalk.GciErrSType);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "exceptionObjClassName",
 category: 'accessing',
 fn: function (){
@@ -181,6 +252,22 @@ smalltalk.GciErrSType);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "exceptionObjClassName:",
+category: 'accessing',
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@exceptionObjClassName"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"exceptionObjClassName:",{anObject:anObject},smalltalk.GciErrSType)})},
+args: ["anObject"],
+source: "exceptionObjClassName: anObject\x0a\x09exceptionObjClassName := anObject.",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.GciErrSType);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "fatal",
 category: 'accessing',
 fn: function (){
@@ -192,6 +279,22 @@ return $1;
 }, function($ctx1) {$ctx1.fill(self,"fatal",{},smalltalk.GciErrSType)})},
 args: [],
 source: "fatal\x0a\x09^ fatal",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.GciErrSType);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "fatal:",
+category: 'accessing',
+fn: function (aChar){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@fatal"]=aChar;
+return self}, function($ctx1) {$ctx1.fill(self,"fatal:",{aChar:aChar},smalltalk.GciErrSType)})},
+args: ["aChar"],
+source: "fatal: aChar\x0a\x09fatal := aChar.",
 messageSends: [],
 referencedClasses: []
 }),
@@ -328,6 +431,22 @@ smalltalk.GciErrSType);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "message:",
+category: 'accessing',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@message"]=aString;
+return self}, function($ctx1) {$ctx1.fill(self,"message:",{aString:aString},smalltalk.GciErrSType)})},
+args: ["aString"],
+source: "message: aString\x0a\x09message := aString.",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.GciErrSType);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "number",
 category: 'accessing',
 fn: function (){
@@ -339,6 +458,22 @@ return $1;
 }, function($ctx1) {$ctx1.fill(self,"number",{},smalltalk.GciErrSType)})},
 args: [],
 source: "number\x0a\x09^ number",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.GciErrSType);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "number:",
+category: 'accessing',
+fn: function (anInteger){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@number"]=anInteger;
+return self}, function($ctx1) {$ctx1.fill(self,"number:",{anInteger:anInteger},smalltalk.GciErrSType)})},
+args: ["anInteger"],
+source: "number: anInteger\x0a\x09number := anInteger.",
 messageSends: [],
 referencedClasses: []
 }),
@@ -384,23 +519,12 @@ selector: "readArguments",
 category: 'private',
 fn: function (){
 var self=this;
-var argsSize,ofs;
-function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
 return smalltalk.withContext(function($ctx1) { 
-argsSize=_st(self)._argsSize();
-self["@args"]=_st($Array())._new_(argsSize);
-ofs=_st(self)._argsOffset();
-_st((1))._to_do_(argsSize,(function(i){
-return smalltalk.withContext(function($ctx2) {
-_st(self["@args"])._at_put_(i,_st(self["@library"])._localFor_(_st(self)._oopTypeAt_(ofs)));
-ofs=_st(ofs).__plus((8));
-return ofs;
-}, function($ctx2) {$ctx2.fillBlock({i:i},$ctx1)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"readArguments",{argsSize:argsSize,ofs:ofs},smalltalk.GciErrSType)})},
+return self}, function($ctx1) {$ctx1.fill(self,"readArguments",{},smalltalk.GciErrSType)})},
 args: [],
-source: "readArguments\x0a  | argsSize ofs |\x0a  argsSize := self argsSize.\x0a  args := Array new: argsSize.\x0a  ofs := self argsOffset.\x0a  1 to: argsSize do: [ :i | \x0a    args at: i put: (library localFor: (self oopTypeAt: ofs)).\x0a    ofs := ofs + 8 ]",
-messageSends: ["argsSize", "new:", "argsOffset", "to:do:", "at:put:", "localFor:", "oopTypeAt:", "+"],
-referencedClasses: ["Array"]
+source: "readArguments",
+messageSends: [],
+referencedClasses: []
 }),
 smalltalk.GciErrSType);
 
@@ -410,30 +534,27 @@ selector: "readArgumentsAndExceptionClassUsingStonIn:",
 category: 'topez-common-core',
 fn: function (aTodeSession){
 var self=this;
-var argsSize,ofs,expressionStream,stonString,answerArray,objectArray,classNameArray,Name,is,exceptionObjInClassNameArray;
+var pArgsSize,ofs,expressionStream,stonString,answerArray,objectArray,classNameArray,Name,is,exceptionObjInClassNameArray;
 function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
 function $String(){return smalltalk.String||(typeof String=="undefined"?nil:String)}
-function $WriteStream(){return smalltalk.WriteStream||(typeof WriteStream=="undefined"?nil:WriteStream)}
+function $StringStream(){return smalltalk.StringStream||(typeof StringStream=="undefined"?nil:StringStream)}
 function $Error(){return smalltalk.Error||(typeof Error=="undefined"?nil:Error)}
 function $STON(){return smalltalk.STON||(typeof STON=="undefined"?nil:STON)}
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11;
-argsSize=_st(self)._argsSize();
-self["@args"]=_st($Array())._new_(argsSize);
-expressionStream=_st($WriteStream())._on_(_st($String())._new());
+pArgsSize=_st(self)._argsSize();
+self["@args"]=_st($Array())._new_(pArgsSize);
+expressionStream=_st($StringStream())._on_(_st($String())._new());
 $1=expressionStream;
 _st($1)._nextPutAll_(_st(_st("(").__comma(_st(aTodeSession)._todeServerAccessString())).__comma(" for: "));
 _st($1)._nextPutAll_(_st(_st(_st(aTodeSession)._shell())._shellId())._printString());
 $2=_st($1)._nextPutAll_(") reifyExceptionArgsForOopList: {");
-ofs=_st(self)._argsOffset();
-_st((1))._to_do_(argsSize,(function(i){
+_st((1))._to_do_(pArgsSize,(function(i){
 return smalltalk.withContext(function($ctx2) {
 $3=expressionStream;
-_st($3)._nextPutAll_(_st(_st(_st(self)._oopTypeAt_(ofs))._asOop())._printString());
+_st($3)._nextPutAll_(_st(_st(_st(self)._args())._at_(i))._printString());
 $4=_st($3)._nextPutAll_(". ");
-$4;
-ofs=_st(ofs).__plus((8));
-return ofs;
+return $4;
 }, function($ctx2) {$ctx2.fillBlock({i:i},$ctx1)})}));
 exceptionObjInClassNameArray=false;
 $5=_st(self)._exceptionObj();
@@ -461,11 +582,9 @@ return _st(self)._halt();
 }, function($ctx2) {$ctx2.fillBlock({ex:ex},$ctx1)})}));
 answerArray=_st($STON())._fromString_(stonString);
 objectArray=_st(answerArray)._at_((1));
-_st((1))._to_do_(argsSize,(function(i){
+_st((1))._to_do_(pArgsSize,(function(i){
 return smalltalk.withContext(function($ctx2) {
-_st(self["@args"])._at_put_(i,_st(objectArray)._at_(i));
-ofs=_st(ofs).__plus((8));
-return ofs;
+return _st(self["@args"])._at_put_(i,_st(objectArray)._at_(i));
 }, function($ctx2) {$ctx2.fillBlock({i:i},$ctx1)})}));
 classNameArray=_st(answerArray)._at_((2));
 $10=exceptionObjInClassNameArray;
@@ -484,11 +603,11 @@ self["@exceptionObjClassName"]=_st(classNameArray)._at_((1));
 self["@exceptionObjClassName"];
 };
 };
-return self}, function($ctx1) {$ctx1.fill(self,"readArgumentsAndExceptionClassUsingStonIn:",{aTodeSession:aTodeSession,argsSize:argsSize,ofs:ofs,expressionStream:expressionStream,stonString:stonString,answerArray:answerArray,objectArray:objectArray,classNameArray:classNameArray,Name:Name,is:is,exceptionObjInClassNameArray:exceptionObjInClassNameArray},smalltalk.GciErrSType)})},
+return self}, function($ctx1) {$ctx1.fill(self,"readArgumentsAndExceptionClassUsingStonIn:",{aTodeSession:aTodeSession,pArgsSize:pArgsSize,ofs:ofs,expressionStream:expressionStream,stonString:stonString,answerArray:answerArray,objectArray:objectArray,classNameArray:classNameArray,Name:Name,is:is,exceptionObjInClassNameArray:exceptionObjInClassNameArray},smalltalk.GciErrSType)})},
 args: ["aTodeSession"],
-source: "readArgumentsAndExceptionClassUsingStonIn: aTodeSession\x0a  | argsSize ofs expressionStream stonString answerArray objectArray classNameArray Name is exceptionObjInClassNameArray |\x0a  argsSize := self argsSize.\x0a  args := Array new: argsSize.\x0a  expressionStream := WriteStream on: String new.\x0a  expressionStream\x0a    nextPutAll: '(' , aTodeSession todeServerAccessString , ' for: ';\x0a    nextPutAll: aTodeSession shell shellId printString;\x0a    nextPutAll: ') reifyExceptionArgsForOopList: {'.\x0a  ofs := self argsOffset.\x0a  1 to: argsSize do: [ :i | \x0a    expressionStream\x0a      nextPutAll: (self oopTypeAt: ofs) asOop printString;\x0a      nextPutAll: '. '.\x0a    ofs := ofs + 8 ].\x0a  exceptionObjInClassNameArray := false.\x0a  self exceptionObj\x0a    ifNil: [ \x0a      exceptionObjInClassNameArray := true.\x0a      expressionStream\x0a        nextPutAll: '} exceptionObjAndClassNameFrom: ';\x0a        nextPutAll: self number asString ]\x0a    ifNotNil: [ \x0a      expressionStream\x0a        nextPutAll: '} classNamesForOopList: {';\x0a        nextPutAll: self exceptionObj asOop printString;\x0a        nextPut: '}' ].\x0a  [ \x0a  stonString := aTodeSession\x0a    executeStringExpectingStringNB: expressionStream contents\x0a    envId: aTodeSession environmentId ]\x0a    on: Error\x0a    do: [ :ex | self halt ].\x0a  answerArray := STON fromString: stonString.\x0a  objectArray := answerArray at: 1.\x0a  1 to: argsSize do: [ :i | \x0a    args at: i put: (objectArray at: i).\x0a    ofs := ofs + 8 ].\x0a  classNameArray := answerArray at: 2.\x0a  exceptionObjInClassNameArray\x0a    ifTrue: [ \x0a      | exceptionObjOop |\x0a      exceptionObjOop := classNameArray at: 1.\x0a      exceptionObj := library oopTypeFromInteger: exceptionObjOop.\x0a      exceptionObjClassName := classNameArray at: 2 ]\x0a    ifFalse: [ \x0a      classNameArray isEmpty not\x0a        ifTrue: [ exceptionObjClassName := classNameArray at: 1 ] ]",
-messageSends: ["argsSize", "new:", "on:", "new", "nextPutAll:", ",", "todeServerAccessString", "printString", "shellId", "shell", "argsOffset", "to:do:", "asOop", "oopTypeAt:", "+", "ifNil:ifNotNil:", "asString", "number", "exceptionObj", "nextPut:", "on:do:", "halt", "executeStringExpectingStringNB:envId:", "contents", "environmentId", "fromString:", "at:", "at:put:", "ifTrue:ifFalse:", "oopTypeFromInteger:", "ifTrue:", "not", "isEmpty"],
-referencedClasses: ["Array", "String", "WriteStream", "Error", "STON"]
+source: "readArgumentsAndExceptionClassUsingStonIn: aTodeSession\x0a  | pArgsSize ofs expressionStream stonString answerArray objectArray classNameArray Name is exceptionObjInClassNameArray |\x0a  pArgsSize := self argsSize.\x0a  args := Array new: pArgsSize.\x0a  expressionStream := StringStream on: String new.\x0a  expressionStream\x0a    nextPutAll: '(' , aTodeSession todeServerAccessString , ' for: ';\x0a    nextPutAll: aTodeSession shell shellId printString;\x0a    nextPutAll: ') reifyExceptionArgsForOopList: {'.\x0a  1 to: pArgsSize do: [ :i | \x0a    expressionStream\x0a      nextPutAll: (self args at: i) printString;\x0a      nextPutAll: '. '].\x0a  exceptionObjInClassNameArray := false.\x0a  self exceptionObj\x0a    ifNil: [ \x0a      exceptionObjInClassNameArray := true.\x0a      expressionStream\x0a        nextPutAll: '} exceptionObjAndClassNameFrom: ';\x0a        nextPutAll: self number asString ]\x0a    ifNotNil: [ \x0a      expressionStream\x0a        nextPutAll: '} classNamesForOopList: {';\x0a        nextPutAll: self exceptionObj asOop printString;\x0a        nextPut: '}' ].\x0a  [ \x0a  stonString := aTodeSession\x0a    executeStringExpectingStringNB: expressionStream contents\x0a    envId: aTodeSession environmentId ]\x0a    on: Error\x0a    do: [ :ex | self halt ].\x0a  answerArray := STON fromString: stonString.\x0a  objectArray := answerArray at: 1.\x0a  1 to: pArgsSize do: [ :i | \x0a    args at: i put: (objectArray at: i)].\x0a  classNameArray := answerArray at: 2.\x0a  exceptionObjInClassNameArray\x0a    ifTrue: [ \x0a      | exceptionObjOop |\x0a      exceptionObjOop := classNameArray at: 1.\x0a      exceptionObj := library oopTypeFromInteger: exceptionObjOop.\x0a      exceptionObjClassName := classNameArray at: 2 ]\x0a    ifFalse: [ \x0a      classNameArray isEmpty not\x0a        ifTrue: [ exceptionObjClassName := classNameArray at: 1 ] ]",
+messageSends: ["argsSize", "new:", "on:", "new", "nextPutAll:", ",", "todeServerAccessString", "printString", "shellId", "shell", "to:do:", "at:", "args", "ifNil:ifNotNil:", "asString", "number", "asOop", "exceptionObj", "nextPut:", "on:do:", "halt", "executeStringExpectingStringNB:envId:", "contents", "environmentId", "fromString:", "at:put:", "ifTrue:ifFalse:", "oopTypeFromInteger:", "ifTrue:", "not", "isEmpty"],
+referencedClasses: ["Array", "String", "StringStream", "Error", "STON"]
 }),
 smalltalk.GciErrSType);
 
@@ -506,6 +625,40 @@ args: [],
 source: "readMessage\x0a\x09message := message copyReplaceAll: Character lf with: Character cr.",
 messageSends: ["copyReplaceAll:with:", "lf", "cr"],
 referencedClasses: ["Character"]
+}),
+smalltalk.GciErrSType);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "reason",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@reason"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"reason",{},smalltalk.GciErrSType)})},
+args: [],
+source: "reason\x0a\x09^ reason",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.GciErrSType);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "reason:",
+category: 'accessing',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@reason"]=aString;
+return self}, function($ctx1) {$ctx1.fill(self,"reason:",{aString:aString},smalltalk.GciErrSType)})},
+args: ["aString"],
+source: "reason: aString\x0a\x09reason := aString.",
+messageSends: [],
+referencedClasses: []
 }),
 smalltalk.GciErrSType);
 
@@ -722,15 +875,16 @@ category: 'proxy',
 fn: function (command,aDictionary){
 var self=this;
 var params,result;
+function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
 function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
 function $Ajax(){return smalltalk.Ajax||(typeof Ajax=="undefined"?nil:Ajax)}
 function $Error(){return smalltalk.Error||(typeof Error=="undefined"?nil:Error)}
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2;
 params=_st(aDictionary)._copy();
-_st($Transcript())._show_(_st(_st(_st("GciLibrary>>apiGci: ").__comma(_st(command)._asString())).__comma(" data: ")).__comma(_st(params)._asString()));
-_st($Transcript())._show_(_st("result: ").__comma(_st(_st(_st($Ajax())._ajaxSync_data_(_st("/gci/").__comma(command),_st(params)._asJSON()))._responseText())._asString()));
+_st($Transcript())._show_(_st(_st(_st(_st("GciLibrary>>apiGci: ").__comma(_st(command)._asString())).__comma(" data: ")).__comma(_st(params)._asString())).__comma(_st($Character())._cr()));
 result=_st(_st(_st($Ajax())._ajaxSync_data_(_st("/gci/").__comma(command),_st(params)._asJSON()))._responseText())._parseJSON();
+_st($Transcript())._show_(_st(_st("result: ").__comma(_st(result)._asString())).__comma(_st($Character())._cr()));
 $1=_st(result)._success();
 if(! smalltalk.assert($1)){
 _st($Error())._signal_(_st(_st(command).__comma(" GCI API call failed. ")).__comma(_st(result)._exception()));
@@ -739,9 +893,41 @@ $2=_st(result)._result();
 return $2;
 }, function($ctx1) {$ctx1.fill(self,"apiGci:data:",{command:command,aDictionary:aDictionary,params:params,result:result},smalltalk.GciLibrary)})},
 args: ["command", "aDictionary"],
-source: "apiGci: command data: aDictionary\x0a\x09|params result|\x0a\x09params := aDictionary copy.\x0a\x09\x22TODO: think about session handling\x22\x0a\x09\x22params at: '!session_id' put: sessionId.\x22\x0a\x09\x0a\x09Transcript show: 'GciLibrary>>apiGci: ', command asString, ' data: ', params asString.\x0a\x09\x0a\x09Transcript show: 'result: ',  (Ajax ajaxSync: '/gci/', command data: params asJSON) responseText asString.\x0a\x09\x0a\x09result := (Ajax ajaxSync: '/gci/', command data: params asJSON) responseText parseJSON.\x0a\x09result success ifFalse: [Error signal: command, ' GCI API call failed. ', result exception].\x0a\x09^ result result",
-messageSends: ["copy", "show:", ",", "asString", "responseText", "ajaxSync:data:", "asJSON", "parseJSON", "ifFalse:", "signal:", "exception", "success", "result"],
-referencedClasses: ["Transcript", "Ajax", "Error"]
+source: "apiGci: command data: aDictionary\x0a\x09|params result|\x0a\x09params := aDictionary copy.\x0a\x09\x22TODO: think about session handling\x22\x0a\x09\x22params at: '!session_id' put: sessionId.\x22\x0a\x09\x0a\x09Transcript show: 'GciLibrary>>apiGci: ', command asString, ' data: ', params asString, Character cr.\x0a\x0a\x09result := (Ajax ajaxSync: '/gci/', command data: params asJSON) responseText parseJSON.\x0a\x09Transcript show: 'result: ', result asString, Character cr.\x0a\x09result success ifFalse: [Error signal: command, ' GCI API call failed. ', result exception].\x0a\x09^ result result",
+messageSends: ["copy", "show:", ",", "cr", "asString", "parseJSON", "responseText", "ajaxSync:data:", "asJSON", "ifFalse:", "signal:", "exception", "success", "result"],
+referencedClasses: ["Character", "Transcript", "Ajax", "Error"]
+}),
+smalltalk.GciLibrary);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "apiGciErr:",
+category: 'API',
+fn: function (anErrObj){
+var self=this;
+var result;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+result=_st(self)._apiGci_("err");
+$1=_st(result)._result();
+if(smalltalk.assert($1)){
+_st(anErrObj)._category_(_st(result)._category());
+_st(anErrObj)._context_(_st(result)._context());
+_st(anErrObj)._exceptionObj_(_st(result)._exceptionObj());
+_st(anErrObj)._argsSize_(_st(result)._argCount());
+_st(anErrObj)._args_(_st(result)._args());
+_st(anErrObj)._number_(_st(result)._number());
+_st(anErrObj)._fatal_(_st(result)._fatal());
+_st(anErrObj)._message_(_st(result)._message());
+_st(anErrObj)._reason_(_st(result)._reason());
+};
+$2=_st(result)._result();
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"apiGciErr:",{anErrObj:anErrObj,result:result},smalltalk.GciLibrary)})},
+args: ["anErrObj"],
+source: "apiGciErr: anErrObj\x0a\x09|result|\x0a\x09result := self apiGci: 'err'.\x0a\x09result result ifTrue: [\x0a\x09\x09anErrObj category: result category.\x0a\x09\x09anErrObj context: result context.\x0a\x09\x09anErrObj exceptionObj: result exceptionObj.\x0a\x09\x09anErrObj argsSize: result argCount.\x0a\x09\x09anErrObj args: result args.\x0a\x09\x09anErrObj number: result number.\x0a\x09\x09anErrObj fatal: result fatal.\x0a\x09\x09anErrObj message: result message.\x0a\x09\x09anErrObj reason: result reason].\x0a\x09^ result result",
+messageSends: ["apiGci:", "ifTrue:", "category:", "category", "context:", "context", "exceptionObj:", "exceptionObj", "argsSize:", "argCount", "args:", "args", "number:", "number", "fatal:", "fatal", "message:", "message", "reason:", "reason", "result"],
+referencedClasses: []
 }),
 smalltalk.GciLibrary);
 
@@ -753,12 +939,12 @@ fn: function (aString,anOop){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=_st(self)._apiGci_data_("execute_str",_st([_st("string").__minus_gt(aString),_st("oop").__minus_gt(anOop)])._asDictionary());
+$1=_st(self)._apiGci_data_("execute_str",_st([_st("string").__minus_gt(aString),_st("oop").__minus_gt(_st(anOop)._asInteger())])._asDictionary());
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"apiGciExecuteStr:a:",{aString:aString,anOop:anOop},smalltalk.GciLibrary)})},
 args: ["aString", "anOop"],
-source: "apiGciExecuteStr: aString a: anOop\x0a\x09^ self apiGci: 'execute_str' data: {'string'->aString. 'oop'->anOop} asDictionary",
-messageSends: ["apiGci:data:", "asDictionary", "->"],
+source: "apiGciExecuteStr: aString a: anOop\x0a\x09^ self apiGci: 'execute_str' data: {'string'->aString. 'oop'->anOop asInteger} asDictionary",
+messageSends: ["apiGci:data:", "asDictionary", "->", "asInteger"],
 referencedClasses: []
 }),
 smalltalk.GciLibrary);
@@ -771,12 +957,12 @@ fn: function (aString,anOop,envId){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=_st(self)._apiGci_data_("execute_str",_st([_st("string").__minus_gt(aString),_st("oop").__minus_gt(anOop),_st("envId").__minus_gt(envId)])._asDictionary());
+$1=_st(self)._apiGci_data_("execute_str",_st([_st("string").__minus_gt(aString),_st("oop").__minus_gt(_st(anOop)._asInteger()),_st("envId").__minus_gt(envId)])._asDictionary());
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"apiGciExecuteStr:a:a:",{aString:aString,anOop:anOop,envId:envId},smalltalk.GciLibrary)})},
 args: ["aString", "anOop", "envId"],
-source: "apiGciExecuteStr: aString a: anOop a: envId\x0a\x09^ self apiGci: 'execute_str' data: {'string'->aString. 'oop'->anOop. 'envId'->envId} asDictionary",
-messageSends: ["apiGci:data:", "asDictionary", "->"],
+source: "apiGciExecuteStr: aString a: anOop a: envId\x0a\x09^ self apiGci: 'execute_str' data: {'string'->aString. 'oop'->anOop asInteger. 'envId'->envId} asDictionary",
+messageSends: ["apiGci:data:", "asDictionary", "->", "asInteger"],
 referencedClasses: []
 }),
 smalltalk.GciLibrary);
@@ -789,12 +975,12 @@ fn: function (aString,anOop){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=_st(self)._apiGci_data_("execute_str_expecting_str",_st([_st("string").__minus_gt(aString),_st("oop").__minus_gt(anOop)])._asDictionary());
+$1=_st(self)._apiGci_data_("execute_str_expecting_str",_st([_st("string").__minus_gt(aString),_st("oop").__minus_gt(_st(anOop)._asInteger())])._asDictionary());
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"apiGciExecuteStrExpectingStr:a:",{aString:aString,anOop:anOop},smalltalk.GciLibrary)})},
 args: ["aString", "anOop"],
-source: "apiGciExecuteStrExpectingStr: aString a: anOop\x0a\x09^ self apiGci: 'execute_str_expecting_str' data: {'string'->aString. 'oop'->anOop} asDictionary",
-messageSends: ["apiGci:data:", "asDictionary", "->"],
+source: "apiGciExecuteStrExpectingStr: aString a: anOop\x0a\x09^ self apiGci: 'execute_str_expecting_str' data: {'string'->aString. 'oop'->anOop asInteger} asDictionary",
+messageSends: ["apiGci:data:", "asDictionary", "->", "asInteger"],
 referencedClasses: []
 }),
 smalltalk.GciLibrary);
@@ -807,12 +993,12 @@ fn: function (aString,anOop,envId){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=_st(self)._apiGci_data_("execute_str_expecting_str",_st([_st("string").__minus_gt(aString),_st("oop").__minus_gt(anOop),_st("envId").__minus_gt(envId)])._asDictionary());
+$1=_st(self)._apiGci_data_("execute_str_expecting_str",_st([_st("string").__minus_gt(aString),_st("oop").__minus_gt(_st(anOop)._asInteger()),_st("envId").__minus_gt(envId)])._asDictionary());
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"apiGciExecuteStrExpectingStr:a:a:",{aString:aString,anOop:anOop,envId:envId},smalltalk.GciLibrary)})},
 args: ["aString", "anOop", "envId"],
-source: "apiGciExecuteStrExpectingStr: aString a: anOop a: envId\x0a\x09^ self apiGci: 'execute_str_expecting_str' data: {'string'->aString. 'oop'->anOop. 'envId'->envId} asDictionary",
-messageSends: ["apiGci:data:", "asDictionary", "->"],
+source: "apiGciExecuteStrExpectingStr: aString a: anOop a: envId\x0a\x09^ self apiGci: 'execute_str_expecting_str' data: {'string'->aString. 'oop'->anOop asInteger. 'envId'->envId} asDictionary",
+messageSends: ["apiGci:data:", "asDictionary", "->", "asInteger"],
 referencedClasses: []
 }),
 smalltalk.GciLibrary);
@@ -878,15 +1064,16 @@ selector: "apiGciLongToOop:",
 category: 'API',
 fn: function (anInteger){
 var self=this;
+function $OopType(){return smalltalk.OopType||(typeof OopType=="undefined"?nil:OopType)}
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=_st(self)._apiGci_data_("long_to_oop",_st([_st("integer").__minus_gt(anInteger)])._asDictionary());
+$1=_st($OopType())._fromInteger_(_st(self)._apiGci_data_("long_to_oop",_st([_st("integer").__minus_gt(anInteger)])._asDictionary()));
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"apiGciLongToOop:",{anInteger:anInteger},smalltalk.GciLibrary)})},
 args: ["anInteger"],
-source: "apiGciLongToOop: anInteger\x0a\x09^ self apiGci: 'long_to_oop' data: {'integer'->anInteger} asDictionary",
-messageSends: ["apiGci:data:", "asDictionary", "->"],
-referencedClasses: []
+source: "apiGciLongToOop: anInteger\x0a\x09^ OopType fromInteger: (self apiGci: 'long_to_oop' data: {'integer'->anInteger} asDictionary)",
+messageSends: ["fromInteger:", "apiGci:data:", "asDictionary", "->"],
+referencedClasses: ["OopType"]
 }),
 smalltalk.GciLibrary);
 
@@ -898,12 +1085,12 @@ fn: function (aString,anOop,envId){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=_st(self)._apiGci_data_("nb_execute_str",_st([_st("string").__minus_gt(aString),_st("oop").__minus_gt(anOop),_st("envId").__minus_gt(envId)])._asDictionary());
+$1=_st(self)._apiGci_data_("nb_execute_str",_st([_st("string").__minus_gt(aString),_st("oop").__minus_gt(_st(anOop)._asInteger()),_st("envId").__minus_gt(envId)])._asDictionary());
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"apiGciNbExecuteStr:a:a:",{aString:aString,anOop:anOop,envId:envId},smalltalk.GciLibrary)})},
 args: ["aString", "anOop", "envId"],
-source: "apiGciNbExecuteStr: aString a: anOop a: envId\x0a\x09^ self apiGci: 'nb_execute_str' data: {'string'->aString. 'oop'->anOop. 'envId'->envId} asDictionary",
-messageSends: ["apiGci:data:", "asDictionary", "->"],
+source: "apiGciNbExecuteStr: aString a: anOop a: envId\x0a\x09^ self apiGci: 'nb_execute_str' data: {'string'->aString. 'oop'->anOop asInteger. 'envId'->envId} asDictionary",
+messageSends: ["apiGci:data:", "asDictionary", "->", "asInteger"],
 referencedClasses: []
 }),
 smalltalk.GciLibrary);
@@ -934,12 +1121,12 @@ fn: function (aReceiver,aSelector,aListOfArgs){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=_st(self)._apiGci_data_("perform",_st([_st("receiver").__minus_gt(_st(aReceiver)._getHandle()),_st("selector").__minus_gt(aSelector),_st("args").__minus_gt(_st(self)._prepareListOfArgs_(aListOfArgs))])._asDictionary());
+$1=_st(self)._apiGci_data_("perform",_st([_st("receiver").__minus_gt(_st(aReceiver)._asInteger()),_st("selector").__minus_gt(aSelector),_st("args").__minus_gt(_st(self)._prepareListOfArgs_(aListOfArgs))])._asDictionary());
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"apiGciPerform:a:a:",{aReceiver:aReceiver,aSelector:aSelector,aListOfArgs:aListOfArgs},smalltalk.GciLibrary)})},
 args: ["aReceiver", "aSelector", "aListOfArgs"],
-source: "apiGciPerform: aReceiver a: aSelector a: aListOfArgs\x0a\x09^ self apiGci: 'perform' data: {'receiver'->aReceiver getHandle. 'selector'->aSelector. 'args'->(self prepareListOfArgs: aListOfArgs)} asDictionary",
-messageSends: ["apiGci:data:", "asDictionary", "->", "getHandle", "prepareListOfArgs:"],
+source: "apiGciPerform: aReceiver a: aSelector a: aListOfArgs\x0a\x09^ self apiGci: 'perform' data: {'receiver'->aReceiver asInteger. 'selector'->aSelector. 'args'->(self prepareListOfArgs: aListOfArgs)} asDictionary",
+messageSends: ["apiGci:data:", "asDictionary", "->", "asInteger", "prepareListOfArgs:"],
 referencedClasses: []
 }),
 smalltalk.GciLibrary);
@@ -999,18 +1186,19 @@ selector: "apiNoSessionGci:data:",
 category: 'proxy',
 fn: function (command,aDictionary){
 var self=this;
+function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
 function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
 function $Ajax(){return smalltalk.Ajax||(typeof Ajax=="undefined"?nil:Ajax)}
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-_st($Transcript())._show_(_st(_st(_st("GciLibrary>>apiNoSessionGci: ").__comma(_st(command)._asString())).__comma(" data: ")).__comma(_st(aDictionary)._asString()));
+_st($Transcript())._show_(_st(_st(_st(_st("GciLibrary>>apiNoSessionGci: ").__comma(_st(command)._asString())).__comma(" data: ")).__comma(_st(aDictionary)._asString())).__comma(_st($Character())._cr()));
 $1=_st($Ajax())._ajaxSync_data_(_st("/gci/").__comma(command),_st(aDictionary)._asJSON());
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"apiNoSessionGci:data:",{command:command,aDictionary:aDictionary},smalltalk.GciLibrary)})},
 args: ["command", "aDictionary"],
-source: "apiNoSessionGci: command data: aDictionary\x0a\x09Transcript show: 'GciLibrary>>apiNoSessionGci: ', command asString, ' data: ', aDictionary asString.\x0a\x09^ Ajax ajaxSync: '/gci/', command data: aDictionary asJSON",
-messageSends: ["show:", ",", "asString", "ajaxSync:data:", "asJSON"],
-referencedClasses: ["Transcript", "Ajax"]
+source: "apiNoSessionGci: command data: aDictionary\x0a\x09Transcript show: 'GciLibrary>>apiNoSessionGci: ', command asString, ' data: ', aDictionary asString, Character cr.\x0a\x09^ Ajax ajaxSync: '/gci/', command data: aDictionary asJSON",
+messageSends: ["show:", ",", "cr", "asString", "ajaxSync:data:", "asJSON"],
+referencedClasses: ["Character", "Transcript", "Ajax"]
 }),
 smalltalk.GciLibrary);
 
@@ -1022,12 +1210,12 @@ fn: function (oop){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=_st(self)._apiGci_data_("fetch_str",_st([_st("oop").__minus_gt(oop)])._asDictionary());
+$1=_st(self)._apiGci_data_("fetch_str",_st([_st("oop").__minus_gt(_st(oop)._asInteger())])._asDictionary());
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"fetchChars:",{oop:oop},smalltalk.GciLibrary)})},
 args: ["oop"],
-source: "fetchChars: oop\x0a\x09^ self apiGci: 'fetch_str' data: {'oop'->oop} asDictionary",
-messageSends: ["apiGci:data:", "asDictionary", "->"],
+source: "fetchChars: oop\x0a\x09^ self apiGci: 'fetch_str' data: {'oop'->oop asInteger} asDictionary",
+messageSends: ["apiGci:data:", "asDictionary", "->", "asInteger"],
 referencedClasses: []
 }),
 smalltalk.GciLibrary);
@@ -1075,14 +1263,17 @@ fn: function (){
 var self=this;
 function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
 function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
+function $GciErrSType(){return smalltalk.GciErrSType||(typeof GciErrSType=="undefined"?nil:GciErrSType)}
 return smalltalk.withContext(function($ctx1) { 
+var $1;
 _st($Transcript())._show_(_st("called getAndClearLastError").__comma(_st($Character())._cr()));
-return false;
+$1=_st($GciErrSType())._library_(self);
+return $1;
 }, function($ctx1) {$ctx1.fill(self,"getAndClearLastError",{},smalltalk.GciLibrary)})},
 args: [],
-source: "getAndClearLastError\x0a\x09Transcript show: 'called getAndClearLastError', Character cr.\x0a\x09\x22TODO: implement\x22\x0a\x09\x0a\x09^ false",
-messageSends: ["show:", ",", "cr"],
-referencedClasses: ["Character", "Transcript"]
+source: "getAndClearLastError\x0a\x09Transcript show: 'called getAndClearLastError', Character cr.\x0a\x09^ GciErrSType library: self",
+messageSends: ["show:", ",", "cr", "library:"],
+referencedClasses: ["Character", "Transcript", "GciErrSType"]
 }),
 smalltalk.GciLibrary);
 
@@ -1696,6 +1887,25 @@ return $1;
 args: [],
 source: "oopTypeClass\x0a\x09^ OopType\x0a\x09",
 messageSends: [],
+referencedClasses: ["OopType"]
+}),
+smalltalk.GciLibrary);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "oopTypeFromInteger:",
+category: 'oop access',
+fn: function (anInteger){
+var self=this;
+function $OopType(){return smalltalk.OopType||(typeof OopType=="undefined"?nil:OopType)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($OopType())._fromInteger_(anInteger);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"oopTypeFromInteger:",{anInteger:anInteger},smalltalk.GciLibrary)})},
+args: ["anInteger"],
+source: "oopTypeFromInteger: anInteger\x0a\x09^ OopType fromInteger: anInteger",
+messageSends: ["fromInteger:"],
 referencedClasses: ["OopType"]
 }),
 smalltalk.GciLibrary);

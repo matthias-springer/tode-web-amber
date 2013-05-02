@@ -981,6 +981,19 @@ smalltalk.Metaclass);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "stonName",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._name();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"stonName",{},smalltalk.Metaclass)})},
+messageSends: ["name"]}),
+smalltalk.Metaclass);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "theMetaClass",
 fn: function (){
 var self=this;
