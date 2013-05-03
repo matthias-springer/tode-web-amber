@@ -4982,7 +4982,7 @@ selector: "setSelectionFrom:to:",
 fn: function (start,end){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
- setSelectionRange(self._textElement()._asJQuery()[0], start - 1, end); ;
+ setSelectionRange(self._textElement()._asJQuery()[0], start - 1, end - 0); ;
 return self}, function($ctx1) {$ctx1.fill(self,"setSelectionFrom:to:",{start:start,end:end},smalltalk.TextMorph)})},
 messageSends: []}),
 smalltalk.TextMorph);
@@ -5061,6 +5061,7 @@ return smalltalk.withContext(function($ctx1) {
 	self['@selectionEnd'] = preCaretRange.toString().length + countBrs;
 	self['@selectionText'] = window.getSelection().toString();
 	self['@selectionStart'] = self['@selectionEnd'] + 1 - self['@selectionText'].length
+	console.log('cursor position: ', self['@selectionStart'], ' to ', self['@selectionEnd']);
 	;
 return self}, function($ctx1) {$ctx1.fill(self,"updateCursor",{},smalltalk.TextMorph)})},
 messageSends: []}),

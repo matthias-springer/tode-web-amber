@@ -2506,6 +2506,17 @@ smalltalk.Array);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "isArray",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return true;
+}, function($ctx1) {$ctx1.fill(self,"isArray",{},smalltalk.Array)})},
+messageSends: []}),
+smalltalk.Array);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "join:",
 fn: function (aString){
 var self=this;

@@ -472,6 +472,17 @@ smalltalk.Object);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "isArray",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return false;
+}, function($ctx1) {$ctx1.fill(self,"isArray",{},smalltalk.Object)})},
+messageSends: []}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "isBehavior",
 fn: function (){
 var self=this;
@@ -1473,7 +1484,7 @@ var self=this;
 var string;
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2;
-string=_st(_st(aNumber).__star((255)))._asHexadecimal();
+string=_st(_st(_st(aNumber).__star((255)))._rounded())._asHexadecimal();
 $1=_st(_st(string)._size()).__eq((1));
 if(smalltalk.assert($1)){
 string=_st(string)._copyReplaceFrom_to_with_((0),(0),"0");
@@ -1482,7 +1493,7 @@ string;
 $2=string;
 return $2;
 }, function($ctx1) {$ctx1.fill(self,"asHexadecimal:",{aNumber:aNumber,string:string},smalltalk.Color)})},
-messageSends: ["asHexadecimal", "*", "ifTrue:", "copyReplaceFrom:to:with:", "=", "size"]}),
+messageSends: ["asHexadecimal", "rounded", "*", "ifTrue:", "copyReplaceFrom:to:with:", "=", "size"]}),
 smalltalk.Color);
 
 smalltalk.addMethod(
@@ -1492,7 +1503,7 @@ fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=_st(_st(self)._blueInt()).__slash((255));
+$1=_st(_st(self)._blueInt()).__slash((1023));
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"blue",{},smalltalk.Color)})},
 messageSends: ["/", "blueInt"]}),
@@ -1512,7 +1523,7 @@ self["@rgb"];
 } else {
 $1;
 };
-$2=_st(self["@rgb"]).__and((255));
+$2=_st(self["@rgb"]).__and((1023));
 return $2;
 }, function($ctx1) {$ctx1.fill(self,"blueInt",{},smalltalk.Color)})},
 messageSends: ["ifNil:", "&"]}),
@@ -1538,7 +1549,7 @@ fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=_st(_st(self)._greenInt()).__slash((255));
+$1=_st(_st(self)._greenInt()).__slash((1023));
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"green",{},smalltalk.Color)})},
 messageSends: ["/", "greenInt"]}),
@@ -1558,10 +1569,10 @@ self["@rgb"];
 } else {
 $1;
 };
-$2=_st(_st(self["@rgb"]).__and(_st((255)).__lt_lt((8)))).__gt_gt((8));
+$2=_st(_st(self["@rgb"]).__gt_gt((10))).__and((1023));
 return $2;
 }, function($ctx1) {$ctx1.fill(self,"greenInt",{},smalltalk.Color)})},
-messageSends: ["ifNil:", ">>", "&", "<<"]}),
+messageSends: ["ifNil:", "&", ">>"]}),
 smalltalk.Color);
 
 smalltalk.addMethod(
@@ -1571,7 +1582,7 @@ fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=_st(_st(self)._redInt()).__slash((255));
+$1=_st(_st(self)._redInt()).__slash((1023));
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"red",{},smalltalk.Color)})},
 messageSends: ["/", "redInt"]}),
@@ -1591,10 +1602,10 @@ self["@rgb"];
 } else {
 $1;
 };
-$2=_st(_st(self["@rgb"]).__and(_st((255)).__lt_lt((16)))).__gt_gt((16));
+$2=_st(_st(self["@rgb"]).__gt_gt((20))).__and((1023));
 return $2;
 }, function($ctx1) {$ctx1.fill(self,"redInt",{},smalltalk.Color)})},
-messageSends: ["ifNil:", ">>", "&", "<<"]}),
+messageSends: ["ifNil:", "&", ">>"]}),
 smalltalk.Color);
 
 smalltalk.addMethod(
@@ -1603,9 +1614,9 @@ selector: "setBlue:",
 fn: function (blue){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-self["@rgb"]=_st(_st(_st(_st(_st(self)._redInt()).__lt_lt((8))).__plus(_st(self)._greenInt())).__lt_lt((8))).__plus(_st(blue).__star((255)));
+_st(self)._setRed_green_blue_(_st(self)._red(),_st(self)._green(),blue);
 return self}, function($ctx1) {$ctx1.fill(self,"setBlue:",{blue:blue},smalltalk.Color)})},
-messageSends: ["+", "*", "<<", "greenInt", "redInt"]}),
+messageSends: ["setRed:green:blue:", "red", "green"]}),
 smalltalk.Color);
 
 smalltalk.addMethod(
@@ -1614,9 +1625,9 @@ selector: "setGreen:",
 fn: function (green){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-self["@rgb"]=_st(_st(_st(_st(_st(self)._redInt()).__lt_lt((8))).__plus(_st(green).__star((255)))).__lt_lt((8))).__plus(_st(self)._blueInt());
+_st(self)._setRed_green_blue_(_st(self)._red(),green,_st(self)._blue());
 return self}, function($ctx1) {$ctx1.fill(self,"setGreen:",{green:green},smalltalk.Color)})},
-messageSends: ["+", "blueInt", "<<", "*", "redInt"]}),
+messageSends: ["setRed:green:blue:", "red", "blue"]}),
 smalltalk.Color);
 
 smalltalk.addMethod(
@@ -1625,9 +1636,20 @@ selector: "setRed:",
 fn: function (red){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-self["@rgb"]=_st(_st(_st(_st(_st(red).__star((255))).__lt_lt((8))).__plus(_st(self)._greenInt())).__lt_lt((8))).__plus(_st(self)._blueInt());
+_st(self)._setRed_green_blue_(red,_st(self)._green(),_st(self)._blue());
 return self}, function($ctx1) {$ctx1.fill(self,"setRed:",{red:red},smalltalk.Color)})},
-messageSends: ["+", "blueInt", "<<", "greenInt", "*"]}),
+messageSends: ["setRed:green:blue:", "green", "blue"]}),
+smalltalk.Color);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "setRed:green:blue:",
+fn: function (r,g,b){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@rgb"]=_st(_st(_st(_st(_st(_st(r).__star((1023)))._rounded()).__and((1023))).__lt_lt((20))).__plus(_st(_st(_st(_st(g).__star((1023)))._rounded()).__and((1023))).__lt_lt((10)))).__plus(_st(_st(_st(b).__star((1023)))._rounded()).__and((1023)));
+return self}, function($ctx1) {$ctx1.fill(self,"setRed:green:blue:",{r:r,g:g,b:b},smalltalk.Color)})},
+messageSends: ["+", "&", "rounded", "*", "<<"]}),
 smalltalk.Color);
 
 

@@ -46,7 +46,7 @@ privateSignal
 
 signal
 	(self class canUnderstand: #defaultAction)
-		ifTrue: [self defaultAction]
+		ifTrue: [^ self defaultAction]
 		ifFalse: [self privateSignal].
 !
 

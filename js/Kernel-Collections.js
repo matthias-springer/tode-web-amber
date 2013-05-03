@@ -3308,6 +3308,22 @@ smalltalk.Array);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "isArray",
+category: 'testing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return true;
+}, function($ctx1) {$ctx1.fill(self,"isArray",{},smalltalk.Array)})},
+args: [],
+source: "isArray\x0a\x09^ true",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Array);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "join:",
 category: 'enumerating',
 fn: function (aString){

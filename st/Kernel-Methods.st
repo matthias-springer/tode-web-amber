@@ -130,6 +130,13 @@ newValue: anObject value: anObject2 value: anObject3
 	<return new self(anObject, anObject2,anObject3)>
 !
 
+runAfter: milliseconds
+	<
+	var method = self;
+	setTimeout(method, milliseconds);
+	>
+!
+
 timeToRun
 	"Answer the number of milliseconds taken to execute this block."
 

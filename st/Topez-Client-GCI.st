@@ -499,7 +499,7 @@ apiGci: command data: aDictionary
 	|params result|
 	params := aDictionary copy.
 	"TODO: think about session handling"
-	"params at: '!!session_id' put: sessionId."
+	params at: '!!session_id' put: sessionId.
 	
 	Transcript show: 'GciLibrary>>apiGci: ', command asString, ' data: ', params asString, Character cr.
 
@@ -510,8 +510,11 @@ apiGci: command data: aDictionary
 !
 
 apiNoSessionGci: command data: aDictionary
+	|result|
 	Transcript show: 'GciLibrary>>apiNoSessionGci: ', command asString, ' data: ', aDictionary asString, Character cr.
-	^ Ajax ajaxSync: '/gci/', command data: aDictionary asJSON
+	result := (Ajax ajaxSync: '/gci/', command data: aDictionary asJSON) responseText parseJSON.
+	result success ifFalse: [Error signal: command, ' GCI API call failed. ', result exception].
+	^ result result
 ! !
 
 !GciLibrary methodsFor: 'wrapper'!

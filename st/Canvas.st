@@ -1926,7 +1926,7 @@ selectionStart
 !
 
 setSelectionFrom: start to: end
-	< setSelectionRange(self._textElement()._asJQuery()[0], start - 1, end); >
+	< setSelectionRange(self._textElement()._asJQuery()[0], start - 1, end - 0); >
 !
 
 updateCursor
@@ -1946,6 +1946,7 @@ updateCursor
 	self['@selectionEnd'] = preCaretRange.toString().length + countBrs;
 	self['@selectionText'] = window.getSelection().toString();
 	self['@selectionStart'] = self['@selectionEnd'] + 1 - self['@selectionText'].length
+	console.log('cursor position: ', self['@selectionStart'], ' to ', self['@selectionEnd']);
 	>
 ! !
 

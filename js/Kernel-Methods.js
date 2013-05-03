@@ -305,6 +305,25 @@ smalltalk.BlockClosure);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "runAfter:",
+category: 'evaluating',
+fn: function (milliseconds){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+
+	var method = self;
+	setTimeout(method, milliseconds);
+	;
+return self}, function($ctx1) {$ctx1.fill(self,"runAfter:",{milliseconds:milliseconds},smalltalk.BlockClosure)})},
+args: ["milliseconds"],
+source: "runAfter: milliseconds\x0a\x09<\x0a\x09var method = self;\x0a\x09setTimeout(method, milliseconds);\x0a\x09>",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.BlockClosure);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "timeToRun",
 category: 'evaluating',
 fn: function (){

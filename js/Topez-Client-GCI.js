@@ -882,6 +882,7 @@ function $Error(){return smalltalk.Error||(typeof Error=="undefined"?nil:Error)}
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2;
 params=_st(aDictionary)._copy();
+_st(params)._at_put_("!session_id",self["@sessionId"]);
 _st($Transcript())._show_(_st(_st(_st(_st("GciLibrary>>apiGci: ").__comma(_st(command)._asString())).__comma(" data: ")).__comma(_st(params)._asString())).__comma(_st($Character())._cr()));
 result=_st(_st(_st($Ajax())._ajaxSync_data_(_st("/gci/").__comma(command),_st(params)._asJSON()))._responseText())._parseJSON();
 _st($Transcript())._show_(_st(_st("result: ").__comma(_st(result)._asString())).__comma(_st($Character())._cr()));
@@ -893,8 +894,8 @@ $2=_st(result)._result();
 return $2;
 }, function($ctx1) {$ctx1.fill(self,"apiGci:data:",{command:command,aDictionary:aDictionary,params:params,result:result},smalltalk.GciLibrary)})},
 args: ["command", "aDictionary"],
-source: "apiGci: command data: aDictionary\x0a\x09|params result|\x0a\x09params := aDictionary copy.\x0a\x09\x22TODO: think about session handling\x22\x0a\x09\x22params at: '!session_id' put: sessionId.\x22\x0a\x09\x0a\x09Transcript show: 'GciLibrary>>apiGci: ', command asString, ' data: ', params asString, Character cr.\x0a\x0a\x09result := (Ajax ajaxSync: '/gci/', command data: params asJSON) responseText parseJSON.\x0a\x09Transcript show: 'result: ', result asString, Character cr.\x0a\x09result success ifFalse: [Error signal: command, ' GCI API call failed. ', result exception].\x0a\x09^ result result",
-messageSends: ["copy", "show:", ",", "cr", "asString", "parseJSON", "responseText", "ajaxSync:data:", "asJSON", "ifFalse:", "signal:", "exception", "success", "result"],
+source: "apiGci: command data: aDictionary\x0a\x09|params result|\x0a\x09params := aDictionary copy.\x0a\x09\x22TODO: think about session handling\x22\x0a\x09params at: '!session_id' put: sessionId.\x0a\x09\x0a\x09Transcript show: 'GciLibrary>>apiGci: ', command asString, ' data: ', params asString, Character cr.\x0a\x0a\x09result := (Ajax ajaxSync: '/gci/', command data: params asJSON) responseText parseJSON.\x0a\x09Transcript show: 'result: ', result asString, Character cr.\x0a\x09result success ifFalse: [Error signal: command, ' GCI API call failed. ', result exception].\x0a\x09^ result result",
+messageSends: ["copy", "at:put:", "show:", ",", "cr", "asString", "parseJSON", "responseText", "ajaxSync:data:", "asJSON", "ifFalse:", "signal:", "exception", "success", "result"],
 referencedClasses: ["Character", "Transcript", "Ajax", "Error"]
 }),
 smalltalk.GciLibrary);
@@ -1186,19 +1187,26 @@ selector: "apiNoSessionGci:data:",
 category: 'proxy',
 fn: function (command,aDictionary){
 var self=this;
+var result;
 function $Character(){return smalltalk.Character||(typeof Character=="undefined"?nil:Character)}
 function $Transcript(){return smalltalk.Transcript||(typeof Transcript=="undefined"?nil:Transcript)}
 function $Ajax(){return smalltalk.Ajax||(typeof Ajax=="undefined"?nil:Ajax)}
+function $Error(){return smalltalk.Error||(typeof Error=="undefined"?nil:Error)}
 return smalltalk.withContext(function($ctx1) { 
-var $1;
+var $1,$2;
 _st($Transcript())._show_(_st(_st(_st(_st("GciLibrary>>apiNoSessionGci: ").__comma(_st(command)._asString())).__comma(" data: ")).__comma(_st(aDictionary)._asString())).__comma(_st($Character())._cr()));
-$1=_st($Ajax())._ajaxSync_data_(_st("/gci/").__comma(command),_st(aDictionary)._asJSON());
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"apiNoSessionGci:data:",{command:command,aDictionary:aDictionary},smalltalk.GciLibrary)})},
+result=_st(_st(_st($Ajax())._ajaxSync_data_(_st("/gci/").__comma(command),_st(aDictionary)._asJSON()))._responseText())._parseJSON();
+$1=_st(result)._success();
+if(! smalltalk.assert($1)){
+_st($Error())._signal_(_st(_st(command).__comma(" GCI API call failed. ")).__comma(_st(result)._exception()));
+};
+$2=_st(result)._result();
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"apiNoSessionGci:data:",{command:command,aDictionary:aDictionary,result:result},smalltalk.GciLibrary)})},
 args: ["command", "aDictionary"],
-source: "apiNoSessionGci: command data: aDictionary\x0a\x09Transcript show: 'GciLibrary>>apiNoSessionGci: ', command asString, ' data: ', aDictionary asString, Character cr.\x0a\x09^ Ajax ajaxSync: '/gci/', command data: aDictionary asJSON",
-messageSends: ["show:", ",", "cr", "asString", "ajaxSync:data:", "asJSON"],
-referencedClasses: ["Character", "Transcript", "Ajax"]
+source: "apiNoSessionGci: command data: aDictionary\x0a\x09|result|\x0a\x09Transcript show: 'GciLibrary>>apiNoSessionGci: ', command asString, ' data: ', aDictionary asString, Character cr.\x0a\x09result := (Ajax ajaxSync: '/gci/', command data: aDictionary asJSON) responseText parseJSON.\x0a\x09result success ifFalse: [Error signal: command, ' GCI API call failed. ', result exception].\x0a\x09^ result result",
+messageSends: ["show:", ",", "cr", "asString", "parseJSON", "responseText", "ajaxSync:data:", "asJSON", "ifFalse:", "signal:", "exception", "success", "result"],
+referencedClasses: ["Character", "Transcript", "Ajax", "Error"]
 }),
 smalltalk.GciLibrary);
 

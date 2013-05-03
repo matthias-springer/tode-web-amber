@@ -6781,10 +6781,10 @@ category: 'interactions',
 fn: function (start,end){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
- setSelectionRange(self._textElement()._asJQuery()[0], start - 1, end); ;
+ setSelectionRange(self._textElement()._asJQuery()[0], start - 1, end - 0); ;
 return self}, function($ctx1) {$ctx1.fill(self,"setSelectionFrom:to:",{start:start,end:end},smalltalk.TextMorph)})},
 args: ["start", "end"],
-source: "setSelectionFrom: start to: end\x0a\x09< setSelectionRange(self._textElement()._asJQuery()[0], start - 1, end); >",
+source: "setSelectionFrom: start to: end\x0a\x09< setSelectionRange(self._textElement()._asJQuery()[0], start - 1, end - 0); >",
 messageSends: [],
 referencedClasses: []
 }),
@@ -6880,10 +6880,11 @@ return smalltalk.withContext(function($ctx1) {
 	self['@selectionEnd'] = preCaretRange.toString().length + countBrs;
 	self['@selectionText'] = window.getSelection().toString();
 	self['@selectionStart'] = self['@selectionEnd'] + 1 - self['@selectionText'].length
+	console.log('cursor position: ', self['@selectionStart'], ' to ', self['@selectionEnd']);
 	;
 return self}, function($ctx1) {$ctx1.fill(self,"updateCursor",{},smalltalk.TextMorph)})},
 args: [],
-source: "updateCursor\x0a\x09< \x0a\x09// TODO: only for Chrome\x0a\x09var range = window.getSelection().getRangeAt(0);\x0a\x09var preCaretRange = range.cloneRange();\x0a\x09preCaretRange.selectNodeContents(self._textElement()._asJQuery()[0]);\x0a\x09preCaretRange.setEnd(range.endContainer, range.endOffset);\x0a\x09var clonedSelection = preCaretRange.cloneContents();\x0a\x09var div = document.createElement('div');\x0a\x09div.appendChild(clonedSelection);\x0a\x09// workaround: Amber does not support writing the tag brackets in String (syntax error)\x0a\x09var brTag = String.fromCharCode(60) + 'br' + String.fromCharCode(62);\x0a\x09var divBrs = div.innerHTML.match(new RegExp(brTag, 'g'));\x0a\x09var countBrs = divBrs ? divBrs.length : 0;\x0a\x09self['@selectionEnd'] = preCaretRange.toString().length + countBrs;\x0a\x09self['@selectionText'] = window.getSelection().toString();\x0a\x09self['@selectionStart'] = self['@selectionEnd'] + 1 - self['@selectionText'].length\x0a\x09>",
+source: "updateCursor\x0a\x09< \x0a\x09// TODO: only for Chrome\x0a\x09var range = window.getSelection().getRangeAt(0);\x0a\x09var preCaretRange = range.cloneRange();\x0a\x09preCaretRange.selectNodeContents(self._textElement()._asJQuery()[0]);\x0a\x09preCaretRange.setEnd(range.endContainer, range.endOffset);\x0a\x09var clonedSelection = preCaretRange.cloneContents();\x0a\x09var div = document.createElement('div');\x0a\x09div.appendChild(clonedSelection);\x0a\x09// workaround: Amber does not support writing the tag brackets in String (syntax error)\x0a\x09var brTag = String.fromCharCode(60) + 'br' + String.fromCharCode(62);\x0a\x09var divBrs = div.innerHTML.match(new RegExp(brTag, 'g'));\x0a\x09var countBrs = divBrs ? divBrs.length : 0;\x0a\x09self['@selectionEnd'] = preCaretRange.toString().length + countBrs;\x0a\x09self['@selectionText'] = window.getSelection().toString();\x0a\x09self['@selectionStart'] = self['@selectionEnd'] + 1 - self['@selectionText'].length\x0a\x09console.log('cursor position: ', self['@selectionStart'], ' to ', self['@selectionEnd']);\x0a\x09>",
 messageSends: [],
 referencedClasses: []
 }),
