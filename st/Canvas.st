@@ -1969,7 +1969,7 @@ getCssClassFor: aCode
 render: container with: html
 	myHtml := html.
 	container 
-		with: [textElement := html span].
+		with: [textElement := html span class: 'content-editable'].
 !
 
 renderCharacter: aCharacter

@@ -4817,11 +4817,11 @@ return smalltalk.withContext(function($ctx1) {
 self["@myHtml"]=html;
 _st(container)._with_((function(){
 return smalltalk.withContext(function($ctx2) {
-self["@textElement"]=_st(html)._span();
+self["@textElement"]=_st(_st(html)._span())._class_("content-editable");
 return self["@textElement"];
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"render:with:",{container:container,html:html},smalltalk.TextMorph)})},
-messageSends: ["with:", "span"]}),
+messageSends: ["with:", "class:", "span"]}),
 smalltalk.TextMorph);
 
 smalltalk.addMethod(

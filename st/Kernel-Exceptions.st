@@ -40,8 +40,14 @@ initialize
 
 !Error methodsFor: 'signaling'!
 
-signal
+privateSignal
 	<self.context = smalltalk.getThisContext(); self.smalltalkError = true; throw(self)>
+!
+
+signal
+	(self class canUnderstand: #defaultAction)
+		ifTrue: [self defaultAction]
+		ifFalse: [self privateSignal].
 !
 
 signal: aString

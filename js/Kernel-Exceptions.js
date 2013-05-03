@@ -119,16 +119,38 @@ smalltalk.Error);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "signal",
+selector: "privateSignal",
 category: 'signaling',
 fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 self.context = smalltalk.getThisContext(); self.smalltalkError = true; throw(self);
+return self}, function($ctx1) {$ctx1.fill(self,"privateSignal",{},smalltalk.Error)})},
+args: [],
+source: "privateSignal\x0a\x09<self.context = smalltalk.getThisContext(); self.smalltalkError = true; throw(self)>",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Error);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "signal",
+category: 'signaling',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._class())._canUnderstand_("defaultAction");
+if(smalltalk.assert($1)){
+_st(self)._defaultAction();
+} else {
+_st(self)._privateSignal();
+};
 return self}, function($ctx1) {$ctx1.fill(self,"signal",{},smalltalk.Error)})},
 args: [],
-source: "signal\x0a\x09<self.context = smalltalk.getThisContext(); self.smalltalkError = true; throw(self)>",
-messageSends: [],
+source: "signal\x0a\x09(self class canUnderstand: #defaultAction)\x0a\x09\x09ifTrue: [self defaultAction]\x0a\x09\x09ifFalse: [self privateSignal].",
+messageSends: ["ifTrue:ifFalse:", "defaultAction", "privateSignal", "canUnderstand:", "class"],
 referencedClasses: []
 }),
 smalltalk.Error);

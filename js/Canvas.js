@@ -6566,13 +6566,13 @@ return smalltalk.withContext(function($ctx1) {
 self["@myHtml"]=html;
 _st(container)._with_((function(){
 return smalltalk.withContext(function($ctx2) {
-self["@textElement"]=_st(html)._span();
+self["@textElement"]=_st(_st(html)._span())._class_("content-editable");
 return self["@textElement"];
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"render:with:",{container:container,html:html},smalltalk.TextMorph)})},
 args: ["container", "html"],
-source: "render: container with: html\x0a\x09myHtml := html.\x0a\x09container \x0a\x09\x09with: [textElement := html span].",
-messageSends: ["with:", "span"],
+source: "render: container with: html\x0a\x09myHtml := html.\x0a\x09container \x0a\x09\x09with: [textElement := html span class: 'content-editable'].",
+messageSends: ["with:", "class:", "span"],
 referencedClasses: []
 }),
 smalltalk.TextMorph);

@@ -448,4 +448,10 @@ function setSelectionRange(el, start, end) {
     }
 }
 
+function numBitShiftLeft(num, st) {
+  return num << st;
+}
 
+function numBitShiftRight(num, st) {
+  return num >> st;
+}

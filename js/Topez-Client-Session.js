@@ -751,6 +751,72 @@ referencedClasses: []
 smalltalk.GciSession.klass);
 
 
+smalltalk.addClass('GsClientForwarderSendNotification', smalltalk.Notification, ['session'], 'Topez-Client-Session');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "defaultAction",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+var result,forwarder,clientForwarderOop,selector,args;
+function $Array(){return smalltalk.Array||(typeof Array=="undefined"?nil:Array)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+args=_st(_st(self)._tag())._args();
+clientForwarderOop=_st(self["@session"])._asOopType_(_st(args)._at_((1)));
+forwarder=_st(self["@session"])._clientObjectForwardedFrom_(clientForwarderOop);
+$1=_st(forwarder).__eq_eq(nil);
+if(smalltalk.assert($1)){
+_st(self)._resume_(_st($Array())._with_with_("resume",nil));
+};
+selector=_st(args)._at_((3));
+args=_st(args)._at_((4));
+result=_st(forwarder)._performFromServer_with_using_(selector,args,self["@session"]);
+_st(self)._resume_(_st($Array())._with_with_("resume",result));
+return self}, function($ctx1) {$ctx1.fill(self,"defaultAction",{result:result,forwarder:forwarder,clientForwarderOop:clientForwarderOop,selector:selector,args:args},smalltalk.GsClientForwarderSendNotification)})},
+args: [],
+source: "defaultAction\x0a  | result forwarder clientForwarderOop selector args |\x0a  args := self tag args.\x0a  clientForwarderOop := session asOopType: (args at: 1).\x0a  forwarder := session clientObjectForwardedFrom: clientForwarderOop.\x0a  forwarder == nil\x0a    ifTrue: [ self resume: (Array with: #'resume' with: nil) ].\x0a  selector := args at: 3.\x0a  args := args at: 4.\x0a  result := forwarder performFromServer: selector with: args using: session.\x0a  self resume: (Array with: #'resume' with: result)",
+messageSends: ["args", "tag", "asOopType:", "at:", "clientObjectForwardedFrom:", "ifTrue:", "resume:", "with:with:", "==", "performFromServer:with:using:"],
+referencedClasses: ["Array"]
+}),
+smalltalk.GsClientForwarderSendNotification);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "session",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@session"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"session",{},smalltalk.GsClientForwarderSendNotification)})},
+args: [],
+source: "session\x0a    ^ session",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.GsClientForwarderSendNotification);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "session:",
+category: 'not yet classified',
+fn: function (aGciSession){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@session"]=aGciSession;
+return self}, function($ctx1) {$ctx1.fill(self,"session:",{aGciSession:aGciSession},smalltalk.GsClientForwarderSendNotification)})},
+args: ["aGciSession"],
+source: "session: aGciSession\x0a    session := aGciSession",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.GsClientForwarderSendNotification);
+
+
+
 smalltalk.addClass('GsError', smalltalk.Error, ['session'], 'Topez-Client-Session');
 smalltalk.addMethod(
 smalltalk.method({

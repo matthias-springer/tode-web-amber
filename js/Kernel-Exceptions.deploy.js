@@ -83,13 +83,30 @@ smalltalk.Error);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "signal",
+selector: "privateSignal",
 fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 self.context = smalltalk.getThisContext(); self.smalltalkError = true; throw(self);
-return self}, function($ctx1) {$ctx1.fill(self,"signal",{},smalltalk.Error)})},
+return self}, function($ctx1) {$ctx1.fill(self,"privateSignal",{},smalltalk.Error)})},
 messageSends: []}),
+smalltalk.Error);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "signal",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(self)._class())._canUnderstand_("defaultAction");
+if(smalltalk.assert($1)){
+_st(self)._defaultAction();
+} else {
+_st(self)._privateSignal();
+};
+return self}, function($ctx1) {$ctx1.fill(self,"signal",{},smalltalk.Error)})},
+messageSends: ["ifTrue:ifFalse:", "defaultAction", "privateSignal", "canUnderstand:", "class"]}),
 smalltalk.Error);
 
 smalltalk.addMethod(
