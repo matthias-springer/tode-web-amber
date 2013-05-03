@@ -140,16 +140,17 @@ category: 'signaling',
 fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-var $1;
+var $1,$2;
 $1=_st(_st(self)._class())._canUnderstand_("defaultAction");
 if(smalltalk.assert($1)){
-_st(self)._defaultAction();
+$2=_st(self)._defaultAction();
+return $2;
 } else {
 _st(self)._privateSignal();
 };
 return self}, function($ctx1) {$ctx1.fill(self,"signal",{},smalltalk.Error)})},
 args: [],
-source: "signal\x0a\x09(self class canUnderstand: #defaultAction)\x0a\x09\x09ifTrue: [self defaultAction]\x0a\x09\x09ifFalse: [self privateSignal].",
+source: "signal\x0a\x09(self class canUnderstand: #defaultAction)\x0a\x09\x09ifTrue: [^ self defaultAction]\x0a\x09\x09ifFalse: [self privateSignal].",
 messageSends: ["ifTrue:ifFalse:", "defaultAction", "privateSignal", "canUnderstand:", "class"],
 referencedClasses: []
 }),

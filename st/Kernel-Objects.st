@@ -334,6 +334,10 @@ ifNotNil: aBlock ifNil: anotherBlock
 	^aBlock value: self
 !
 
+isArray
+	^ false
+!
+
 isBehavior
 	^ false
 !
@@ -666,49 +670,53 @@ Object subclass: #Color
 !Color methodsFor: 'accessing'!
 
 blue
-	^ self blueInt / 255.0
+	^ self blueInt / 1023.0
 !
 
 blueInt
 	rgb ifNil: [rgb := 0].
-	^ rgb & 255
+	^ rgb & 1023
 !
 
 green
-	^ self greenInt / 255.0
+	^ self greenInt / 1023.0
 !
 
 greenInt
 	rgb ifNil: [rgb := 0].
-	^ (rgb & (255 << 8)) >> 8
+	^ rgb >> 10 & 1023
 !
 
 red
-	^ self redInt / 255.0
+	^ self redInt / 1023.0
 !
 
 redInt
 	rgb ifNil: [rgb := 0].
-	^ (rgb & (255 << 16)) >> 16
+	^ rgb >> 20 & 1023
 !
 
 setBlue: blue
-	rgb := self redInt << 8 + self greenInt << 8 + (blue * 255)
+	self setRed: self red green: self green blue: blue.
 !
 
 setGreen: green
-	rgb := self redInt << 8 + (green * 255) << 8 + self blueInt
+	self setRed: self red green: green blue: self blue.
 !
 
 setRed: red
-	rgb := (red * 255) << 8 + self greenInt << 8 + self blueInt
+	self setRed: red green: self green blue: self blue.
+!
+
+setRed: r green: g blue: b
+	rgb := (((r * 1023.0) rounded & 1023) << 20) + (((g * 1023.0) rounded & 1023) << 10) + ((b * 1023.0) rounded & 1023).
 ! !
 
 !Color methodsFor: 'converting'!
 
 asHexadecimal: aNumber
 	|string|
-	string := (aNumber*255) asHexadecimal.
+	string := ((aNumber*255) rounded) asHexadecimal.
 	string size = 1 ifTrue:[string := string copyReplaceFrom:0 to: 0 with: '0'].
 	^string
 !

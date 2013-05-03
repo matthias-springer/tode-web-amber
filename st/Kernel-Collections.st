@@ -1234,6 +1234,12 @@ storeOn: aStream
 			aStream nextPut: ')']
 ! !
 
+!Array methodsFor: 'testing'!
+
+isArray
+	^ true
+! !
+
 !Array class methodsFor: 'instance creation'!
 
 new: anInteger

@@ -98,10 +98,11 @@ selector: "signal",
 fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-var $1;
+var $1,$2;
 $1=_st(_st(self)._class())._canUnderstand_("defaultAction");
 if(smalltalk.assert($1)){
-_st(self)._defaultAction();
+$2=_st(self)._defaultAction();
+return $2;
 } else {
 _st(self)._privateSignal();
 };
