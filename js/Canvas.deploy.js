@@ -3201,6 +3201,30 @@ smalltalk.Morph);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "margin",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(_st(self)._morphElement())._asJQuery())._css_("margin"))._parseFloat();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"margin",{},smalltalk.Morph)})},
+messageSends: ["parseFloat", "css:", "asJQuery", "morphElement"]}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "margin:",
+fn: function (aNumber){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(_st(self)._morphElement())._asJQuery())._css_a_("margin",_st(_st(aNumber)._asString()).__comma("px"));
+return self}, function($ctx1) {$ctx1.fill(self,"margin:",{aNumber:aNumber},smalltalk.Morph)})},
+messageSends: ["css:a:", ",", "asString", "asJQuery", "morphElement"]}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "morphElement",
 fn: function (){
 var self=this;
@@ -3370,6 +3394,30 @@ var self=this;
 return smalltalk.withContext(function($ctx1) { 
 _st(_st(_st(self)._morphElement())._asJQuery())._css_a_("padding",_st(_st(aNumber)._asString()).__comma("px"));
 return self}, function($ctx1) {$ctx1.fill(self,"padding:",{aNumber:aNumber},smalltalk.Morph)})},
+messageSends: ["css:a:", ",", "asString", "asJQuery", "morphElement"]}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "paddingLeft",
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(_st(self)._morphElement())._asJQuery())._css_("padding-left"))._parseFloat();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"paddingLeft",{},smalltalk.Morph)})},
+messageSends: ["parseFloat", "css:", "asJQuery", "morphElement"]}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "paddingLeft:",
+fn: function (aNumber){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(_st(self)._morphElement())._asJQuery())._css_a_("padding-left",_st(_st(aNumber)._asString()).__comma("px"));
+return self}, function($ctx1) {$ctx1.fill(self,"paddingLeft:",{aNumber:aNumber},smalltalk.Morph)})},
 messageSends: ["css:a:", ",", "asString", "asJQuery", "morphElement"]}),
 smalltalk.Morph);
 
@@ -6235,7 +6283,7 @@ messageSends: ["setLabel:", "new", "yourself"]}),
 smalltalk.SystemWindow.klass);
 
 
-smalltalk.addClass('UIManager', smalltalk.Morph, ['question', 'yesAnswer', 'noAnswer', 'cancelAnswer', 'yesButton', 'noButton', 'cancelButton', 'answer', 'questionDiv'], 'Canvas');
+smalltalk.addClass('UIManager', smalltalk.Morph, ['morphElement', 'question', 'yesAnswer', 'noAnswer', 'cancelAnswer', 'yesButton', 'noButton', 'cancelButton', 'answer', 'questionDiv', 'morphOffsets', 'systemWindow'], 'Canvas');
 smalltalk.addMethod(
 smalltalk.method({
 selector: "answer",
@@ -6330,6 +6378,34 @@ smalltalk.UIManager);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "contentExtent",
+fn: function (){
+var self=this;
+function $Point(){return smalltalk.Point||(typeof Point=="undefined"?nil:Point)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($Point())._x_y_(_st(_st(self)._width()).__minus(_st(self)._padding()),_st(_st(self)._height()).__minus(_st(self)._padding()));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"contentExtent",{},smalltalk.UIManager)})},
+messageSends: ["x:y:", "-", "padding", "width", "height"]}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "contentOrigin",
+fn: function (){
+var self=this;
+function $Point(){return smalltalk.Point||(typeof Point=="undefined"?nil:Point)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($Point())._x_y_(_st(self)._padding(),_st(self)._padding());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"contentOrigin",{},smalltalk.UIManager)})},
+messageSends: ["x:y:", "padding"]}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "drawButtons",
 fn: function (){
 var self=this;
@@ -6338,24 +6414,30 @@ return smalltalk.withContext(function($ctx1) {
 var $1,$2,$3,$4,$5,$7,$8,$6,$9,$10;
 $1=self;
 $2=_st($SimpleButtonMorph())._new();
+_st($2)._setToAdhereToEdge_("bottom");
 _st($2)._label_(_st(self)._yesAnswer());
 $3=_st($2)._onClick_((function(){
 return smalltalk.withContext(function($ctx2) {
-return _st(self)._answer_(true);
+_st(self)._answer_(true);
+return _st(self["@systemWindow"])._delete();
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 _st($1)._yesButton_($3);
 $4=_st($SimpleButtonMorph())._new();
+_st($4)._setToAdhereToEdge_("bottom");
 _st($4)._label_(_st(self)._noAnswer());
 $5=_st($4)._onClick_((function(){
 return smalltalk.withContext(function($ctx2) {
-return _st(self)._answer_(false);
+_st(self)._answer_(false);
+return _st(self["@systemWindow"])._delete();
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 _st($1)._noButton_($5);
 $7=_st($SimpleButtonMorph())._new();
+_st($7)._setToAdhereToEdge_("bottom");
 _st($7)._label_(_st(self)._cancelAnswer());
 $8=_st($7)._onClick_((function(){
 return smalltalk.withContext(function($ctx2) {
-return _st(self)._answer_(nil);
+_st(self)._answer_(nil);
+return _st(self["@systemWindow"])._delete();
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 $6=_st($1)._cancelButton_($8);
 $9=self;
@@ -6363,7 +6445,7 @@ _st($9)._addMorph_(_st(self)._yesButton());
 _st($9)._addMorph_(_st(self)._noButton());
 $10=_st($9)._addMorph_(_st(self)._cancelButton());
 return self}, function($ctx1) {$ctx1.fill(self,"drawButtons",{},smalltalk.UIManager)})},
-messageSends: ["yesButton:", "label:", "yesAnswer", "new", "onClick:", "answer:", "noButton:", "noAnswer", "cancelButton:", "cancelAnswer", "addMorph:", "yesButton", "noButton", "cancelButton"]}),
+messageSends: ["yesButton:", "setToAdhereToEdge:", "new", "label:", "yesAnswer", "onClick:", "answer:", "delete", "noButton:", "noAnswer", "cancelButton:", "cancelAnswer", "addMorph:", "yesButton", "noButton", "cancelButton"]}),
 smalltalk.UIManager);
 
 smalltalk.addMethod(
@@ -6377,9 +6459,31 @@ $1=self;
 _st($1)._yesAnswer_("Yes");
 _st($1)._noAnswer_("No");
 $2=_st($1)._cancelAnswer_("Cancel");
+self["@notClosed"]=true;
 smalltalk.Morph.fn.prototype._initialize.apply(_st(self), []);
 return self}, function($ctx1) {$ctx1.fill(self,"initialize",{},smalltalk.UIManager)})},
 messageSends: ["yesAnswer:", "noAnswer:", "cancelAnswer:", "initialize"]}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "morphOffsets",
+fn: function (){
+var self=this;
+function $Dictionary(){return smalltalk.Dictionary||(typeof Dictionary=="undefined"?nil:Dictionary)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=self["@morphOffsets"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@morphOffsets"]=_st($Dictionary())._new();
+self["@morphOffsets"];
+} else {
+$1;
+};
+$2=self["@morphOffsets"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"morphOffsets",{},smalltalk.UIManager)})},
+messageSends: ["ifNil:", "new"]}),
 smalltalk.UIManager);
 
 smalltalk.addMethod(
@@ -6439,11 +6543,11 @@ var win;
 function $SystemWindow(){return smalltalk.SystemWindow||(typeof SystemWindow=="undefined"?nil:SystemWindow)}
 function $WorkspaceMorph(){return smalltalk.WorkspaceMorph||(typeof WorkspaceMorph=="undefined"?nil:WorkspaceMorph)}
 return smalltalk.withContext(function($ctx1) { 
-win=_st($SystemWindow())._new();
-_st(_st($WorkspaceMorph())._current())._addMorph_(win);
-_st(win)._addMorph_frame_(self,_st(_st((0)).__at((0)))._extent_(_st((1)).__at((1))));
+self["@systemWindow"]=_st($SystemWindow())._labelled_("Question");
+_st(_st($WorkspaceMorph())._current())._addMorph_(self["@systemWindow"]);
+_st(self["@systemWindow"])._addMorph_frame_(self,_st(_st((0)).__at((0)))._extent_(_st((1)).__at((1))));
 return self}, function($ctx1) {$ctx1.fill(self,"openInWorld",{win:win},smalltalk.UIManager)})},
-messageSends: ["new", "addMorph:", "current", "addMorph:frame:", "extent:", "@"]}),
+messageSends: ["labelled:", "addMorph:", "current", "addMorph:frame:", "extent:", "@"]}),
 smalltalk.UIManager);
 
 smalltalk.addMethod(
@@ -6504,6 +6608,30 @@ _st(_st(_st(self)._cancelButton())._button())._empty();
 _st(_st(self)._cancelButton())._label_(_st(self)._cancelAnswer());
 return self}, function($ctx1) {$ctx1.fill(self,"update",{},smalltalk.UIManager)})},
 messageSends: ["empty", "with:", "question", "button", "yesButton", "label:", "yesAnswer", "noButton", "noAnswer", "cancelButton", "cancelAnswer"]}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "updateLayout",
+fn: function (){
+var self=this;
+var width;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+smalltalk.Morph.fn.prototype._updateLayout.apply(_st(self), []);
+width=(0);
+_st(self)._submorphsDo_((function(morph){
+return smalltalk.withContext(function($ctx2) {
+$1=morph;
+_st($1)._positionAbsolute();
+$2=_st($1)._left_(width);
+$2;
+width=_st(_st(_st(width).__plus(_st(morph)._width())).__plus(_st(morph)._padding())).__plus((3));
+return width;
+}, function($ctx2) {$ctx2.fillBlock({morph:morph},$ctx1)})}));
+_st(self["@systemWindow"])._extent_(_st(_st(width).__plus(_st(self["@systemWindow"])._padding())).__at(_st(_st(_st(_st(_st(self)._yesButton())._height()).__plus(_st(_st(self["@questionDiv"])._asJQuery())._height())).__star((1.5))).__plus(_st(self["@systemWindow"])._fullTitleBarHeight())));
+return self}, function($ctx1) {$ctx1.fill(self,"updateLayout",{width:width},smalltalk.UIManager)})},
+messageSends: ["updateLayout", "submorphsDo:", "positionAbsolute", "left:", "+", "padding", "width", "extent:", "@", "fullTitleBarHeight", "*", "height", "asJQuery", "yesButton"]}),
 smalltalk.UIManager);
 
 smalltalk.addMethod(

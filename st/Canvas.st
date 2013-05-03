@@ -1203,6 +1203,14 @@ left: aNumber
 	self morphElement asJQuery css: 'left' a: aNumber asString, 'px'.
 !
 
+margin
+	^ (self morphElement asJQuery css: 'margin') parseFloat
+!
+
+margin: aNumber
+	self morphElement asJQuery css: 'margin' a: aNumber asString, 'px'.
+!
+
 overflow
 	^ self morphElement asJQuery css: 'overflow'
 !
@@ -1239,6 +1247,14 @@ padding
 
 padding: aNumber
 	self morphElement asJQuery css: 'padding' a: aNumber asString, 'px'.
+!
+
+paddingLeft
+	^ (self morphElement asJQuery css: 'padding-left') parseFloat
+!
+
+paddingLeft: aNumber
+	self morphElement asJQuery css: 'padding-left' a: aNumber asString, 'px'.
 !
 
 paddingTop
@@ -2534,7 +2550,7 @@ labelled: labelString
 ! !
 
 Morph subclass: #UIManager
-	instanceVariableNames: 'question yesAnswer noAnswer cancelAnswer yesButton noButton cancelButton answer questionDiv'
+	instanceVariableNames: 'morphElement question yesAnswer noAnswer cancelAnswer yesButton noButton cancelButton answer questionDiv morphOffsets systemWindow'
 	package: 'Canvas'!
 
 !UIManager methodsFor: 'accessing'!
@@ -2561,6 +2577,11 @@ cancelButton
 
 cancelButton: anObject
 	cancelButton := anObject
+!
+
+morphOffsets
+	morphOffsets ifNil: [morphOffsets := Dictionary new].
+	^ morphOffsets
 !
 
 noAnswer
@@ -2603,6 +2624,32 @@ yesButton: anObject
 	yesButton:= anObject
 ! !
 
+!UIManager methodsFor: 'geometry'!
+
+contentExtent
+	^ Point
+		x: self width - self padding
+		y: self height - self padding.
+!
+
+contentOrigin
+	^ Point
+		x: self padding
+		y: self padding
+!
+
+updateLayout
+	|width|
+	super updateLayout.
+	width := 0.
+	self submorphsDo: [:morph  | 
+		morph
+			positionAbsolute;
+			left: width.
+		width := width + morph width + morph padding + 3].
+	systemWindow extent: (width + systemWindow padding)@(self yesButton height + questionDiv asJQuery height * 1.5 + systemWindow fullTitleBarHeight)
+! !
+
 !UIManager methodsFor: 'not yet classified'!
 
 confirm: queryString trueChoice: yes falseChoice: no cancelChoice: cancelChoice default: defaultOption
@@ -2620,6 +2667,7 @@ initialize
 		yesAnswer: 'Yes';
 		noAnswer: 'No';
 		cancelAnswer: 'Cancel'.
+	notClosed:= true.
 	super initialize
 !
 
@@ -2640,14 +2688,17 @@ update
 drawButtons
 	self 
 		yesButton: (SimpleButtonMorph new 
+							setToAdhereToEdge: #bottom;
 							label: self yesAnswer;
-							onClick:[ self answer: true]);
+							onClick:[ self answer: true. systemWindow delete]);
 		noButton: (SimpleButtonMorph new 
+							setToAdhereToEdge: #bottom;
 							label: self noAnswer;
-							onClick:[ self answer: false]);
+							onClick:[ self answer: false. systemWindow delete]);
 		cancelButton: (SimpleButtonMorph new 
+							setToAdhereToEdge: #bottom;
 							label: self cancelAnswer;
-							onClick:[ self answer: nil]).
+							onClick:[ self answer: nil. systemWindow delete]).
 	self 
 		addMorph: self yesButton;
 		addMorph: self noButton;
@@ -2656,9 +2707,9 @@ drawButtons
 
 openInWorld
 	|win|
-	win := SystemWindow new.
-	WorkspaceMorph current addMorph:win.
-	win addMorph: self frame: (0@0 extent: 1@1)
+	systemWindow := SystemWindow labelled:'Question'.
+	WorkspaceMorph current addMorph:systemWindow.
+	systemWindow addMorph: self frame: (0@0 extent: 1@1)
 !
 
 render: container with: html

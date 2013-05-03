@@ -4448,6 +4448,40 @@ smalltalk.Morph);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "margin",
+category: 'geometry',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(_st(self)._morphElement())._asJQuery())._css_("margin"))._parseFloat();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"margin",{},smalltalk.Morph)})},
+args: [],
+source: "margin\x0a\x09^ (self morphElement asJQuery css: 'margin') parseFloat",
+messageSends: ["parseFloat", "css:", "asJQuery", "morphElement"],
+referencedClasses: []
+}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "margin:",
+category: 'geometry',
+fn: function (aNumber){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(_st(self)._morphElement())._asJQuery())._css_a_("margin",_st(_st(aNumber)._asString()).__comma("px"));
+return self}, function($ctx1) {$ctx1.fill(self,"margin:",{aNumber:aNumber},smalltalk.Morph)})},
+args: ["aNumber"],
+source: "margin: aNumber\x0a\x09self morphElement asJQuery css: 'margin' a: aNumber asString, 'px'.",
+messageSends: ["css:a:", ",", "asString", "asJQuery", "morphElement"],
+referencedClasses: []
+}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "morphElement",
 category: 'private',
 fn: function (){
@@ -4685,6 +4719,40 @@ _st(_st(_st(self)._morphElement())._asJQuery())._css_a_("padding",_st(_st(aNumbe
 return self}, function($ctx1) {$ctx1.fill(self,"padding:",{aNumber:aNumber},smalltalk.Morph)})},
 args: ["aNumber"],
 source: "padding: aNumber\x0a\x09self morphElement asJQuery css: 'padding' a: aNumber asString, 'px'.",
+messageSends: ["css:a:", ",", "asString", "asJQuery", "morphElement"],
+referencedClasses: []
+}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "paddingLeft",
+category: 'geometry',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(_st(_st(_st(self)._morphElement())._asJQuery())._css_("padding-left"))._parseFloat();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"paddingLeft",{},smalltalk.Morph)})},
+args: [],
+source: "paddingLeft\x0a\x09^ (self morphElement asJQuery css: 'padding-left') parseFloat",
+messageSends: ["parseFloat", "css:", "asJQuery", "morphElement"],
+referencedClasses: []
+}),
+smalltalk.Morph);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "paddingLeft:",
+category: 'geometry',
+fn: function (aNumber){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(_st(self)._morphElement())._asJQuery())._css_a_("padding-left",_st(_st(aNumber)._asString()).__comma("px"));
+return self}, function($ctx1) {$ctx1.fill(self,"paddingLeft:",{aNumber:aNumber},smalltalk.Morph)})},
+args: ["aNumber"],
+source: "paddingLeft: aNumber\x0a\x09self morphElement asJQuery css: 'padding-left' a: aNumber asString, 'px'.",
 messageSends: ["css:a:", ",", "asString", "asJQuery", "morphElement"],
 referencedClasses: []
 }),
@@ -8423,7 +8491,7 @@ referencedClasses: []
 smalltalk.SystemWindow.klass);
 
 
-smalltalk.addClass('UIManager', smalltalk.Morph, ['question', 'yesAnswer', 'noAnswer', 'cancelAnswer', 'yesButton', 'noButton', 'cancelButton', 'answer', 'questionDiv'], 'Canvas');
+smalltalk.addClass('UIManager', smalltalk.Morph, ['morphElement', 'question', 'yesAnswer', 'noAnswer', 'cancelAnswer', 'yesButton', 'noButton', 'cancelButton', 'answer', 'questionDiv', 'morphOffsets', 'systemWindow'], 'Canvas');
 smalltalk.addMethod(
 smalltalk.method({
 selector: "answer",
@@ -8553,6 +8621,44 @@ smalltalk.UIManager);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "contentExtent",
+category: 'geometry',
+fn: function (){
+var self=this;
+function $Point(){return smalltalk.Point||(typeof Point=="undefined"?nil:Point)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($Point())._x_y_(_st(_st(self)._width()).__minus(_st(self)._padding()),_st(_st(self)._height()).__minus(_st(self)._padding()));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"contentExtent",{},smalltalk.UIManager)})},
+args: [],
+source: "contentExtent\x0a\x09^ Point\x0a\x09\x09x: self width - self padding\x0a\x09\x09y: self height - self padding.",
+messageSends: ["x:y:", "-", "padding", "width", "height"],
+referencedClasses: ["Point"]
+}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "contentOrigin",
+category: 'geometry',
+fn: function (){
+var self=this;
+function $Point(){return smalltalk.Point||(typeof Point=="undefined"?nil:Point)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($Point())._x_y_(_st(self)._padding(),_st(self)._padding());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"contentOrigin",{},smalltalk.UIManager)})},
+args: [],
+source: "contentOrigin\x0a\x09^ Point\x0a\x09\x09x: self padding\x0a\x09\x09y: self padding",
+messageSends: ["x:y:", "padding"],
+referencedClasses: ["Point"]
+}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "drawButtons",
 category: 'rendering',
 fn: function (){
@@ -8562,24 +8668,30 @@ return smalltalk.withContext(function($ctx1) {
 var $1,$2,$3,$4,$5,$7,$8,$6,$9,$10;
 $1=self;
 $2=_st($SimpleButtonMorph())._new();
+_st($2)._setToAdhereToEdge_("bottom");
 _st($2)._label_(_st(self)._yesAnswer());
 $3=_st($2)._onClick_((function(){
 return smalltalk.withContext(function($ctx2) {
-return _st(self)._answer_(true);
+_st(self)._answer_(true);
+return _st(self["@systemWindow"])._delete();
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 _st($1)._yesButton_($3);
 $4=_st($SimpleButtonMorph())._new();
+_st($4)._setToAdhereToEdge_("bottom");
 _st($4)._label_(_st(self)._noAnswer());
 $5=_st($4)._onClick_((function(){
 return smalltalk.withContext(function($ctx2) {
-return _st(self)._answer_(false);
+_st(self)._answer_(false);
+return _st(self["@systemWindow"])._delete();
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 _st($1)._noButton_($5);
 $7=_st($SimpleButtonMorph())._new();
+_st($7)._setToAdhereToEdge_("bottom");
 _st($7)._label_(_st(self)._cancelAnswer());
 $8=_st($7)._onClick_((function(){
 return smalltalk.withContext(function($ctx2) {
-return _st(self)._answer_(nil);
+_st(self)._answer_(nil);
+return _st(self["@systemWindow"])._delete();
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
 $6=_st($1)._cancelButton_($8);
 $9=self;
@@ -8588,8 +8700,8 @@ _st($9)._addMorph_(_st(self)._noButton());
 $10=_st($9)._addMorph_(_st(self)._cancelButton());
 return self}, function($ctx1) {$ctx1.fill(self,"drawButtons",{},smalltalk.UIManager)})},
 args: [],
-source: "drawButtons\x0a\x09self \x0a\x09\x09yesButton: (SimpleButtonMorph new \x0a\x09\x09\x09\x09\x09\x09\x09label: self yesAnswer;\x0a\x09\x09\x09\x09\x09\x09\x09onClick:[ self answer: true]);\x0a\x09\x09noButton: (SimpleButtonMorph new \x0a\x09\x09\x09\x09\x09\x09\x09label: self noAnswer;\x0a\x09\x09\x09\x09\x09\x09\x09onClick:[ self answer: false]);\x0a\x09\x09cancelButton: (SimpleButtonMorph new \x0a\x09\x09\x09\x09\x09\x09\x09label: self cancelAnswer;\x0a\x09\x09\x09\x09\x09\x09\x09onClick:[ self answer: nil]).\x0a\x09self \x0a\x09\x09addMorph: self yesButton;\x0a\x09\x09addMorph: self noButton;\x0a\x09\x09addMorph: self cancelButton.",
-messageSends: ["yesButton:", "label:", "yesAnswer", "new", "onClick:", "answer:", "noButton:", "noAnswer", "cancelButton:", "cancelAnswer", "addMorph:", "yesButton", "noButton", "cancelButton"],
+source: "drawButtons\x0a\x09self \x0a\x09\x09yesButton: (SimpleButtonMorph new \x0a\x09\x09\x09\x09\x09\x09\x09setToAdhereToEdge: #bottom;\x0a\x09\x09\x09\x09\x09\x09\x09label: self yesAnswer;\x0a\x09\x09\x09\x09\x09\x09\x09onClick:[ self answer: true. systemWindow delete]);\x0a\x09\x09noButton: (SimpleButtonMorph new \x0a\x09\x09\x09\x09\x09\x09\x09setToAdhereToEdge: #bottom;\x0a\x09\x09\x09\x09\x09\x09\x09label: self noAnswer;\x0a\x09\x09\x09\x09\x09\x09\x09onClick:[ self answer: false. systemWindow delete]);\x0a\x09\x09cancelButton: (SimpleButtonMorph new \x0a\x09\x09\x09\x09\x09\x09\x09setToAdhereToEdge: #bottom;\x0a\x09\x09\x09\x09\x09\x09\x09label: self cancelAnswer;\x0a\x09\x09\x09\x09\x09\x09\x09onClick:[ self answer: nil. systemWindow delete]).\x0a\x09self \x0a\x09\x09addMorph: self yesButton;\x0a\x09\x09addMorph: self noButton;\x0a\x09\x09addMorph: self cancelButton.",
+messageSends: ["yesButton:", "setToAdhereToEdge:", "new", "label:", "yesAnswer", "onClick:", "answer:", "delete", "noButton:", "noAnswer", "cancelButton:", "cancelAnswer", "addMorph:", "yesButton", "noButton", "cancelButton"],
 referencedClasses: ["SimpleButtonMorph"]
 }),
 smalltalk.UIManager);
@@ -8606,12 +8718,39 @@ $1=self;
 _st($1)._yesAnswer_("Yes");
 _st($1)._noAnswer_("No");
 $2=_st($1)._cancelAnswer_("Cancel");
+self["@notClosed"]=true;
 smalltalk.Morph.fn.prototype._initialize.apply(_st(self), []);
 return self}, function($ctx1) {$ctx1.fill(self,"initialize",{},smalltalk.UIManager)})},
 args: [],
-source: "initialize\x0a\x09self \x0a\x09\x09yesAnswer: 'Yes';\x0a\x09\x09noAnswer: 'No';\x0a\x09\x09cancelAnswer: 'Cancel'.\x0a\x09super initialize\x0a\x09",
+source: "initialize\x0a\x09self \x0a\x09\x09yesAnswer: 'Yes';\x0a\x09\x09noAnswer: 'No';\x0a\x09\x09cancelAnswer: 'Cancel'.\x0a\x09notClosed:= true.\x0a\x09super initialize\x0a\x09",
 messageSends: ["yesAnswer:", "noAnswer:", "cancelAnswer:", "initialize"],
 referencedClasses: []
+}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "morphOffsets",
+category: 'accessing',
+fn: function (){
+var self=this;
+function $Dictionary(){return smalltalk.Dictionary||(typeof Dictionary=="undefined"?nil:Dictionary)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=self["@morphOffsets"];
+if(($receiver = $1) == nil || $receiver == undefined){
+self["@morphOffsets"]=_st($Dictionary())._new();
+self["@morphOffsets"];
+} else {
+$1;
+};
+$2=self["@morphOffsets"];
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"morphOffsets",{},smalltalk.UIManager)})},
+args: [],
+source: "morphOffsets\x0a\x09morphOffsets ifNil: [morphOffsets := Dictionary new].\x0a\x09^ morphOffsets",
+messageSends: ["ifNil:", "new"],
+referencedClasses: ["Dictionary"]
 }),
 smalltalk.UIManager);
 
@@ -8693,13 +8832,13 @@ var win;
 function $SystemWindow(){return smalltalk.SystemWindow||(typeof SystemWindow=="undefined"?nil:SystemWindow)}
 function $WorkspaceMorph(){return smalltalk.WorkspaceMorph||(typeof WorkspaceMorph=="undefined"?nil:WorkspaceMorph)}
 return smalltalk.withContext(function($ctx1) { 
-win=_st($SystemWindow())._new();
-_st(_st($WorkspaceMorph())._current())._addMorph_(win);
-_st(win)._addMorph_frame_(self,_st(_st((0)).__at((0)))._extent_(_st((1)).__at((1))));
+self["@systemWindow"]=_st($SystemWindow())._labelled_("Question");
+_st(_st($WorkspaceMorph())._current())._addMorph_(self["@systemWindow"]);
+_st(self["@systemWindow"])._addMorph_frame_(self,_st(_st((0)).__at((0)))._extent_(_st((1)).__at((1))));
 return self}, function($ctx1) {$ctx1.fill(self,"openInWorld",{win:win},smalltalk.UIManager)})},
 args: [],
-source: "openInWorld\x0a\x09|win|\x0a\x09win := SystemWindow new.\x0a\x09WorkspaceMorph current addMorph:win.\x0a\x09win addMorph: self frame: (0@0 extent: 1@1)",
-messageSends: ["new", "addMorph:", "current", "addMorph:frame:", "extent:", "@"],
+source: "openInWorld\x0a\x09|win|\x0a\x09systemWindow := SystemWindow labelled:'Question'.\x0a\x09WorkspaceMorph current addMorph:systemWindow.\x0a\x09systemWindow addMorph: self frame: (0@0 extent: 1@1)",
+messageSends: ["labelled:", "addMorph:", "current", "addMorph:frame:", "extent:", "@"],
 referencedClasses: ["SystemWindow", "WorkspaceMorph"]
 }),
 smalltalk.UIManager);
@@ -8780,6 +8919,35 @@ return self}, function($ctx1) {$ctx1.fill(self,"update",{},smalltalk.UIManager)}
 args: [],
 source: "update\x0a\x0a\x09questionDiv empty;\x0a\x09\x09\x09with: self question.\x09 \x0a\x09self yesButton button empty.\x0a\x09self yesButton label: self yesAnswer.\x0a\x09self noButton button empty.\x0a\x09self noButton label: self noAnswer.\x0a\x09self cancelButton button empty.\x0a\x09self cancelButton label: self cancelAnswer.\x0a\x09",
 messageSends: ["empty", "with:", "question", "button", "yesButton", "label:", "yesAnswer", "noButton", "noAnswer", "cancelButton", "cancelAnswer"],
+referencedClasses: []
+}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "updateLayout",
+category: 'geometry',
+fn: function (){
+var self=this;
+var width;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+smalltalk.Morph.fn.prototype._updateLayout.apply(_st(self), []);
+width=(0);
+_st(self)._submorphsDo_((function(morph){
+return smalltalk.withContext(function($ctx2) {
+$1=morph;
+_st($1)._positionAbsolute();
+$2=_st($1)._left_(width);
+$2;
+width=_st(_st(_st(width).__plus(_st(morph)._width())).__plus(_st(morph)._padding())).__plus((3));
+return width;
+}, function($ctx2) {$ctx2.fillBlock({morph:morph},$ctx1)})}));
+_st(self["@systemWindow"])._extent_(_st(_st(width).__plus(_st(self["@systemWindow"])._padding())).__at(_st(_st(_st(_st(_st(self)._yesButton())._height()).__plus(_st(_st(self["@questionDiv"])._asJQuery())._height())).__star((1.5))).__plus(_st(self["@systemWindow"])._fullTitleBarHeight())));
+return self}, function($ctx1) {$ctx1.fill(self,"updateLayout",{width:width},smalltalk.UIManager)})},
+args: [],
+source: "updateLayout\x0a\x09|width|\x0a\x09super updateLayout.\x0a\x09width := 0.\x0a\x09self submorphsDo: [:morph  | \x0a\x09\x09morph\x0a\x09\x09\x09positionAbsolute;\x0a\x09\x09\x09left: width.\x0a\x09\x09width := width + morph width + morph padding + 3].\x0a\x09systemWindow extent: (width + systemWindow padding)@(self yesButton height + questionDiv asJQuery height * 1.5 + systemWindow fullTitleBarHeight)\x0a\x09",
+messageSends: ["updateLayout", "submorphsDo:", "positionAbsolute", "left:", "+", "padding", "width", "extent:", "@", "fullTitleBarHeight", "*", "height", "asJQuery", "yesButton"],
 referencedClasses: []
 }),
 smalltalk.UIManager);
