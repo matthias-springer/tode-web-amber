@@ -2533,6 +2533,146 @@ labelled: labelString
 		yourself
 ! !
 
+Morph subclass: #UIManager
+	instanceVariableNames: 'question yesAnswer noAnswer cancelAnswer yesButton noButton cancelButton answer questionDiv'
+	package: 'Canvas'!
+
+!UIManager methodsFor: 'accessing'!
+
+answer
+	^answer
+!
+
+answer: anObject
+	answer := anObject
+!
+
+cancelAnswer
+	^cancelAnswer
+!
+
+cancelAnswer: anObject
+	cancelAnswer := anObject
+!
+
+cancelButton
+	^cancelButton
+!
+
+cancelButton: anObject
+	cancelButton := anObject
+!
+
+noAnswer
+	^noAnswer
+!
+
+noAnswer: anObject
+	noAnswer := anObject
+!
+
+noButton
+	^noButton
+!
+
+noButton: anObject
+	noButton := anObject
+!
+
+question
+	^question
+!
+
+question: anObject
+	question := anObject
+!
+
+yesAnswer
+	^yesAnswer
+!
+
+yesAnswer: anObject
+	yesAnswer := anObject
+!
+
+yesButton
+	^yesButton
+!
+
+yesButton: anObject
+	yesButton:= anObject
+! !
+
+!UIManager methodsFor: 'not yet classified'!
+
+confirm: queryString trueChoice: yes falseChoice: no cancelChoice: cancelChoice default: defaultOption
+	^self 
+		question: queryString;
+		yesAnswer: yes;
+		noAnswer: no;
+		cancelAnswer: cancelChoice;
+		update;
+		answer
+!
+
+initialize
+	self 
+		yesAnswer: 'Yes';
+		noAnswer: 'No';
+		cancelAnswer: 'Cancel'.
+	super initialize
+!
+
+update
+
+	questionDiv empty;
+			with: self question.	 
+	self yesButton button empty.
+	self yesButton label: self yesAnswer.
+	self noButton button empty.
+	self noButton label: self noAnswer.
+	self cancelButton button empty.
+	self cancelButton label: self cancelAnswer.
+! !
+
+!UIManager methodsFor: 'rendering'!
+
+drawButtons
+	self 
+		yesButton: (SimpleButtonMorph new 
+							label: self yesAnswer;
+							onClick:[ self answer: true]);
+		noButton: (SimpleButtonMorph new 
+							label: self noAnswer;
+							onClick:[ self answer: false]);
+		cancelButton: (SimpleButtonMorph new 
+							label: self cancelAnswer;
+							onClick:[ self answer: nil]).
+	self 
+		addMorph: self yesButton;
+		addMorph: self noButton;
+		addMorph: self cancelButton.
+!
+
+openInWorld
+	|win|
+	win := SystemWindow new.
+	WorkspaceMorph current addMorph:win.
+	win addMorph: self frame: (0@0 extent: 1@1)
+!
+
+render: container with: html
+	container with:
+		[questionDiv := html div: self question].
+	self drawButtons
+! !
+
+!UIManager class methodsFor: 'not yet classified'!
+
+default
+	^self new
+! !
+
 Morph subclass: #WorkspaceMorph
 	instanceVariableNames: 'morphElement'
 	package: 'Canvas'!

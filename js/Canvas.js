@@ -8423,6 +8423,455 @@ referencedClasses: []
 smalltalk.SystemWindow.klass);
 
 
+smalltalk.addClass('UIManager', smalltalk.Morph, ['question', 'yesAnswer', 'noAnswer', 'cancelAnswer', 'yesButton', 'noButton', 'cancelButton', 'answer', 'questionDiv'], 'Canvas');
+smalltalk.addMethod(
+smalltalk.method({
+selector: "answer",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@answer"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"answer",{},smalltalk.UIManager)})},
+args: [],
+source: "answer\x0a\x09^answer",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "answer:",
+category: 'accessing',
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@answer"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"answer:",{anObject:anObject},smalltalk.UIManager)})},
+args: ["anObject"],
+source: "answer: anObject\x0a\x09answer := anObject",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "cancelAnswer",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@cancelAnswer"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"cancelAnswer",{},smalltalk.UIManager)})},
+args: [],
+source: "cancelAnswer\x0a\x09^cancelAnswer",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "cancelAnswer:",
+category: 'accessing',
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@cancelAnswer"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"cancelAnswer:",{anObject:anObject},smalltalk.UIManager)})},
+args: ["anObject"],
+source: "cancelAnswer: anObject\x0a\x09cancelAnswer := anObject",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "cancelButton",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@cancelButton"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"cancelButton",{},smalltalk.UIManager)})},
+args: [],
+source: "cancelButton\x0a\x09^cancelButton",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "cancelButton:",
+category: 'accessing',
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@cancelButton"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"cancelButton:",{anObject:anObject},smalltalk.UIManager)})},
+args: ["anObject"],
+source: "cancelButton: anObject\x0a\x09cancelButton := anObject",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "confirm:trueChoice:falseChoice:cancelChoice:default:",
+category: 'not yet classified',
+fn: function (queryString,yes,no,cancelChoice,defaultOption){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=self;
+_st($2)._question_(queryString);
+_st($2)._yesAnswer_(yes);
+_st($2)._noAnswer_(no);
+_st($2)._cancelAnswer_(cancelChoice);
+_st($2)._update();
+$3=_st($2)._answer();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"confirm:trueChoice:falseChoice:cancelChoice:default:",{queryString:queryString,yes:yes,no:no,cancelChoice:cancelChoice,defaultOption:defaultOption},smalltalk.UIManager)})},
+args: ["queryString", "yes", "no", "cancelChoice", "defaultOption"],
+source: "confirm: queryString trueChoice: yes falseChoice: no cancelChoice: cancelChoice default: defaultOption\x0a\x09^self \x0a\x09\x09question: queryString;\x0a\x09\x09yesAnswer: yes;\x0a\x09\x09noAnswer: no;\x0a\x09\x09cancelAnswer: cancelChoice;\x0a\x09\x09update;\x0a\x09\x09answer",
+messageSends: ["question:", "yesAnswer:", "noAnswer:", "cancelAnswer:", "update", "answer"],
+referencedClasses: []
+}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "drawButtons",
+category: 'rendering',
+fn: function (){
+var self=this;
+function $SimpleButtonMorph(){return smalltalk.SimpleButtonMorph||(typeof SimpleButtonMorph=="undefined"?nil:SimpleButtonMorph)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4,$5,$7,$8,$6,$9,$10;
+$1=self;
+$2=_st($SimpleButtonMorph())._new();
+_st($2)._label_(_st(self)._yesAnswer());
+$3=_st($2)._onClick_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._answer_(true);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+_st($1)._yesButton_($3);
+$4=_st($SimpleButtonMorph())._new();
+_st($4)._label_(_st(self)._noAnswer());
+$5=_st($4)._onClick_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._answer_(false);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+_st($1)._noButton_($5);
+$7=_st($SimpleButtonMorph())._new();
+_st($7)._label_(_st(self)._cancelAnswer());
+$8=_st($7)._onClick_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(self)._answer_(nil);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+$6=_st($1)._cancelButton_($8);
+$9=self;
+_st($9)._addMorph_(_st(self)._yesButton());
+_st($9)._addMorph_(_st(self)._noButton());
+$10=_st($9)._addMorph_(_st(self)._cancelButton());
+return self}, function($ctx1) {$ctx1.fill(self,"drawButtons",{},smalltalk.UIManager)})},
+args: [],
+source: "drawButtons\x0a\x09self \x0a\x09\x09yesButton: (SimpleButtonMorph new \x0a\x09\x09\x09\x09\x09\x09\x09label: self yesAnswer;\x0a\x09\x09\x09\x09\x09\x09\x09onClick:[ self answer: true]);\x0a\x09\x09noButton: (SimpleButtonMorph new \x0a\x09\x09\x09\x09\x09\x09\x09label: self noAnswer;\x0a\x09\x09\x09\x09\x09\x09\x09onClick:[ self answer: false]);\x0a\x09\x09cancelButton: (SimpleButtonMorph new \x0a\x09\x09\x09\x09\x09\x09\x09label: self cancelAnswer;\x0a\x09\x09\x09\x09\x09\x09\x09onClick:[ self answer: nil]).\x0a\x09self \x0a\x09\x09addMorph: self yesButton;\x0a\x09\x09addMorph: self noButton;\x0a\x09\x09addMorph: self cancelButton.",
+messageSends: ["yesButton:", "label:", "yesAnswer", "new", "onClick:", "answer:", "noButton:", "noAnswer", "cancelButton:", "cancelAnswer", "addMorph:", "yesButton", "noButton", "cancelButton"],
+referencedClasses: ["SimpleButtonMorph"]
+}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "initialize",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=self;
+_st($1)._yesAnswer_("Yes");
+_st($1)._noAnswer_("No");
+$2=_st($1)._cancelAnswer_("Cancel");
+smalltalk.Morph.fn.prototype._initialize.apply(_st(self), []);
+return self}, function($ctx1) {$ctx1.fill(self,"initialize",{},smalltalk.UIManager)})},
+args: [],
+source: "initialize\x0a\x09self \x0a\x09\x09yesAnswer: 'Yes';\x0a\x09\x09noAnswer: 'No';\x0a\x09\x09cancelAnswer: 'Cancel'.\x0a\x09super initialize\x0a\x09",
+messageSends: ["yesAnswer:", "noAnswer:", "cancelAnswer:", "initialize"],
+referencedClasses: []
+}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "noAnswer",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@noAnswer"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"noAnswer",{},smalltalk.UIManager)})},
+args: [],
+source: "noAnswer\x0a\x09^noAnswer",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "noAnswer:",
+category: 'accessing',
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@noAnswer"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"noAnswer:",{anObject:anObject},smalltalk.UIManager)})},
+args: ["anObject"],
+source: "noAnswer: anObject\x0a\x09noAnswer := anObject",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "noButton",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@noButton"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"noButton",{},smalltalk.UIManager)})},
+args: [],
+source: "noButton\x0a\x09^noButton",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "noButton:",
+category: 'accessing',
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@noButton"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"noButton:",{anObject:anObject},smalltalk.UIManager)})},
+args: ["anObject"],
+source: "noButton: anObject\x0a\x09noButton := anObject",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "openInWorld",
+category: 'rendering',
+fn: function (){
+var self=this;
+var win;
+function $SystemWindow(){return smalltalk.SystemWindow||(typeof SystemWindow=="undefined"?nil:SystemWindow)}
+function $WorkspaceMorph(){return smalltalk.WorkspaceMorph||(typeof WorkspaceMorph=="undefined"?nil:WorkspaceMorph)}
+return smalltalk.withContext(function($ctx1) { 
+win=_st($SystemWindow())._new();
+_st(_st($WorkspaceMorph())._current())._addMorph_(win);
+_st(win)._addMorph_frame_(self,_st(_st((0)).__at((0)))._extent_(_st((1)).__at((1))));
+return self}, function($ctx1) {$ctx1.fill(self,"openInWorld",{win:win},smalltalk.UIManager)})},
+args: [],
+source: "openInWorld\x0a\x09|win|\x0a\x09win := SystemWindow new.\x0a\x09WorkspaceMorph current addMorph:win.\x0a\x09win addMorph: self frame: (0@0 extent: 1@1)",
+messageSends: ["new", "addMorph:", "current", "addMorph:frame:", "extent:", "@"],
+referencedClasses: ["SystemWindow", "WorkspaceMorph"]
+}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "question",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@question"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"question",{},smalltalk.UIManager)})},
+args: [],
+source: "question\x0a\x09^question",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "question:",
+category: 'accessing',
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@question"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"question:",{anObject:anObject},smalltalk.UIManager)})},
+args: ["anObject"],
+source: "question: anObject\x0a\x09question := anObject",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "render:with:",
+category: 'rendering',
+fn: function (container,html){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(container)._with_((function(){
+return smalltalk.withContext(function($ctx2) {
+self["@questionDiv"]=_st(html)._div_(_st(self)._question());
+return self["@questionDiv"];
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1)})}));
+_st(self)._drawButtons();
+return self}, function($ctx1) {$ctx1.fill(self,"render:with:",{container:container,html:html},smalltalk.UIManager)})},
+args: ["container", "html"],
+source: "render: container with: html\x0a\x09container with:\x0a\x09\x09[questionDiv := html div: self question].\x0a\x09self drawButtons",
+messageSends: ["with:", "div:", "question", "drawButtons"],
+referencedClasses: []
+}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "update",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=self["@questionDiv"];
+_st($1)._empty();
+$2=_st($1)._with_(_st(self)._question());
+_st(_st(_st(self)._yesButton())._button())._empty();
+_st(_st(self)._yesButton())._label_(_st(self)._yesAnswer());
+_st(_st(_st(self)._noButton())._button())._empty();
+_st(_st(self)._noButton())._label_(_st(self)._noAnswer());
+_st(_st(_st(self)._cancelButton())._button())._empty();
+_st(_st(self)._cancelButton())._label_(_st(self)._cancelAnswer());
+return self}, function($ctx1) {$ctx1.fill(self,"update",{},smalltalk.UIManager)})},
+args: [],
+source: "update\x0a\x0a\x09questionDiv empty;\x0a\x09\x09\x09with: self question.\x09 \x0a\x09self yesButton button empty.\x0a\x09self yesButton label: self yesAnswer.\x0a\x09self noButton button empty.\x0a\x09self noButton label: self noAnswer.\x0a\x09self cancelButton button empty.\x0a\x09self cancelButton label: self cancelAnswer.\x0a\x09",
+messageSends: ["empty", "with:", "question", "button", "yesButton", "label:", "yesAnswer", "noButton", "noAnswer", "cancelButton", "cancelAnswer"],
+referencedClasses: []
+}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "yesAnswer",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@yesAnswer"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"yesAnswer",{},smalltalk.UIManager)})},
+args: [],
+source: "yesAnswer\x0a\x09^yesAnswer",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "yesAnswer:",
+category: 'accessing',
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@yesAnswer"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"yesAnswer:",{anObject:anObject},smalltalk.UIManager)})},
+args: ["anObject"],
+source: "yesAnswer: anObject\x0a\x09yesAnswer := anObject",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "yesButton",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@yesButton"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"yesButton",{},smalltalk.UIManager)})},
+args: [],
+source: "yesButton\x0a\x09^yesButton",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.UIManager);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "yesButton:",
+category: 'accessing',
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@yesButton"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"yesButton:",{anObject:anObject},smalltalk.UIManager)})},
+args: ["anObject"],
+source: "yesButton: anObject\x0a\x09yesButton:= anObject",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.UIManager);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "default",
+category: 'not yet classified',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self)._new();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"default",{},smalltalk.UIManager.klass)})},
+args: [],
+source: "default\x0a\x09^self new",
+messageSends: ["new"],
+referencedClasses: []
+}),
+smalltalk.UIManager.klass);
+
+
 smalltalk.addClass('WorkspaceMorph', smalltalk.Morph, ['morphElement'], 'Canvas');
 smalltalk.addMethod(
 smalltalk.method({
